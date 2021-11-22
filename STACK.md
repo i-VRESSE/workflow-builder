@@ -8,7 +8,7 @@ The first builder iteration should have following UI elements
 * Output a workflow file
 
 The software stack should produce app which:
-* can run as static website or as a desktop app 
+* can run as static website or as a desktop app
 * can be embedded within a bigger app (vre)
 * can be developed on Windows/Mac/Linux
 * uses mature/stable dependencies
@@ -47,7 +47,7 @@ Use desktop oriented framework
 
 ## Toml io
 
-1. 
+1.
 
 ## PDB or ciff read
 
@@ -55,7 +55,15 @@ Use desktop oriented framework
 
 ## Workflow/dag/flowchart drawing
 
+## Drag n drop
+
+Drag step from catalog to workflow visualization
+Should place nice with workflow viz library.
+
+1. react-beautiful-dnd
+2. react-dnd
+
 ## Desktop app
 
-1. electron 
-2. tauri
+1. electron
+2. tauri, https://tauri.studio/en/
