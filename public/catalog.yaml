@@ -1,0 +1,102 @@
+nodes:
+  - id: global
+    label: Global state
+    schema:
+      type: object
+      required: [molecules, ncores]
+      properties:
+        molecules:
+          type: array
+          items:
+            type: string
+            format: data-url
+        rundir:
+          type: string
+        ncores:
+          type: integer
+          default: 1
+          minimum: 1
+        cns_exec:
+          type: string
+    uiSchema:
+      molecules:
+        items:
+          'ui:options':
+            accept: '.pdb'
+  - id: topoaa
+    label: Atom topology
+    schema:
+      type: object
+      properties:
+        autohis:
+          type: boolean
+          description: Automatically ssign protonation states
+          default: false
+      required: []
+    description: Description of topoaa
+  - id: rigidbody
+    label: Rigid body docker
+    schema:
+      type: object
+      properties:
+        ambig:
+          type: string
+          format: data-url
+          description: Ambiguious interaction constraints
+        sampling:
+          type: integer
+          title: Number of models to generate
+          minimum: 2
+          maximum: 1000
+          default: 200
+      required: [ambig]
+  - id: flexref
+    label: Semi flexible refinement
+    schema:
+      type: object
+      properties:
+        ambig:
+          type: string
+          format: data-url
+          description: Ambiguious interaction constraints
+        cool1_steps:
+          type: integer
+          title: Number of MD steps during first rigid body cooling stage
+          minimum: 0
+          maximum: 100
+      required: [ambig]
+  - id: clustfcc
+    label: Fcc clustering
+    schema:
+      type: object
+      properties:
+        contact_distance_cutoff:
+          title: Distance cutoff
+          type: number
+          minimum: 0
+          maximum: 100
+        fraction_cutoff:
+          title: Fraction cutoff
+          type: number
+          minimum: 0
+          maximum: 1
+        threshold:
+          title: Minimal number of elements inside a cluster
+          type: number
+          minimum: 1
+      required: []
+  - id: seletopcluster
+    label: Top ranking cluster
+    schema:
+      type: object
+      properties:
+        top_cluster:
+          title: description of param
+          type: array
+          items:
+            type: string
+        top_models:
+          title: description of param
+          type: integer
+          minimum: 0
+          maximum: 100

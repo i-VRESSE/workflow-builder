@@ -29,6 +29,13 @@ Use desktop oriented framework
 1. ant.design
 2. blueprint
 
+## State management
+
+1. hooks
+2. redux
+3. recoil
+4. mobx
+
 ## Lint
 
 1. eslint
@@ -67,3 +74,15 @@ Should place nice with workflow viz library.
 
 1. electron
 2. tauri, https://tauri.studio/en/
+
+## File pointers
+
+Workflow parameters can be URLs to files on local disk.
+
+1. https://developer.mozilla.org/en-US/docs/Web/API/File_System_Access_API
+2. https://developer.mozilla.org/en-US/docs/Web/API/File_and_Directory_Entries_API
+
+## Similar tools
+
+1. https://github.com/rabix/composer
+2. https://galaxyproject.org/learn/advanced-workflow/

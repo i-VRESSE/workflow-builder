@@ -1,44 +1,23 @@
-import { useState } from 'react'
-import logo from './logo.svg'
+import { RecoilRoot } from 'recoil'
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css'
+import { CatalogPanel } from './CatalogPanel'
+import { StepPanel } from './StepPanel'
+import { WorkflowPanel } from './WorkflowPanel'
+import React from 'react';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Hello Vite + React!</p>
-        <p>
-          <button type="button" onClick={() => setCount((count) => count + 1)}>
-            count is: {count}
-          </button>
-        </p>
-        <p>
-          Edit <code>App.tsx</code> and save to test HMR updates.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          {' | '}
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-        </p>
-      </header>
-    </div>
+    <RecoilRoot>
+      <React.Suspense fallback={<div>Loading...</div>}>
+      <h1 style={{height: '1em'}}>iVresse workflow builder</h1>
+      <div style={{display: 'grid', gridTemplateColumns: '300px 0.6fr 1fr', gridAutoRows: '90vh'}}>
+        <CatalogPanel/>
+        <WorkflowPanel/>
+        <StepPanel/>
+      </div>
+      </React.Suspense>
+    </RecoilRoot>
   )
 }
 
