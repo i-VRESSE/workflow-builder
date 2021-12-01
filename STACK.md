@@ -54,7 +54,9 @@ Use desktop oriented framework
 
 ## Toml io
 
-1.
+See https://github.com/toml-lang/toml/wiki
+
+1. @ltd/j-toml
 
 ## PDB or ciff read
 
@@ -81,6 +83,10 @@ Workflow parameters can be URLs to files on local disk.
 
 1. https://developer.mozilla.org/en-US/docs/Web/API/File_System_Access_API
 2. https://developer.mozilla.org/en-US/docs/Web/API/File_and_Directory_Entries_API
+
+## Code highlighter
+
+1. react-syntax-highlighter with prismjs
 
 ## Similar tools
 

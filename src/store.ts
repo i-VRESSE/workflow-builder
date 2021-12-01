@@ -2,6 +2,8 @@ import { load } from "js-yaml";
 import { atom, selector, useRecoilState, useRecoilValue } from "recoil";
 import type { JSONSchema7} from 'json-schema'
 import { UiSchema } from "@rjsf/core";
+import { Section, stringify } from "@ltd/j-toml";
+
 
 export interface INode {
     id: string
@@ -32,7 +34,7 @@ export function useCatalog() {
 
 export interface IStep {
     id: string
-    parameters: unknown
+    parameters: Record<string, unknown>
 }
 
 const workflowState = atom<IStep[]>({
@@ -75,15 +77,36 @@ export function useWorkflow() {
         setParameters: (parameters: unknown) => {
             const newStep = {...steps[selectedStep], parameters}
             const newSteps = replaceItemAtIndex(steps, selectedStep, newStep)
-            setSteps(newSteps)
+            setSteps(newSteps as any)
         }
     }
 }
 
+function steps2tomltable(steps: IStep[]) {
+    const table: Record<string, unknown> = {}
+    const track: Record<string, number> = {}
+    for (const step of steps) {
+        if (step.id === 'global') {
+            Object.entries(step.parameters).forEach(
+                ([k,v]) => table[k] = v
+            )
+        } else {
+            if (!(step.id in track)) {
+                track[step.id] = 0
+            }
+            track[step.id]++
+            const section = step.id + '.' + track[step.id]
+            table[section] = Section(step.parameters as any)
+        }
+    }
+    return table
+}
+
 export function useCode() {
     const {steps} = useWorkflow()
-    // TODO replace with toml format
-    return JSON.stringify(steps, null, 4)
+    const table = steps2tomltable(steps)
+    const text = stringify(table as any, { newline: "\n", integer: Number.MAX_SAFE_INTEGER})
+    return text
 }
 
 export function useCodeUrl() {
