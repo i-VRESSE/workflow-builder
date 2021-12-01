@@ -5,10 +5,13 @@ interface IProp {
     index: number
 }
 
-export const VisualStep = ({ id, index}: IProp) => {
+export const VisualStep = ({ id, index }: IProp) => {
     const { selectedStep, selectStep, deleteStep } = useWorkflow()
-    const style = selectedStep === index ? {border: '1px solid gray'} : {}
+    const style = selectedStep === index ? { fontWeight: 'bold' } : {}
     return (
-        <li style={style}>{id} <button onClick={() => selectStep(index)}>C</button><button onClick={() => deleteStep(index)}>-</button></li>
+        <li style={style}>{id}
+            <button className="btn btn-light" onClick={() => selectStep(index)}>C</button>
+            <button className="btn btn-light" onClick={() => deleteStep(index)}>-</button>
+        </li>
     )
 }
