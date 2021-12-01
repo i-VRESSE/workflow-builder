@@ -107,8 +107,34 @@ export function useWorkflow() {
         loadWorkflow: (tomlstring: string) => {
             const newSteps = parseWorkflow(tomlstring);
             setSteps(newSteps)
+        },
+        moveStepDown(stepIndex: number) {
+            if (stepIndex + 1 < steps.length ) {
+                const newSteps = moveStep(steps, stepIndex, 1);
+                setSelectedStep(-1)
+                setSteps(newSteps)
+            }
+        },
+        moveStepUp(stepIndex: number) {
+            if (stepIndex > 0) {
+                const newSteps = moveStep(steps, stepIndex, -1);
+                setSelectedStep(-1)
+                setSteps(newSteps)
+            }
         }
     }
+}
+
+function moveStep(steps: IStep[], stepIndex: number, direction: number) {
+    const step = steps[stepIndex];
+    const swappedIndex = stepIndex + direction;
+    const swappedStep = steps[swappedIndex];
+    const newSteps = replaceItemAtIndex(
+        replaceItemAtIndex(steps, stepIndex, swappedStep),
+        swappedIndex,
+        step
+    );
+    return newSteps;
 }
 
 function steps2tomltable(steps: IStep[]) {

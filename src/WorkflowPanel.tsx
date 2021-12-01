@@ -28,7 +28,7 @@ export const WorkflowPanel = () => {
             <legend>Workflow</legend>
             <div style={{ display: 'flex', justifyContent: 'space-between', flexFlow: 'column', height: '90vh' }}>
                 <div>
-                    <div>
+                    <div className="btn-group">
                         <button className="btn btn-light" style={visualTabStyle} onClick={() => setTab('visual')}>Visual</button>
                         <button className="btn btn-light" style={codeTabStyle} onClick={() => setTab('code')}>Code</button>
                     </div>
