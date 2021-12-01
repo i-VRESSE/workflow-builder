@@ -2,7 +2,7 @@ import { load } from "js-yaml";
 import { atom, selector, useRecoilState, useRecoilValue } from "recoil";
 import type { JSONSchema7} from 'json-schema'
 import { UiSchema } from "@rjsf/core";
-import { Section, stringify } from "@ltd/j-toml";
+import { parse, Section, stringify } from "@ltd/j-toml";
 
 
 export interface INode {
@@ -15,6 +15,7 @@ export interface INode {
 
 export interface ICatalog {
     nodes: INode[]
+    templates: Record<string, string>
 }
 
 const catalogState = selector<ICatalog>({
@@ -55,6 +56,30 @@ function replaceItemAtIndex<V>(arr: V[], index: number, newValue: V) {
     return [...arr.slice(0, index), ...arr.slice(index + 1)];
   }
 
+function parseWorkflow(workflow: string) {
+    const table = parse(workflow, { bigint: false})
+    const global: Record<string, unknown> = {}
+    const nonGlobalSteps: IStep[] = [];
+    Object.entries(table).forEach(([k, v]) => {
+        if (typeof v === 'object' && Object.prototype.toString.call(v) !== '[object Array]') {
+            nonGlobalSteps.push({
+                id: k,
+                parameters: v
+            } as any)
+        } else {
+            global[k] = v
+        }
+    })
+    const newSteps = [
+        {
+            id: 'global',
+            parameters: global
+        },
+        ...nonGlobalSteps
+    ]
+    return newSteps
+}
+
 export function useWorkflow() {
     const [steps, setSteps] = useRecoilState(workflowState)
     const [selectedStep, setSelectedStep] = useRecoilState(selectedStepState)
@@ -78,6 +103,10 @@ export function useWorkflow() {
             const newStep = {...steps[selectedStep], parameters}
             const newSteps = replaceItemAtIndex(steps, selectedStep, newStep)
             setSteps(newSteps as any)
+        },
+        loadWorkflow: (tomlstring: string) => {
+            const newSteps = parseWorkflow(tomlstring);
+            setSteps(newSteps)
         }
     }
 }
