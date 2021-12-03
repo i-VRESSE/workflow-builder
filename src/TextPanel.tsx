@@ -10,9 +10,9 @@ import { useText } from "./store"
 export const TextPanel = () => {
     const code = useText()
 
-    function copy2clipboard() {
-        // TODO check if allowed to write to clipboard
-        navigator.clipboard.writeText(code)
+    async function copy2clipboard() {
+        await navigator.permissions.query({name: "clipboard-write"} as any)
+        await navigator.clipboard.writeText(code)
     }
 
     return (
