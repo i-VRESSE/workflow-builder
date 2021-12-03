@@ -155,7 +155,7 @@ function steps2tomltable(steps: IStep[]) {
                 track[step.id] = 0
             }
             track[step.id]++
-            const section = step.id + '.' + track[step.id]
+            const section = track[step.id] > 1 ? step.id + '.' + track[step.id] : step.id
             table[section] = Section(step.parameters as any)
         }
     }
