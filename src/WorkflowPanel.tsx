@@ -1,17 +1,17 @@
 import { useState } from "react"
-import { CodePanel } from "./CodePanel"
-import { useCodeUrl, useWorkflow } from "./store"
+import { TextPanel } from "./TextPanel"
+import { useTextUrl, useWorkflow } from "./store"
 import { VisualPanel } from "./VisualPanel"
 
-type ITab = 'code' | 'visual'
+type ITab = 'text' | 'visual'
 
 export const WorkflowPanel = () => {
     const [tab, setTab] = useState<ITab>('visual')
     const {loadWorkflow} = useWorkflow();
-    const selectedPanel = tab === 'visual' ? <VisualPanel /> : <CodePanel />
+    const selectedPanel = tab === 'visual' ? <VisualPanel /> : <TextPanel />
     const visualTabStyle = { fontWeight: tab === 'visual' ? 'bold' : 'normal' }
-    const codeTabStyle = { fontWeight: tab === 'code' ? 'bold' : 'normal' }
-    const url = useCodeUrl()
+    const textTabStyle = { fontWeight: tab === 'text' ? 'bold' : 'normal' }
+    const url = useTextUrl()
 
     async function uploadWorkflow() {
         // TODO compatible with non-Chrome browsers
@@ -30,7 +30,7 @@ export const WorkflowPanel = () => {
                 <div>
                     <div className="btn-group">
                         <button className="btn btn-light" style={visualTabStyle} onClick={() => setTab('visual')}>Visual</button>
-                        <button className="btn btn-light" style={codeTabStyle} onClick={() => setTab('code')}>Code</button>
+                        <button className="btn btn-light" style={textTabStyle} onClick={() => setTab('text')}>Text</button>
                     </div>
                     <button className="btn btn-link" onClick={uploadWorkflow}>Upload</button>
                     {selectedPanel}

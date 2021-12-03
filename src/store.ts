@@ -162,13 +162,13 @@ function steps2tomltable(steps: IStep[]) {
     return table
 }
 
-export function useCode() {
+export function useText() {
     const {steps} = useWorkflow()
     const table = steps2tomltable(steps)
     const text = stringify(table as any, { newline: "\n", integer: Number.MAX_SAFE_INTEGER})
     return text
 }
 
-export function useCodeUrl() {
-    return "data:application/json;base64," + btoa(useCode())
+export function useTextUrl() {
+    return "data:application/json;base64," + btoa(useText())
 }

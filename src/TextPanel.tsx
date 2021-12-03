@@ -4,11 +4,11 @@ import style from 'react-syntax-highlighter/dist/esm/styles/prism/vs';
 
 SyntaxHighlighter.registerLanguage('toml', toml);
 
-import { useCode } from "./store"
+import { useText } from "./store"
 
 
-export const CodePanel = () => {
-    const code = useCode()
+export const TextPanel = () => {
+    const code = useText()
 
     function copy2clipboard() {
         // TODO check if allowed to write to clipboard
