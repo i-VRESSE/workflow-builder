@@ -11,9 +11,15 @@ export interface INode {
     schema: JSONSchema7
     uiSchema?: UiSchema
     description: string
+    category: string
+}
+
+export interface ICategory {
+    name: string
 }
 
 export interface ICatalog {
+    categories: ICategory[]
     nodes: INode[]
     templates: Record<string, string>
 }
@@ -27,7 +33,6 @@ const catalogState = selector<ICatalog>({
         return load(body) as ICatalog
     }
 })
-
 
 export function useCatalog() {
     return useRecoilValue<ICatalog>(catalogState);

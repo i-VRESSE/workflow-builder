@@ -11,7 +11,7 @@ function App() {
     <RecoilRoot>
       <React.Suspense fallback={<div>Loading...</div>}>
       <h1 style={{height: '1em'}}>i-VRESSE workflow builder</h1>
-      <div style={{display: 'grid', gridTemplateColumns: '300px 0.6fr 1fr', gridAutoRows: '90vh'}}>
+      <div style={{display: 'grid', gridTemplateColumns: '400px 0.6fr 1fr', gridAutoRows: '90vh'}}>
         <CatalogPanel/>
         <WorkflowPanel/>
         <StepPanel/>

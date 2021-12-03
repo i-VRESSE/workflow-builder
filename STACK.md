@@ -19,7 +19,7 @@ The software stack should produce app which:
 
 ## Build system
 
-1. CRA
+1. ~CRA~ too slow
 2. Vite
 
 ## UI
@@ -28,6 +28,7 @@ Use desktop oriented framework
 
 1. ant.design
 2. blueprint
+3. Bootstrap 4
 
 ## State management
 
@@ -74,7 +75,7 @@ Should place nice with workflow viz library.
 
 ## Desktop app
 
-1. electron
+1. electron with https://www.electronforge.io/ or electron-builder
 2. tauri, https://tauri.studio/en/
 
 ## File pointers
