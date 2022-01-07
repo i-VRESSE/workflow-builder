@@ -64,6 +64,12 @@ See https://github.com/toml-lang/toml/wiki
 
 1. @ltd/j-toml
 
+## Archive
+
+Bundle workflow file and data files into an archive file.
+
+1. @zip.js/zip.js
+
 ## PDB or ciff read
 
 1. ngl/parser/pdb-parser http://nglviewer.org/ngl/api/class/src/parser/pdb-parser.js~PdbParser.html
