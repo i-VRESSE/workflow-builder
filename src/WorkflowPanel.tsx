@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { TextPanel } from "./TextPanel"
-import { useTextUrl, useWorkflow } from "./store"
+import { useArchive, useTextUrl, useWorkflow } from "./store"
 import { VisualPanel } from "./VisualPanel"
 
 type ITab = 'text' | 'visual'
@@ -11,7 +11,7 @@ export const WorkflowPanel = () => {
     const selectedPanel = tab === 'visual' ? <VisualPanel /> : <TextPanel />
     const visualTabStyle = { fontWeight: tab === 'visual' ? 'bold' : 'normal' }
     const textTabStyle = { fontWeight: tab === 'text' ? 'bold' : 'normal' }
-    const url = useTextUrl()
+    const archiveUrl = useArchive()
 
     async function uploadWorkflow() {
         // TODO compatible with non-Chrome browsers
@@ -35,7 +35,7 @@ export const WorkflowPanel = () => {
                     <button className="btn btn-link" onClick={uploadWorkflow}>Upload</button>
                     {selectedPanel}
                 </div>
-                <a className="btn btn-primary" href={url} download="workflow.cfg">Download</a>
+                <a className="btn btn-primary" href={archiveUrl} download="workflow.zip">Download archive</a>
             </div>
         </fieldset>
     )

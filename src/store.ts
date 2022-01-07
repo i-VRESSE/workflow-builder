@@ -3,6 +3,12 @@ import { atom, selector, useRecoilState, useRecoilValue } from "recoil";
 import type { JSONSchema7 } from "json-schema";
 import { UiSchema } from "@rjsf/core";
 import { parse, Section, stringify, inline } from "@ltd/j-toml";
+import {
+  Data64URIReader,
+  Data64URIWriter,
+  TextReader,
+  ZipWriter,
+} from "@zip.js/zip.js";
 
 export interface TomlSchema {
   nesting?: "global" | "section" | "inline";
@@ -172,10 +178,9 @@ function moveStep(steps: IStep[], stepIndex: number, direction: number) {
   return newSteps;
 }
 
-function steps2tomltable(steps: IStep[]) {
+function steps2tomltable(steps: IStep[], nodes: INode[]) {
   const table: Record<string, unknown> = {};
   const track: Record<string, number> = {};
-  const { nodes } = useCatalog();
   for (const step of steps) {
     const schema = nodes.find((n) => n.id === step?.id)?.tomlSchema;
     if (schema?.nesting === "global") {
@@ -215,9 +220,8 @@ function steps2tomltable(steps: IStep[]) {
   return table;
 }
 
-export function useText() {
-  const { steps } = useWorkflow();
-  const table = steps2tomltable(steps);
+function steps2tomltext(steps: IStep[], nodes: INode[]) {
+  const table = steps2tomltable(steps, nodes);
   const text = stringify(table as any, {
     newline: "\n",
     integer: Number.MAX_SAFE_INTEGER,
@@ -225,8 +229,87 @@ export function useText() {
   return text;
 }
 
+export function useText() {
+  const { steps } = useWorkflow();
+  const { nodes } = useCatalog();
+  return steps2tomltext(steps, nodes);
+}
+
 export function useTextUrl() {
   const text = useText();
   // console.log(text);
   return "data:application/json;base64," + btoa(text);
+}
+
+function isDataURL(value: unknown) {
+  return typeof value === "string" && value.startsWith("data:");
+}
+
+function dataURL2filename(value: string) {
+  // rjsf creates data URLs like `data:text/markdown;name=README.md;base64,Rm9.....`
+  return value.split(";")[1].split("=")[1];
+}
+
+function externalizeDataUrls(inlinedSteps: IStep[]) {
+  const dataFiles: Record<string, string> = {};
+  const steps: IStep[] = inlinedSteps.map((s) => {
+    const parameters: Record<string, unknown> = { ...s.parameters };
+    // {k: 'data:...'}
+    Object.entries(s.parameters)
+      .filter(([key, value]) => isDataURL(value))
+      .forEach(([key, value]) => {
+        const fn = dataURL2filename(value as string);
+        dataFiles[fn] = value as string;
+        parameters[key] = fn;
+      });
+    // {k: ['data:...']}
+    Object.entries(s.parameters)
+      .filter(([key, value]) => Array.isArray(value))
+      .forEach(([key, value]) => {
+        parameters[key] = (value as string[]).map((d) => {
+          if (isDataURL(d)) {
+            const fn = dataURL2filename(d as string);
+            dataFiles[fn] = d as string;
+            return fn;
+          } else {
+            return d;
+          }
+        });
+      });
+    // {k: [{k2: 'data:...'}]}
+    // TODO implement or replace blocks above with recursive code
+    return { id: s.id, parameters };
+  });
+
+  return {
+    dataFiles,
+    steps,
+  };
+}
+
+const archiveState = selector<string>({
+  key: "archive",
+  get: async ({ get }) => {
+    const writer = new ZipWriter(new Data64URIWriter("application/zip"));
+
+    const steps = get(workflowState);
+    const { nodes } = get(catalogState);
+    // replace data URLs in step leafs with file path
+    const { dataFiles, steps: externalSteps } = externalizeDataUrls(steps);
+    // add data URL content to file in archive
+    await Promise.all(
+      Object.entries(dataFiles).map(([fn, dataURL]) =>
+        writer.add(fn, new Data64URIReader(dataURL))
+      )
+    );
+
+    const text = steps2tomltext(externalSteps, nodes);
+    await writer.add("workflow.cfg", new TextReader(text));
+
+    return await writer.close();
+  },
+});
+
+export function useArchive() {
+  return useRecoilValue<string>(archiveState);
 }

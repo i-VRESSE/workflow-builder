@@ -11,6 +11,7 @@
     "@ltd/j-toml": "^1.24.0",
     "@rjsf/bootstrap-4": "^3.2.1",
     "@rjsf/core": "^3.2.1",
+    "@zip.js/zip.js": "^2.3.23",
     "bootstrap": "^4",
     "js-yaml": "^4.1.0",
     "react": "^17.0.0",
