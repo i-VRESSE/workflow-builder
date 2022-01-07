@@ -6,7 +6,7 @@ export const CatalogNode = ({id, label}: INode) => {
     return (
         <li>
             <button className="btn btn-light" onClick={() => addNodeToWorkflow(id)}>+</button>
-            <span>{label}</span>
+            <span title={id}>{label}</span>
         </li>
     )
 }
