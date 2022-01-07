@@ -40,6 +40,7 @@ Use desktop oriented framework
 ## Lint
 
 1. eslint
+2. standard
 
 ## Lang
 
@@ -48,6 +49,10 @@ Use desktop oriented framework
 ## Unit test
 
 1. Jest
+
+## Code formatter
+
+1. Prettier
 
 ## e2e test
 
