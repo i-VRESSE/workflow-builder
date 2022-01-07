@@ -32,6 +32,8 @@ nodes:
         items:
           'ui:options':
             accept: '.pdb'
+    tomlSchema:
+      nesting: global
   - id: topoaa
     label: All atom topology
     category: topology
@@ -40,10 +42,36 @@ nodes:
       properties:
         autohis:
           type: boolean
-          description: Automatically ssign protonation states
+          description: Automatically assign protonation states
           default: false
+        input:
+          type: array
+          description: Histamine protonation states for each input molecule
+          items:
+            type: object
+            properties:
+              hisd:
+                type: array
+                description: Residue identifier of histamines that need to be assigned to hisd
+                items:
+                  type: number
+              hise:
+                type: array
+                description: Residue identifier of histamines that need to be assigned to hise
+                items:
+                  type: number
       required: []
     description: Description of topoaa
+    tomlSchema:
+      items:
+        input:
+          nesting: section
+          indexPrefix: mol
+          items:
+            hisd:
+              nesting: inline
+            hise:
+              nesting: inline
   - id: topocg
     label: Coarse-grained-atom topology
     category: topology
