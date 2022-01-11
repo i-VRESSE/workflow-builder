@@ -48,7 +48,9 @@ Use desktop oriented framework
 
 ## Unit test
 
-1. Jest
+1. ~Jest~ requires lots of fiddling
+1. vitest, similar api as jest, wip
+1. vite-jest, connects vite compiler machinery to jest, wip
 
 ## Code formatter
 
@@ -69,6 +71,11 @@ See https://github.com/toml-lang/toml/wiki
 Bundle workflow file and data files into an archive file.
 
 1. @zip.js/zip.js
+
+Save to disk
+
+1. file-saver
+1. ~ https://developer.mozilla.org/en-US/docs/Web/API/File_System_Access_API ~ not supported on Firefox
 
 ## PDB or ciff read
 

@@ -1,6 +1,8 @@
-import { INode, IStep, useWorkflow } from "./store"
 import { withTheme, utils } from "@rjsf/core";
 import { Theme } from "@rjsf/bootstrap-4";
+import { useFiles, useWorkflow } from "./store"
+import { IStep, INode } from "./types";
+import { internalizeDataUrls } from "./dataurls";
 
 // TODO workaround for broken bootsrap-4 file widget, see https://github.com/rjsf-team/react-jsonschema-form/issues/2095
 // this workaround is not drawing the title for the field
@@ -15,8 +17,9 @@ interface IProp {
 }
 
 export const StepForm = ({ node, step }: IProp) => {
-    const {setParameters} = useWorkflow()
-    const parameters = step.parameters
+    const { setParameters } = useWorkflow()
+    const { files } = useFiles();
+    const parameters = internalizeDataUrls(step.parameters, files)
     const uiSchema = node.uiSchema ? node.uiSchema : {}
     return (
         <>
@@ -24,7 +27,7 @@ export const StepForm = ({ node, step }: IProp) => {
             <div>
                 {node.description}
             </div>
-            <Form schema={node.schema} uiSchema={uiSchema} formData={parameters} onSubmit={({formData}) => setParameters(formData)}/>
+            <Form schema={node.schema} uiSchema={uiSchema} formData={parameters} onSubmit={({ formData }) => setParameters(formData)} />
         </>
     )
 }
