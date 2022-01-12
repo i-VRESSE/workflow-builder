@@ -15,7 +15,7 @@ const catalogState = selector<ICatalog>({
   }
 })
 
-export function useCatalog () {
+export function useCatalog (): ICatalog {
   return useRecoilValue<ICatalog>(catalogState)
 }
 
@@ -53,6 +53,9 @@ export function useWorkflow () {
     selectedStep,
     addNodeToWorkflow (nodeId: string) {
       setSteps([...steps, { id: nodeId, parameters: {} }])
+      if (selectedStep === -1) {
+        setSelectedStep(steps.length)
+      }
     },
     selectStep: (stepIndex: number) => setSelectedStep(stepIndex),
     deleteStep (stepIndex: number) {
