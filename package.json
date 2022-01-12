@@ -26,6 +26,7 @@
   "devDependencies": {
     "@types/file-saver": "^2.0.4",
     "@types/js-yaml": "^4.0.5",
+    "@types/node": "16",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "@types/react-syntax-highlighter": "^13.5.2",
@@ -34,6 +35,8 @@
     "ts-standard": "^11.0.0",
     "typescript": "^4.3.2",
     "vite": "^2.6.4",
+    "vite-node": "^0.0.141",
     "vitest": "^0.0.140"
-  }
+  },
+  "engines" : { "node" : "~16" }
 }
