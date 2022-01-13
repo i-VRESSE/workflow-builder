@@ -45,7 +45,7 @@ function removeItemAtIndex<V> (arr: V[], index: number) {
 export function useWorkflow () {
   const [steps, setSteps] = useRecoilState(workflowState)
   const [selectedStep, setSelectedStep] = useRecoilState(selectedStepState)
-  const { files, upsert } = useFiles()
+  const { files, setFiles } = useFiles()
   const { nodes } = useCatalog()
 
   return {
@@ -67,17 +67,22 @@ export function useWorkflow () {
     },
     clearStepSelection: () => setSelectedStep(-1),
     setParameters (inlinedParameters: unknown) {
-      const newFiles = {}
+      const newFiles = {...files}
       const parameters = externalizeDataUrls(inlinedParameters, newFiles)
       const newStep = { ...steps[selectedStep], parameters }
       const newSteps = replaceItemAtIndex(steps, selectedStep, newStep)
       setSteps(newSteps as any)
-      Object.entries(newFiles).forEach(([k, v]) => upsert(k, v as any))
+      setFiles(newFiles)
     },
     loadWorkflow (tomlstring: string) {
       // TODO load zip file
       const newSteps = parseWorkflow(tomlstring)
+      const newFiles = {}
+      newSteps.forEach(s => {
+        s.parameters = externalizeDataUrls(s.parameters, newFiles)
+      })
       setSteps(newSteps)
+      setFiles(newFiles)
     },
     async save () {
       await saveArchive(steps, nodes, files, 'workflow.cfg', 'workflow.zip')
@@ -104,16 +109,7 @@ export function useFiles () {
 
   return {
     files,
-    upsert (filename: string, body: string) {
-      const newFiles = { ...files }
-      newFiles[filename] = body
-      setFiles(newFiles)
-    },
-    delete (filename: string) {
-      const newFiles = { ...files }
-      delete newFiles[filename]
-      setFiles(newFiles)
-    }
+    setFiles
   }
 }
 
