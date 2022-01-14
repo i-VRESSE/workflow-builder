@@ -67,11 +67,6 @@ nodes:
         input:
           nesting: section
           indexPrefix: mol
-          items:
-            hisd:
-              nesting: inline
-            hise:
-              nesting: inline
   - id: topocg
     label: Coarse-grained-atom topology
     category: topology

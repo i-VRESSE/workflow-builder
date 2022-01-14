@@ -1,4 +1,4 @@
-import { Section, stringify, inline, parse } from '@ltd/j-toml'
+import { Section, stringify, parse } from '@ltd/j-toml'
 import { IStep, INode } from './types'
 
 function steps2tomltable (steps: IStep[], nodes: INode[]) {
@@ -30,8 +30,6 @@ function steps2tomltable (steps: IStep[], nodes: INode[]) {
             } else {
               stepParameters[k] = Section(v as any)
             }
-          } else if (schema.items[k].nesting === 'inline') {
-            stepParameters[k] = inline(v as any)
           }
         } else {
           stepParameters[k] = v
