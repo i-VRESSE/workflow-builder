@@ -1,14 +1,19 @@
 import { load } from 'js-yaml'
 import { atom, selector, useRecoilState, useRecoilValue } from 'recoil'
 import { externalizeDataUrls } from './dataurls'
-import { saveArchive } from './archive'
+import { readArchive, saveArchive } from './archive'
 import { ICatalog, IStep, IFiles } from './types'
 import { parseWorkflow, steps2tomltext } from './toml'
 
+export const catalogURLState = atom<string>({
+  key: 'catalogURL',
+  default: new URL('/catalog.yaml', import.meta.url).href
+})
+
 const catalogState = selector<ICatalog>({
   key: 'catalog',
-  get: async () => {
-    const catalogUrl = new URL('/catalog.yaml', import.meta.url).href
+  get: async ({ get }) => {
+    const catalogUrl = get(catalogURLState)
     const response = await fetch(catalogUrl)
     const body = await response.text()
     return load(body) as ICatalog
@@ -67,11 +72,17 @@ export function useWorkflow () {
     },
     clearStepSelection: () => setSelectedStep(-1),
     setParameters (inlinedParameters: unknown) {
-      const newFiles = {...files}
+      const newFiles = { ...files }
       const parameters = externalizeDataUrls(inlinedParameters, newFiles)
       const newStep = { ...steps[selectedStep], parameters }
       const newSteps = replaceItemAtIndex(steps, selectedStep, newStep)
       setSteps(newSteps as any)
+      setFiles(newFiles)
+    },
+    async loadWorkflowArchive (archiveURL: string) {
+      const { tomlstring, files: newFiles } = await readArchive(archiveURL, nodes)
+      const newSteps = parseWorkflow(tomlstring)
+      setSteps(newSteps)
       setFiles(newFiles)
     },
     loadWorkflow (tomlstring: string) {
@@ -85,7 +96,7 @@ export function useWorkflow () {
       setFiles(newFiles)
     },
     async save () {
-      await saveArchive(steps, nodes, files, 'workflow.cfg', 'workflow.zip')
+      await saveArchive(steps, nodes, files)
     },
     moveStepDown (stepIndex: number) {
       if (stepIndex + 1 < steps.length) {

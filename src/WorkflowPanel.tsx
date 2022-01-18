@@ -7,7 +7,7 @@ type ITab = 'text' | 'visual'
 
 export const WorkflowPanel = () => {
   const [tab, setTab] = useState<ITab>('visual')
-  const { loadWorkflow, save } = useWorkflow()
+  const { loadWorkflowArchive, save } = useWorkflow()
   const selectedPanel = tab === 'visual' ? <VisualPanel /> : <TextPanel />
   const visualTabStyle = { fontWeight: tab === 'visual' ? 'bold' : 'normal' }
   const textTabStyle = { fontWeight: tab === 'text' ? 'bold' : 'normal' }
@@ -15,11 +15,17 @@ export const WorkflowPanel = () => {
   async function uploadWorkflow () {
     // TODO compatible with non-Chrome browsers
     const [fileHandle] = await (window as any).showOpenFilePicker({
-      muliple: false
+      types: [{
+        description: 'Zip archive',
+        accept: {
+          'application/zip': ['.zip']
+        }
+      }]
     })
     const file: File = await fileHandle.getFile()
-    const text = await file.text()
-    loadWorkflow(text)
+    const url = URL.createObjectURL(file)
+    await loadWorkflowArchive(url)
+    URL.revokeObjectURL(url)
   }
   return (
     <fieldset>

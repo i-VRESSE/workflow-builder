@@ -6,6 +6,6 @@ interface IProps {
 }
 
 export const TemplateNode = ({ name, workflow }: IProps) => {
-  const { loadWorkflow } = useWorkflow()
-  return <li><button className='btn btn-light' onClick={() => loadWorkflow(workflow)} title={workflow}>{name}</button></li>
+  const { loadWorkflowArchive } = useWorkflow()
+  return <li><button className='btn btn-light' onClick={() => loadWorkflowArchive(workflow)} title={workflow}>{name}</button></li>
 }

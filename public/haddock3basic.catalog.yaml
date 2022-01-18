@@ -1,6 +1,5 @@
 categories:
   - name: global
-  - name: topology
   - name: sampling
   - name: refinement
   - name: scoring
@@ -34,47 +33,6 @@ nodes:
             accept: '.pdb'
     tomlSchema:
       nesting: global
-  - id: topoaa
-    label: All atom topology
-    category: topology
-    schema:
-      type: object
-      properties:
-        autohis:
-          type: boolean
-          description: Automatically assign protonation states
-          default: false
-        input:
-          type: array
-          description: Histamine protonation states for each input molecule
-          items:
-            type: object
-            properties:
-              hisd:
-                type: array
-                description: Residue identifier of histamines that need to be assigned to hisd
-                items:
-                  type: number
-              hise:
-                type: array
-                description: Residue identifier of histamines that need to be assigned to hise
-                items:
-                  type: number
-      required: []
-    description: Description of topoaa
-    tomlSchema:
-      items:
-        input:
-          nesting: section
-          indexPrefix: mol
-  - id: topocg
-    label: Coarse-grained-atom topology
-    category: topology
-    schema:
-      type: object
-      properties: {}
-      required: []
-    description: Description of topocg
   - id: rigidbody
     label: Rigid body docker
     category: sampling
@@ -92,36 +50,6 @@ nodes:
           maximum: 1000
           default: 200
       required: [ambig]
-  - id: gdock
-    label: Gdock
-    category: sampling
-    schema:
-      type: object
-      schema:
-        type: object
-        properties:
-          ambig:
-            type: string
-            format: data-url
-            description: Ambiguious interaction constraints
-      required: [ambig]
-    description: Description of gdock
-  - id: lightdock
-    label: Lightdock
-    category: sampling
-    schema:
-      type: object
-      properties:
-        receptor_chains:
-          type: array
-          items:
-            type: string
-        ligand_chains:
-          type: array
-          items:
-            type: string
-      required: []
-    description: Description of gdock
   - id: flexref
     label: Semi flexible refinement
     category: refinement
@@ -138,30 +66,6 @@ nodes:
           title: Number of MD steps during first rigid body cooling stage
           minimum: 0
           maximum: 100
-      required: [ambig]
-  - id: emref
-    label: Energy minimization refinement
-    category: refinement
-    description: Description of emref
-    schema:
-      type: object
-      properties:
-        ambig:
-          type: string
-          format: data-url
-          title: Ambiguious interaction constraints
-      required: [ambig]
-  - id: mdref
-    label: Water refinement
-    category: refinement
-    description: Description of mdref
-    schema:
-      type: object
-      properties:
-        ambig:
-          type: string
-          format: data-url
-          title: Ambiguious interaction constraints
       required: [ambig]
   - id: emscoring
     label: Energy minimization scoring
@@ -222,27 +126,4 @@ nodes:
           type: integer
           default: 400
       required: [select]
-  - id: clustfcc
-    label: FCC clustering
-    description: Fraction of Common Contacts Clustering
-    category: analysis
-    schema:
-      type: object
-      properties:
-        fraction_cutoff:
-          type: number
-          default: 0.6
-      required: []
-  - id: caprieval
-    label: CAPRI metrics
-    category: analysis
-    schema:
-      type: object
-      properties:
-        receptor_chain:
-          type: string
-        ligand_chain:
-          type: string
-      required: []
-templates:
-  docking: /templates/docking.zip
+templates: {}
