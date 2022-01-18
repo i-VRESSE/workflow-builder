@@ -1,6 +1,6 @@
-import { expect, describe, it } from 'vitest';
-import { parseWorkflow, steps2tomltext } from './toml';
-import { INode } from './types';
+import { expect, describe, it } from 'vitest'
+import { parseWorkflow, steps2tomltext } from './toml'
+import { INode } from './types'
 
 describe('steps2tomltext()', () => {
   it('should index repeated nodes', () => {
