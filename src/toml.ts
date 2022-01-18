@@ -54,13 +54,16 @@ export function parseWorkflow (workflow: string) {
   const table = parse(workflow, { bigint: false })
   const global: Record<string, unknown> = {}
   const nonGlobalSteps: IStep[] = []
+  const sectionwithindex = /\.\d+$/
   Object.entries(table).forEach(([k, v]) => {
+    const section = k.replace(sectionwithindex, '')
     if (
       typeof v === 'object' &&
       Object.prototype.toString.call(v) !== '[object Array]'
     ) {
+      // TODO handle repeat nodes like `k === '<nodeid>.<index>'`
       nonGlobalSteps.push({
-        id: k,
+        id: section,
         parameters: v
       } as any)
     } else {
