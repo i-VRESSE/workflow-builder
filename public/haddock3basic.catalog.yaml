@@ -13,7 +13,7 @@ nodes:
       required: [molecules, ncores]
       properties:
         molecules:
-          tilte: Molecules
+          title: Molecules
           type: array
           items:
             type: string
