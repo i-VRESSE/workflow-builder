@@ -1,0 +1,397 @@
+categories:
+- description: HADDOCK3 modules for sampling.
+  name: sampling
+- description: HADDOCK3 modules related to model analysis.
+  name: analysis
+- description: HADDOCK3 actions referring to refinement.
+  name: refinement
+- description: HADDOCK3 modules to score modules.
+  name: scoring
+- description: HADDOCK3 modules to create topologies.
+  name: topology
+global:
+  schema:
+    properties:
+      molecules:
+        default: []
+        items:
+          format: data-url
+          type: string
+        title: Molecules
+        type: array
+    required: []
+    type: object
+  uiSchema: {}
+nodes:
+- category: analysis
+  description: HADDOCK3 module to select top cluster/model.
+  id: seletop
+  label: HADDOCK3 module to select a top cluster/model.
+  schema:
+    properties:
+      select:
+        default: 400
+        maximum: 9999
+        minimum: -9999
+        type: number
+    required: []
+    type: object
+  tomSchema: {}
+  uiSchema: {}
+- category: analysis
+  description: Haddock Module for 'seletopclusts'.
+  id: seletopclusts
+  label: HADDOCK3 module to select a top cluster/model.
+  schema:
+    properties:
+      top_cluster:
+        default:
+        - 1
+        - 2
+        - 3
+        - 4
+        items:
+          type: number
+        type: array
+      top_models:
+        default: 4
+        maximum: 9999
+        minimum: -9999
+        type: number
+    required: []
+    type: object
+  tomSchema: {}
+  uiSchema: {}
+- category: analysis
+  description: HADDOCK3 module to calculate the CAPRI metrics.
+  id: caprieval
+  label: Calculate CAPRI metrics.
+  schema:
+    properties:
+      reference_fname:
+        default: ''
+        format: data-url
+        maxLength: 9999
+        type: string
+    required: []
+    type: object
+  tomSchema: {}
+  uiSchema: {}
+- category: sampling
+  description: HADDOCK3 gdock module.
+  id: gdock
+  label: HADDOCK3 gdock integration module.
+  schema:
+    properties:
+      ambig_fname:
+        default: ''
+        format: data-url
+        maxLength: 9999
+        type: string
+    required: []
+    type: object
+  tomSchema: {}
+  uiSchema: {}
+- category: sampling
+  description: HADDOCK3 module for rigid body sampling.
+  id: rigidbody
+  label: HADDOCK3 rigid-body docking module.
+  schema:
+    properties:
+      ambig_fname:
+        default: ''
+        format: data-url
+        maxLength: 9999
+        type: string
+      hbond_fname:
+        default: ''
+        format: data-url
+        maxLength: 9999
+        type: string
+      ligand_param_fname:
+        default: ''
+        format: data-url
+        maxLength: 9999
+        type: string
+      ligand_top_fname:
+        default: ''
+        format: data-url
+        maxLength: 9999
+        type: string
+      log_level:
+        default: verbose
+        maxLength: 9999
+        type: string
+      sampling:
+        default: 5
+        maximum: 9999
+        minimum: -9999
+        type: number
+      tolerance:
+        default: 0
+        maximum: 9999
+        minimum: -9999
+        type: number
+      unambig_fname:
+        default: ''
+        format: data-url
+        maxLength: 9999
+        type: string
+    required: []
+    type: object
+  tomSchema: {}
+  uiSchema: {}
+- category: sampling
+  description: HADDOCK3 Lightdock module.
+  id: lightdock
+  label: Run Lightdock as a HADDOCK3 module.
+  schema:
+    properties:
+      glowworms:
+        default: 200
+        maximum: 9999
+        minimum: -9999
+        type: number
+      ligand_active:
+        default: ''
+        maxLength: 9999
+        type: string
+      ligand_chains:
+        default: B
+        maxLength: 9999
+        type: string
+      ligand_passive:
+        default: ''
+        maxLength: 9999
+        type: string
+      noh:
+        default: true
+        type: boolean
+      noxt:
+        default: true
+        type: boolean
+      receptor_active:
+        default: ''
+        maxLength: 9999
+        type: string
+      receptor_chains:
+        default: A
+        maxLength: 9999
+        type: string
+      receptor_passive:
+        default: ''
+        maxLength: 9999
+        type: string
+      restraints:
+        default: false
+        type: boolean
+      scoring:
+        default: fastdfire
+        maxLength: 9999
+        type: string
+      steps:
+        default: 100
+        maximum: 9999
+        minimum: -9999
+        type: number
+      swarms:
+        default: 400
+        maximum: 9999
+        minimum: -9999
+        type: number
+      top:
+        default: 10
+        maximum: 9999
+        minimum: -9999
+        type: number
+    required: []
+    type: object
+  tomSchema: {}
+  uiSchema: {}
+- category: topology
+  description: HADDOCK3 module to create CNS all-atom topologies.
+  id: topoaa
+  label: Create and manage CNS all-atom topology.
+  schema:
+    properties:
+      autohis:
+        default: true
+        type: boolean
+    required: []
+    type: object
+  tomSchema: {}
+  uiSchema: {}
+- category: scoring
+  description: HADDOCK3 module to perform energy minimization scoring.
+  id: emscoring
+  label: HADDOCK3 scoring module.
+  schema:
+    properties:
+      log_level:
+        default: verbose
+        maxLength: 9999
+        type: string
+      tolerance:
+        default: 5
+        maximum: 9999
+        minimum: -9999
+        type: number
+    required: []
+    type: object
+  tomSchema: {}
+  uiSchema: {}
+- category: refinement
+  description: HADDOCK3 module for flexible refinement.
+  id: flexref
+  label: HADDOCK3 module for flexible refinement.
+  schema:
+    properties:
+      ambig_fname:
+        default: ''
+        format: data-url
+        maxLength: 9999
+        type: string
+      dihe_fname:
+        default: ''
+        format: data-url
+        maxLength: 9999
+        type: string
+      hbond_fname:
+        default: ''
+        format: data-url
+        maxLength: 9999
+        type: string
+      ligand_param_fname:
+        default: ''
+        format: data-url
+        maxLength: 9999
+        type: string
+      ligand_top_fname:
+        default: ''
+        format: data-url
+        maxLength: 9999
+        type: string
+      log_level:
+        default: verbose
+        maxLength: 9999
+        type: string
+      sampling_factor:
+        default: 1
+        maximum: 9999
+        minimum: -9999
+        type: number
+      tolerance:
+        default: 5
+        maximum: 9999
+        minimum: -9999
+        type: number
+      unambig_fname:
+        default: ''
+        format: data-url
+        maxLength: 9999
+        type: string
+    required: []
+    type: object
+  tomSchema: {}
+  uiSchema: {}
+- category: refinement
+  description: HADDOCK3 module for water refinement.
+  id: mdref
+  label: HADDOCK3 module for water refinement.
+  schema:
+    properties:
+      ambig_fname:
+        default: ''
+        format: data-url
+        maxLength: 9999
+        type: string
+      dihe_fname:
+        default: ''
+        format: data-url
+        maxLength: 9999
+        type: string
+      hbond_fname:
+        default: ''
+        format: data-url
+        maxLength: 9999
+        type: string
+      log_level:
+        default: verbose
+        maxLength: 9999
+        type: string
+      sampling_factor:
+        default: 1
+        maximum: 9999
+        minimum: -9999
+        type: number
+      tolerance:
+        default: 5
+        maximum: 9999
+        minimum: -9999
+        type: number
+      unambig_fname:
+        default: ''
+        format: data-url
+        maxLength: 9999
+        type: string
+    required: []
+    type: object
+  tomSchema: {}
+  uiSchema: {}
+- category: refinement
+  description: HADDOCK3 module energy minimization refinement.
+  id: emref
+  label: HADDOCK3 module for energy minimization refinement.
+  schema:
+    properties:
+      ambig_fname:
+        default: ''
+        format: data-url
+        maxLength: 9999
+        type: string
+      dihe_fname:
+        default: ''
+        format: data-url
+        maxLength: 9999
+        type: string
+      hbond_fname:
+        default: ''
+        format: data-url
+        maxLength: 9999
+        type: string
+      ligand_param_fname:
+        default: ''
+        format: data-url
+        maxLength: 9999
+        type: string
+      ligand_top_fname:
+        default: ''
+        format: data-url
+        maxLength: 9999
+        type: string
+      log_level:
+        default: verbose
+        maxLength: 9999
+        type: string
+      sampling_factor:
+        default: 1
+        maximum: 9999
+        minimum: -9999
+        type: number
+      tolerance:
+        default: 5
+        maximum: 9999
+        minimum: -9999
+        type: number
+      unambig_fname:
+        default: ''
+        format: data-url
+        maxLength: 9999
+        type: string
+    required: []
+    type: object
+  tomSchema: {}
+  uiSchema: {}
+templates:
+  docking: /templates/docking.zip
+title: Haddock 3 basic

@@ -19,7 +19,7 @@ nodes:
           items:
             type: string
             format: data-url
-        rundir:
+        run_dir:
           type: string
         ncores:
           type: integer
