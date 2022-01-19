@@ -8,7 +8,7 @@ import { internalizeDataUrls } from './dataurls'
 // this workaround is not drawing the title for the field
 const registry = utils.getDefaultRegistry()
 const DefaultFileWidget = registry.widgets.FileWidget;
-(Theme as any).widgets.FileWidget = (props) => {
+(Theme as any).widgets.FileWidget = (props: WidgetProps) => {
   return (
     <div>
       <label className='form-label'>{props.schema.title || props.label}
