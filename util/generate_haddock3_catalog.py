@@ -67,6 +67,10 @@ def config2schema(config):
         #     }
         elif v['type'] == 'list':
             prop['type'] = "array"
+            if 'min' in v:
+                prop['minItems'] = v['min']
+            if 'max' in v:
+                prop['maxItems'] = v['max']
             if 'items' in v:
                 obj = {'a' : v['items']} # config2schema requires object
                 items = config2schema(obj)
@@ -131,6 +135,7 @@ molecules:
         type: path
         accept: '.pdb'
     min: 2
+    max: 10
     hover: Molecules
     doc: No help yet
 """, Loader=Loader)

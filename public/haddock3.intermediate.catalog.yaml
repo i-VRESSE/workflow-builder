@@ -1,14 +1,14 @@
 categories:
-- description: HADDOCK3 modules to create topologies.
-  name: topology
-- description: HADDOCK3 modules for sampling.
-  name: sampling
-- description: HADDOCK3 modules to score modules.
-  name: scoring
 - description: HADDOCK3 modules related to model analysis.
   name: analysis
+- description: HADDOCK3 modules for sampling.
+  name: sampling
 - description: HADDOCK3 actions referring to refinement.
   name: refinement
+- description: HADDOCK3 modules to create topologies.
+  name: topology
+- description: HADDOCK3 modules to score modules.
+  name: scoring
 global:
   schema:
     properties:
@@ -17,6 +17,8 @@ global:
         items:
           format: data-url
           type: string
+        maxItems: 10
+        minItems: 2
         title: Molecules
         type: array
     required: []
