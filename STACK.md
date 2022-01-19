@@ -28,19 +28,19 @@ Use desktop oriented framework
 
 1. ant.design
 2. blueprint
-3. Bootstrap 4
+3. Bootstrap 4 <- chosen because it is default in react-json-schema-form
 
 ## State management
 
 1. hooks
 2. redux
-3. recoil
+3. recoil <- chosen for its simplicity
 4. mobx
 
 ## Lint
 
 1. eslint
-2. standard
+2. standard <- chosen for its simplicity, but dont agree with some of its rules like `explicit-function-return-type` and weak autofixer
 
 ## Lang
 
@@ -55,6 +55,7 @@ Use desktop oriented framework
 ## Code formatter
 
 1. Prettier
+2. Standard
 
 ## e2e test
 
