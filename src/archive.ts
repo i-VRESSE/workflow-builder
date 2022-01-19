@@ -16,7 +16,7 @@ import { workflowArchiveFilename, workflowFilename } from './constants'
 async function createZip (
   steps: IStep[],
   nodes: INode[],
-  files: IFiles,
+  files: IFiles
 ) {
   const writer = new ZipWriter(new BlobWriter('application/zip'))
 
@@ -35,7 +35,7 @@ async function createZip (
 export async function saveArchive (
   steps: IStep[],
   nodes: INode[],
-  files: IFiles,
+  files: IFiles
 ) {
   const zip: Blob = await createZip(steps, nodes, files)
   saveAs(zip, workflowArchiveFilename)
