@@ -1,19 +1,18 @@
 categories:
-- description: HADDOCK3 actions referring to refinement.
-  name: refinement
-- description: HADDOCK3 modules to score modules.
-  name: scoring
-- description: HADDOCK3 modules for sampling.
-  name: sampling
 - description: HADDOCK3 modules to create topologies.
   name: topology
+- description: HADDOCK3 modules to score modules.
+  name: scoring
+- description: HADDOCK3 actions referring to refinement.
+  name: refinement
+- description: HADDOCK3 modules for sampling.
+  name: sampling
 - description: HADDOCK3 modules related to model analysis.
   name: analysis
 global:
   schema:
     properties:
       molecules:
-        default: []
         items:
           format: data-url
           type: string
@@ -21,7 +20,16 @@ global:
         minItems: 2
         title: Molecules
         type: array
-    required: []
+      ncores:
+        default: 8
+        title: Number of cpu cores
+        type: number
+      run_dir:
+        title: Run directory
+        type: string
+    required:
+    - molecules
+    - run_dir
     type: object
   uiSchema: {}
 nodes:
@@ -124,9 +132,7 @@ nodes:
         maxLength: 9999
         type: string
       reference_fname:
-        default: ''
         format: data-url
-        maxLength: 9999
         type: string
       sort_ascending:
         default: true
@@ -146,9 +152,7 @@ nodes:
   schema:
     properties:
       ambig_fname:
-        default: ''
         format: data-url
-        maxLength: 9999
         type: string
     required: []
     type: object
@@ -181,9 +185,7 @@ nodes:
         minimum: -9999
         type: number
       ambig_fname:
-        default: ''
         format: data-url
-        maxLength: 9999
         type: string
       anastruc:
         default: 200
@@ -2345,9 +2347,7 @@ nodes:
         minimum: -9999
         type: number
       hbond_fname:
-        default: ''
         format: data-url
-        maxLength: 9999
         type: string
       hbond_hot:
         default: 10
@@ -4239,14 +4239,10 @@ nodes:
         minimum: -9999
         type: number
       ligand_param_fname:
-        default: ''
         format: data-url
-        maxLength: 9999
         type: string
       ligand_top_fname:
-        default: ''
         format: data-url
-        maxLength: 9999
         type: string
       log_level:
         default: verbose
@@ -6233,9 +6229,7 @@ nodes:
         minimum: -9999
         type: number
       unambig_fname:
-        default: ''
         format: data-url
-        maxLength: 9999
         type: string
       w_air:
         default: 0.01
@@ -6410,15 +6404,147 @@ nodes:
         maximum: 9999
         minimum: -9999
         type: number
+      input:
+        items:
+          properties:
+            cg:
+              default: false
+              type: boolean
+            cyclicpept:
+              default: false
+              type: boolean
+            dna:
+              default: false
+              type: boolean
+            fix_origin:
+              default: false
+              type: boolean
+            hisd_1:
+              default: 0
+              maximum: 9999
+              minimum: -9999
+              type: number
+            hisd_10:
+              default: 0
+              maximum: 9999
+              minimum: -9999
+              type: number
+            hisd_2:
+              default: 0
+              maximum: 9999
+              minimum: -9999
+              type: number
+            hisd_3:
+              default: 0
+              maximum: 9999
+              minimum: -9999
+              type: number
+            hisd_4:
+              default: 0
+              maximum: 9999
+              minimum: -9999
+              type: number
+            hisd_5:
+              default: 0
+              maximum: 9999
+              minimum: -9999
+              type: number
+            hisd_6:
+              default: 0
+              maximum: 9999
+              minimum: -9999
+              type: number
+            hisd_7:
+              default: 0
+              maximum: 9999
+              minimum: -9999
+              type: number
+            hisd_8:
+              default: 0
+              maximum: 9999
+              minimum: -9999
+              type: number
+            hisd_9:
+              default: 0
+              maximum: 9999
+              minimum: -9999
+              type: number
+            hise_1:
+              default: 0
+              maximum: 9999
+              minimum: -9999
+              type: number
+            hise_10:
+              default: 0
+              maximum: 9999
+              minimum: -9999
+              type: number
+            hise_2:
+              default: 0
+              maximum: 9999
+              minimum: -9999
+              type: number
+            hise_3:
+              default: 0
+              maximum: 9999
+              minimum: -9999
+              type: number
+            hise_4:
+              default: 0
+              maximum: 9999
+              minimum: -9999
+              type: number
+            hise_5:
+              default: 0
+              maximum: 9999
+              minimum: -9999
+              type: number
+            hise_6:
+              default: 0
+              maximum: 9999
+              minimum: -9999
+              type: number
+            hise_7:
+              default: 0
+              maximum: 9999
+              minimum: -9999
+              type: number
+            hise_8:
+              default: 0
+              maximum: 9999
+              minimum: -9999
+              type: number
+            hise_9:
+              default: 0
+              maximum: 9999
+              minimum: -9999
+              type: number
+            nhisd:
+              default: 0
+              maximum: 9999
+              minimum: -9999
+              type: number
+            nhise:
+              default: 0
+              maximum: 9999
+              minimum: -9999
+              type: number
+            prot_segid:
+              default: A
+              maxLength: 9999
+              type: string
+            shape:
+              default: false
+              type: boolean
+          required: []
+          type: object
+        maxItems: 20
+        type: array
       ligand_param_fname:
-        default: ''
         format: data-url
-        maxLength: 9999
         type: string
       ligand_top_fname:
-        default: ''
         format: data-url
-        maxLength: 9999
         type: string
       limit:
         default: true
@@ -6435,7 +6561,8 @@ nodes:
         maximum: 9999
         minimum: -9999
         type: number
-    required: []
+    required:
+    - input
     type: object
   tomSchema: {}
   uiSchema: {}
@@ -6464,14 +6591,10 @@ nodes:
         default: true
         type: boolean
       ligand_param_fname:
-        default: ''
         format: data-url
-        maxLength: 9999
         type: string
       ligand_top_fname:
-        default: ''
         format: data-url
-        maxLength: 9999
         type: string
       log_level:
         default: verbose
@@ -6667,9 +6790,7 @@ nodes:
         minimum: -9999
         type: number
       ambig_fname:
-        default: ''
         format: data-url
-        maxLength: 9999
         type: string
       asy_cool1:
         default: 1.0
@@ -7381,9 +7502,7 @@ nodes:
         maxLength: 9999
         type: string
       dihe_fname:
-        default: ''
         format: data-url
-        maxLength: 9999
         type: string
       dihedflag:
         default: true
@@ -8718,9 +8837,7 @@ nodes:
         minimum: -9999
         type: number
       hbond_fname:
-        default: ''
         format: data-url
-        maxLength: 9999
         type: string
       hbond_hot:
         default: 10
@@ -10590,14 +10707,10 @@ nodes:
         minimum: -9999
         type: number
       ligand_param_fname:
-        default: ''
         format: data-url
-        maxLength: 9999
         type: string
       ligand_top_fname:
-        default: ''
         format: data-url
-        maxLength: 9999
         type: string
       log_level:
         default: verbose
@@ -12626,9 +12739,7 @@ nodes:
         minimum: -9999
         type: number
       unambig_fname:
-        default: ''
         format: data-url
-        maxLength: 9999
         type: string
       w_air:
         default: 0.1
@@ -12741,9 +12852,7 @@ nodes:
         minimum: -9999
         type: number
       ambig_fname:
-        default: ''
         format: data-url
-        maxLength: 9999
         type: string
       c2sym_end1_1:
         default: ''
@@ -13360,9 +13469,7 @@ nodes:
         maxLength: 9999
         type: string
       dihe_fname:
-        default: ''
         format: data-url
-        maxLength: 9999
         type: string
       dihedflag:
         default: true
@@ -14652,9 +14759,7 @@ nodes:
         default: false
         type: boolean
       hbond_fname:
-        default: ''
         format: data-url
-        maxLength: 9999
         type: string
       hbond_scale:
         default: 50
@@ -16499,14 +16604,10 @@ nodes:
         minimum: -9999
         type: number
       ligand_param_fname:
-        default: ''
         format: data-url
-        maxLength: 9999
         type: string
       ligand_top_fname:
-        default: ''
         format: data-url
-        maxLength: 9999
         type: string
       log_level:
         default: verbose
@@ -18404,9 +18505,7 @@ nodes:
         minimum: -9999
         type: number
       unambig_fname:
-        default: ''
         format: data-url
-        maxLength: 9999
         type: string
       w_air:
         default: 0.1
@@ -18524,9 +18623,7 @@ nodes:
         minimum: -9999
         type: number
       ambig_fname:
-        default: ''
         format: data-url
-        maxLength: 9999
         type: string
       c2sym_end1_1:
         default: ''
@@ -19143,9 +19240,7 @@ nodes:
         maxLength: 9999
         type: string
       dihe_fname:
-        default: ''
         format: data-url
-        maxLength: 9999
         type: string
       dihedflag:
         default: true
@@ -20435,9 +20530,7 @@ nodes:
         default: false
         type: boolean
       hbond_fname:
-        default: ''
         format: data-url
-        maxLength: 9999
         type: string
       hbond_scale:
         default: 50
@@ -22282,14 +22375,10 @@ nodes:
         minimum: -9999
         type: number
       ligand_param_fname:
-        default: ''
         format: data-url
-        maxLength: 9999
         type: string
       ligand_top_fname:
-        default: ''
         format: data-url
-        maxLength: 9999
         type: string
       log_level:
         default: verbose
@@ -24183,9 +24272,7 @@ nodes:
         minimum: -9999
         type: number
       unambig_fname:
-        default: ''
         format: data-url
-        maxLength: 9999
         type: string
       w_air:
         default: 0.1

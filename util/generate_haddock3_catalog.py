@@ -25,24 +25,33 @@ LEVELS = ('basic', 'intermediate', 'guru')
 def argparser_builder():
     parser = argparse.ArgumentParser()
     parser.add_argument('out', type=argparse.FileType('w', encoding='UTF-8'), default='-')
-    parser.add_argument('--level', choices=LEVELS, default='basic')
+    parser.add_argument('--level', choices=LEVELS, default=LEVELS[0])
     return parser
 
 def config2schema(config):
     """Translate haddock3 config file of a module to JSON schema"""
     properties = {}
+    required = []
     for k, v in config.items():
         prop = {}
         if 'default' in v:
             prop["default"] = v['default']
+        else:
+            # If there is no default then user must supply a value so prop is required
+            required.append(k)
         if 'hover' in v and v['hover'] != 'No help yet':
             prop['title'] = v['hover']
         if 'doc' in v and v['doc'] != 'No help yet':
             prop['description'] = v['doc']
         if 'type' not in v:
-            # TODO handle mol1': {'prot_segid
-            continue
-        if v['type'] == 'bool':
+            # TODO haddock3 file needs to be refactored so input is list of dict
+            # for now use value of mol1 key as items schema
+            prop = {
+                "type": "array",
+                "items": config2schema(next(iter(v.values()))),
+                "maxItems": len(v)
+            }
+        elif v['type'] == 'bool':
             prop['type'] = "boolean"
         elif v['type'] in {'float', 'integer'}:
             prop['type'] = "number"
@@ -54,17 +63,18 @@ def config2schema(config):
             prop['type'] = 'string'
             prop['format'] = 'data-url'
             if 'length' in v:
-                prop['maxLength'] = v['length']
+                # TODO rjsf gives `should NOT be longer than 9999 characters` error when maxLenght is set
+                # prop['maxLength'] = v['length']
+                pass
+            if 'default' in v and v['default'] == '':
+                # paths can not have defaults
+                del prop['default']
+
+            # TODO add accept key/value pair to uiSchema
         elif v['type'] == 'string':
             prop['type'] = 'string'
             if 'length' in v:
                 prop['maxLength'] = v['length']
-        # elif isinstance(v, str):
-        #     prop = {
-        #         "type": "string",
-        #         # TODO could be path to file which needs `format: data-url`
-        #         "default": v
-        #     }
         elif v['type'] == 'list':
             prop['type'] = "array"
             if 'min' in v:
@@ -82,16 +92,15 @@ def config2schema(config):
                 }
             else:
                 raise ValueError(f"Don't know how to determine type of items of {v}")
-
         # elif isinstance(v, dict):
         #     prop = config2schema(v)
         else:
-            raise ValueError(f"Don't know what to do with {v}")
+            raise ValueError(f"Don't know what to do with {k}:{v}")
         properties[k] = prop
     return {
         "type": "object",
         "properties": properties,
-        "required": [] # TODO mark required props
+        "required": required
     }
 
 def process_module(module_name, category, level):
@@ -127,9 +136,9 @@ def process_category(category):
     }
 
 # TODO retrieve global config in haddock3 code
+# TODO in haddock3 this section is called general run parameters, we could rename global to general
 GLOBAL_CONFIG = load("""
 molecules:
-    default: []
     type: list
     items:
         type: path
@@ -138,6 +147,15 @@ molecules:
     max: 10
     hover: Molecules
     doc: No help yet
+run_dir:
+    type: string
+    hover: Run directory
+    doc: No help yet
+ncores:
+    type: integer
+    hover: Number of cpu cores
+    doc: No help yet
+    default: 8
 """, Loader=Loader)
 
 GLOBAL_NODE = {
@@ -158,8 +176,9 @@ def main(argv=sys.argv[1:]):
     catalog = {
         "title": f"Haddock 3 {args.level}",
         "categories": categories,
-        "nodes": nodes,
         "global": GLOBAL_NODE,
+        # TODO in haddock3 nodes are called modules, we could rename it here
+        "nodes": nodes,
         "templates": {
             'docking': '/templates/docking.zip' # TODO get from somewhere instead of hardcoding it here
         }
