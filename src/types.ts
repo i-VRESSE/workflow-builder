@@ -1,18 +1,11 @@
 import { JSONSchema7 } from 'json-schema'
 import { UiSchema } from '@rjsf/core'
 
-export interface TomlSchema {
-  nesting?: 'section'
-  indexPrefix?: string
-  items?: Record<string, TomlSchema>
-}
-
 export interface INode {
   id: string
   label: string
   schema: JSONSchema7
   uiSchema?: UiSchema
-  tomlSchema?: TomlSchema
   description: string
   category: string
 }
