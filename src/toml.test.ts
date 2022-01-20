@@ -1,8 +1,34 @@
-import { expect, describe, it } from 'vitest'
-import { parseWorkflow, steps2tomltext } from './toml'
-import { INode } from './types'
+import { expect, describe, it } from 'vitest';
+import { parseWorkflow, workflow2tomltext } from './toml';
+import { INode } from './types';
 
 describe('steps2tomltext()', () => {
+  it('should write list of dicts as array of tables', () => {
+    const steps = [{
+      id: 'somenode',
+      parameters: {
+        foo: [{
+          bar: 'fiz'
+        }, {
+          bar: 'fizzz'
+        }]
+      }
+    }]
+
+    const result = workflow2tomltext(steps, {})
+    const expected = `
+[somenode]
+
+[[somenode.foo]]
+
+bar = 'fiz'
+
+[[somenode.foo]]
+
+bar = 'fizzz'
+`
+    expect(result).toEqual(expected)
+  })
   it('should index repeated nodes', () => {
     const steps = [
       {
@@ -18,25 +44,8 @@ describe('steps2tomltext()', () => {
         }
       }
     ]
-    const nodes: INode[] = [
-      {
-        id: 'somenode',
-        label: 'Some node',
-        category: 'somecategory',
-        description: 'Some description',
-        schema: {
-          type: 'object',
-          properties: {
-            foo: {
-              type: 'string'
-            }
-          }
-        },
-        tomlSchema: {}
-      }
-    ]
 
-    const result = steps2tomltext(steps, nodes)
+    const result = workflow2tomltext(steps, {})
     const expected = `
 [somenode]
 
@@ -51,6 +60,32 @@ foo = 'fizz'
 })
 
 describe('parseWorkflow()', () => {
+  it('should divide global and module parameters', () => {
+    const workflow = `
+myglobalvar = 'something'
+
+[somenode]
+
+foo = 'bar'
+`
+    const globalKeys = new Set(['myglobalvar'])
+    const result = parseWorkflow(workflow, globalKeys)
+    const expected = {
+      global: {
+        myglobalvar: 'something'
+      },
+      steps: [
+        {
+          id: 'somenode',
+          parameters: {
+            foo: 'bar'
+          }
+        }
+      ]
+    }
+    expect(result).toEqual(expected)
+  })
+
   it('should de-index repeated nodes', () => {
     const workflow = `
 [somenode]
@@ -61,25 +96,24 @@ foo = 'bar'
 
 foo = 'fizz'
 `
-    const result = parseWorkflow(workflow)
-    const expected = [
-      {
-        id: 'global',
-        parameters: {}
-      },
-      {
-        id: 'somenode',
-        parameters: {
-          foo: 'bar'
+    const result = parseWorkflow(workflow, new Set())
+    const expected = {
+      global: {},
+      steps: [
+        {
+          id: 'somenode',
+          parameters: {
+            foo: 'bar'
+          }
+        },
+        {
+          id: 'somenode',
+          parameters: {
+            foo: 'fizz'
+          }
         }
-      },
-      {
-        id: 'somenode',
-        parameters: {
-          foo: 'fizz'
-        }
-      }
-    ]
+      ]
+    }
     expect(result).toEqual(expected)
   })
 })

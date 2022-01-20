@@ -1,48 +1,44 @@
 import { Section, stringify, parse } from '@ltd/j-toml'
-import { IStep, INode } from './types'
+import { IStep, IParameters } from './types'
 
-function steps2tomltable (steps: IStep[], nodes: INode[]) {
+function isObject (o: unknown): boolean {
+  return typeof o === 'object' &&
+    Object.prototype.toString.call(o) === '[object Object]'
+}
+
+function steps2tomltable (steps: IStep[]) {
   const table: Record<string, unknown> = {}
   const track: Record<string, number> = {}
   for (const step of steps) {
-    const schema = nodes.find((n) => n.id === step?.id)?.tomlSchema
-    if (schema?.nesting === 'global') {
-      Object.entries(step.parameters).forEach(([k, v]) => (table[k] = v))
-    } else {
-      if (!(step.id in track)) {
-        track[step.id] = 0
-      }
-      track[step.id]++
-      const section =
-        track[step.id] > 1 ? `${step.id}.${track[step.id]}` : step.id
-      const stepParameters: Record<string, unknown> = {}
-      // TODO make recursive so `items.input.items.hisd: nesting` is also applied
-      Object.entries(step.parameters).forEach(([k, v]) => {
-        if ((schema != null) && (schema.items != null) && k in schema.items) {
-          if (schema.items[k].nesting === 'section') {
-            if (schema.items[k].indexPrefix) {
-              const sectionedParameter: Record<string, unknown> = {};
-              (v as unknown[]).forEach((d: unknown, i: number) => {
-                sectionedParameter[`${schema.items![k].indexPrefix!}${(i + 1)}`] =
-                  Section(d as any)
-              })
-              stepParameters[k] = sectionedParameter
-            } else {
-              stepParameters[k] = Section(v as any)
-            }
-          }
-        } else {
-          stepParameters[k] = v
-        }
-      })
-      table[section] = Section(stepParameters as any)
+    if (!(step.id in track)) {
+      track[step.id] = 0
     }
+    track[step.id]++
+    const section =
+      track[step.id] > 1 ? `${step.id}.${track[step.id]}` : step.id
+    const stepParameters: Record<string, unknown> = {}
+    // TODO make recursive so `items.input.items.hisd: nesting` is also applied
+    Object.entries(step.parameters).forEach(([k, v]) => {
+      if (Array.isArray(v) && v.length > 0 && isObject(v[0])) {
+        // A value that is an array of objects will have each of its objects as a section
+        stepParameters[k] = v.map(d => Section(d))
+      } else {
+        stepParameters[k] = v
+      }
+    })
+    table[section] = Section(stepParameters as any)
   }
   return table
 }
 
-export function steps2tomltext (steps: IStep[], nodes: INode[]) {
-  const table = steps2tomltable(steps, nodes)
+export function workflow2tomltext (
+  steps: IStep[],
+  global: IParameters
+) {
+  const table = {
+    ...steps2tomltable(steps),
+    ...global
+  }
   const text = stringify(table as any, {
     newline: '\n',
     integer: Number.MAX_SAFE_INTEGER
@@ -50,32 +46,21 @@ export function steps2tomltext (steps: IStep[], nodes: INode[]) {
   return text
 }
 
-export function parseWorkflow (workflow: string) {
+export function parseWorkflow (workflow: string, globalKeys: Set<string>) {
   const table = parse(workflow, { bigint: false })
   const global: Record<string, unknown> = {}
-  const nonGlobalSteps: IStep[] = []
+  const steps: IStep[] = []
   const sectionwithindex = /\.\d+$/
   Object.entries(table).forEach(([k, v]) => {
     const section = k.replace(sectionwithindex, '')
-    if (
-      typeof v === 'object' &&
-      Object.prototype.toString.call(v) !== '[object Array]'
-    ) {
-      // TODO handle repeat nodes like `k === '<nodeid>.<index>'`
-      nonGlobalSteps.push({
-        id: section,
-        parameters: v
-      } as any)
-    } else {
+    if (globalKeys.has(section)) {
       global[k] = v
+    } else {
+      steps.push({
+        id: section,
+        parameters: v as IParameters
+      })
     }
   })
-  const newSteps = [
-    {
-      id: 'global',
-      parameters: global
-    },
-    ...nonGlobalSteps
-  ]
-  return newSteps
+  return { steps, global }
 }

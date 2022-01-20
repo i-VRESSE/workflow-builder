@@ -2,12 +2,13 @@ import { load } from 'js-yaml'
 import { atom, selector, useRecoilState, useRecoilValue } from 'recoil'
 import { externalizeDataUrls } from './dataurls'
 import { readArchive, saveArchive } from './archive'
-import { ICatalog, IStep, IFiles } from './types'
-import { parseWorkflow, steps2tomltext } from './toml'
+import { ICatalog, IStep, IFiles, IParameters } from './types'
+import { parseWorkflow, workflow2tomltext } from './toml'
+import { catalogURLchoices } from './constants'
 
 export const catalogURLState = atom<string>({
   key: 'catalogURL',
-  default: new URL('/catalog.yaml', import.meta.url).href
+  default: catalogURLchoices[0][1]
 })
 
 const catalogState = selector<ICatalog>({
@@ -24,13 +25,35 @@ export function useCatalog (): ICatalog {
   return useRecoilValue<ICatalog>(catalogState)
 }
 
-const workflowState = atom<IStep[]>({
+const globalKeysState = selector<Set<string>>({
+  key: 'globalKeys',
+  get: ({ get }) => {
+    const { global } = get(catalogState)
+    let keys: string[] = []
+    if (global?.schema.properties != null) {
+      keys = Object.keys(global.schema.properties)
+    }
+    return new Set(keys)
+  }
+})
+
+const globalParametersState = atom<IParameters>({
+  key: 'global',
+  default: {}
+})
+
+const editingGlobalParametersState = atom<boolean>({
+  key: 'editingGlobal',
+  default: false
+})
+
+const stepsState = atom<IStep[]>({
   key: 'steps',
   default: []
 })
 
-const selectedStepState = atom<number>({
-  key: 'selectedStep',
+const selectedStepIndexState = atom<number>({
+  key: 'selectedStepIndex',
   default: -1
 })
 
@@ -48,67 +71,88 @@ function removeItemAtIndex<V> (arr: V[], index: number) {
 }
 
 export function useWorkflow () {
-  const [steps, setSteps] = useRecoilState(workflowState)
-  const [selectedStep, setSelectedStep] = useRecoilState(selectedStepState)
+  const [steps, setSteps] = useRecoilState(stepsState)
+  const [global, setGlobal] = useRecoilState(globalParametersState)
+  const [editingGlobal, setEditingGlobal] = useRecoilState(editingGlobalParametersState)
+  const [selectedStepIndex, setSelectedStepIndex] = useRecoilState(selectedStepIndexState)
   const { files, setFiles } = useFiles()
   const { nodes } = useCatalog()
+  const globalKeys = useRecoilValue(globalKeysState);
 
   return {
     steps,
-    selectedStep,
+    selectedStep: selectedStepIndex, // TODO rename to selectedStepIndex
+    editingGlobal,
+    global,
+    toggleGlobalEdit () {
+      setEditingGlobal(!editingGlobal)
+      setSelectedStepIndex(-1)
+    },
     addNodeToWorkflow (nodeId: string) {
       setSteps([...steps, { id: nodeId, parameters: {} }])
-      if (selectedStep === -1) {
-        setSelectedStep(steps.length)
+      if (selectedStepIndex === -1 && !editingGlobal) {
+        setSelectedStepIndex(steps.length)
       }
     },
-    selectStep: (stepIndex: number) => setSelectedStep(stepIndex),
+    selectStep: (stepIndex: number) => {
+      if (editingGlobal) {
+        setEditingGlobal(false)
+      }
+      setSelectedStepIndex(stepIndex)
+    },
     deleteStep (stepIndex: number) {
-      if (stepIndex === selectedStep) {
-        setSelectedStep(-1)
+      if (stepIndex === selectedStepIndex) {
+        setSelectedStepIndex(-1)
       }
       const newSteps = removeItemAtIndex(steps, stepIndex)
       setSteps(newSteps)
     },
-    clearStepSelection: () => setSelectedStep(-1),
+    clearStepSelection: () => setSelectedStepIndex(-1),
     setParameters (inlinedParameters: unknown) {
       const newFiles = { ...files }
+      // TODO forget files that are no longer refered to in parameters
       const parameters = externalizeDataUrls(inlinedParameters, newFiles)
-      const newStep = { ...steps[selectedStep], parameters }
-      const newSteps = replaceItemAtIndex(steps, selectedStep, newStep)
-      setSteps(newSteps as any)
+      if (editingGlobal) {
+        setGlobal(parameters)
+      } else {
+        const newStep = { ...steps[selectedStepIndex], parameters }
+        const newSteps = replaceItemAtIndex(steps, selectedStepIndex, newStep)
+        setSteps(newSteps as any)
+      }
       setFiles(newFiles)
     },
     async loadWorkflowArchive (archiveURL: string) {
       const { tomlstring, files: newFiles } = await readArchive(archiveURL, nodes)
-      const newSteps = parseWorkflow(tomlstring)
+      const { steps: newSteps, global: newGlobal } = parseWorkflow(tomlstring, globalKeys)
       setSteps(newSteps)
       setFiles(newFiles)
+      setGlobal(newGlobal)
     },
     loadWorkflow (tomlstring: string) {
       // TODO load zip file
-      const newSteps = parseWorkflow(tomlstring)
+      const { steps: newSteps, global: newGlobal } = parseWorkflow(tomlstring, globalKeys)
       const newFiles = {}
       newSteps.forEach(s => {
         s.parameters = externalizeDataUrls(s.parameters, newFiles)
       })
       setSteps(newSteps)
+      setGlobal(externalizeDataUrls(newGlobal, newFiles))
       setFiles(newFiles)
     },
     async save () {
-      await saveArchive(steps, nodes, files)
+      await saveArchive(steps, global, files)
     },
     moveStepDown (stepIndex: number) {
       if (stepIndex + 1 < steps.length) {
         const newSteps = moveStep(steps, stepIndex, 1)
-        setSelectedStep(-1)
+        setSelectedStepIndex(-1)
         setSteps(newSteps)
       }
     },
     moveStepUp (stepIndex: number) {
       if (stepIndex > 0) {
         const newSteps = moveStep(steps, stepIndex, -1)
-        setSelectedStep(-1)
+        setSelectedStepIndex(-1)
         setSteps(newSteps)
       }
     }
@@ -137,9 +181,8 @@ function moveStep (steps: IStep[], stepIndex: number, direction: number) {
 }
 
 export function useText () {
-  const { steps } = useWorkflow()
-  const { nodes } = useCatalog()
-  return steps2tomltext(steps, nodes)
+  const { steps, global } = useWorkflow()
+  return workflow2tomltext(steps, global)
 }
 
 export function useTextUrl () {
