@@ -124,7 +124,6 @@ def process_module(module_name, category, level):
         "description": cls.__doc__,
         "schema": config2schema(config4level),
         "uiSchema": {}, # TODO
-        "tomSchema": {}, # TODO
     }
 
 def process_category(category):
