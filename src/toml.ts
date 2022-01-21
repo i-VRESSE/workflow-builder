@@ -62,5 +62,6 @@ export function parseWorkflow (workflow: string, globalKeys: Set<string>) {
       })
     }
   })
+  // TODO validate steps and global parameters against schemas in catalog
   return { steps, global }
 }

@@ -61,6 +61,9 @@ def config2schema(config):
                 prop['minimum'] = v['min']
         elif v['type'] == 'path':
             prop['type'] = 'string'
+            # TODO move data-url to uiSchema,
+            # as workflow.cfg file use paths instead of bas64 encoded string
+            # rjsf needs data-url to render a file upload field in the form, but that can also be configured in uiSchema
             prop['format'] = 'data-url'
             if 'length' in v:
                 # TODO rjsf gives `should NOT be longer than 9999 characters` error when maxLenght is set
