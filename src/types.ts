@@ -35,3 +35,13 @@ export interface IStep {
 }
 
 export type IFiles = Record<string, string>
+
+export interface IWorkflow {
+  global: IParameters
+  steps: IStep[]
+}
+
+export interface IWorkflowSchema {
+  global: IGlobal
+  nodes: INode[]
+}

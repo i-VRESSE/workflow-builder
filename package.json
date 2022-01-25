@@ -14,6 +14,8 @@
     "@rjsf/bootstrap-4": "^3.2.1",
     "@rjsf/core": "^3.2.1",
     "@zip.js/zip.js": "^2.3.23",
+    "ajv": "^8.9.0",
+    "ajv-formats": "^2.1.1",
     "bootstrap": "^4",
     "file-saver": "^2.0.5",
     "js-yaml": "^4.1.0",
@@ -38,5 +40,7 @@
     "vite-node": "^0.0.141",
     "vitest": "^0.0.140"
   },
-  "engines" : { "node" : "~16" }
+  "engines": {
+    "node": "~16"
+  }
 }
