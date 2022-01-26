@@ -25,13 +25,14 @@ const catalogState = selector<ICatalog>({
       if (errors.length > 0) {
         // TODO notify user of bad catalog
         toast.error('Loading catalog failed')
-        return undefined
+        return {} as ICatalog
       }
       // TODO Only report success when user initiated catalog loading, not when page is loaded
       // toast.success('Loading catalog completed')
       return catalog as ICatalog
     } catch (error) {
       toast.error('Loading catalog failed')
+      return {} as ICatalog
     }
   }
 })
