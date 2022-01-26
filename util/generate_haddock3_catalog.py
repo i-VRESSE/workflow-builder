@@ -31,9 +31,12 @@ def argparser_builder():
 def config2schema(config):
     """Translate haddock3 config file of a module to JSON schema"""
     properties = {}
+    uiSchema = {}
+
     required = []
     for k, v in config.items():
         prop = {}
+        prop_ui = {}
         if 'default' in v:
             prop["default"] = v['default']
         else:
@@ -46,11 +49,16 @@ def config2schema(config):
         if 'type' not in v:
             # TODO haddock3 file needs to be refactored so input is list of dict
             # for now use value of mol1 key as items schema
+            schema_uiSchema = config2schema(next(iter(v.values())))
             prop = {
                 "type": "array",
-                "items": config2schema(next(iter(v.values()))),
+                "items": schema_uiSchema['schema'],
                 "maxItems": len(v)
             }
+            if schema_uiSchema['uiSchema']:
+                prop_ui = {
+                    "items": schema_uiSchema['uiSchema']
+                }
         elif v['type'] == 'bool':
             prop['type'] = "boolean"
         elif v['type'] in {'float', 'integer'}:
@@ -61,19 +69,24 @@ def config2schema(config):
                 prop['minimum'] = v['min']
         elif v['type'] == 'path':
             prop['type'] = 'string'
-            # TODO move data-url to uiSchema,
-            # as workflow.cfg file use paths instead of bas64 encoded string
-            # rjsf needs data-url to render a file upload field in the form, but that can also be configured in uiSchema
-            prop['format'] = 'data-url'
+            prop['format'] = 'uri-reference'
             if 'length' in v:
                 # TODO rjsf gives `should NOT be longer than 9999 characters` error when maxLenght is set
-                # prop['maxLength'] = v['length']
                 pass
             if 'default' in v and v['default'] == '':
                 # paths can not have defaults
                 del prop['default']
 
+            # TODO move data-url to uiSchema,
+            # as workflow.cfg file use paths instead of bas64 encoded string
+            # rjsf needs data-url to render a file upload field in the form, but that can also be configured in uiSchema
+            prop_ui ={
+                "ui:widget": "file"
+            }
+
             # TODO add accept key/value pair to uiSchema
+            if 'accept' in v:
+                prop_ui["ui:options"] = { "accept": v['accept']}
         elif v['type'] == 'string':
             prop['type'] = 'string'
             if 'length' in v:
@@ -86,8 +99,12 @@ def config2schema(config):
                 prop['maxItems'] = v['max']
             if 'items' in v:
                 obj = {'a' : v['items']} # config2schema requires object
-                items = config2schema(obj)
-                prop['items'] = items['properties']['a']
+                schema_uiSchema = config2schema(obj)
+                prop['items'] = schema_uiSchema['schema']['properties']['a']
+                if schema_uiSchema['uiSchema'] and schema_uiSchema['uiSchema']['a']:
+                    prop_ui = {
+                        "items": schema_uiSchema['uiSchema']['a']
+                    }
             elif len(v['default']) and (isinstance(v['default'][0], int) or isinstance(v['default'][0], float)):
                 # Use default value to determine type of items in array/list
                 prop['items'] = {
@@ -100,10 +117,16 @@ def config2schema(config):
         else:
             raise ValueError(f"Don't know what to do with {k}:{v}")
         properties[k] = prop
-    return {
+        if prop_ui:
+            uiSchema[k] = prop_ui
+    schema = {
         "type": "object",
         "properties": properties,
         "required": required
+    }
+    return {
+        "schema": schema,
+        "uiSchema": uiSchema
     }
 
 def process_module(module_name, category, level):
@@ -120,13 +143,14 @@ def process_module(module_name, category, level):
         if l == level:
             break
 
+    schema_uiSchema = config2schema(config4level)
     return {
         "id": module_name,
         "category": category,
         "label": module.__doc__,
         "description": cls.__doc__,
-        "schema": config2schema(config4level),
-        "uiSchema": {}, # TODO
+        "schema": schema_uiSchema['schema'],
+        "uiSchema": schema_uiSchema['uiSchema']
     }
 
 def process_category(category):
@@ -160,16 +184,13 @@ ncores:
     default: 8
 """, Loader=Loader)
 
-GLOBAL_NODE = {
-    "schema": config2schema(GLOBAL_CONFIG),
-    "uiSchema": {},
-}
+GLOBAL_NODE = config2schema(GLOBAL_CONFIG)
 
 def main(argv=sys.argv[1:]):
     argparser = argparser_builder()
     args = argparser.parse_args(argv)
 
-    # TODO order of categories by which category needs output from another
+    # TODO order the categories by which category needs output from another. Now order is not reproducible
     categories = [process_category(c) for c in set(modules_category.values())]
 
     broken_modules = {'clustfcc', 'topocg'}

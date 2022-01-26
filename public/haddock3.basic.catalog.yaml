@@ -1,20 +1,20 @@
 categories:
-- description: HADDOCK3 modules for sampling.
-  name: sampling
-- description: HADDOCK3 actions referring to refinement.
-  name: refinement
-- description: HADDOCK3 modules to score modules.
-  name: scoring
-- description: HADDOCK3 modules to create topologies.
-  name: topology
 - description: HADDOCK3 modules related to model analysis.
   name: analysis
+- description: HADDOCK3 modules to create topologies.
+  name: topology
+- description: HADDOCK3 actions referring to refinement.
+  name: refinement
+- description: HADDOCK3 modules for sampling.
+  name: sampling
+- description: HADDOCK3 modules to score modules.
+  name: scoring
 global:
   schema:
     properties:
       molecules:
         items:
-          format: data-url
+          format: uri-reference
           type: string
         maxItems: 10
         minItems: 2
@@ -31,7 +31,12 @@ global:
     - molecules
     - run_dir
     type: object
-  uiSchema: {}
+  uiSchema:
+    molecules:
+      items:
+        ui:options:
+          accept: .pdb
+        ui:widget: file
 nodes:
 - category: analysis
   description: HADDOCK3 module to select top cluster/model.
@@ -46,7 +51,6 @@ nodes:
         type: number
     required: []
     type: object
-  tomSchema: {}
   uiSchema: {}
 - category: analysis
   description: Haddock Module for 'seletopclusts'.
@@ -70,7 +74,6 @@ nodes:
         type: number
     required: []
     type: object
-  tomSchema: {}
   uiSchema: {}
 - category: analysis
   description: HADDOCK3 module to calculate the CAPRI metrics.
@@ -79,12 +82,13 @@ nodes:
   schema:
     properties:
       reference_fname:
-        format: data-url
+        format: uri-reference
         type: string
     required: []
     type: object
-  tomSchema: {}
-  uiSchema: {}
+  uiSchema:
+    reference_fname:
+      ui:widget: file
 - category: sampling
   description: HADDOCK3 gdock module.
   id: gdock
@@ -92,12 +96,13 @@ nodes:
   schema:
     properties:
       ambig_fname:
-        format: data-url
+        format: uri-reference
         type: string
     required: []
     type: object
-  tomSchema: {}
-  uiSchema: {}
+  uiSchema:
+    ambig_fname:
+      ui:widget: file
 - category: sampling
   description: HADDOCK3 module for rigid body sampling.
   id: rigidbody
@@ -105,16 +110,16 @@ nodes:
   schema:
     properties:
       ambig_fname:
-        format: data-url
+        format: uri-reference
         type: string
       hbond_fname:
-        format: data-url
+        format: uri-reference
         type: string
       ligand_param_fname:
-        format: data-url
+        format: uri-reference
         type: string
       ligand_top_fname:
-        format: data-url
+        format: uri-reference
         type: string
       log_level:
         default: verbose
@@ -131,12 +136,21 @@ nodes:
         minimum: -9999
         type: number
       unambig_fname:
-        format: data-url
+        format: uri-reference
         type: string
     required: []
     type: object
-  tomSchema: {}
-  uiSchema: {}
+  uiSchema:
+    ambig_fname:
+      ui:widget: file
+    hbond_fname:
+      ui:widget: file
+    ligand_param_fname:
+      ui:widget: file
+    ligand_top_fname:
+      ui:widget: file
+    unambig_fname:
+      ui:widget: file
 - category: sampling
   description: HADDOCK3 Lightdock module.
   id: lightdock
@@ -202,7 +216,6 @@ nodes:
         type: number
     required: []
     type: object
-  tomSchema: {}
   uiSchema: {}
 - category: topology
   description: HADDOCK3 module to create CNS all-atom topologies.
@@ -215,7 +228,6 @@ nodes:
         type: boolean
     required: []
     type: object
-  tomSchema: {}
   uiSchema: {}
 - category: scoring
   description: HADDOCK3 module to perform energy minimization scoring.
@@ -234,7 +246,6 @@ nodes:
         type: number
     required: []
     type: object
-  tomSchema: {}
   uiSchema: {}
 - category: refinement
   description: HADDOCK3 module for flexible refinement.
@@ -243,19 +254,19 @@ nodes:
   schema:
     properties:
       ambig_fname:
-        format: data-url
+        format: uri-reference
         type: string
       dihe_fname:
-        format: data-url
+        format: uri-reference
         type: string
       hbond_fname:
-        format: data-url
+        format: uri-reference
         type: string
       ligand_param_fname:
-        format: data-url
+        format: uri-reference
         type: string
       ligand_top_fname:
-        format: data-url
+        format: uri-reference
         type: string
       log_level:
         default: verbose
@@ -272,12 +283,23 @@ nodes:
         minimum: -9999
         type: number
       unambig_fname:
-        format: data-url
+        format: uri-reference
         type: string
     required: []
     type: object
-  tomSchema: {}
-  uiSchema: {}
+  uiSchema:
+    ambig_fname:
+      ui:widget: file
+    dihe_fname:
+      ui:widget: file
+    hbond_fname:
+      ui:widget: file
+    ligand_param_fname:
+      ui:widget: file
+    ligand_top_fname:
+      ui:widget: file
+    unambig_fname:
+      ui:widget: file
 - category: refinement
   description: HADDOCK3 module for water refinement.
   id: mdref
@@ -285,13 +307,13 @@ nodes:
   schema:
     properties:
       ambig_fname:
-        format: data-url
+        format: uri-reference
         type: string
       dihe_fname:
-        format: data-url
+        format: uri-reference
         type: string
       hbond_fname:
-        format: data-url
+        format: uri-reference
         type: string
       log_level:
         default: verbose
@@ -308,12 +330,19 @@ nodes:
         minimum: -9999
         type: number
       unambig_fname:
-        format: data-url
+        format: uri-reference
         type: string
     required: []
     type: object
-  tomSchema: {}
-  uiSchema: {}
+  uiSchema:
+    ambig_fname:
+      ui:widget: file
+    dihe_fname:
+      ui:widget: file
+    hbond_fname:
+      ui:widget: file
+    unambig_fname:
+      ui:widget: file
 - category: refinement
   description: HADDOCK3 module energy minimization refinement.
   id: emref
@@ -321,19 +350,19 @@ nodes:
   schema:
     properties:
       ambig_fname:
-        format: data-url
+        format: uri-reference
         type: string
       dihe_fname:
-        format: data-url
+        format: uri-reference
         type: string
       hbond_fname:
-        format: data-url
+        format: uri-reference
         type: string
       ligand_param_fname:
-        format: data-url
+        format: uri-reference
         type: string
       ligand_top_fname:
-        format: data-url
+        format: uri-reference
         type: string
       log_level:
         default: verbose
@@ -350,12 +379,23 @@ nodes:
         minimum: -9999
         type: number
       unambig_fname:
-        format: data-url
+        format: uri-reference
         type: string
     required: []
     type: object
-  tomSchema: {}
-  uiSchema: {}
+  uiSchema:
+    ambig_fname:
+      ui:widget: file
+    dihe_fname:
+      ui:widget: file
+    hbond_fname:
+      ui:widget: file
+    ligand_param_fname:
+      ui:widget: file
+    ligand_top_fname:
+      ui:widget: file
+    unambig_fname:
+      ui:widget: file
 templates:
   docking: /templates/docking.zip
 title: Haddock 3 basic
