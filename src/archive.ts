@@ -3,6 +3,7 @@ import {
   BlobWriter,
   Data64URIReader,
   Data64URIWriter,
+  getMimeType,
   TextReader,
   TextWriter,
   ZipReader,
@@ -41,6 +42,11 @@ export async function saveArchive (
   saveAs(zip, workflowArchiveFilename)
 }
 
+export function injectFilenameIntoDataURL (filename: string, unnamedDataURL: string): string {
+  const mimeType = getMimeType(filename)
+  return unnamedDataURL.replace('data:;base64,', `data:${mimeType};name=${filename};base64,`)
+}
+
 export async function readArchive (archiveURL: string, nodes: INode[]): Promise<{
   tomlstring: string
   files: IFiles
@@ -50,7 +56,9 @@ export async function readArchive (archiveURL: string, nodes: INode[]): Promise<
   const file = await response.blob()
   const reader = new ZipReader(new BlobReader(file))
   const entries = await reader.getEntries()
-  const writer = new Data64URIWriter()
+  // TODO store files as File object (https://developer.mozilla.org/en-US/docs/Web/API/File),
+  // File object contains filename property while filename is hacked into dataURL so rjsf can use it
+  // Also File object together with URL.createObjectURL() could be more performant then copying large dataURL strings around
   const files: IFiles = {}
   let tomlstring = ''
   for await (const entry of entries) {
@@ -60,8 +68,12 @@ export async function readArchive (archiveURL: string, nodes: INode[]): Promise<
     if (entry.filename === workflowFilename) {
       tomlstring = await entry.getData(new TextWriter())
     } else {
-      files[entry.filename] = await entry.getData(writer)
+      // TODO add mime type to Data64Uri
+      const writer = new Data64URIWriter()
+      const dataURL = await entry.getData(writer)
+      files[entry.filename] = injectFilenameIntoDataURL(entry.filename, dataURL)
     }
+    // TODO complain when there is no workflowFilename in archive
   }
   return {
     tomlstring,
