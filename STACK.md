@@ -108,6 +108,16 @@ Workflow parameters can be URLs to files on local disk.
 
 1. react-syntax-highlighter with prismjs
 
+## Data validation
+
+1. ajv, to validate data against JSON schema
+2. ~typebox, to validate data against Typescript type~ Wanted to use for validating catalog, but catalog contains JSON schema of itself, typebox does not handle this nesting
+
+## Notifications
+
+1. react-toastify
+2. ~react-hot-toast~ not chosen because fewer users, however does seem to be more active currently
+
 ## Similar tools
 
 1. https://github.com/rabix/composer

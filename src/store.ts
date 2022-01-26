@@ -5,6 +5,8 @@ import { readArchive, saveArchive } from './archive'
 import { ICatalog, IStep, IFiles, IParameters } from './types'
 import { parseWorkflow, workflow2tomltext } from './toml'
 import { catalogURLchoices } from './constants'
+import { validateWorkflow, validateCatalog } from './validate'
+import { toast } from 'react-toastify'
 
 export const catalogURLState = atom<string>({
   key: 'catalogURL',
@@ -15,9 +17,22 @@ const catalogState = selector<ICatalog>({
   key: 'catalog',
   get: async ({ get }) => {
     const catalogUrl = get(catalogURLState)
-    const response = await fetch(catalogUrl)
-    const body = await response.text()
-    return load(body) as ICatalog
+    try {
+      const response = await fetch(catalogUrl)
+      const body = await response.text()
+      const catalog = load(body)
+      const errors = validateCatalog(catalog)
+      if (errors.length > 0) {
+        // TODO notify user of bad catalog
+        toast.error('Loading catalog failed')
+        return undefined
+      }
+      // TODO Only report success when user initiated catalog loading, not when page is loaded
+      // toast.success('Loading catalog completed')
+      return catalog as ICatalog
+    } catch (error) {
+      toast.error('Loading catalog failed')
+    }
   }
 })
 
@@ -76,7 +91,7 @@ export function useWorkflow () {
   const [editingGlobal, setEditingGlobal] = useRecoilState(editingGlobalParametersState)
   const [selectedStepIndex, setSelectedStepIndex] = useRecoilState(selectedStepIndexState)
   const { files, setFiles } = useFiles()
-  const { nodes } = useCatalog()
+  const { global: globalDescription,nodes } = useCatalog()
   const globalKeys = useRecoilValue(globalKeysState);
 
   return {
@@ -124,20 +139,22 @@ export function useWorkflow () {
     async loadWorkflowArchive (archiveURL: string) {
       const { tomlstring, files: newFiles } = await readArchive(archiveURL, nodes)
       const { steps: newSteps, global: newGlobal } = parseWorkflow(tomlstring, globalKeys)
-      setSteps(newSteps)
-      setFiles(newFiles)
-      setGlobal(newGlobal)
-    },
-    loadWorkflow (tomlstring: string) {
-      // TODO load zip file
-      const { steps: newSteps, global: newGlobal } = parseWorkflow(tomlstring, globalKeys)
-      const newFiles = {}
-      newSteps.forEach(s => {
-        s.parameters = externalizeDataUrls(s.parameters, newFiles)
+      const errors = validateWorkflow({
+        global: newGlobal,
+        steps: newSteps
+      }, {
+        global: globalDescription,
+        nodes: nodes
       })
-      setSteps(newSteps)
-      setGlobal(externalizeDataUrls(newGlobal, newFiles))
-      setFiles(newFiles)
+      if (errors.length > 0) {
+        // give feedback to users about errors
+        toast.error('Workflow archive is invalid. See DevTools console for errors')
+        console.error(errors)
+      } else {
+        setSteps(newSteps)
+        setFiles(newFiles)
+        setGlobal(newGlobal)
+      }
     },
     async save () {
       await saveArchive(steps, global, files)
