@@ -8,10 +8,8 @@ interface IProps {
   code: string
 }
 
-const HighlightedCode = ({ code }: IProps): JSX.Element => (
+export const HighlightedCode = ({ code }: IProps): JSX.Element => (
   <SyntaxHighlighter language='toml' style={style}>
     {code}
   </SyntaxHighlighter>
 )
-
-export default HighlightedCode
