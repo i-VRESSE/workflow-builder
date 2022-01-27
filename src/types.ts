@@ -24,7 +24,7 @@ export interface ICatalog {
   global: IGlobal
   categories: ICategory[]
   nodes: INode[]
-  templates: Record<string, string>
+  examples: Record<string, string>
 }
 
 export type IParameters = Record<string, unknown>

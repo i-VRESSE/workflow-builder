@@ -2,7 +2,7 @@ import React from 'react'
 import { CatalogPicker } from './CatalogPicker'
 import { CatalogCategory } from './CatalogCategory'
 import { useCatalog, useWorkflow } from './store'
-import { TemplateNode } from './TemplateNode'
+import { Example } from './Example'
 
 export const CatalogPanel = () => {
   const catalog = useCatalog()
@@ -17,10 +17,10 @@ export const CatalogPanel = () => {
         <ul>
           {catalog?.categories.map((category) => <CatalogCategory key={category.name} {...category} />)}
         </ul>
-        <h3>Templates</h3>
-        Workflow templates that can be loaded as a starting point.
+        <h3>Examples</h3>
+        Workflow examples that can be loaded as a starting point.
         <ul>
-          {Object.entries(catalog?.templates).map(([name, workflow]) => <TemplateNode key={name} name={name} workflow={workflow} />)}
+          {Object.entries(catalog?.examples).map(([name, workflow]) => <Example key={name} name={name} workflow={workflow} />)}
         </ul>
       </React.Suspense>
     </fieldset>

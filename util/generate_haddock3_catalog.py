@@ -144,6 +144,7 @@ def process_module(module_name, category, level):
             break
 
     schema_uiSchema = config2schema(config4level)
+    # TODO add $schema and $id to schema
     return {
         "id": module_name,
         "category": category,
@@ -202,8 +203,8 @@ def main(argv=sys.argv[1:]):
         "global": GLOBAL_NODE,
         # TODO in haddock3 nodes are called modules, we could rename it here
         "nodes": nodes,
-        "templates": {
-            'docking': '/templates/docking.zip' # TODO get from somewhere instead of hardcoding it here
+        "examples": {
+            'docking': '/examples/docking-protein-ligand.zip' # TODO get from somewhere instead of hardcoding it here
         }
     }
     dump(catalog, args.out)
