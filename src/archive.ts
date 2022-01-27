@@ -67,6 +67,8 @@ export async function readArchive (archiveURL: string, nodes: INode[]): Promise<
     }
     if (entry.filename === workflowFilename) {
       tomlstring = await entry.getData(new TextWriter())
+    } else if (entry.directory) {
+      // Skip directories
     } else {
       // TODO add mime type to Data64Uri
       const writer = new Data64URIWriter()
