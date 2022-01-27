@@ -17,7 +17,7 @@ export const TextPanel = () => {
 
   return (
     <div>
-      <SyntaxHighlighter language='javascript' style={style}>
+      <SyntaxHighlighter language='toml' style={style}>
         {code}
       </SyntaxHighlighter>
       <button className='btn btn-link' onClick={copy2clipboard}>Copy to clipboard</button>
