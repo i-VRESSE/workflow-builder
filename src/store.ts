@@ -138,24 +138,29 @@ export function useWorkflow () {
       setFiles(newFiles)
     },
     async loadWorkflowArchive (archiveURL: string) {
-      const { tomlstring, files: newFiles } = await readArchive(archiveURL, nodes)
-      const { steps: newSteps, global: newGlobal } = parseWorkflow(tomlstring, globalKeys)
-      const errors = validateWorkflow({
-        global: newGlobal,
-        steps: newSteps
-      }, {
-        global: globalDescription,
-        nodes: nodes
-      })
-      if (errors.length > 0) {
-        // give feedback to users about errors
-        toast.error('Workflow archive is invalid. See DevTools console for errors')
-        console.error(errors)
-      } else {
-        setSteps(newSteps)
-        setFiles(newFiles)
-        setGlobal(newGlobal)
-      }
+      try {
+        const { tomlstring, files: newFiles } = await readArchive(archiveURL, nodes)
+        const { steps: newSteps, global: newGlobal } = parseWorkflow(tomlstring, globalKeys)
+        const errors = validateWorkflow({
+          global: newGlobal,
+          steps: newSteps
+        }, {
+          global: globalDescription,
+          nodes: nodes
+        })
+        if (errors.length > 0) {
+          // give feedback to users about errors
+          toast.error('Workflow archive is invalid. See DevTools console for errors')
+          console.error(errors)
+        } else {
+          setSteps(newSteps)
+          setFiles(newFiles)
+          setGlobal(newGlobal)
+        }
+      } catch (error) {
+        toast.error('Workflow archive is failed to load. See DevTools console for errors')
+        console.error(error)
+    }
     },
     async save () {
       await saveArchive(steps, global, files)
