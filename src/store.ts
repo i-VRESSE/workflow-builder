@@ -7,6 +7,7 @@ import { parseWorkflow, workflow2tomltext } from './toml'
 import { catalogURLchoices } from './constants'
 import { validateWorkflow, validateCatalog } from './validate'
 import { toast } from 'react-toastify'
+import { removeItemAtIndex, replaceItemAtIndex } from './utils/array'
 
 export const catalogURLState = atom<string>({
   key: 'catalogURL',
@@ -81,14 +82,6 @@ const filesState = atom<IFiles>({
   key: 'files',
   default: {}
 })
-
-function replaceItemAtIndex<V> (arr: V[], index: number, newValue: V) {
-  return [...arr.slice(0, index), newValue, ...arr.slice(index + 1)]
-}
-
-function removeItemAtIndex<V> (arr: V[], index: number) {
-  return [...arr.slice(0, index), ...arr.slice(index + 1)]
-}
 
 const selectedStepState = selector<IStep | undefined>({
   key: 'selectedStep',
@@ -231,7 +224,7 @@ export function useFiles () {
   }
 }
 
-function moveStep (steps: IStep[], stepIndex: number, direction: number) {
+function moveStep (steps: IStep[], stepIndex: number, direction: number): IStep[] {
   const step = steps[stepIndex]
   const swappedIndex = stepIndex + direction
   const swappedStep = steps[swappedIndex]
@@ -243,12 +236,12 @@ function moveStep (steps: IStep[], stepIndex: number, direction: number) {
   return newSteps
 }
 
-export function useText () {
+export function useText (): string {
   const { steps, global } = useWorkflow()
   return workflow2tomltext(steps, global)
 }
 
-export function useTextUrl () {
+export function useTextUrl (): string {
   const text = useText()
   return 'data:application/json;base64,' + btoa(text)
 }
