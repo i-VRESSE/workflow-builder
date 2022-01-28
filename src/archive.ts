@@ -3,19 +3,20 @@ import {
   BlobWriter,
   Data64URIReader,
   Data64URIWriter,
+  getMimeType,
   TextReader,
   TextWriter,
   ZipReader,
   ZipWriter
 } from '@zip.js/zip.js'
 import { saveAs } from 'file-saver'
-import { IStep, INode, IFiles } from './types'
-import { steps2tomltext } from './toml'
+import { IStep, INode, IFiles, IParameters } from './types'
+import { workflow2tomltext } from './toml'
 import { workflowArchiveFilename, workflowFilename } from './constants'
 
 async function createZip (
   steps: IStep[],
-  nodes: INode[],
+  global: IParameters,
   files: IFiles
 ) {
   const writer = new ZipWriter(new BlobWriter('application/zip'))
@@ -26,7 +27,7 @@ async function createZip (
       await writer.add(fn, new Data64URIReader(dataURL))
     )
   )
-  const text = steps2tomltext(steps, nodes)
+  const text = workflow2tomltext(steps, global)
   await writer.add(workflowFilename, new TextReader(text))
 
   return await writer.close()
@@ -34,11 +35,16 @@ async function createZip (
 
 export async function saveArchive (
   steps: IStep[],
-  nodes: INode[],
+  global: IParameters,
   files: IFiles
 ) {
-  const zip: Blob = await createZip(steps, nodes, files)
+  const zip: Blob = await createZip(steps, global, files)
   saveAs(zip, workflowArchiveFilename)
+}
+
+export function injectFilenameIntoDataURL (filename: string, unnamedDataURL: string): string {
+  const mimeType = getMimeType(filename)
+  return unnamedDataURL.replace('data:;base64,', `data:${mimeType};name=${filename};base64,`)
 }
 
 export async function readArchive (archiveURL: string, nodes: INode[]): Promise<{
@@ -50,7 +56,9 @@ export async function readArchive (archiveURL: string, nodes: INode[]): Promise<
   const file = await response.blob()
   const reader = new ZipReader(new BlobReader(file))
   const entries = await reader.getEntries()
-  const writer = new Data64URIWriter()
+  // TODO store files as File object (https://developer.mozilla.org/en-US/docs/Web/API/File),
+  // File object contains filename property while filename is hacked into dataURL so rjsf can use it
+  // Also File object together with URL.createObjectURL() could be more performant then copying large dataURL strings around
   const files: IFiles = {}
   let tomlstring = ''
   for await (const entry of entries) {
@@ -59,8 +67,17 @@ export async function readArchive (archiveURL: string, nodes: INode[]): Promise<
     }
     if (entry.filename === workflowFilename) {
       tomlstring = await entry.getData(new TextWriter())
+    } else if (entry.directory) {
+      // Skip directories
     } else {
-      files[entry.filename] = await entry.getData(writer)
+      // TODO add mime type to Data64Uri
+      const writer = new Data64URIWriter()
+      const dataURL = await entry.getData(writer)
+      files[entry.filename] = injectFilenameIntoDataURL(entry.filename, dataURL)
+    }
+    // TODO complain when there is no workflowFilename in archive
+    if (tomlstring === '') {
+      throw new Error('No workflow.cfg file found in workflow archive file')
     }
   }
   return {

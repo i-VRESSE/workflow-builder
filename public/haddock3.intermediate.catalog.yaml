@@ -1,0 +1,583 @@
+categories:
+- description: HADDOCK3 modules for sampling.
+  name: sampling
+- description: HADDOCK3 modules related to model analysis.
+  name: analysis
+- description: HADDOCK3 modules to create topologies.
+  name: topology
+- description: HADDOCK3 modules to score modules.
+  name: scoring
+- description: HADDOCK3 actions referring to refinement.
+  name: refinement
+global:
+  schema:
+    properties:
+      molecules:
+        items:
+          format: uri-reference
+          type: string
+        maxItems: 10
+        minItems: 2
+        title: Molecules
+        type: array
+      ncores:
+        default: 8
+        title: Number of cpu cores
+        type: number
+      run_dir:
+        title: Run directory
+        type: string
+    required:
+    - molecules
+    - run_dir
+    type: object
+  uiSchema:
+    molecules:
+      items:
+        ui:options:
+          accept: .pdb
+        ui:widget: file
+nodes:
+- category: analysis
+  description: HADDOCK3 module to select top cluster/model.
+  id: seletop
+  label: HADDOCK3 module to select a top cluster/model.
+  schema:
+    properties:
+      select:
+        default: 400
+        maximum: 9999
+        minimum: -9999
+        type: number
+    required: []
+    type: object
+  uiSchema: {}
+- category: analysis
+  description: Haddock Module for 'seletopclusts'.
+  id: seletopclusts
+  label: HADDOCK3 module to select a top cluster/model.
+  schema:
+    properties:
+      top_cluster:
+        default:
+        - 1
+        - 2
+        - 3
+        - 4
+        items:
+          type: number
+        type: array
+      top_models:
+        default: 4
+        maximum: 9999
+        minimum: -9999
+        type: number
+    required: []
+    type: object
+  uiSchema: {}
+- category: analysis
+  description: HADDOCK3 module to calculate the CAPRI metrics.
+  id: caprieval
+  label: Calculate CAPRI metrics.
+  schema:
+    properties:
+      alignment_method:
+        default: sequence
+        maxLength: 9999
+        type: string
+      fnat:
+        default: true
+        type: boolean
+      fnat_cutoff:
+        default: 5.0
+        maximum: 9999
+        minimum: -9999
+        type: number
+      ilrmsd:
+        default: true
+        type: boolean
+      irmsd:
+        default: true
+        type: boolean
+      irmsd_cutoff:
+        default: 10.0
+        maximum: 9999
+        minimum: -9999
+        type: number
+      ligand_chain:
+        default: B
+        maxLength: 9999
+        type: string
+      lovoalign_exec:
+        default: ''
+        maxLength: 9999
+        type: string
+      lrmsd:
+        default: true
+        type: boolean
+      lrmsd_cutoff:
+        default: 10.0
+        maximum: 9999
+        minimum: -9999
+        type: number
+      rank_ascending:
+        default: true
+        type: boolean
+      rankby:
+        default: score
+        maxLength: 9999
+        type: string
+      receptor_chain:
+        default: A
+        maxLength: 9999
+        type: string
+      reference_fname:
+        format: uri-reference
+        type: string
+      sort_ascending:
+        default: true
+        type: boolean
+      sortby:
+        default: score
+        maxLength: 9999
+        type: string
+    required: []
+    type: object
+  uiSchema:
+    reference_fname:
+      ui:widget: file
+- category: sampling
+  description: HADDOCK3 gdock module.
+  id: gdock
+  label: HADDOCK3 gdock integration module.
+  schema:
+    properties:
+      ambig_fname:
+        format: uri-reference
+        type: string
+    required: []
+    type: object
+  uiSchema:
+    ambig_fname:
+      ui:widget: file
+- category: sampling
+  description: HADDOCK3 module for rigid body sampling.
+  id: rigidbody
+  label: HADDOCK3 rigid-body docking module.
+  schema:
+    properties:
+      amb_cool1:
+        default: 10
+        maximum: 9999
+        minimum: -9999
+        type: number
+      amb_cool2:
+        default: 50
+        maximum: 9999
+        minimum: -9999
+        type: number
+      amb_cool3:
+        default: 50
+        maximum: 9999
+        minimum: -9999
+        type: number
+      amb_hot:
+        default: 10
+        maximum: 9999
+        minimum: -9999
+        type: number
+      ambig_fname:
+        format: uri-reference
+        type: string
+      anastruc:
+        default: 200
+        maximum: 9999
+        minimum: -9999
+        type: number
+      autohis:
+        default: true
+        type: boolean
+      hbond_fname:
+        format: uri-reference
+        type: string
+      ligand_param_fname:
+        format: uri-reference
+        type: string
+      ligand_top_fname:
+        format: uri-reference
+        type: string
+      log_level:
+        default: verbose
+        maxLength: 9999
+        type: string
+      sampling:
+        default: 5
+        maximum: 9999
+        minimum: -9999
+        type: number
+      tolerance:
+        default: 0
+        maximum: 9999
+        minimum: -9999
+        type: number
+      unambig_fname:
+        format: uri-reference
+        type: string
+    required: []
+    type: object
+  uiSchema:
+    ambig_fname:
+      ui:widget: file
+    hbond_fname:
+      ui:widget: file
+    ligand_param_fname:
+      ui:widget: file
+    ligand_top_fname:
+      ui:widget: file
+    unambig_fname:
+      ui:widget: file
+- category: sampling
+  description: HADDOCK3 Lightdock module.
+  id: lightdock
+  label: Run Lightdock as a HADDOCK3 module.
+  schema:
+    properties:
+      glowworms:
+        default: 200
+        maximum: 9999
+        minimum: -9999
+        type: number
+      ligand_active:
+        default: ''
+        maxLength: 9999
+        type: string
+      ligand_chains:
+        default: B
+        maxLength: 9999
+        type: string
+      ligand_passive:
+        default: ''
+        maxLength: 9999
+        type: string
+      noh:
+        default: true
+        type: boolean
+      noxt:
+        default: true
+        type: boolean
+      receptor_active:
+        default: ''
+        maxLength: 9999
+        type: string
+      receptor_chains:
+        default: A
+        maxLength: 9999
+        type: string
+      receptor_passive:
+        default: ''
+        maxLength: 9999
+        type: string
+      restraints:
+        default: false
+        type: boolean
+      scoring:
+        default: fastdfire
+        maxLength: 9999
+        type: string
+      steps:
+        default: 100
+        maximum: 9999
+        minimum: -9999
+        type: number
+      swarms:
+        default: 400
+        maximum: 9999
+        minimum: -9999
+        type: number
+      top:
+        default: 10
+        maximum: 9999
+        minimum: -9999
+        type: number
+    required: []
+    type: object
+  uiSchema: {}
+- category: topology
+  description: HADDOCK3 module to create CNS all-atom topologies.
+  id: topoaa
+  label: Create and manage CNS all-atom topology.
+  schema:
+    properties:
+      autohis:
+        default: true
+        type: boolean
+      delenph:
+        default: true
+        type: boolean
+      iniseed:
+        default: 917
+        maximum: 9999
+        minimum: -9999
+        type: number
+      ligand_param_fname:
+        format: uri-reference
+        type: string
+      ligand_top_fname:
+        format: uri-reference
+        type: string
+      log_level:
+        default: verbose
+        maxLength: 9999
+        type: string
+      randorien:
+        default: true
+        type: boolean
+    required: []
+    type: object
+  uiSchema:
+    ligand_param_fname:
+      ui:widget: file
+    ligand_top_fname:
+      ui:widget: file
+- category: scoring
+  description: HADDOCK3 module to perform energy minimization scoring.
+  id: emscoring
+  label: HADDOCK3 scoring module.
+  schema:
+    properties:
+      dielec:
+        default: cdie
+        maxLength: 9999
+        type: string
+      dihedflag:
+        default: true
+        type: boolean
+      elecflag:
+        default: true
+        type: boolean
+      epsilon:
+        default: 1
+        maximum: 9999
+        minimum: -9999
+        type: number
+      individualize:
+        default: true
+        type: boolean
+      ligand_param_fname:
+        format: uri-reference
+        type: string
+      ligand_top_fname:
+        format: uri-reference
+        type: string
+      log_level:
+        default: verbose
+        maxLength: 9999
+        type: string
+      par_nonbonded:
+        default: OPLSX
+        maxLength: 9999
+        type: string
+      tolerance:
+        default: 5
+        maximum: 9999
+        minimum: -9999
+        type: number
+    required: []
+    type: object
+  uiSchema:
+    ligand_param_fname:
+      ui:widget: file
+    ligand_top_fname:
+      ui:widget: file
+- category: refinement
+  description: HADDOCK3 module for flexible refinement.
+  id: flexref
+  label: HADDOCK3 module for flexible refinement.
+  schema:
+    properties:
+      amb_cool1:
+        default: 10
+        maximum: 9999
+        minimum: -9999
+        type: number
+      amb_cool2:
+        default: 50
+        maximum: 9999
+        minimum: -9999
+        type: number
+      amb_cool3:
+        default: 50
+        maximum: 9999
+        minimum: -9999
+        type: number
+      amb_firstit:
+        default: 0
+        maximum: 9999
+        minimum: -9999
+        type: number
+      amb_hot:
+        default: 10
+        maximum: 9999
+        minimum: -9999
+        type: number
+      ambig_fname:
+        format: uri-reference
+        type: string
+      dihe_fname:
+        format: uri-reference
+        type: string
+      hbond_fname:
+        format: uri-reference
+        type: string
+      ligand_param_fname:
+        format: uri-reference
+        type: string
+      ligand_top_fname:
+        format: uri-reference
+        type: string
+      log_level:
+        default: verbose
+        maxLength: 9999
+        type: string
+      sampling_factor:
+        default: 1
+        maximum: 9999
+        minimum: -9999
+        type: number
+      tolerance:
+        default: 5
+        maximum: 9999
+        minimum: -9999
+        type: number
+      unambig_fname:
+        format: uri-reference
+        type: string
+    required: []
+    type: object
+  uiSchema:
+    ambig_fname:
+      ui:widget: file
+    dihe_fname:
+      ui:widget: file
+    hbond_fname:
+      ui:widget: file
+    ligand_param_fname:
+      ui:widget: file
+    ligand_top_fname:
+      ui:widget: file
+    unambig_fname:
+      ui:widget: file
+- category: refinement
+  description: HADDOCK3 module for water refinement.
+  id: mdref
+  label: HADDOCK3 module for water refinement.
+  schema:
+    properties:
+      ambig_fname:
+        format: uri-reference
+        type: string
+      dihe_fname:
+        format: uri-reference
+        type: string
+      hbond_fname:
+        format: uri-reference
+        type: string
+      ligand_param_fname:
+        format: uri-reference
+        type: string
+      ligand_top_fname:
+        format: uri-reference
+        type: string
+      log_level:
+        default: verbose
+        maxLength: 9999
+        type: string
+      sampling_factor:
+        default: 1
+        maximum: 9999
+        minimum: -9999
+        type: number
+      tolerance:
+        default: 5
+        maximum: 9999
+        minimum: -9999
+        type: number
+      unambig_fname:
+        format: uri-reference
+        type: string
+    required: []
+    type: object
+  uiSchema:
+    ambig_fname:
+      ui:widget: file
+    dihe_fname:
+      ui:widget: file
+    hbond_fname:
+      ui:widget: file
+    ligand_param_fname:
+      ui:widget: file
+    ligand_top_fname:
+      ui:widget: file
+    unambig_fname:
+      ui:widget: file
+- category: refinement
+  description: HADDOCK3 module energy minimization refinement.
+  id: emref
+  label: HADDOCK3 module for energy minimization refinement.
+  schema:
+    properties:
+      amb_scale:
+        default: 50
+        maximum: 9999
+        minimum: -9999
+        type: number
+      ambig_fname:
+        format: uri-reference
+        type: string
+      dihe_fname:
+        format: uri-reference
+        type: string
+      hbond_fname:
+        format: uri-reference
+        type: string
+      ligand_param_fname:
+        format: uri-reference
+        type: string
+      ligand_top_fname:
+        format: uri-reference
+        type: string
+      log_level:
+        default: verbose
+        maxLength: 9999
+        type: string
+      sampling_factor:
+        default: 1
+        maximum: 9999
+        minimum: -9999
+        type: number
+      tolerance:
+        default: 5
+        maximum: 9999
+        minimum: -9999
+        type: number
+      unambig_fname:
+        format: uri-reference
+        type: string
+    required: []
+    type: object
+  uiSchema:
+    ambig_fname:
+      ui:widget: file
+    dihe_fname:
+      ui:widget: file
+    hbond_fname:
+      ui:widget: file
+    ligand_param_fname:
+      ui:widget: file
+    ligand_top_fname:
+      ui:widget: file
+    unambig_fname:
+      ui:widget: file
+examples:
+  docking-protein-ligand: /examples/docking-protein-ligand.zip
+title: Haddock 3 intermediate

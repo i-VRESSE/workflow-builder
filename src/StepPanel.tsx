@@ -1,18 +1,21 @@
+import { GlobalForm } from './GlobalForm'
 import { StepForm } from './StepForm'
-import { useCatalog, useWorkflow } from './store'
+import { useWorkflow } from './store'
 
 export const StepPanel = () => {
-  const { selectedStep, steps } = useWorkflow()
-  const catalog = useCatalog()
-  let form = <div>No step selected</div>
-  const step = steps[selectedStep]
-  const node = catalog?.nodes.find((n) => n.id === step?.id)
-  if (node != null) {
-    form = <StepForm node={node} step={step} />
+  const { selectedStep, editingGlobal } = useWorkflow()
+  let form = <div>No step or global parameters selected for configuration.</div>
+  let legend = 'Step'
+  if (editingGlobal) {
+    form = <GlobalForm />
+    legend = 'Global parameters'
+  }
+  if (selectedStep !== -1) {
+    form = <StepForm />
   }
   return (
     <fieldset>
-      <legend>Step</legend>
+      <legend>{legend}</legend>
       {form}
     </fieldset>
   )

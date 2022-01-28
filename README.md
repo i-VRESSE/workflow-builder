@@ -63,3 +63,37 @@ yarn build
 ```
 
 Which will create `dist/` directory which should be hosted on the web somewhere.
+
+## Format
+
+### Workflow archive
+
+The workflow builder creates a zip file with a workflow configuration file called `workflow.cfg` in a [TOML format](https://toml.io).
+The configuration file contains paths to input files which are included in the zip file.
+
+## Workflow configuration file
+
+The workflow configuration file consists out of 2 parts:
+
+1. Global parameters, which are available to engine and each node.
+2. Table with parameters for each node the workflow should run.
+
+TOML does not allow for tables with same name. So any node that needs be run multiple times should have a index appened to the table name.
+
+### Catalog
+
+The catalog is a YAML formatted file which tells the app what nodes are available. In has the following info:
+
+1. Description of global parameters
+    * schema: What parameters are valid. Formatted as JSON schema draft 7.
+    * uiSchema: How the form for filling the parameters should be rendered.
+2. Description of available nodes.
+    * id: Identifier of node, for computers
+    * label: Label of node, for humans
+    * category: Category to which node belongs
+    * description: Text describing what node needs, does and produces.
+    * schema: What parameters are valid. Formatted as JSON schema draft 7.
+    * uiSchema: How the form for filling the parameters should be rendered.
+3. Descriptions of node categories
+4. Title and link to example workflows
+5. Title of the catalog
