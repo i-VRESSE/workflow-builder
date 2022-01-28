@@ -31,7 +31,7 @@ describe('validateWorkflow()', () => {
         global: {
           run_dir: 'run1'
         },
-        steps: []
+        nodes: []
       }
       const errors = validateWorkflow(workflow, schemas)
 
@@ -41,7 +41,7 @@ describe('validateWorkflow()', () => {
     it('should return run_dir required error when empty global parameters is given', () => {
       const workflow = {
         global: {},
-        steps: []
+        nodes: []
       }
       const errors = validateWorkflow(workflow, schemas)
 
@@ -99,7 +99,7 @@ describe('validateWorkflow()', () => {
     it('should return no errors when parameters are valid against node schema', () => {
       const workflow = {
         global: {},
-        steps: [
+        nodes: [
           {
             id: 'mynode',
             parameters: {
@@ -116,7 +116,7 @@ describe('validateWorkflow()', () => {
     it('should return autohis required error when empty node parameters is given', () => {
       const workflow = {
         global: {},
-        steps: [
+        nodes: [
           {
             id: 'mynode',
             parameters: {}
@@ -134,17 +134,17 @@ describe('validateWorkflow()', () => {
             missingProperty: 'autohis'
           },
           schemaPath: '#/required',
-          workflowPath: 'step[0]'
+          workflowPath: 'node[0]'
         }
       ]
       expect(errors).toEqual(expected)
     })
 
-    describe('given step without absent node', () => {
+    describe('given node without absent node', () => {
       it('should give a node schema not found error', () => {
         const workflow = {
           global: {},
-          steps: [
+          nodes: [
             {
               id: 'myothernode',
               parameters: {}
@@ -162,7 +162,7 @@ describe('validateWorkflow()', () => {
               node: 'myothernode'
             },
             schemaPath: '',
-            workflowPath: 'step[0]'
+            workflowPath: 'node[0]'
           }
         ]
         expect(errors).toEqual(expected)

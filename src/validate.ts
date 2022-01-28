@@ -2,7 +2,7 @@ import Ajv from 'ajv'
 import type { ErrorObject } from 'ajv'
 import addFormats from 'ajv-formats'
 import { JSONSchema7 } from 'json-schema'
-import type { ICatalog, INode, IParameters, IStep, IWorkflow, IWorkflowSchema } from './types'
+import type { ICatalog, ICatalogNode, IParameters, IWorkflowNode, IWorkflow, IWorkflowSchema } from './types'
 
 const ajv = new Ajv()
 addFormats(ajv)
@@ -21,38 +21,38 @@ export function validateWorkflow (workflow: IWorkflow, schemas: IWorkflowSchema)
   globalErrors.forEach(e => {
     e.workflowPath = 'global'
   })
-  const stepValidator = validateStep(schemas.nodes)
-  const stepsErrors = workflow.steps.map(stepValidator)
+  const nodeValidator = validateNode(schemas.nodes)
+  const nodesErrors = workflow.nodes.map(nodeValidator)
 
   // TODO validate files,
   // that all file paths in keys of files object are mentioned in parameters
   // and all filled `type:path` fields have entry in files object
-  return [...globalErrors, ...stepsErrors.flat(1)]
+  return [...globalErrors, ...nodesErrors.flat(1)]
 }
 
-function validateStep (nodes: INode[]): (value: IStep, index: number, array: IStep[]) => Errors {
-  return (step, stepIndex) => {
-    const node = nodes.find((n) => n.id === step.id)
-    if (node != null) {
-      const stepErrors = validateParameters(
-        step.parameters,
-        node.schema
+function validateNode (catalogNodes: ICatalogNode[]): (value: IWorkflowNode, index: number, array: IWorkflowNode[]) => Errors {
+  return (node, nodeIndex) => {
+    const catalogNode = catalogNodes.find((n) => n.id === node.id)
+    if (catalogNode != null) {
+      const nodeErrors = validateParameters(
+        node.parameters,
+        catalogNode.schema
       )
-      stepErrors.forEach(e => {
-        e.workflowPath = `step[${stepIndex}]`
+      nodeErrors.forEach(e => {
+        e.workflowPath = `node[${nodeIndex}]`
       })
-      return stepErrors
+      return nodeErrors
     } else {
-      // Node belonging to step could not be found
+      // Node belonging to node could not be found
       return [{
         message: 'must have node name belonging to known nodes',
         params: {
-          node: step.id
+          node: node.id
         },
         instancePath: '',
         schemaPath: '',
         keyword: 'schema',
-        workflowPath: `step[${stepIndex}]`
+        workflowPath: `node[${nodeIndex}]`
       }]
     }
   }
@@ -98,14 +98,14 @@ export function validateCatalog (catalog: unknown): Errors {
   })
 
   // Validate node schemas
-  const stepsErrors = catalog.nodes.map((n, nodeIndex) => {
-    const stepErrors = validateSchema(n.schema)
-    stepErrors.forEach(e => {
+  const nodesErrors = catalog.nodes.map((n, nodeIndex) => {
+    const nodeErrors = validateSchema(n.schema)
+    nodeErrors.forEach(e => {
       e.workflowPath = `node[${nodeIndex}]`
     })
-    return stepErrors
+    return nodeErrors
   })
 
   // TODO validate non schema fields
-  return [...globalErrors, ...stepsErrors.flat(1)]
+  return [...globalErrors, ...nodesErrors.flat(1)]
 }

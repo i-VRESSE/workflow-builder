@@ -10,12 +10,12 @@ import {
   ZipWriter
 } from '@zip.js/zip.js'
 import { saveAs } from 'file-saver'
-import { IStep, INode, IFiles, IParameters } from './types'
+import { IWorkflowNode, ICatalogNode, IFiles, IParameters } from './types'
 import { workflow2tomltext } from './toml'
 import { workflowArchiveFilename, workflowFilename } from './constants'
 
 async function createZip (
-  steps: IStep[],
+  nodes: IWorkflowNode[],
   global: IParameters,
   files: IFiles
 ) {
@@ -27,18 +27,18 @@ async function createZip (
       await writer.add(fn, new Data64URIReader(dataURL))
     )
   )
-  const text = workflow2tomltext(steps, global)
+  const text = workflow2tomltext(nodes, global)
   await writer.add(workflowFilename, new TextReader(text))
 
   return await writer.close()
 }
 
 export async function saveArchive (
-  steps: IStep[],
+  nodes: IWorkflowNode[],
   global: IParameters,
   files: IFiles
 ) {
-  const zip: Blob = await createZip(steps, global, files)
+  const zip: Blob = await createZip(nodes, global, files)
   saveAs(zip, workflowArchiveFilename)
 }
 
@@ -47,7 +47,7 @@ export function injectFilenameIntoDataURL (filename: string, unnamedDataURL: str
   return unnamedDataURL.replace('data:;base64,', `data:${mimeType};name=${filename};base64,`)
 }
 
-export async function readArchive (archiveURL: string, nodes: INode[]): Promise<{
+export async function readArchive (archiveURL: string, nodes: ICatalogNode[]): Promise<{
   tomlstring: string
   files: IFiles
 }> {

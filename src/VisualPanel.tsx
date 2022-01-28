@@ -1,13 +1,12 @@
 import { useWorkflow } from './store'
-import { VisualStep } from './VisualStep'
+import { VisualNode } from './VisualNode'
 
-export const VisualPanel = () => {
-  const { steps } = useWorkflow()
+export const VisualPanel = (): JSX.Element => {
+  const { nodes } = useWorkflow()
   return (
     <div>
-      <div>Visual workflow visualization</div>
       <ol>
-        {steps.map((step, i) => <VisualStep key={i} index={i} id={step.id} />)}
+        {nodes.map((node, i) => <VisualNode key={i} index={i} id={node.id} />)}
       </ol>
     </div>
   )

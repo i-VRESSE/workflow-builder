@@ -1,10 +1,10 @@
 import { saveAs } from 'file-saver'
 import { useFiles } from './store'
 
-export const FilesList = () => {
-  const { files } = useFiles()
+export const FilesList = (): JSX.Element => {
+  const files = useFiles()
 
-  function downloadFile (filename: string) {
+  function downloadFile (filename: string): void {
     saveAs(files[filename], filename)
   }
 
