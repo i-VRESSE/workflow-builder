@@ -24432,4 +24432,5 @@ nodes:
       ui:widget: file
 examples:
   docking-protein-ligand: /examples/docking-protein-ligand.zip
+  double_topoaa.zip: /examples/double_topoaa.zip
 title: Haddock 3 guru
