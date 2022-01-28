@@ -1,5 +1,5 @@
 import { IFiles } from './types'
-import { walk } from './searchreplace'
+import { walk } from './utils/searchreplace'
 
 export function isDataURL (value: string) {
   return value.startsWith('data:')
