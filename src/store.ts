@@ -2,7 +2,7 @@ import { load } from 'js-yaml'
 import { atom, selector, useRecoilState, useRecoilValue } from 'recoil'
 import { externalizeDataUrls } from './dataurls'
 import { readArchive, saveArchive } from './archive'
-import { ICatalog, IStep, IFiles, IParameters } from './types'
+import { ICatalog, IStep, IFiles, IParameters, INode } from './types'
 import { parseWorkflow, workflow2tomltext } from './toml'
 import { catalogURLchoices } from './constants'
 import { validateWorkflow, validateCatalog } from './validate'
@@ -73,6 +73,10 @@ const selectedStepIndexState = atom<number>({
   default: -1
 })
 
+export function useSelectStepIndex (): number {
+  return useRecoilValue(selectedStepIndexState)
+}
+
 const filesState = atom<IFiles>({
   key: 'files',
   default: {}
@@ -86,18 +90,53 @@ function removeItemAtIndex<V> (arr: V[], index: number) {
   return [...arr.slice(0, index), ...arr.slice(index + 1)]
 }
 
+const selectedStepState = selector<IStep | undefined>({
+  key: 'selectedStep',
+  get: ({ get }) => {
+    const index = get(selectedStepIndexState)
+    const steps = get(stepsState)
+    if (index in steps) {
+      return steps[index]
+    }
+    return undefined
+  }
+})
+
+export function useSelectedStep (): IStep | undefined {
+  return useRecoilValue(selectedStepState)
+}
+
+const selectedNodeCatalogState = selector<INode | undefined>({
+  key: 'selectedNodeCatalogState',
+  get: ({ get }) => {
+    const step = get(selectedStepState)
+    if (step === undefined) {
+      return undefined
+    }
+    const catalog = get(catalogState)
+    const node = catalog.nodes.find((n) => n.id === step.id)
+    if (node === undefined) {
+      return undefined
+    }
+    return node
+  }
+})
+
+export function useSelectedNodeCatalog (): INode | undefined {
+  return useRecoilValue(selectedNodeCatalogState)
+}
+
 export function useWorkflow () {
   const [steps, setSteps] = useRecoilState(stepsState)
   const [global, setGlobal] = useRecoilState(globalParametersState)
   const [editingGlobal, setEditingGlobal] = useRecoilState(editingGlobalParametersState)
   const [selectedStepIndex, setSelectedStepIndex] = useRecoilState(selectedStepIndexState)
   const { files, setFiles } = useFiles()
-  const { global: globalDescription,nodes } = useCatalog()
-  const globalKeys = useRecoilValue(globalKeysState);
+  const { global: globalDescription, nodes } = useCatalog()
+  const globalKeys = useRecoilValue(globalKeysState)
 
   return {
     steps,
-    selectedStep: selectedStepIndex, // TODO rename to selectedStepIndex
     editingGlobal,
     global,
     toggleGlobalEdit () {
@@ -121,6 +160,7 @@ export function useWorkflow () {
         setSelectedStepIndex(-1)
       }
       const newSteps = removeItemAtIndex(steps, stepIndex)
+      // TODO forget files that where only mentioned in removed step
       setSteps(newSteps)
     },
     clearStepSelection: () => setSelectedStepIndex(-1),
@@ -160,7 +200,7 @@ export function useWorkflow () {
       } catch (error) {
         toast.error('Workflow archive is failed to load. See DevTools console for errors')
         console.error(error)
-    }
+      }
     },
     async save () {
       await saveArchive(steps, global, files)

@@ -1,13 +1,14 @@
-import { useWorkflow } from './store'
+import { useSelectStepIndex, useWorkflow } from './store'
 
 interface IProp {
   id: string
   index: number
 }
 
-export const VisualStep = ({ id, index }: IProp) => {
-  const { selectedStep, selectStep, deleteStep, moveStepDown, moveStepUp } = useWorkflow()
-  const style = selectedStep === index ? { fontWeight: 'bold' } : {}
+export const VisualStep = ({ id, index }: IProp): JSX.Element => {
+  const selectedStepIndex = useSelectStepIndex()
+  const { selectStep, deleteStep, moveStepDown, moveStepUp } = useWorkflow()
+  const style = selectedStepIndex === index ? { fontWeight: 'bold' } : {}
   return (
     <li style={style}>
       <div className='btn-group'>

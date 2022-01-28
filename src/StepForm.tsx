@@ -1,16 +1,17 @@
-
-import { useCatalog, useFiles, useWorkflow } from './store'
+import { useFiles, useSelectedNodeCatalog, useSelectedStep, useWorkflow } from './store'
 import { internalizeDataUrls } from './dataurls'
 import { Form } from './Form'
 
-export const StepForm = () => {
-  const { selectedStep, steps } = useWorkflow()
-  const catalog = useCatalog()
+export const StepForm = (): JSX.Element => {
+  // TODO move setPararmeters to useSelectedStep
   const { setParameters } = useWorkflow()
   const { files } = useFiles()
+  const step = useSelectedStep()
+  const node = useSelectedNodeCatalog()
 
-  const step = steps[selectedStep]
-  const node = catalog.nodes.find((n) => n.id === step?.id)
+  if (step === undefined) {
+    return <div>No step selected</div>
+  }
   if (node === undefined) {
     return <div>Unable to find schema belonging to node</div>
   }
