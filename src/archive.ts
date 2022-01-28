@@ -75,10 +75,10 @@ export async function readArchive (archiveURL: string, nodes: INode[]): Promise<
       const dataURL = await entry.getData(writer)
       files[entry.filename] = injectFilenameIntoDataURL(entry.filename, dataURL)
     }
-    // TODO complain when there is no workflowFilename in archive
-    if (tomlstring === '') {
-      throw new Error('No workflow.cfg file found in workflow archive file')
-    }
+  }
+  // TODO complain when there is no workflowFilename in archive
+  if (tomlstring === '') {
+    throw new Error('No workflow.cfg file found in workflow archive file')
   }
   return {
     tomlstring,
