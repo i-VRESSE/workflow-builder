@@ -16,8 +16,6 @@ export async function fetchCatalog (catalogUrl: string): Promise<ICatalog> {
   if (errors.length > 0) {
     throw new ValidationError('Invalid catalog loaded', errors)
   }
-  // TODO Only report success when user initiated catalog loading, not when page is loaded
-  // toast.success('Loading catalog completed')
   return catalog
 }
 
