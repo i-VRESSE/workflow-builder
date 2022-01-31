@@ -1,6 +1,6 @@
 import { atom, selector, useRecoilState, useRecoilValue } from 'recoil'
 
-import { externalizeDataUrls } from './dataurls'
+import { dropUnusedFiles, externalizeDataUrls } from './dataurls'
 import { saveArchive } from './archive'
 import { ICatalog, IWorkflowNode, IFiles, IParameters, ICatalogNode } from './types'
 import { workflow2tomltext } from './toml'
@@ -141,25 +141,26 @@ export function useWorkflow (): UseWorkflow {
         setSelectedNodeIndex(-1)
       }
       const newNodes = removeItemAtIndex(nodes, nodeIndex)
-      // TODO forget files that where only mentioned in removed node
+      const newFiles = dropUnusedFiles(global, newNodes, files)
+      setFiles(newFiles)
       setNodes(newNodes)
     },
     clearNodeSelection: () => setSelectedNodeIndex(-1),
     setGlobalParameters (inlinedParameters: IParameters) {
       const newFiles = { ...files }
-      // TODO forget files that are no longer refered to in parameters
       const parameters = externalizeDataUrls(inlinedParameters, newFiles)
+      const newUsedFiles = dropUnusedFiles(parameters, nodes, newFiles)
       setGlobal(parameters)
-      setFiles(newFiles)
+      setFiles(newUsedFiles)
     },
     setNodeParameters (inlinedParameters: IParameters) {
       const newFiles = { ...files }
-      // TODO forget files that are no longer refered to in parameters
       const parameters = externalizeDataUrls(inlinedParameters, newFiles)
       const newNode = { ...nodes[selectedNodeIndex], parameters }
       const newNodes = replaceItemAtIndex(nodes, selectedNodeIndex, newNode)
-      setNodes(newNodes as any)
-      setFiles(newFiles)
+      const newUsedFiles = dropUnusedFiles(global, newNodes, newFiles)
+      setNodes(newNodes)
+      setFiles(newUsedFiles)
     },
     async loadWorkflowArchive (archiveURL: string) {
       const r = await loadWorkflowArchive(archiveURL, catalog)
