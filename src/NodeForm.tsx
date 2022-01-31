@@ -4,7 +4,7 @@ import { Form } from './Form'
 
 export const NodeForm = (): JSX.Element => {
   // TODO move setParameters to useSelectedNode
-  const { setParameters } = useWorkflow()
+  const { setNodeParameters } = useWorkflow()
   const files = useFiles()
   const node = useSelectedNode()
   const catalogNode = useSelectedCatalogNode()
@@ -24,7 +24,7 @@ export const NodeForm = (): JSX.Element => {
       <div>
         {catalogNode.description}
       </div>
-      <Form schema={catalogNode.schema} uiSchema={uiSchema} formData={parametersWithDataUrls} onSubmit={({ formData }) => setParameters(formData)} />
+      <Form schema={catalogNode.schema} uiSchema={uiSchema} formData={parametersWithDataUrls} onSubmit={({ formData }) => setNodeParameters(formData)} />
     </>
   )
 }

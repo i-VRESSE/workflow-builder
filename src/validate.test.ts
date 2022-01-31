@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 import { JSONSchema7 } from 'json-schema'
 import { validateCatalog, validateWorkflow } from './validate'
-import { IWorkflowSchema } from './types'
+import { ICatalog, IWorkflowSchema } from './types'
 
 describe('validateWorkflow()', () => {
   describe('given a workflow with only global parameters', () => {
@@ -174,11 +174,16 @@ describe('validateWorkflow()', () => {
 describe('validateCatalog', () => {
   describe('given catalog with JSON schemas', () => {
     it('should return zero errors', () => {
-      const catalog = {
+      const catalog: ICatalog = {
         title: 'Test catalog',
         global: {
           schema: {
-            type: 'string'
+            type: 'object',
+            properties: {
+              someprop: {
+                type: 'string'
+              }
+            }
           }
         },
         nodes: [{
@@ -187,9 +192,16 @@ describe('validateCatalog', () => {
           description: 'My node description',
           category: 'My category',
           schema: {
-            type: 'string'
+            type: 'object',
+            properties: {
+              someprop: {
+                type: 'string'
+              }
+            }
           }
-        }]
+        }],
+        examples: {},
+        categories: []
       }
 
       const errors = validateCatalog(catalog)
@@ -198,33 +210,24 @@ describe('validateCatalog', () => {
     })
   })
 
-  describe('given empty object', () => {
-    it('should return errors about all missing fields', () => {
-      const catalog = {}
-
-      const errors = validateCatalog(catalog)
-
-      const expected = [{
-        message: 'catalog malformed or missing fields',
-        instancePath: '',
-        schemaPath: '',
-        keyword: '',
-        params: {}
-      }]
-      expect(errors).toEqual(expected)
-    })
-  })
-
   describe('given global schema with wrong type', () => {
     it('should return errors about that schema', () => {
-      const catalog = {
+      const catalog: ICatalog = {
         title: 'Test catalog',
         global: {
           schema: {
-            type: 'nonexistingtype'
+            type: 'object',
+            properties: {
+              someprop: {
+                // @ts-expect-error
+                type: 'nonexistingtype'
+              }
+            }
           }
         },
-        nodes: []
+        nodes: [],
+        examples: {},
+        categories: []
       }
 
       const errors = validateCatalog(catalog)
@@ -235,11 +238,16 @@ describe('validateCatalog', () => {
 
   describe('given node schema with wrong type', () => {
     it('should return errors about that schema', () => {
-      const catalog = {
+      const catalog: ICatalog = {
         title: 'Test catalog',
         global: {
           schema: {
-            type: 'string'
+            type: 'object',
+            properties: {
+              someprop: {
+                type: 'string'
+              }
+            }
           }
         },
         nodes: [{
@@ -248,7 +256,13 @@ describe('validateCatalog', () => {
           description: 'My node description',
           category: 'My category',
           schema: {
-            type: 'nonexistingtype'
+            type: 'object',
+            properties: {
+              someprop: {
+                // @ts-expect-error
+                type: 'nonexistingtype'
+              }
+            }
           }
         }]
       }

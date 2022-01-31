@@ -2,7 +2,7 @@ import Ajv from 'ajv'
 import type { ErrorObject } from 'ajv'
 import addFormats from 'ajv-formats'
 import { JSONSchema7 } from 'json-schema'
-import type { ICatalog, ICatalogNode, IParameters, IWorkflowNode, IWorkflow, IWorkflowSchema } from './types'
+import type { ICatalogNode, IParameters, IWorkflowNode, IWorkflow, IWorkflowSchema, ICatalog } from './types'
 
 const ajv = new Ajv()
 addFormats(ajv)
@@ -79,25 +79,7 @@ function validateSchema (schema: JSONSchema7): Errors {
   return []
 }
 
-function isCatalog (catalog: unknown): catalog is ICatalog {
-  return typeof catalog === 'object' &&
-    catalog !== null &&
-    'global' in catalog &&
-    'nodes' in catalog
-  // TODO add more checks
-}
-
-export function validateCatalog (catalog: unknown): Errors {
-  if (!isCatalog(catalog)) {
-    return [{
-      message: 'catalog malformed or missing fields',
-      instancePath: '',
-      schemaPath: '',
-      keyword: '',
-      params: {}
-    }]
-  }
-
+export function validateCatalog (catalog: ICatalog): Errors {
   // Validate global schema
   const globalErrors = validateSchema(catalog.global.schema)
   globalErrors.forEach(e => {
