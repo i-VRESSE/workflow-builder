@@ -2,7 +2,7 @@ import { useCatalog } from './store'
 import { ICategory } from './types'
 import { CatalogNode } from './CatalogNode'
 
-export const CatalogCategory = ({ name }: ICategory) => {
+export const CatalogCategory = ({ name }: ICategory): JSX.Element => {
   const catalog = useCatalog()
   return (
     <li>

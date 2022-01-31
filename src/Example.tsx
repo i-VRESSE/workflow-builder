@@ -5,7 +5,17 @@ interface IProps {
   workflow: string
 }
 
-export const Example = ({ name, workflow }: IProps) => {
+export const Example = ({ name, workflow }: IProps): JSX.Element => {
   const { loadWorkflowArchive } = useWorkflow()
-  return <li><button className='btn btn-light' onClick={async () => await loadWorkflowArchive(workflow)} title={workflow}>{name}</button></li>
+  return (
+    <li>
+      <button
+        className='btn btn-light'
+        onClick={async () => await loadWorkflowArchive(workflow)}
+        title={workflow}
+      >
+        {name}
+      </button>
+    </li>
+  )
 }

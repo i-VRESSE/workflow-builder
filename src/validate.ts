@@ -13,6 +13,13 @@ interface IvresseErrorObject extends ErrorObject<string, Record<string, any>, un
 
 export type Errors = IvresseErrorObject[]
 
+export class ValidationError extends Error {
+  constructor (message: string, public errors: IvresseErrorObject[] = []) {
+    super(message)
+    Object.setPrototypeOf(this, new.target.prototype)
+  }
+}
+
 export function validateWorkflow (workflow: IWorkflow, schemas: IWorkflowSchema): Errors {
   const globalErrors = validateParameters(
     workflow.global,
@@ -66,7 +73,7 @@ function validateParameters (parameters: IParameters, schema: JSONSchema7): Erro
 }
 
 function validateSchema (schema: JSONSchema7): Errors {
-  if (!ajv.validateSchema(schema) && ajv.errors !== undefined && ajv.errors !== null) {
+  if (!(ajv.validateSchema(schema) as boolean) && ajv.errors !== undefined && ajv.errors !== null) {
     return ajv.errors
   }
   return []

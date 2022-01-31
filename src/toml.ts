@@ -1,12 +1,12 @@
 import { Section, stringify, parse } from '@ltd/j-toml'
-import { IWorkflowNode, IParameters } from './types'
+import { IWorkflowNode, IParameters, IWorkflow } from './types'
 
 function isObject (o: unknown): boolean {
   return typeof o === 'object' &&
     Object.prototype.toString.call(o) === '[object Object]'
 }
 
-function nodes2tomltable (nodes: IWorkflowNode[]) {
+function nodes2tomltable (nodes: IWorkflowNode[]): Record<string, unknown> {
   const table: Record<string, unknown> = {}
   const track: Record<string, number> = {}
   for (const node of nodes) {
@@ -34,7 +34,7 @@ function nodes2tomltable (nodes: IWorkflowNode[]) {
 export function workflow2tomltext (
   nodes: IWorkflowNode[],
   global: IParameters
-) {
+): string {
   const table = {
     ...nodes2tomltable(nodes),
     ...global
@@ -46,9 +46,9 @@ export function workflow2tomltext (
   return text
 }
 
-export function parseWorkflow (workflow: string, globalKeys: Set<string>) {
+export function parseWorkflow (workflow: string, globalKeys: Set<string>): IWorkflow {
   const table = parse(workflow, { bigint: false })
-  const global: Record<string, unknown> = {}
+  const global: IParameters = {}
   const nodes: IWorkflowNode[] = []
   const sectionwithindex = /\.\d+$/
   Object.entries(table).forEach(([k, v]) => {

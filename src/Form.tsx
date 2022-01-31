@@ -5,10 +5,11 @@ import { Theme } from '@rjsf/bootstrap-4'
 const registry = utils.getDefaultRegistry()
 const DefaultFileWidget = registry.widgets.FileWidget;
 (Theme as any).widgets.FileWidget = (props: WidgetProps) => {
+  const label = props.schema.title ?? props.label
   return (
     <div>
-      <label className='form-label'>{props.schema.title || props.label}
-        {(props.label || props.schema.title) && props.required ? '*' : null}
+      <label className='form-label'>{label}
+        {props.required ? '*' : null}
       </label>
       <DefaultFileWidget {...props} />
     </div>

@@ -18,7 +18,7 @@ async function createZip (
   nodes: IWorkflowNode[],
   global: IParameters,
   files: IFiles
-) {
+): Promise<Blob> {
   const writer = new ZipWriter(new BlobWriter('application/zip'))
 
   // add data URL content to file in archive
@@ -37,7 +37,7 @@ export async function saveArchive (
   nodes: IWorkflowNode[],
   global: IParameters,
   files: IFiles
-) {
+): Promise<void> {
   const zip: Blob = await createZip(nodes, global, files)
   saveAs(zip, workflowArchiveFilename)
 }

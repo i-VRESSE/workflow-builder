@@ -7,7 +7,7 @@ import { readArchive, saveArchive } from './archive'
 import { ICatalog, IWorkflowNode, IFiles, IParameters, ICatalogNode } from './types'
 import { parseWorkflow, workflow2tomltext } from './toml'
 import { catalogURLchoices } from './constants'
-import { validateWorkflow, validateCatalog } from './validate'
+import { validateWorkflow, validateCatalog, ValidationError } from './validate'
 import { moveItem, removeItemAtIndex, replaceItemAtIndex } from './utils/array'
 
 export const catalogURLState = atom<string>({
@@ -21,20 +21,22 @@ const catalogState = selector<ICatalog>({
     const catalogUrl = get(catalogURLState)
     try {
       const response = await fetch(catalogUrl)
+      if (!response.ok) {
+        throw new Error('Error retrieving catalog')
+      }
       const body = await response.text()
       const catalog = load(body)
       const errors = validateCatalog(catalog)
       if (errors.length > 0) {
-        // TODO notify user of bad catalog
-        toast.error('Loading catalog failed')
-        return {} as ICatalog
+        throw new ValidationError('Loading catalog failed', errors)
       }
       // TODO Only report success when user initiated catalog loading, not when page is loaded
       // toast.success('Loading catalog completed')
       return catalog as ICatalog
     } catch (error) {
-      toast.error('Loading catalog failed')
-      return {} as ICatalog
+      toast.error('Loading catalog failed') // TODO move toast to ErrorBoundary fallback
+      console.error(error)
+      throw error
     }
   }
 })
@@ -120,7 +122,23 @@ export function useSelectedCatalogNode (): ICatalogNode | undefined {
   return useRecoilValue(selectedCatalogNodeState)
 }
 
-export function useWorkflow () {
+interface UseWorkflow {
+  nodes: IWorkflowNode[]
+  editingGlobal: boolean
+  global: IParameters
+  toggleGlobalEdit: () => void
+  addNodeToWorkflow: (nodeId: string) => void
+  setParameters: (inlinedParameters: IParameters) => void
+  loadWorkflowArchive: (archiveURL: string) => Promise<void>
+  save: () => Promise<void>
+  deleteNode: (nodeIndex: number) => void
+  selectNode: (nodeIndex: number) => void
+  clearNodeSelection: () => void
+  moveNodeDown: (nodeIndex: number) => void
+  moveNodeUp: (nodeIndex: number) => void
+}
+
+export function useWorkflow (): UseWorkflow {
   const [nodes, setNodes] = useRecoilState(workflowNodesState)
   const [global, setGlobal] = useRecoilState(globalParametersState)
   const [editingGlobal, setEditingGlobal] = useRecoilState(editingGlobalParametersState)
@@ -158,7 +176,7 @@ export function useWorkflow () {
       setNodes(newNodes)
     },
     clearNodeSelection: () => setSelectedNodeIndex(-1),
-    setParameters (inlinedParameters: unknown) {
+    setParameters (inlinedParameters: IParameters) {
       const newFiles = { ...files }
       // TODO forget files that are no longer refered to in parameters
       const parameters = externalizeDataUrls(inlinedParameters, newFiles)
