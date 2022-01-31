@@ -70,7 +70,6 @@ export async function readArchive (archiveURL: string, nodes: ICatalogNode[]): P
     } else if (entry.directory) {
       // Skip directories
     } else {
-      // TODO add mime type to Data64Uri
       const writer = new Data64URIWriter()
       const dataURL = await entry.getData(writer)
       files[entry.filename] = injectFilenameIntoDataURL(entry.filename, dataURL)
