@@ -1,4 +1,5 @@
 import { useRef } from 'react'
+import { toast } from 'react-toastify'
 import { useWorkflow } from './store'
 
 export const WorkflowUpload = (): JSX.Element => {
@@ -11,8 +12,25 @@ export const WorkflowUpload = (): JSX.Element => {
     }
     const file = event.target.files[0]
     const url = URL.createObjectURL(file)
-    await loadWorkflowArchive(url)
-    URL.revokeObjectURL(url)
+    await toast.promise(
+      async () => {
+        try {
+          await loadWorkflowArchive(url)
+        } finally {
+          URL.revokeObjectURL(url)
+        }
+      },
+      {
+        pending: 'Loading workfow ...',
+        success: 'Workflow loaded',
+        error: {
+          render ({ data }) {
+            console.error(data)
+            return 'Workflow archive failed to load. See DevTools (F12) console for errors.'
+          }
+        }
+      }
+    )
   }
 
   return (

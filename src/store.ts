@@ -1,5 +1,4 @@
 import { atom, selector, useRecoilState, useRecoilValue } from 'recoil'
-import { toast } from 'react-toastify'
 
 import { externalizeDataUrls } from './dataurls'
 import { saveArchive } from './archive'
@@ -19,13 +18,7 @@ const catalogState = selector<ICatalog>({
   key: 'catalog',
   get: async ({ get }) => {
     const catalogUrl = get(catalogURLState)
-    try {
-      return await fetchCatalog(catalogUrl)
-    } catch (error) {
-      toast.error('Loading catalog failed') // TODO move toast to ErrorBoundary fallback
-      console.error(error)
-      throw error
-    }
+    return await fetchCatalog(catalogUrl)
   }
 })
 
@@ -169,15 +162,10 @@ export function useWorkflow (): UseWorkflow {
       setFiles(newFiles)
     },
     async loadWorkflowArchive (archiveURL: string) {
-      try {
-        const r = await loadWorkflowArchive(archiveURL, catalog)
-        setNodes(r.nodes)
-        setFiles(r.files)
-        setGlobal(r.global)
-      } catch (error) {
-        toast.error('Workflow archive is failed to load. See DevTools console for errors')
-        console.error(error)
-      }
+      const r = await loadWorkflowArchive(archiveURL, catalog)
+      setNodes(r.nodes)
+      setFiles(r.files)
+      setGlobal(r.global)
     },
     async save () {
       await saveArchive(nodes, global, files)
