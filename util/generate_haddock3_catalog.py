@@ -14,6 +14,7 @@ TODO move script outside workflow-builder repo as this repo should be generic an
 
 import argparse
 import importlib
+from math import isnan
 import sys
 from yaml import dump, load, Loader
 
@@ -65,6 +66,9 @@ def config2schema(config):
                 prop['maximum'] = v['max']
             if 'min' in v:
                 prop['minimum'] = v['min']
+            if 'default' in v and isnan(v['default']):
+                # TODO handle nan's more gracefully
+                del prop['default']
         elif v['type'] == 'file':
             prop['type'] = 'string'
             prop['format'] = 'uri-reference'
