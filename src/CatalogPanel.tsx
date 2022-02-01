@@ -11,7 +11,9 @@ export const CatalogPanel = (): JSX.Element => {
   return (
     <fieldset>
       <legend>Catalog</legend>
-      <CatalogPicker />
+      <div>
+        <CatalogPicker />
+      </div>
       <React.Suspense fallback={<span>Loading catalog...</span>}>
         <button className='btn btn-light' onClick={toggleGlobalEdit}>Configure global parameters</button>
         <h4>Nodes</h4>
