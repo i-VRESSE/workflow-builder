@@ -1,13 +1,13 @@
 import { atom, selector, useRecoilState, useRecoilValue } from 'recoil'
 
-import { dropUnusedFiles, externalizeDataUrls } from './dataurls'
+import { externalizeDataUrls } from './dataurls'
 import { saveArchive } from './archive'
 import { ICatalog, IWorkflowNode, IFiles, IParameters, ICatalogNode } from './types'
 import { workflow2tomltext } from './toml'
 import { catalogURLchoices } from './constants'
 import { moveItem, removeItemAtIndex, replaceItemAtIndex } from './utils/array'
 import { fetchCatalog } from './catalog'
-import { loadWorkflowArchive } from './workflow'
+import { dropUnusedFiles, loadWorkflowArchive } from './workflow'
 
 export const catalogURLState = atom<string>({
   key: 'catalogURL',
