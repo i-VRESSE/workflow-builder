@@ -127,7 +127,7 @@ def config2schema(config):
                     "type": "number"
                 }
             else:
-                # TODO dont fallback to number
+                # TODO dont fallback to number, for example seletopclusts:top_cluster
                 prop['items'] = {
                     "type": "number"
                 }
@@ -186,6 +186,7 @@ def process_category(category):
     }
 
 def nest_by_group(config):
+    # TODO undo grouping when rendering toml
     out = {}
     for k, v in config.items():
         if 'group' in v and v['group'] != '':
