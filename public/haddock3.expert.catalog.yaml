@@ -3,12 +3,12 @@ categories:
   name: refinement
 - description: HADDOCK3 modules related to model analysis.
   name: analysis
-- description: HADDOCK3 modules for sampling.
-  name: sampling
 - description: HADDOCK3 modules to create topologies.
   name: topology
 - description: HADDOCK3 modules to score modules.
   name: scoring
+- description: HADDOCK3 modules for sampling.
+  name: sampling
 examples:
   docking: /examples/docking-protein-ligand.zip
 global:
@@ -60,6 +60,10 @@ global:
         maximum: 9999
         minimum: 1
         type: number
+      run_dir:
+        format: uri-reference
+        title: Run directory
+        type: string
       self_contained:
         default: false
         description: Copies the CNS scripts and executable to the run folder
@@ -67,6 +71,7 @@ global:
         type: boolean
     required:
     - molecules
+    - run_dir
     type: object
   uiSchema:
     cns_exec:
@@ -103,7 +108,6 @@ nodes:
           type: number
         type: array
       top_models:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
@@ -254,12 +258,10 @@ nodes:
         minimum: -9999
         type: number
       c2sym_end1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c2sym_end2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
@@ -274,27 +276,22 @@ nodes:
         minLength: 0
         type: string
       c2sym_sta1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c2sym_sta2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c3sym_end1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c3sym_end2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c3sym_end3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
@@ -314,37 +311,30 @@ nodes:
         minLength: 0
         type: string
       c3sym_sta1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c3sym_sta2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c3sym_sta3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c4sym_end1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c4sym_end2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c4sym_end3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c4sym_end4_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
@@ -369,47 +359,38 @@ nodes:
         minLength: 0
         type: string
       c4sym_sta1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c4sym_sta2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c4sym_sta3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c4sym_sta4_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c5sym_end1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c5sym_end2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c5sym_end3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c5sym_end4_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c5sym_end5_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
@@ -439,57 +420,46 @@ nodes:
         minLength: 0
         type: string
       c5sym_sta1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c5sym_sta2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c5sym_sta3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c5sym_sta4_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c5sym_sta5_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c6sym_end1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c6sym_end2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c6sym_end3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c6sym_end4_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c6sym_end5_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c6sym_end6_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
@@ -524,32 +494,26 @@ nodes:
         minLength: 0
         type: string
       c6sym_sta1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c6sym_sta2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c6sym_sta3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c6sym_sta4_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c6sym_sta5_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c6sym_sta6_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
@@ -1793,12 +1757,10 @@ nodes:
         minimum: -9999
         type: number
       ncs_end1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       ncs_end2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
@@ -1816,12 +1778,10 @@ nodes:
         minLength: 0
         type: string
       ncs_sta1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       ncs_sta2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
@@ -2079,202 +2039,162 @@ nodes:
         minLength: 0
         type: string
       rair_end_10_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       rair_end_11_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       rair_end_12_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       rair_end_13_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       rair_end_14_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       rair_end_15_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       rair_end_16_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       rair_end_17_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       rair_end_18_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       rair_end_19_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       rair_end_1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       rair_end_20_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       rair_end_2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       rair_end_3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       rair_end_4_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       rair_end_5_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       rair_end_6_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       rair_end_7_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       rair_end_8_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       rair_end_9_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       rair_start_10_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       rair_start_11_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       rair_start_12_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       rair_start_13_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       rair_start_14_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       rair_start_15_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       rair_start_16_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       rair_start_17_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       rair_start_18_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       rair_start_19_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       rair_start_1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       rair_start_20_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       rair_start_2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       rair_start_3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       rair_start_4_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       rair_start_5_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       rair_start_6_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       rair_start_7_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       rair_start_8_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       rair_start_9_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
@@ -2311,17 +2231,14 @@ nodes:
         minimum: -9999
         type: number
       s3sym_end1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       s3sym_end2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       s3sym_end3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
@@ -2341,17 +2258,14 @@ nodes:
         minLength: 0
         type: string
       s3sym_sta1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       s3sym_sta2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       s3sym_sta3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
@@ -2669,12 +2583,10 @@ nodes:
             default: false
             type: boolean
           hisd_1:
-            default: .nan
             maximum: 9999
             minimum: -9999
             type: number
           hise_1:
-            default: .nan
             maximum: 9999
             minimum: -9999
             type: number
@@ -2713,12 +2625,10 @@ nodes:
             default: false
             type: boolean
           hisd_1:
-            default: .nan
             maximum: 9999
             minimum: -9999
             type: number
           hise_1:
-            default: .nan
             maximum: 9999
             minimum: -9999
             type: number
@@ -2757,12 +2667,10 @@ nodes:
             default: false
             type: boolean
           hisd_1:
-            default: .nan
             maximum: 9999
             minimum: -9999
             type: number
           hise_1:
-            default: .nan
             maximum: 9999
             minimum: -9999
             type: number
@@ -2801,12 +2709,10 @@ nodes:
             default: false
             type: boolean
           hisd_1:
-            default: .nan
             maximum: 9999
             minimum: -9999
             type: number
           hise_1:
-            default: .nan
             maximum: 9999
             minimum: -9999
             type: number
@@ -2845,12 +2751,10 @@ nodes:
             default: false
             type: boolean
           hisd_1:
-            default: .nan
             maximum: 9999
             minimum: -9999
             type: number
           hise_1:
-            default: .nan
             maximum: 9999
             minimum: -9999
             type: number
@@ -2889,12 +2793,10 @@ nodes:
             default: false
             type: boolean
           hisd_1:
-            default: .nan
             maximum: 9999
             minimum: -9999
             type: number
           hise_1:
-            default: .nan
             maximum: 9999
             minimum: -9999
             type: number
@@ -2933,12 +2835,10 @@ nodes:
             default: false
             type: boolean
           hisd_1:
-            default: .nan
             maximum: 9999
             minimum: -9999
             type: number
           hise_1:
-            default: .nan
             maximum: 9999
             minimum: -9999
             type: number
@@ -2977,12 +2877,10 @@ nodes:
             default: false
             type: boolean
           hisd_1:
-            default: .nan
             maximum: 9999
             minimum: -9999
             type: number
           hise_1:
-            default: .nan
             maximum: 9999
             minimum: -9999
             type: number
@@ -3021,12 +2919,10 @@ nodes:
             default: false
             type: boolean
           hisd_1:
-            default: .nan
             maximum: 9999
             minimum: -9999
             type: number
           hise_1:
-            default: .nan
             maximum: 9999
             minimum: -9999
             type: number
@@ -3065,12 +2961,10 @@ nodes:
             default: false
             type: boolean
           hisd_1:
-            default: .nan
             maximum: 9999
             minimum: -9999
             type: number
           hise_1:
-            default: .nan
             maximum: 9999
             minimum: -9999
             type: number
@@ -3109,12 +3003,10 @@ nodes:
             default: false
             type: boolean
           hisd_1:
-            default: .nan
             maximum: 9999
             minimum: -9999
             type: number
           hise_1:
-            default: .nan
             maximum: 9999
             minimum: -9999
             type: number
@@ -3153,12 +3045,10 @@ nodes:
             default: false
             type: boolean
           hisd_1:
-            default: .nan
             maximum: 9999
             minimum: -9999
             type: number
           hise_1:
-            default: .nan
             maximum: 9999
             minimum: -9999
             type: number
@@ -3197,12 +3087,10 @@ nodes:
             default: false
             type: boolean
           hisd_1:
-            default: .nan
             maximum: 9999
             minimum: -9999
             type: number
           hise_1:
-            default: .nan
             maximum: 9999
             minimum: -9999
             type: number
@@ -3241,12 +3129,10 @@ nodes:
             default: false
             type: boolean
           hisd_1:
-            default: .nan
             maximum: 9999
             minimum: -9999
             type: number
           hise_1:
-            default: .nan
             maximum: 9999
             minimum: -9999
             type: number
@@ -3285,12 +3171,10 @@ nodes:
             default: false
             type: boolean
           hisd_1:
-            default: .nan
             maximum: 9999
             minimum: -9999
             type: number
           hise_1:
-            default: .nan
             maximum: 9999
             minimum: -9999
             type: number
@@ -3329,12 +3213,10 @@ nodes:
             default: false
             type: boolean
           hisd_1:
-            default: .nan
             maximum: 9999
             minimum: -9999
             type: number
           hise_1:
-            default: .nan
             maximum: 9999
             minimum: -9999
             type: number
@@ -3373,12 +3255,10 @@ nodes:
             default: false
             type: boolean
           hisd_1:
-            default: .nan
             maximum: 9999
             minimum: -9999
             type: number
           hise_1:
-            default: .nan
             maximum: 9999
             minimum: -9999
             type: number
@@ -3417,12 +3297,10 @@ nodes:
             default: false
             type: boolean
           hisd_1:
-            default: .nan
             maximum: 9999
             minimum: -9999
             type: number
           hise_1:
-            default: .nan
             maximum: 9999
             minimum: -9999
             type: number
@@ -3461,12 +3339,10 @@ nodes:
             default: false
             type: boolean
           hisd_1:
-            default: .nan
             maximum: 9999
             minimum: -9999
             type: number
           hise_1:
-            default: .nan
             maximum: 9999
             minimum: -9999
             type: number
@@ -3505,12 +3381,10 @@ nodes:
             default: false
             type: boolean
           hisd_1:
-            default: .nan
             maximum: 9999
             minimum: -9999
             type: number
           hise_1:
-            default: .nan
             maximum: 9999
             minimum: -9999
             type: number
@@ -3830,12 +3704,10 @@ nodes:
         minimum: -9999
         type: number
       c2sym_end1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c2sym_end2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
@@ -3850,27 +3722,22 @@ nodes:
         minLength: 0
         type: string
       c2sym_sta1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c2sym_sta2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c3sym_end1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c3sym_end2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c3sym_end3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
@@ -3890,37 +3757,30 @@ nodes:
         minLength: 0
         type: string
       c3sym_sta1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c3sym_sta2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c3sym_sta3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c4sym_end1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c4sym_end2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c4sym_end3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c4sym_end4_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
@@ -3945,47 +3805,38 @@ nodes:
         minLength: 0
         type: string
       c4sym_sta1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c4sym_sta2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c4sym_sta3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c4sym_sta4_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c5sym_end1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c5sym_end2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c5sym_end3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c5sym_end4_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c5sym_end5_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
@@ -4015,57 +3866,46 @@ nodes:
         minLength: 0
         type: string
       c5sym_sta1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c5sym_sta2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c5sym_sta3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c5sym_sta4_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c5sym_sta5_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c6sym_end1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c6sym_end2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c6sym_end3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c6sym_end4_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c6sym_end5_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c6sym_end6_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
@@ -4100,32 +3940,26 @@ nodes:
         minLength: 0
         type: string
       c6sym_sta1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c6sym_sta2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c6sym_sta3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c6sym_sta4_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c6sym_sta5_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c6sym_sta6_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
@@ -4246,202 +4080,162 @@ nodes:
         default: false
         type: boolean
       fleend10_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend11_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend12_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend13_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend14_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend15_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend16_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend17_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend18_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend19_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend20_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend4_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend5_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend6_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend7_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend8_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend9_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta10_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta11_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta12_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta13_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta14_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta15_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta16_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta17_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta18_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta19_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta20_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta4_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta5_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta6_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta7_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta8_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta9_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
@@ -5621,12 +5415,10 @@ nodes:
         minimum: -9999
         type: number
       ncs_end1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       ncs_end2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
@@ -5644,12 +5436,10 @@ nodes:
         minLength: 0
         type: string
       ncs_sta1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       ncs_sta2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
@@ -6025,17 +5815,14 @@ nodes:
         minimum: -9999
         type: number
       s3sym_end1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       s3sym_end2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       s3sym_end3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
@@ -6055,17 +5842,14 @@ nodes:
         minLength: 0
         type: string
       s3sym_sta1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       s3sym_sta2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       s3sym_sta3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
@@ -6075,202 +5859,162 @@ nodes:
         minimum: -9999
         type: number
       segend10_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend11_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend12_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend13_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend14_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend15_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend16_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend17_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend18_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend19_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend20_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend4_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend5_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend6_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend7_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend8_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend9_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta10_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta11_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta12_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta13_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta14_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta15_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta16_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta17_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta18_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta19_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta20_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta4_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta5_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta6_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta7_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta8_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta9_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
@@ -6563,12 +6307,10 @@ nodes:
         format: uri-reference
         type: string
       c2sym_end1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c2sym_end2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
@@ -6583,27 +6325,22 @@ nodes:
         minLength: 0
         type: string
       c2sym_sta1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c2sym_sta2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c3sym_end1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c3sym_end2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c3sym_end3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
@@ -6623,37 +6360,30 @@ nodes:
         minLength: 0
         type: string
       c3sym_sta1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c3sym_sta2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c3sym_sta3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c4sym_end1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c4sym_end2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c4sym_end3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c4sym_end4_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
@@ -6678,47 +6408,38 @@ nodes:
         minLength: 0
         type: string
       c4sym_sta1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c4sym_sta2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c4sym_sta3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c4sym_sta4_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c5sym_end1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c5sym_end2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c5sym_end3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c5sym_end4_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c5sym_end5_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
@@ -6748,57 +6469,46 @@ nodes:
         minLength: 0
         type: string
       c5sym_sta1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c5sym_sta2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c5sym_sta3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c5sym_sta4_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c5sym_sta5_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c6sym_end1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c6sym_end2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c6sym_end3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c6sym_end4_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c6sym_end5_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c6sym_end6_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
@@ -6833,32 +6543,26 @@ nodes:
         minLength: 0
         type: string
       c6sym_sta1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c6sym_sta2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c6sym_sta3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c6sym_sta4_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c6sym_sta5_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c6sym_sta6_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
@@ -6964,202 +6668,162 @@ nodes:
         default: false
         type: boolean
       fleend10_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend11_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend12_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend13_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend14_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend15_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend16_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend17_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend18_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend19_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend20_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend4_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend5_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend6_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend7_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend8_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend9_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta10_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta11_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta12_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta13_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta14_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta15_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta16_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta17_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta18_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta19_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta20_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta4_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta5_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta6_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta7_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta8_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta9_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
@@ -8264,12 +7928,10 @@ nodes:
         minLength: 0
         type: string
       ncs_end1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       ncs_end2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
@@ -8287,12 +7949,10 @@ nodes:
         minLength: 0
         type: string
       ncs_sta1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       ncs_sta2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
@@ -8648,17 +8308,14 @@ nodes:
         default: false
         type: boolean
       s3sym_end1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       s3sym_end2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       s3sym_end3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
@@ -8678,17 +8335,14 @@ nodes:
         minLength: 0
         type: string
       s3sym_sta1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       s3sym_sta2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       s3sym_sta3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
@@ -8698,202 +8352,162 @@ nodes:
         minimum: -9999
         type: number
       segend10_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend11_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend12_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend13_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend14_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend15_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend16_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend17_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend18_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend19_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend20_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend4_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend5_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend6_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend7_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend8_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend9_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta10_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta11_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta12_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta13_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta14_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta15_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta16_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta17_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta18_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta19_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta20_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta4_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta5_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta6_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta7_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta8_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta9_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
@@ -9121,12 +8735,10 @@ nodes:
         format: uri-reference
         type: string
       c2sym_end1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c2sym_end2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
@@ -9141,27 +8753,22 @@ nodes:
         minLength: 0
         type: string
       c2sym_sta1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c2sym_sta2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c3sym_end1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c3sym_end2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c3sym_end3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
@@ -9181,37 +8788,30 @@ nodes:
         minLength: 0
         type: string
       c3sym_sta1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c3sym_sta2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c3sym_sta3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c4sym_end1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c4sym_end2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c4sym_end3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c4sym_end4_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
@@ -9236,47 +8836,38 @@ nodes:
         minLength: 0
         type: string
       c4sym_sta1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c4sym_sta2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c4sym_sta3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c4sym_sta4_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c5sym_end1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c5sym_end2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c5sym_end3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c5sym_end4_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c5sym_end5_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
@@ -9306,57 +8897,46 @@ nodes:
         minLength: 0
         type: string
       c5sym_sta1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c5sym_sta2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c5sym_sta3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c5sym_sta4_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c5sym_sta5_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c6sym_end1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c6sym_end2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c6sym_end3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c6sym_end4_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c6sym_end5_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c6sym_end6_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
@@ -9391,32 +8971,26 @@ nodes:
         minLength: 0
         type: string
       c6sym_sta1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c6sym_sta2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c6sym_sta3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c6sym_sta4_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c6sym_sta5_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       c6sym_sta6_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
@@ -9522,202 +9096,162 @@ nodes:
         default: false
         type: boolean
       fleend10_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend11_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend12_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend13_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend14_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend15_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend16_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend17_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend18_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend19_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend20_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend4_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend5_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend6_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend7_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend8_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       fleend9_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta10_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta11_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta12_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta13_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta14_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta15_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta16_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta17_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta18_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta19_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta20_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta4_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta5_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta6_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta7_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta8_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       flesta9_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
@@ -10822,12 +10356,10 @@ nodes:
         minLength: 0
         type: string
       ncs_end1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       ncs_end2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
@@ -10845,12 +10377,10 @@ nodes:
         minLength: 0
         type: string
       ncs_sta1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       ncs_sta2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
@@ -11211,17 +10741,14 @@ nodes:
         default: false
         type: boolean
       s3sym_end1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       s3sym_end2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       s3sym_end3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
@@ -11241,17 +10768,14 @@ nodes:
         minLength: 0
         type: string
       s3sym_sta1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       s3sym_sta2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       s3sym_sta3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
@@ -11266,202 +10790,162 @@ nodes:
         minimum: -9999
         type: number
       segend10_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend11_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend12_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend13_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend14_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend15_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend16_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend17_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend18_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend19_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend20_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend4_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend5_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend6_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend7_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend8_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segend9_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta10_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta11_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta12_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta13_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta14_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta15_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta16_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta17_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta18_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta19_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta1_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta20_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta2_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta3_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta4_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta5_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta6_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta7_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta8_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number
       segsta9_1:
-        default: .nan
         maximum: 9999
         minimum: -9999
         type: number

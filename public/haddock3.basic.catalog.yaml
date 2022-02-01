@@ -1,14 +1,14 @@
 categories:
-- description: HADDOCK3 modules to score modules.
-  name: scoring
 - description: HADDOCK3 modules to create topologies.
   name: topology
-- description: HADDOCK3 actions referring to refinement.
-  name: refinement
 - description: HADDOCK3 modules for sampling.
   name: sampling
 - description: HADDOCK3 modules related to model analysis.
   name: analysis
+- description: HADDOCK3 modules to score modules.
+  name: scoring
+- description: HADDOCK3 actions referring to refinement.
+  name: refinement
 examples:
   docking: /examples/docking-protein-ligand.zip
 global:
@@ -60,6 +60,10 @@ global:
         maximum: 9999
         minimum: 1
         type: number
+      run_dir:
+        format: uri-reference
+        title: Run directory
+        type: string
       self_contained:
         default: false
         description: Copies the CNS scripts and executable to the run folder
@@ -67,6 +71,7 @@ global:
         type: boolean
     required:
     - molecules
+    - run_dir
     type: object
   uiSchema:
     cns_exec:

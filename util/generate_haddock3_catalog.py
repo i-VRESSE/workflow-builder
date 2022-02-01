@@ -83,6 +83,12 @@ def config2schema(config):
 
             if 'accept' in v:
                 prop_ui["ui:options"] = { "accept": v['accept']}
+        elif v['type'] == 'dir':
+            prop['type'] = 'string'
+            prop['format'] = 'uri-reference'
+            if 'default' in v and v['default'] == '':
+                # paths can not have defaults
+                del prop['default']
         elif v['type'] == 'string':
             prop['type'] = 'string'
             if 'minchars' in v:
@@ -216,6 +222,12 @@ REQUIRED_GLOBAL_PARAMETERS = {
         'min': 1,
         'max': 20,
         'title': 'Molecules',
+        'group': '',
+        'explevel': 'basic'
+    },
+    'run_dir': {
+        'type': 'dir',
+        'title': 'Run directory',
         'group': '',
         'explevel': 'basic'
     }
