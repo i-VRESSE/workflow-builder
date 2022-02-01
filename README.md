@@ -76,24 +76,27 @@ The configuration file contains paths to input files which are included in the z
 The workflow configuration file consists out of 2 parts:
 
 1. Global parameters, which are available to engine and each node.
-2. Table with parameters for each node the workflow should run.
+2. Tables with parameters for each node the workflow should run.
 
-TOML does not allow for tables with same name. So any node that needs be run multiple times should have a index appened to the table name.
+TOML does not allow for tables with same name. So any node that occurs multiple times should have a index appened to the table name.
 
 ### Catalog
 
 The catalog is a YAML formatted file which tells the app what nodes are available. In has the following info:
 
-1. Description of global parameters
+1. global: Description of global parameters
     * schema: What parameters are valid. Formatted as JSON schema draft 7.
     * uiSchema: How the form for filling the parameters should be rendered.
-2. Description of available nodes.
+2. nodes: Description of available nodes.
     * id: Identifier of node, for computers
     * label: Label of node, for humans
     * category: Category to which node belongs
     * description: Text describing what node needs, does and produces.
     * schema: What parameters are valid. Formatted as JSON schema draft 7.
     * uiSchema: How the form for filling the parameters should be rendered.
-3. Descriptions of node categories
-4. Title and link to example workflows
-5. Title of the catalog
+3. catagories: Descriptions of node categories
+    * name: Name of category
+    * description: Description of category
+4. examples: Title and link to example workflows
+    * map with title as key and link as value
+5. title: Title of the catalog
