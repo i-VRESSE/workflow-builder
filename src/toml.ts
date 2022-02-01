@@ -22,6 +22,8 @@ function nodes2tomltable (nodes: IWorkflowNode[]): Record<string, unknown> {
       if (Array.isArray(v) && v.length > 0 && isObject(v[0])) {
         // A value that is an array of objects will have each of its objects as a section
         nodeParameters[k] = v.map(d => Section(d))
+      } else if (isObject(v)) {
+        nodeParameters[k] = Section(v as any)
       } else {
         nodeParameters[k] = v
       }
