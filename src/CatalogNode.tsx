@@ -1,7 +1,7 @@
 import { useWorkflow } from './store'
-import { INode } from './types'
+import { ICatalogNode } from './types'
 
-export const CatalogNode = ({ id, label }: INode) => {
+export const CatalogNode = ({ id, label }: ICatalogNode): JSX.Element => {
   const { addNodeToWorkflow } = useWorkflow()
   return (
     <li>

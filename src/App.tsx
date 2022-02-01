@@ -6,22 +6,25 @@ import 'react-toastify/dist/ReactToastify.css'
 
 import './App.css'
 import { CatalogPanel } from './CatalogPanel'
-import { StepPanel } from './StepPanel'
+import { NodePanel } from './NodePanel'
 import { WorkflowPanel } from './WorkflowPanel'
 import { Header } from './Header'
+import { ErrorBoundary } from './ErrorBoundary'
 
 function App (): JSX.Element {
   return (
     <RecoilRoot>
-      <React.Suspense fallback={<div>Loading...</div>}>
-        <ToastContainer position='top-center' autoClose={1000} closeOnClick pauseOnFocusLoss />
-        <Header />
-        <div style={{ display: 'grid', gridTemplateColumns: '400px 0.6fr 1fr', gridAutoRows: '90vh', columnGap: '0.5em' }}>
-          <CatalogPanel />
-          <WorkflowPanel />
-          <StepPanel />
-        </div>
-      </React.Suspense>
+      <ErrorBoundary>
+        <React.Suspense fallback={<div>Loading...</div>}>
+          <ToastContainer position='top-center' autoClose={1000} closeOnClick pauseOnFocusLoss />
+          <Header />
+          <div style={{ display: 'grid', gridTemplateColumns: '400px 0.6fr 1fr', gridAutoRows: '90vh', columnGap: '0.5em' }}>
+            <CatalogPanel />
+            <WorkflowPanel />
+            <NodePanel />
+          </div>
+        </React.Suspense>
+      </ErrorBoundary>
     </RecoilRoot>
   )
 }

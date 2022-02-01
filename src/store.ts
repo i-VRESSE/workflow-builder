@@ -1,12 +1,13 @@
-import { load } from 'js-yaml'
 import { atom, selector, useRecoilState, useRecoilValue } from 'recoil'
+
 import { externalizeDataUrls } from './dataurls'
-import { readArchive, saveArchive } from './archive'
-import { ICatalog, IStep, IFiles, IParameters } from './types'
-import { parseWorkflow, workflow2tomltext } from './toml'
+import { saveArchive } from './archive'
+import { ICatalog, IWorkflowNode, IFiles, IParameters, ICatalogNode } from './types'
+import { workflow2tomltext } from './toml'
 import { catalogURLchoices } from './constants'
-import { validateWorkflow, validateCatalog } from './validate'
-import { toast } from 'react-toastify'
+import { moveItem, removeItemAtIndex, replaceItemAtIndex } from './utils/array'
+import { fetchCatalog } from './catalog'
+import { dropUnusedFiles, loadWorkflowArchive } from './workflow'
 
 export const catalogURLState = atom<string>({
   key: 'catalogURL',
@@ -17,41 +18,13 @@ const catalogState = selector<ICatalog>({
   key: 'catalog',
   get: async ({ get }) => {
     const catalogUrl = get(catalogURLState)
-    try {
-      const response = await fetch(catalogUrl)
-      const body = await response.text()
-      const catalog = load(body)
-      const errors = validateCatalog(catalog)
-      if (errors.length > 0) {
-        // TODO notify user of bad catalog
-        toast.error('Loading catalog failed')
-        return {} as ICatalog
-      }
-      // TODO Only report success when user initiated catalog loading, not when page is loaded
-      // toast.success('Loading catalog completed')
-      return catalog as ICatalog
-    } catch (error) {
-      toast.error('Loading catalog failed')
-      return {} as ICatalog
-    }
+    return await fetchCatalog(catalogUrl)
   }
 })
 
 export function useCatalog (): ICatalog {
   return useRecoilValue<ICatalog>(catalogState)
 }
-
-const globalKeysState = selector<Set<string>>({
-  key: 'globalKeys',
-  get: ({ get }) => {
-    const { global } = get(catalogState)
-    let keys: string[] = []
-    if (global?.schema.properties != null) {
-      keys = Object.keys(global.schema.properties)
-    }
-    return new Set(keys)
-  }
-})
 
 const globalParametersState = atom<IParameters>({
   key: 'global',
@@ -63,152 +36,163 @@ const editingGlobalParametersState = atom<boolean>({
   default: false
 })
 
-const stepsState = atom<IStep[]>({
-  key: 'steps',
+const workflowNodesState = atom<IWorkflowNode[]>({
+  key: 'workflowNodes',
   default: []
 })
 
-const selectedStepIndexState = atom<number>({
-  key: 'selectedStepIndex',
+const selectedNodeIndexState = atom<number>({
+  key: 'selectedNodeIndex',
   default: -1
 })
+
+export function useSelectNodeIndex (): number {
+  return useRecoilValue(selectedNodeIndexState)
+}
 
 const filesState = atom<IFiles>({
   key: 'files',
   default: {}
 })
 
-function replaceItemAtIndex<V> (arr: V[], index: number, newValue: V) {
-  return [...arr.slice(0, index), newValue, ...arr.slice(index + 1)]
+const selectedNodeState = selector<IWorkflowNode | undefined>({
+  key: 'selectedNode',
+  get: ({ get }) => {
+    const index = get(selectedNodeIndexState)
+    const nodes = get(workflowNodesState)
+    if (index in nodes) {
+      return nodes[index]
+    }
+    return undefined
+  }
+})
+
+export function useSelectedNode (): IWorkflowNode | undefined {
+  return useRecoilValue(selectedNodeState)
 }
 
-function removeItemAtIndex<V> (arr: V[], index: number) {
-  return [...arr.slice(0, index), ...arr.slice(index + 1)]
+const selectedCatalogNodeState = selector<ICatalogNode | undefined>({
+  key: 'selectedNodeCatalogState',
+  get: ({ get }) => {
+    const node = get(selectedNodeState)
+    if (node === undefined) {
+      return undefined
+    }
+    const catalog = get(catalogState)
+    const catalogNode = catalog.nodes.find((n) => n.id === node.id)
+    if (catalogNode === undefined) {
+      return undefined
+    }
+    return catalogNode
+  }
+})
+
+export function useSelectedCatalogNode (): ICatalogNode | undefined {
+  return useRecoilValue(selectedCatalogNodeState)
 }
 
-export function useWorkflow () {
-  const [steps, setSteps] = useRecoilState(stepsState)
+interface UseWorkflow {
+  nodes: IWorkflowNode[]
+  editingGlobal: boolean
+  global: IParameters
+  toggleGlobalEdit: () => void
+  addNodeToWorkflow: (nodeId: string) => void
+  setGlobalParameters: (inlinedParameters: IParameters) => void
+  setNodeParameters: (inlinedParameters: IParameters) => void
+  loadWorkflowArchive: (archiveURL: string) => Promise<void>
+  save: () => Promise<void>
+  deleteNode: (nodeIndex: number) => void
+  selectNode: (nodeIndex: number) => void
+  clearNodeSelection: () => void
+  moveNodeDown: (nodeIndex: number) => void
+  moveNodeUp: (nodeIndex: number) => void
+}
+
+export function useWorkflow (): UseWorkflow {
+  const [nodes, setNodes] = useRecoilState(workflowNodesState)
   const [global, setGlobal] = useRecoilState(globalParametersState)
   const [editingGlobal, setEditingGlobal] = useRecoilState(editingGlobalParametersState)
-  const [selectedStepIndex, setSelectedStepIndex] = useRecoilState(selectedStepIndexState)
-  const { files, setFiles } = useFiles()
-  const { global: globalDescription,nodes } = useCatalog()
-  const globalKeys = useRecoilValue(globalKeysState);
+  const [selectedNodeIndex, setSelectedNodeIndex] = useRecoilState(selectedNodeIndexState)
+  const [files, setFiles] = useRecoilState(filesState)
+  const catalog = useCatalog()
 
   return {
-    steps,
-    selectedStep: selectedStepIndex, // TODO rename to selectedStepIndex
+    nodes,
     editingGlobal,
     global,
     toggleGlobalEdit () {
       setEditingGlobal(!editingGlobal)
-      setSelectedStepIndex(-1)
+      setSelectedNodeIndex(-1)
     },
     addNodeToWorkflow (nodeId: string) {
-      setSteps([...steps, { id: nodeId, parameters: {} }])
-      if (selectedStepIndex === -1 && !editingGlobal) {
-        setSelectedStepIndex(steps.length)
+      setNodes([...nodes, { id: nodeId, parameters: {} }])
+      if (selectedNodeIndex === -1 && !editingGlobal) {
+        setSelectedNodeIndex(nodes.length)
       }
     },
-    selectStep: (stepIndex: number) => {
+    selectNode: (nodeIndex: number) => {
       if (editingGlobal) {
         setEditingGlobal(false)
       }
-      setSelectedStepIndex(stepIndex)
+      setSelectedNodeIndex(nodeIndex)
     },
-    deleteStep (stepIndex: number) {
-      if (stepIndex === selectedStepIndex) {
-        setSelectedStepIndex(-1)
+    deleteNode (nodeIndex: number) {
+      if (nodeIndex === selectedNodeIndex) {
+        setSelectedNodeIndex(-1)
       }
-      const newSteps = removeItemAtIndex(steps, stepIndex)
-      setSteps(newSteps)
-    },
-    clearStepSelection: () => setSelectedStepIndex(-1),
-    setParameters (inlinedParameters: unknown) {
-      const newFiles = { ...files }
-      // TODO forget files that are no longer refered to in parameters
-      const parameters = externalizeDataUrls(inlinedParameters, newFiles)
-      if (editingGlobal) {
-        setGlobal(parameters)
-      } else {
-        const newStep = { ...steps[selectedStepIndex], parameters }
-        const newSteps = replaceItemAtIndex(steps, selectedStepIndex, newStep)
-        setSteps(newSteps as any)
-      }
+      const newNodes = removeItemAtIndex(nodes, nodeIndex)
+      const newFiles = dropUnusedFiles(global, newNodes, files)
       setFiles(newFiles)
+      setNodes(newNodes)
+    },
+    clearNodeSelection: () => setSelectedNodeIndex(-1),
+    setGlobalParameters (inlinedParameters: IParameters) {
+      const newFiles = { ...files }
+      const parameters = externalizeDataUrls(inlinedParameters, newFiles)
+      const newUsedFiles = dropUnusedFiles(parameters, nodes, newFiles)
+      setGlobal(parameters)
+      setFiles(newUsedFiles)
+    },
+    setNodeParameters (inlinedParameters: IParameters) {
+      const newFiles = { ...files }
+      const parameters = externalizeDataUrls(inlinedParameters, newFiles)
+      const newNode = { ...nodes[selectedNodeIndex], parameters }
+      const newNodes = replaceItemAtIndex(nodes, selectedNodeIndex, newNode)
+      const newUsedFiles = dropUnusedFiles(global, newNodes, newFiles)
+      setNodes(newNodes)
+      setFiles(newUsedFiles)
     },
     async loadWorkflowArchive (archiveURL: string) {
-      try {
-        const { tomlstring, files: newFiles } = await readArchive(archiveURL, nodes)
-        const { steps: newSteps, global: newGlobal } = parseWorkflow(tomlstring, globalKeys)
-        const errors = validateWorkflow({
-          global: newGlobal,
-          steps: newSteps
-        }, {
-          global: globalDescription,
-          nodes: nodes
-        })
-        if (errors.length > 0) {
-          // give feedback to users about errors
-          toast.error('Workflow archive is invalid. See DevTools console for errors')
-          console.error(errors)
-        } else {
-          setSteps(newSteps)
-          setFiles(newFiles)
-          setGlobal(newGlobal)
-        }
-      } catch (error) {
-        toast.error('Workflow archive is failed to load. See DevTools console for errors')
-        console.error(error)
-    }
+      const r = await loadWorkflowArchive(archiveURL, catalog)
+      setNodes(r.nodes)
+      setFiles(r.files)
+      setGlobal(r.global)
     },
     async save () {
-      await saveArchive(steps, global, files)
+      await saveArchive(nodes, global, files)
     },
-    moveStepDown (stepIndex: number) {
-      if (stepIndex + 1 < steps.length) {
-        const newSteps = moveStep(steps, stepIndex, 1)
-        setSelectedStepIndex(-1)
-        setSteps(newSteps)
+    moveNodeDown (nodeIndex: number) {
+      if (nodeIndex + 1 < nodes.length) {
+        const newNodes = moveItem(nodes, nodeIndex, 1)
+        setSelectedNodeIndex(-1)
+        setNodes(newNodes)
       }
     },
-    moveStepUp (stepIndex: number) {
-      if (stepIndex > 0) {
-        const newSteps = moveStep(steps, stepIndex, -1)
-        setSelectedStepIndex(-1)
-        setSteps(newSteps)
+    moveNodeUp (nodeIndex: number) {
+      if (nodeIndex > 0) {
+        const newNodes = moveItem(nodes, nodeIndex, -1)
+        setSelectedNodeIndex(-1)
+        setNodes(newNodes)
       }
     }
   }
 }
 
-export function useFiles () {
-  const [files, setFiles] = useRecoilState(filesState)
-
-  return {
-    files,
-    setFiles
-  }
+export function useFiles (): IFiles {
+  return useRecoilValue(filesState)
 }
 
-function moveStep (steps: IStep[], stepIndex: number, direction: number) {
-  const step = steps[stepIndex]
-  const swappedIndex = stepIndex + direction
-  const swappedStep = steps[swappedIndex]
-  const newSteps = replaceItemAtIndex(
-    replaceItemAtIndex(steps, stepIndex, swappedStep),
-    swappedIndex,
-    step
-  )
-  return newSteps
-}
-
-export function useText () {
-  const { steps, global } = useWorkflow()
-  return workflow2tomltext(steps, global)
-}
-
-export function useTextUrl () {
-  const text = useText()
-  return 'data:application/json;base64,' + btoa(text)
+export function useText (): string {
+  const { nodes, global } = useWorkflow()
+  return workflow2tomltext(nodes, global)
 }

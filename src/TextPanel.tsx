@@ -16,8 +16,6 @@ export const TextPanel = (): JSX.Element => {
     await navigator.clipboard.writeText(code)
   }
 
-  // TODO would be nice if text was editable and showed parameter description on hover and inline validation errors.
-  // TODO would be nice to be able to click in text to select step to edit.
   return (
     <div>
       <HighlightedCode code={code} />

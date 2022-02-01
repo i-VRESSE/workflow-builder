@@ -1,7 +1,7 @@
 import { JSONSchema7 } from 'json-schema'
 import { UiSchema } from '@rjsf/core'
 
-export interface INode {
+export interface ICatalogNode {
   id: string
   label: string
   schema: JSONSchema7
@@ -23,13 +23,13 @@ export interface ICatalog {
   title: string
   global: IGlobal
   categories: ICategory[]
-  nodes: INode[]
+  nodes: ICatalogNode[]
   examples: Record<string, string>
 }
 
 export type IParameters = Record<string, unknown>
 
-export interface IStep {
+export interface IWorkflowNode {
   id: string
   parameters: IParameters
 }
@@ -38,10 +38,10 @@ export type IFiles = Record<string, string>
 
 export interface IWorkflow {
   global: IParameters
-  steps: IStep[]
+  nodes: IWorkflowNode[]
 }
 
 export interface IWorkflowSchema {
   global: IGlobal
-  nodes: INode[]
+  nodes: ICatalogNode[]
 }

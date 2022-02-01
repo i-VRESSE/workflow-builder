@@ -1,42 +1,42 @@
 import { Section, stringify, parse } from '@ltd/j-toml'
-import { IStep, IParameters } from './types'
+import { IWorkflowNode, IParameters, IWorkflow } from './types'
 
 function isObject (o: unknown): boolean {
   return typeof o === 'object' &&
     Object.prototype.toString.call(o) === '[object Object]'
 }
 
-function steps2tomltable (steps: IStep[]) {
+function nodes2tomltable (nodes: IWorkflowNode[]): Record<string, unknown> {
   const table: Record<string, unknown> = {}
   const track: Record<string, number> = {}
-  for (const step of steps) {
-    if (!(step.id in track)) {
-      track[step.id] = 0
+  for (const node of nodes) {
+    if (!(node.id in track)) {
+      track[node.id] = 0
     }
-    track[step.id]++
+    track[node.id]++
     const section =
-      track[step.id] > 1 ? `${step.id}.${track[step.id]}` : step.id
-    const stepParameters: Record<string, unknown> = {}
+      track[node.id] > 1 ? `${node.id}.${track[node.id]}` : node.id
+    const nodeParameters: Record<string, unknown> = {}
     // TODO make recursive so `items.input.items.hisd: nesting` is also applied
-    Object.entries(step.parameters).forEach(([k, v]) => {
+    Object.entries(node.parameters).forEach(([k, v]) => {
       if (Array.isArray(v) && v.length > 0 && isObject(v[0])) {
         // A value that is an array of objects will have each of its objects as a section
-        stepParameters[k] = v.map(d => Section(d))
+        nodeParameters[k] = v.map(d => Section(d))
       } else {
-        stepParameters[k] = v
+        nodeParameters[k] = v
       }
     })
-    table[section] = Section(stepParameters as any)
+    table[section] = Section(nodeParameters as any)
   }
   return table
 }
 
 export function workflow2tomltext (
-  steps: IStep[],
+  nodes: IWorkflowNode[],
   global: IParameters
-) {
+): string {
   const table = {
-    ...steps2tomltable(steps),
+    ...nodes2tomltable(nodes),
     ...global
   }
   const text = stringify(table as any, {
@@ -46,22 +46,22 @@ export function workflow2tomltext (
   return text
 }
 
-export function parseWorkflow (workflow: string, globalKeys: Set<string>) {
+export function parseWorkflow (workflow: string, globalKeys: Set<string>): IWorkflow {
   const table = parse(workflow, { bigint: false })
-  const global: Record<string, unknown> = {}
-  const steps: IStep[] = []
+  const global: IParameters = {}
+  const nodes: IWorkflowNode[] = []
   const sectionwithindex = /\.\d+$/
   Object.entries(table).forEach(([k, v]) => {
     const section = k.replace(sectionwithindex, '')
     if (globalKeys.has(section)) {
       global[k] = v
     } else {
-      steps.push({
+      nodes.push({
         id: section,
         parameters: v as IParameters
       })
     }
   })
-  // TODO validate steps and global parameters against schemas in catalog
-  return { steps, global }
+  // TODO validate nodes and global parameters against schemas in catalog
+  return { nodes, global }
 }

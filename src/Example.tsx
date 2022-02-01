@@ -1,3 +1,4 @@
+import { toast } from 'react-toastify'
 import { useWorkflow } from './store'
 
 interface IProps {
@@ -5,7 +6,34 @@ interface IProps {
   workflow: string
 }
 
-export const Example = ({ name, workflow }: IProps) => {
+export const Example = ({ name, workflow }: IProps): JSX.Element => {
   const { loadWorkflowArchive } = useWorkflow()
-  return <li><button className='btn btn-light' onClick={async () => await loadWorkflowArchive(workflow)} title={workflow}>{name}</button></li>
+
+  async function onClick (): Promise<void> {
+    await toast.promise(
+      loadWorkflowArchive(workflow),
+      {
+        pending: 'Loading workfow ...',
+        success: 'Workflow loaded',
+        error: {
+          render ({ data }) {
+            console.error(data)
+            return 'Workflow archive failed to load. See DevTools (F12) console for errors.'
+          }
+        }
+      }
+    )
+  }
+
+  return (
+    <li>
+      <button
+        className='btn btn-light'
+        onClick={onClick}
+        title={workflow}
+      >
+        {name}
+      </button>
+    </li>
+  )
 }

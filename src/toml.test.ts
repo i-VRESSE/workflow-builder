@@ -1,10 +1,9 @@
-import { expect, describe, it } from 'vitest';
-import { parseWorkflow, workflow2tomltext } from './toml';
-import { INode } from './types';
+import { expect, describe, it } from 'vitest'
+import { parseWorkflow, workflow2tomltext } from './toml'
 
-describe('steps2tomltext()', () => {
+describe('nodes2tomltext()', () => {
   it('should write list of dicts as array of tables', () => {
-    const steps = [{
+    const nodes = [{
       id: 'somenode',
       parameters: {
         foo: [{
@@ -15,7 +14,7 @@ describe('steps2tomltext()', () => {
       }
     }]
 
-    const result = workflow2tomltext(steps, {})
+    const result = workflow2tomltext(nodes, {})
     const expected = `
 [somenode]
 
@@ -30,7 +29,7 @@ bar = 'fizzz'
     expect(result).toEqual(expected)
   })
   it('should index repeated nodes', () => {
-    const steps = [
+    const nodes = [
       {
         id: 'somenode',
         parameters: {
@@ -45,7 +44,7 @@ bar = 'fizzz'
       }
     ]
 
-    const result = workflow2tomltext(steps, {})
+    const result = workflow2tomltext(nodes, {})
     const expected = `
 [somenode]
 
@@ -74,7 +73,7 @@ foo = 'bar'
       global: {
         myglobalvar: 'something'
       },
-      steps: [
+      nodes: [
         {
           id: 'somenode',
           parameters: {
@@ -99,7 +98,7 @@ foo = 'fizz'
     const result = parseWorkflow(workflow, new Set())
     const expected = {
       global: {},
-      steps: [
+      nodes: [
         {
           id: 'somenode',
           parameters: {
