@@ -245,7 +245,7 @@ def main(argv=sys.argv[1:]):
             'docking': '/examples/docking-protein-ligand.zip' # TODO get from somewhere instead of hardcoding it here
         }
     }
-    dump(catalog, args.out)
+    dump(catalog, args.out, sort_keys=False)
 
 if __name__ == '__main__':
     sys.exit(main())
