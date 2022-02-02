@@ -2,14 +2,14 @@ title: Haddock 3 basic
 categories:
 - name: topology
   description: HADDOCK3 modules to create topologies.
-- name: analysis
-  description: HADDOCK3 modules related to model analysis.
-- name: refinement
-  description: HADDOCK3 actions referring to refinement.
 - name: sampling
   description: HADDOCK3 modules for sampling.
+- name: analysis
+  description: HADDOCK3 modules related to model analysis.
 - name: scoring
   description: HADDOCK3 modules to score modules.
+- name: refinement
+  description: HADDOCK3 actions referring to refinement.
 global:
   schema:
     type: object
@@ -105,6 +105,8 @@ nodes:
       top_cluster:
         default: []
         type: array
+        minItems: 0
+        maxItems: 100
         items:
           type: number
       top_models:
@@ -3420,6 +3422,10 @@ nodes:
         required: []
     required: []
   uiSchema:
+    autohis:
+      ui:group: molecule
+    delenph:
+      ui:group: molecule
     ligand_param_fname:
       ui:widget: file
     ligand_top_fname:

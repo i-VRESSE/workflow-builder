@@ -99,9 +99,9 @@ def config2schema(config):
                 prop['enum'] = v['choices']
         elif v['type'] == 'list':
             prop['type'] = "array"
-            if 'min' in v:
+            if 'minitems' in v:
                 prop['minItems'] = v['minitems']
-            if 'max' in v:
+            if 'maxitems' in v:
                 prop['maxItems'] = v['maxitems']
             if 'itemtype' in v:
                 obj = {'a' : {'type': v['itemtype']}} # config2schema requires object
@@ -137,6 +137,8 @@ def config2schema(config):
         else:
             raise ValueError(f"Don't know what to do with {k}:{v}")
         properties[k] = prop
+        if 'group' in v and v['group'] != '':
+            prop_ui['ui:group'] = v['group']
         if prop_ui:
             uiSchema[k] = prop_ui
     schema = {
