@@ -1,5 +1,6 @@
 import { useDrop } from 'react-dnd'
 import { useWorkflow } from './store'
+import { DragItem } from './types'
 import { VisualNode } from './VisualNode'
 
 export const VisualPanel = (): JSX.Element => {
@@ -7,7 +8,7 @@ export const VisualPanel = (): JSX.Element => {
   const [_, drop] = useDrop(
     () => ({
       accept: ['catalognode'],
-      drop: (item) => {
+      drop: (item: DragItem) => {
         if ('index' in item) {
           console.log(`Move node ${item.index}`)
         } else {

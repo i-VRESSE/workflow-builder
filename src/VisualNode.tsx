@@ -2,16 +2,11 @@ import { DropTargetMonitor, useDrag, useDrop } from 'react-dnd'
 import { XYCoord } from 'dnd-core'
 import { useSelectNodeIndex, useWorkflow } from './store'
 import { useRef } from 'react'
+import { DragItem } from './types'
 
 interface IProp {
   id: string
   index: number
-}
-
-interface DragItem {
-  index: number
-  id: string
-  type: string
 }
 
 export const VisualNode = ({ id, index }: IProp): JSX.Element => {
