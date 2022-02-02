@@ -83,6 +83,7 @@ export const VisualNode = ({ id, index }: IProp): JSX.Element => {
   })
   drag(drop(ref))
   // TODO make buttons same size
+  // TODO make area where node can be dropped bigger, now must be dropped on text
   return (
     <li ref={ref} style={style}>
       <button style={style} className='btn btn-light btn-sm' title='Configure' onClick={() => selectNode(index)}>{id}</button>

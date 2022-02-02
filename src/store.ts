@@ -126,6 +126,7 @@ export function useWorkflow (): UseWorkflow {
       setSelectedNodeIndex(-1)
     },
     addNodeToWorkflow (nodeId: string) {
+      // TODO when dragging node then previously added node gets replaced instead of dragged node being appended
       setNodes([...nodes, { id: nodeId, parameters: {} }])
       if (selectedNodeIndex === -1 && !editingGlobal) {
         setSelectedNodeIndex(nodes.length)
