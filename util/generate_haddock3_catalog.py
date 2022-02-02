@@ -4,10 +4,38 @@ Requires haddock3, fcc and pyyaml
 
 Run with
 
-```
+```shell
 util/generate_haddock3_catalog.py --level basic public/haddock3.basic.catalog.yaml
-util/generate_haddock3_catalog.py --level expert public/haddock3.expert.catalog.yaml
+util/generate_haddock3_catalog.py --level intermediate public/haddock3.intermediate.catalog.yaml
+util/generate_haddock3_catalog.py --level guru public/haddock3.guru.catalog.yaml
 ```
+
+Translations from haddock3 -> i-VRESSE workflow builder:
+
+* module -> node
+* generic parameters-> global parameters
+* Module info
+    * haddock.modules.<catagory>.<module>.__doc__ -> node.label
+    * haddock.modules.<catagory>.<module>.HaddockModule.__doc__ -> node.description
+* Category info
+    * haddock.modules.<catagory>.__doc__ -> category.description
+* Module DEFAULT_CONFIG -> JSON schema + UI schema:
+    * short -> description
+    * long -> $comment
+    * type=float or type=integer -> type=number
+    * type=list -> type=array
+    * type=file -> type=string + format=uri-reference + ui:widget=file
+    * type=dir -> type=string + format=uri-reference
+    * type missing -> {type:object, parameters: <key/value pairs>}
+    * min -> minimum
+    * max -> maximum
+    * minchars -> minLength
+    * maxchars -> maxLength
+    * minitems -> minItems
+    * maxitems -> maxItems
+    * accept -> ui:options={accept}
+    * choices -> enum
+    * explevel -> each explevel gets generated into own catalog
 
 TODO move script outside workflow-builder repo as this repo should be generic and not have any haddock specific scripts
 """
@@ -19,13 +47,12 @@ import sys
 from yaml import dump, load, Loader
 
 from haddock.modules import modules_category
-
-LEVELS = ('basic', 'expert')
+from haddock import config_expert_levels
 
 def argparser_builder():
     parser = argparse.ArgumentParser()
     parser.add_argument('out', type=argparse.FileType('w', encoding='UTF-8'), default='-')
-    parser.add_argument('--level', choices=LEVELS, default=LEVELS[0])
+    parser.add_argument('--level', choices=config_expert_levels, default=config_expert_levels[0])
     return parser
 
 def config2schema(config):
@@ -132,8 +159,6 @@ def config2schema(config):
                     "type": "number"
                 }
                 # raise ValueError(f"Don't know how to determine type of items of {v}")
-        # elif isinstance(v, dict):
-        #     prop = config2schema(v)
         else:
             raise ValueError(f"Don't know what to do with {k}:{v}")
         properties[k] = prop
@@ -154,7 +179,7 @@ def config2schema(config):
 def filter_on_level(config, level):
     # Each higher level should include parameters from previous level
     valid_levels = set()
-    for l in LEVELS:
+    for l in config_expert_levels:
         valid_levels.add(l)
         if l == level:
             break
@@ -204,7 +229,6 @@ def process_global(level):
 
 
 # TODO retrieve required global config from haddock3 code
-# TODO in haddock3 this section is called general run parameters, we could rename global to general
 REQUIRED_GLOBAL_PARAMETERS = {
     'molecules': {
         'type': 'list',
@@ -241,7 +265,6 @@ def main(argv=sys.argv[1:]):
         "title": f"Haddock 3 {args.level}",
         "categories": categories,
         'global': process_global(args.level),
-        # TODO in haddock3 nodes are called modules, we could rename it here
         "nodes": nodes,
         "examples": {
             'docking': '/examples/docking-protein-ligand.zip' # TODO get from somewhere instead of hardcoding it here

@@ -1,15 +1,15 @@
-title: Haddock 3 expert
+title: Haddock 3 guru
 categories:
-- name: topology
-  description: HADDOCK3 modules to create topologies.
 - name: scoring
   description: HADDOCK3 modules to score modules.
-- name: refinement
-  description: HADDOCK3 actions referring to refinement.
-- name: analysis
-  description: HADDOCK3 modules related to model analysis.
+- name: topology
+  description: HADDOCK3 modules to create topologies.
 - name: sampling
   description: HADDOCK3 modules for sampling.
+- name: analysis
+  description: HADDOCK3 modules related to model analysis.
+- name: refinement
+  description: HADDOCK3 actions referring to refinement.
 global:
   schema:
     type: object
@@ -2566,24 +2566,6 @@ nodes:
           this should not be done if you are defining distance restraints to specific
           hydrogen atoms (e.g. when using NMR distance restraints).
         type: boolean
-      log_level:
-        default: verbose
-        title: Log level verbosity for CNS
-        description: Set the log level verbosity for CNS (minimal or verbose)
-        $comment: CNS, the computational engine used by HADDOCK can generate a lot
-          of output messages. This parameter controls the verbosity of CNS (minimal
-          or verbose)
-        type: string
-        minLength: 0
-        maxLength: 100
-      iniseed:
-        default: 917
-        title: Random seed
-        description: Random seed used in CNS to initialize the random seed function
-        $comment: Random seed used in CNS to initialize the random seed function
-        type: number
-        maximum: 9999999999999999
-        minimum: 0
       ligand_param_fname:
         type: string
         format: uri-reference
@@ -3443,10 +3425,6 @@ nodes:
     autohis:
       ui:group: molecule
     delenph:
-      ui:group: molecule
-    log_level:
-      ui:group: module
-    iniseed:
       ui:group: molecule
     ligand_param_fname:
       ui:widget: file

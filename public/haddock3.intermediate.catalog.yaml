@@ -1,15 +1,15 @@
-title: Haddock 3 basic
+title: Haddock 3 intermediate
 categories:
-- name: scoring
-  description: HADDOCK3 modules to score modules.
 - name: topology
   description: HADDOCK3 modules to create topologies.
 - name: refinement
   description: HADDOCK3 actions referring to refinement.
-- name: sampling
-  description: HADDOCK3 modules for sampling.
 - name: analysis
   description: HADDOCK3 modules related to model analysis.
+- name: sampling
+  description: HADDOCK3 modules for sampling.
+- name: scoring
+  description: HADDOCK3 modules to score modules.
 global:
   schema:
     type: object
