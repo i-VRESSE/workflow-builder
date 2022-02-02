@@ -14,16 +14,16 @@ export const VisualNode = ({ id, index }: IProp): JSX.Element => {
   const { selectNode, moveNode, addNodeToWorkflow } = useWorkflow()
   const style = selectedNodeIndex === index ? { fontWeight: 'bold' } : {}
   const ref = useRef<HTMLLIElement>(null)
-  const [_, drag] = useDrag(() => ({
+  const drag = useDrag(() => ({
     type: 'node',
     item: { id, index }
-  }))
+  }))[1]
   // Copied from https://github.com/react-dnd/react-dnd/blob/main/packages/examples-hooks/src/04-sortable/simple/Card.tsx
-  const [_2, drop] = useDrop({
+  const drop = useDrop({
     accept: ['catalognode', 'node'],
     // TODO give user feedback where hovering node will end up
     drop (item: DragItem, monitor: DropTargetMonitor) {
-      if (!ref.current) {
+      if (ref.current === null) {
         return
       }
       const dropIndex = index
@@ -75,7 +75,7 @@ export const VisualNode = ({ id, index }: IProp): JSX.Element => {
       // to avoid expensive index searches.
       // item.index = hoverIndex
     }
-  })
+  })[1]
   drag(drop(ref))
   // TODO make buttons same size
   // TODO make area where node can be dropped bigger, now must be dropped on text

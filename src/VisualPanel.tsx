@@ -5,7 +5,7 @@ import { VisualNode } from './VisualNode'
 
 export const VisualPanel = (): JSX.Element => {
   const { addNodeToWorkflow } = useWorkflow()
-  const [_, drop] = useDrop(
+  const drop = useDrop(
     () => ({
       accept: ['catalognode'],
       drop: (item: DragItem) => {
@@ -17,7 +17,7 @@ export const VisualPanel = (): JSX.Element => {
       }
     }),
     []
-  )
+  )[1]
   const { nodes } = useWorkflow()
 
   return (
