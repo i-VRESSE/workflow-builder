@@ -3,12 +3,12 @@ categories:
   name: topology
 - description: HADDOCK3 modules for sampling.
   name: sampling
+- description: HADDOCK3 actions referring to refinement.
+  name: refinement
 - description: HADDOCK3 modules related to model analysis.
   name: analysis
 - description: HADDOCK3 modules to score modules.
   name: scoring
-- description: HADDOCK3 actions referring to refinement.
-  name: refinement
 examples:
   docking: /examples/docking-protein-ligand.zip
 global:
@@ -2545,6 +2545,25 @@ nodes:
   label: Create and manage CNS all-atom topology.
   schema:
     properties:
+      autohis:
+        $comment: 'If set to true, HADDOCK will automatically define the protonation
+          state of histidines ((+1: HIS or 0: HISD/HISE) by selecting the state leading
+          to the lowest electrostatic energy'
+        default: true
+        description: 'The protonation state of histidine (+1: HIS or 0: HISD/HISE)
+          will be automatically set by HADDOCK'
+        title: Automatic HIS protonation state
+        type: boolean
+      delenph:
+        $comment: Since HADDOCK uses a united atom force field, the non-polar hydrogen
+          atoms can be in principle discarded. This saves computing time. However
+          this should not be done if you are defining distance restraints to specific
+          hydrogen atoms (e.g. when using NMR distance restraints).
+        default: true
+        description: If set to true, non-polar hydrogen atoms will be discarded to
+          save computing time
+        title: Keep or remove non-polar hydrogen atoms
+        type: boolean
       ligand_param_fname:
         format: uri-reference
         type: string
@@ -3391,29 +3410,6 @@ nodes:
             type: string
           shape:
             default: false
-            type: boolean
-        required: []
-        type: object
-      molecule:
-        properties:
-          autohis:
-            $comment: 'If set to true, HADDOCK will automatically define the protonation
-              state of histidines ((+1: HIS or 0: HISD/HISE) by selecting the state
-              leading to the lowest electrostatic energy'
-            default: true
-            description: 'The protonation state of histidine (+1: HIS or 0: HISD/HISE)
-              will be automatically set by HADDOCK'
-            title: Automatic HIS protonation state
-            type: boolean
-          delenph:
-            $comment: Since HADDOCK uses a united atom force field, the non-polar
-              hydrogen atoms can be in principle discarded. This saves computing time.
-              However this should not be done if you are defining distance restraints
-              to specific hydrogen atoms (e.g. when using NMR distance restraints).
-            default: true
-            description: If set to true, non-polar hydrogen atoms will be discarded
-              to save computing time
-            title: Keep or remove non-polar hydrogen atoms
             type: boolean
         required: []
         type: object

@@ -165,7 +165,7 @@ def process_module(module_name, category, level):
     with open(module.DEFAULT_CONFIG) as f:
         config = load(f, Loader=Loader)
 
-    config4level = nest_by_group(filter_on_level(config, level))
+    config4level = filter_on_level(config, level)
     schema_uiSchema = config2schema(config4level)
     # TODO add $schema and $id to schema
     return {
@@ -185,25 +185,13 @@ def process_category(category):
         'description': module.__doc__,
     }
 
-def nest_by_group(config):
-    # TODO undo grouping when rendering toml
-    out = {}
-    for k, v in config.items():
-        if 'group' in v and v['group'] != '':
-            if v['group'] not in out:
-                out[v['group']] = {}
-            out[v['group']][k] = v
-        else:
-            out[k] = v
-    return out
-
 def process_global(level):
     package = 'haddock.modules'
     module = importlib.import_module(package)
     with open(module.modules_defaults_path) as f:
         optional_global_parameters = load(f, Loader=Loader)
     config = REQUIRED_GLOBAL_PARAMETERS | optional_global_parameters
-    config4level = nest_by_group(filter_on_level(config, level))
+    config4level = filter_on_level(config, level)
 
     schema_uiSchema = config2schema(config4level)
     # TODO add $schema and $id to schema

@@ -1,14 +1,14 @@
 categories:
+- description: HADDOCK3 modules for sampling.
+  name: sampling
 - description: HADDOCK3 actions referring to refinement.
   name: refinement
+- description: HADDOCK3 modules to score modules.
+  name: scoring
 - description: HADDOCK3 modules related to model analysis.
   name: analysis
 - description: HADDOCK3 modules to create topologies.
   name: topology
-- description: HADDOCK3 modules to score modules.
-  name: scoring
-- description: HADDOCK3 modules for sampling.
-  name: sampling
 examples:
   docking: /examples/docking-protein-ligand.zip
 global:
@@ -2545,6 +2545,33 @@ nodes:
   label: Create and manage CNS all-atom topology.
   schema:
     properties:
+      autohis:
+        $comment: 'If set to true, HADDOCK will automatically define the protonation
+          state of histidines ((+1: HIS or 0: HISD/HISE) by selecting the state leading
+          to the lowest electrostatic energy'
+        default: true
+        description: 'The protonation state of histidine (+1: HIS or 0: HISD/HISE)
+          will be automatically set by HADDOCK'
+        title: Automatic HIS protonation state
+        type: boolean
+      delenph:
+        $comment: Since HADDOCK uses a united atom force field, the non-polar hydrogen
+          atoms can be in principle discarded. This saves computing time. However
+          this should not be done if you are defining distance restraints to specific
+          hydrogen atoms (e.g. when using NMR distance restraints).
+        default: true
+        description: If set to true, non-polar hydrogen atoms will be discarded to
+          save computing time
+        title: Keep or remove non-polar hydrogen atoms
+        type: boolean
+      iniseed:
+        $comment: Random seed used in CNS to initialize the random seed function
+        default: 917
+        description: Random seed used in CNS to initialize the random seed function
+        maximum: 9999999999999999
+        minimum: 0
+        title: Random seed
+        type: number
       ligand_param_fname:
         format: uri-reference
         type: string
@@ -2554,20 +2581,16 @@ nodes:
       limit:
         default: true
         type: boolean
-      module:
-        properties:
-          log_level:
-            $comment: CNS, the computational engine used by HADDOCK can generate a
-              lot of output messages. This parameter controls the verbosity of CNS
-              (minimal or verbose)
-            default: verbose
-            description: Set the log level verbosity for CNS (minimal or verbose)
-            maxLength: 100
-            minLength: 0
-            title: Log level verbosity for CNS
-            type: string
-        required: []
-        type: object
+      log_level:
+        $comment: CNS, the computational engine used by HADDOCK can generate a lot
+          of output messages. This parameter controls the verbosity of CNS (minimal
+          or verbose)
+        default: verbose
+        description: Set the log level verbosity for CNS (minimal or verbose)
+        maxLength: 100
+        minLength: 0
+        title: Log level verbosity for CNS
+        type: string
       mol1:
         properties:
           cg:
@@ -3406,37 +3429,6 @@ nodes:
           shape:
             default: false
             type: boolean
-        required: []
-        type: object
-      molecule:
-        properties:
-          autohis:
-            $comment: 'If set to true, HADDOCK will automatically define the protonation
-              state of histidines ((+1: HIS or 0: HISD/HISE) by selecting the state
-              leading to the lowest electrostatic energy'
-            default: true
-            description: 'The protonation state of histidine (+1: HIS or 0: HISD/HISE)
-              will be automatically set by HADDOCK'
-            title: Automatic HIS protonation state
-            type: boolean
-          delenph:
-            $comment: Since HADDOCK uses a united atom force field, the non-polar
-              hydrogen atoms can be in principle discarded. This saves computing time.
-              However this should not be done if you are defining distance restraints
-              to specific hydrogen atoms (e.g. when using NMR distance restraints).
-            default: true
-            description: If set to true, non-polar hydrogen atoms will be discarded
-              to save computing time
-            title: Keep or remove non-polar hydrogen atoms
-            type: boolean
-          iniseed:
-            $comment: Random seed used in CNS to initialize the random seed function
-            default: 917
-            description: Random seed used in CNS to initialize the random seed function
-            maximum: 9999999999999999
-            minimum: 0
-            title: Random seed
-            type: number
         required: []
         type: object
       tolerance:
