@@ -5,7 +5,7 @@ import { saveArchive } from './archive'
 import { ICatalog, IWorkflowNode, IFiles, IParameters, ICatalogNode } from './types'
 import { workflow2tomltext } from './toml'
 import { catalogURLchoices } from './constants'
-import { moveItem, removeItemAtIndex, replaceItemAtIndex } from './utils/array'
+import { swapItem, removeItemAtIndex, replaceItemAtIndex, moveItem } from './utils/array'
 import { fetchCatalog } from './catalog'
 import { dropUnusedFiles, loadWorkflowArchive } from './workflow'
 
@@ -106,6 +106,7 @@ interface UseWorkflow {
   clearNodeSelection: () => void
   moveNodeDown: (nodeIndex: number) => void
   moveNodeUp: (nodeIndex: number) => void
+  moveNode: (sourceIndex: number, targetIndex: number) => void
 }
 
 export function useWorkflow (): UseWorkflow {
@@ -173,17 +174,22 @@ export function useWorkflow (): UseWorkflow {
     },
     moveNodeDown (nodeIndex: number) {
       if (nodeIndex + 1 < nodes.length) {
-        const newNodes = moveItem(nodes, nodeIndex, 1)
+        const newNodes = swapItem(nodes, nodeIndex, 1)
         setSelectedNodeIndex(-1)
         setNodes(newNodes)
       }
     },
     moveNodeUp (nodeIndex: number) {
       if (nodeIndex > 0) {
-        const newNodes = moveItem(nodes, nodeIndex, -1)
+        const newNodes = swapItem(nodes, nodeIndex, -1)
         setSelectedNodeIndex(-1)
         setNodes(newNodes)
       }
+    },
+    moveNode (sourceIndex: number, targetIndex: number) {
+      const newNodes = moveItem(nodes, sourceIndex, targetIndex)
+      setSelectedNodeIndex(-1)
+      setNodes(newNodes)
     }
   }
 }

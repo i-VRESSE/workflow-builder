@@ -89,8 +89,10 @@ Save to disk
 Drag step from catalog to workflow visualization
 Should place nice with workflow viz library.
 
-1. react-beautiful-dnd
+1. ~react-beautiful-dnd~ No longer activly maintained
 2. react-dnd
+3. ~react-dragula~ No longer activly maintained
+4. react-draggable
 
 ## Desktop app
 
