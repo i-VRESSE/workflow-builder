@@ -100,9 +100,9 @@ def config2schema(config):
         elif v['type'] == 'list':
             prop['type'] = "array"
             if 'min' in v:
-                prop['minItems'] = v['min']
+                prop['minItems'] = v['minitems']
             if 'max' in v:
-                prop['maxItems'] = v['max']
+                prop['maxItems'] = v['maxitems']
             if 'itemtype' in v:
                 obj = {'a' : {'type': v['itemtype']}} # config2schema requires object
                 if 'accept' in v:
@@ -208,8 +208,8 @@ REQUIRED_GLOBAL_PARAMETERS = {
         'type': 'list',
         'itemtype': 'file',
         'accept': '.pdb',
-        'min': 1,
-        'max': 20,
+        'minitems': 1,
+        'maxitems': 20,
         'title': 'Molecules',
         'group': '',
         'explevel': 'basic'
