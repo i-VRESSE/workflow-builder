@@ -9,8 +9,8 @@ export const VisualPanel = (): JSX.Element => {
     () => ({
       accept: ['catalognode'],
       drop: (item: DragItem, monitor) => {
+        // Only append node when it was not dropped already on a VisualNode
         if (!monitor.didDrop()) {
-          // Only append node when it was not dropped already on a VisualNode
           addNodeToWorkflow(item.id)
         }
       }

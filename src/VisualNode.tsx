@@ -1,5 +1,4 @@
-import { DropTargetMonitor, useDrag, useDrop } from 'react-dnd'
-import { XYCoord } from 'dnd-core'
+import { useDrag, useDrop, DropTargetMonitor } from 'react-dnd'
 import { useSelectNodeIndex, useWorkflow } from './store'
 import { useRef } from 'react'
 import { DragItem } from './types'
@@ -18,16 +17,15 @@ export const VisualNode = ({ id, index }: IProp): JSX.Element => {
     type: 'node',
     item: { id, index }
   }))[1]
-  // Copied from https://github.com/react-dnd/react-dnd/blob/main/packages/examples-hooks/src/04-sortable/simple/Card.tsx
   const drop = useDrop({
     accept: ['catalognode', 'node'],
-    // TODO give user feedback where hovering node will end up
     drop (item: DragItem, monitor: DropTargetMonitor) {
       if (ref.current === null) {
         return
       }
       const dropIndex = index
-      if (!('index' in item)) {
+      if (monitor.getItemType() === 'catalognode') {
+        // Add catalog node at drop location
         addNodeToWorkflowAt(item.id, dropIndex)
         return
       }
@@ -38,33 +36,6 @@ export const VisualNode = ({ id, index }: IProp): JSX.Element => {
         return
       }
 
-      // Determine rectangle on screen
-      const hoverBoundingRect = ref.current?.getBoundingClientRect()
-
-      // Get vertical middle
-      const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2
-
-      // Determine mouse position
-      const clientOffset = monitor.getClientOffset()
-
-      // Get pixels to the top
-      const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top
-
-      // Only perform the move when the mouse has crossed half of the items height
-      // When dragging downwards, only move when the cursor is below 50%
-      // When dragging upwards, only move when the cursor is above 50%
-
-      // Dragging downwards
-      if (dragIndex < dropIndex && hoverClientY < hoverMiddleY) {
-        return
-      }
-
-      // Dragging upwards
-      if (dragIndex > dropIndex && hoverClientY > hoverMiddleY) {
-        return
-      }
-
-      // Time to actually perform the action
       moveNode(dragIndex, dropIndex)
     }
   })[1]
