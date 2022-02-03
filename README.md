@@ -107,7 +107,7 @@ In the worklfow builder you can pick a catalog from a list. This list gets downl
 
 ```json
 [
-    ['<title of catalog>', '<URL of catalog YAML file>']
+    ["<title of catalog>", "<URL of catalog YAML file>"]
 ]
 ```
 
