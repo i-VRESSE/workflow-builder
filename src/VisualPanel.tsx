@@ -8,10 +8,9 @@ export const VisualPanel = (): JSX.Element => {
   const drop = useDrop(
     () => ({
       accept: ['catalognode'],
-      drop: (item: DragItem) => {
-        if ('index' in item) {
-          console.log(`Move node ${item.index}`)
-        } else {
+      drop: (item: DragItem, monitor) => {
+        if (!monitor.didDrop()) {
+          // Only append node when it was not dropped already on a VisualNode
           addNodeToWorkflow(item.id)
         }
       }
@@ -22,10 +21,13 @@ export const VisualPanel = (): JSX.Element => {
 
   return (
     <div ref={drop} style={{ height: '100%' }}>
-      <ol>
+      <ol style={{ lineHeight: '2.5em' }}>
         {nodes.map((node, i) => <VisualNode key={i} index={i} id={node.id} />)}
       </ol>
-      <div style={{ border: '1px dashed gray' }}>Add node by dragging node from catalog to here. Reorder nodes by dragging them to the desired place.</div>
+      <div style={{ border: '1px dashed gray', padding: '4px' }}>
+        <p>Add node by clicking node in catalog or by dragging node from catalog to here.</p>
+        <p>Reorder nodes by dragging them to the desired place. Click node to configure it.</p>
+      </div>
     </div>
   )
 }

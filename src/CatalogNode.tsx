@@ -11,7 +11,7 @@ export const CatalogNode = ({ id, label }: ICatalogNode): JSX.Element => {
   // TODO make buttons same size
   return (
     <li ref={drag}>
-      <button title={id} className='btn btn-light' onClick={() => addNodeToWorkflow(id)}>{label}</button>
+      <button style={{ width: '200px' }} title={label} className='btn btn-light btn-sm' onClick={() => addNodeToWorkflow(id)}>{id}</button>
     </li>
   )
 }

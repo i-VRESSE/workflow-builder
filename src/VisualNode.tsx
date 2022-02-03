@@ -11,7 +11,7 @@ interface IProp {
 
 export const VisualNode = ({ id, index }: IProp): JSX.Element => {
   const selectedNodeIndex = useSelectNodeIndex()
-  const { selectNode, moveNode, addNodeToWorkflow } = useWorkflow()
+  const { selectNode, moveNode, addNodeToWorkflowAt } = useWorkflow()
   const style = selectedNodeIndex === index ? { fontWeight: 'bold' } : {}
   const ref = useRef<HTMLLIElement>(null)
   const drag = useDrag(() => ({
@@ -28,8 +28,7 @@ export const VisualNode = ({ id, index }: IProp): JSX.Element => {
       }
       const dropIndex = index
       if (!('index' in item)) {
-        console.log(`Inserting catalog node ${item.id}`)
-        addNodeToWorkflow(item.id)
+        addNodeToWorkflowAt(item.id, dropIndex)
         return
       }
       const dragIndex = item.index
@@ -66,22 +65,15 @@ export const VisualNode = ({ id, index }: IProp): JSX.Element => {
       }
 
       // Time to actually perform the action
-      console.log(`Move node from ${dragIndex} to ${dropIndex}`)
       moveNode(dragIndex, dropIndex)
-
-      // Note: we're mutating the monitor item here!
-      // Generally it's better to avoid mutations,
-      // but it's good here for the sake of performance
-      // to avoid expensive index searches.
-      // item.index = hoverIndex
     }
   })[1]
   drag(drop(ref))
-  // TODO make buttons same size
+  // TODO make buttons same relative size, not a absolute pixel size
   // TODO make area where node can be dropped bigger, now must be dropped on text
   return (
     <li ref={ref} style={style}>
-      <button style={style} className='btn btn-light btn-sm' title='Configure' onClick={() => selectNode(index)}>{id}</button>
+      <button style={{ ...style, width: '200px' }} className='btn btn-light btn-sm' title='Configure' onClick={() => selectNode(index)}>{id}</button>
     </li>
   )
 }

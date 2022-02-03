@@ -111,6 +111,7 @@ interface UseWorkflow {
   global: IParameters
   toggleGlobalEdit: () => void
   addNodeToWorkflow: (nodeId: string) => void
+  addNodeToWorkflowAt: (nodeId: string, targetIndex: number) => void
   setGlobalParameters: (inlinedParameters: IParameters) => void
   setNodeParameters: (inlinedParameters: IParameters) => void
   loadWorkflowArchive: (archiveURL: string) => Promise<void>
@@ -139,8 +140,16 @@ export function useWorkflow (): UseWorkflow {
       setEditingGlobal(!editingGlobal)
       setSelectedNodeIndex(-1)
     },
+    addNodeToWorkflowAt (nodeId: string, targetIndex: number) {
+      setNodes((oldNodes) => {
+        const newNodes = [...oldNodes, { id: nodeId, parameters: {} }]
+        return moveItem(newNodes, newNodes.length - 1, targetIndex)
+      })
+      if (selectedNodeIndex === -1 && !editingGlobal) {
+        setSelectedNodeIndex(targetIndex)
+      }
+    },
     addNodeToWorkflow (nodeId: string) {
-      // TODO when dragging node then previously added node gets replaced instead of dragged node being appended
       setNodes((oldNodes) => [...oldNodes, { id: nodeId, parameters: {} }])
       if (selectedNodeIndex === -1 && !editingGlobal) {
         setSelectedNodeIndex(nodes.length)

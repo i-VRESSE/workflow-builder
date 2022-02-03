@@ -5,7 +5,7 @@ import { Form } from './Form'
 export const NodeForm = (): JSX.Element => {
   // TODO move setParameters to useSelectedNode
   const index = useSelectNodeIndex()
-  const { setNodeParameters, deleteNode } = useWorkflow()
+  const { setNodeParameters, deleteNode, clearNodeSelection } = useWorkflow()
   const files = useFiles()
   const node = useSelectedNode()
   const catalogNode = useSelectedCatalogNode()
@@ -25,8 +25,36 @@ export const NodeForm = (): JSX.Element => {
       <div>
         {catalogNode.description}
       </div>
-      <Form schema={catalogNode.schema} uiSchema={uiSchema} formData={parametersWithDataUrls} onSubmit={({ formData }) => setNodeParameters(formData)} />
-      <button className='btn btn-light btn-sm' title='Remove' onClick={() => deleteNode(index)}>Delete</button>
+      <Form
+        schema={catalogNode.schema}
+        uiSchema={uiSchema}
+        formData={parametersWithDataUrls}
+        onSubmit={({ formData }) => setNodeParameters(formData)}
+      >
+        <div className='btn-group'>
+          <button
+            type='submit'
+            className='btn btn-primary'
+            title='Save parameters in node'
+          >
+            Submit
+          </button>
+          <button
+            className='btn btn-light'
+            onClick={() => clearNodeSelection()}
+            title='Forget changes made in form'
+          >
+            Cancel
+          </button>
+          <button
+            className='btn btn-light'
+            onClick={() => deleteNode(index)}
+            title='Delete node from workflow'
+          >
+            Delete
+          </button>
+        </div>
+      </Form>
     </>
   )
 }

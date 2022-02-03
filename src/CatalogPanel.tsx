@@ -17,7 +17,7 @@ export const CatalogPanel = (): JSX.Element => {
       <React.Suspense fallback={<span>Loading catalog...</span>}>
         <button className='btn btn-light' onClick={toggleGlobalEdit}>Configure global parameters</button>
         <h4>Nodes</h4>
-        <ul>
+        <ul style={{ lineHeight: '2.5em' }}>
           {catalog?.categories.map((category) => <CatalogCategory key={category.name} {...category} />)}
         </ul>
         <h4>Examples</h4>
