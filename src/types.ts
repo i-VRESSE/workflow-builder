@@ -1,6 +1,8 @@
 import { JSONSchema7 } from 'json-schema'
 import { UiSchema } from '@rjsf/core'
 
+export type ICatalogIndex = Array<[string, string]>
+
 export interface ICatalogNode {
   id: string
   label: string

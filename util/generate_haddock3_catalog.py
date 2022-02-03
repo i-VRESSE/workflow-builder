@@ -5,9 +5,7 @@ Requires haddock3, fcc and pyyaml
 Run with
 
 ```shell
-util/generate_haddock3_catalog.py --level basic public/haddock3.basic.catalog.yaml
-util/generate_haddock3_catalog.py --level intermediate public/haddock3.intermediate.catalog.yaml
-util/generate_haddock3_catalog.py --level guru public/haddock3.guru.catalog.yaml
+util/generate_haddock3_catalog.py
 ```
 
 Translations from haddock3 -> i-VRESSE workflow builder:
@@ -42,7 +40,10 @@ TODO move script outside workflow-builder repo as this repo should be generic an
 
 import argparse
 import importlib
+import json
+import logging
 from math import isnan
+from pathlib import Path
 import sys
 from yaml import dump, load, Loader
 
@@ -51,8 +52,8 @@ from haddock import config_expert_levels
 
 def argparser_builder():
     parser = argparse.ArgumentParser()
-    parser.add_argument('out', type=argparse.FileType('w', encoding='UTF-8'), default='-')
-    parser.add_argument('--level', choices=config_expert_levels, default=config_expert_levels[0])
+    parser.add_argument('--out_dir', type=Path, default='public/catalog')
+    parser.add_argument('--root_url', type=Path, default='/catalog')
     return parser
 
 def config2schema(config):
@@ -169,7 +170,8 @@ def config2schema(config):
     schema = {
         "type": "object",
         "properties": properties,
-        "required": required
+        "required": required,
+        "additionalProperties": False
     }
     return {
         "schema": schema,
@@ -238,20 +240,17 @@ REQUIRED_GLOBAL_PARAMETERS = {
         'maxitems': 20,
         'title': 'Molecules',
         'group': '',
-        'explevel': 'basic'
+        'explevel': 'easy'
     },
     'run_dir': {
         'type': 'dir',
         'title': 'Run directory',
         'group': '',
-        'explevel': 'basic'
+        'explevel': 'easy'
     }
 }
 
-def main(argv=sys.argv[1:]):
-    argparser = argparser_builder()
-    args = argparser.parse_args(argv)
-
+def process_level(level_fn: Path, level: str):
     # TODO order the categories by which category needs output from another. Now order is not reproducible
     categories = [process_category(c) for c in set(modules_category.values())]
 
@@ -259,18 +258,40 @@ def main(argv=sys.argv[1:]):
         'clustfcc',  # Gives `ModuleNotFoundError: No module named 'fcc.scripts'`` error
         'topocg', # Gives `AttributeError: module 'haddock.modules.topology.topocg' has no attribute 'HaddockModule'` error
     }
-    nodes = [process_module(module, category, args.level) for module, category in modules_category.items() if module not in broken_modules]
+    nodes = [process_module(module, category, level) for module, category in modules_category.items() if module not in broken_modules]
 
     catalog = {
-        "title": f"Haddock 3 {args.level}",
+        "title": f"Haddock 3 on {level} level",
         "categories": categories,
-        'global': process_global(args.level),
+        'global': process_global(level),
         "nodes": nodes,
         "examples": {
             'docking': '/examples/docking-protein-ligand.zip' # TODO get from somewhere instead of hardcoding it here
         }
     }
-    dump(catalog, args.out, sort_keys=False)
+    with level_fn.open('w') as f:
+        dump(catalog, f, sort_keys=False)
+
+def write_catalog_index(catalogs, file):
+    with file.open('w') as f:
+        json.dump(catalogs, f)
+        logging.warning(f'Written {file}')
+
+def main(argv=sys.argv[1:]):
+    argparser = argparser_builder()
+    args = argparser.parse_args(argv)
+    args.out_dir.mkdir(parents=True, exist_ok=True)
+
+    catalogs = []
+    for level in config_expert_levels:
+        level_fn = args.out_dir / f'haddock3.{level}.yaml'
+        level_url = args.root_url / f'haddock3.{level}.yaml'
+        catalogs.append([f'haddock3{level}', str(level_url)])
+        process_level(level_fn, level)
+        logging.warning(f'Written {level_fn}')
+
+    write_catalog_index(catalogs, args.out_dir / 'index.json')
+
 
 if __name__ == '__main__':
     sys.exit(main())

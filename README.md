@@ -100,3 +100,15 @@ The catalog is a YAML formatted file which tells the app what nodes are availabl
 4. examples: Title and link to example workflows
     * map with title as key and link as value
 5. title: Title of the catalog
+
+### Catalog index
+
+In the worklfow builder you can pick a catalog from a list. This list gets downloaded from [public/catalog/index.json](public/catalog/index.json) and is formatted like
+
+```json
+[
+    ["<title of catalog>", "<URL of catalog YAML file>"]
+]
+```
+
+The first catalog in the index.json file will be shown when you open the app.
