@@ -2,16 +2,30 @@ import { atom, selector, useRecoilState, useRecoilValue } from 'recoil'
 
 import { externalizeDataUrls } from './dataurls'
 import { saveArchive } from './archive'
-import { ICatalog, IWorkflowNode, IFiles, IParameters, ICatalogNode } from './types'
+import { ICatalog, IWorkflowNode, IFiles, IParameters, ICatalogNode, ICatalogIndex } from './types'
 import { workflow2tomltext } from './toml'
-import { catalogURLchoices } from './constants'
+import { catalogIndexURL } from './constants'
 import { moveItem, removeItemAtIndex, replaceItemAtIndex } from './utils/array'
-import { fetchCatalog } from './catalog'
+import { fetchCatalog, fetchCatalogIndex } from './catalog'
 import { dropUnusedFiles, loadWorkflowArchive } from './workflow'
+
+export const catalogIndexState = selector<ICatalogIndex>({
+  key: 'catalogIndex',
+  get: async () => {
+    return await fetchCatalogIndex(catalogIndexURL)
+  }
+})
+
+const defaultCatalogURLState = selector<string>({
+  key: 'defaultCatalogURL',
+  get: ({ get }) => {
+    return get(catalogIndexState)[0][1]
+  }
+})
 
 export const catalogURLState = atom<string>({
   key: 'catalogURL',
-  default: catalogURLchoices[0][1]
+  default: defaultCatalogURLState
 })
 
 const catalogState = selector<ICatalog>({
