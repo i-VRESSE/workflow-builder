@@ -1,15 +1,15 @@
-title: Haddock 3 guru
+title: Haddock 3 on guru level
 categories:
 - name: scoring
   description: HADDOCK3 modules to score modules.
-- name: topology
-  description: HADDOCK3 modules to create topologies.
-- name: sampling
-  description: HADDOCK3 modules for sampling.
-- name: analysis
-  description: HADDOCK3 modules related to model analysis.
 - name: refinement
   description: HADDOCK3 actions referring to refinement.
+- name: analysis
+  description: HADDOCK3 modules related to model analysis.
+- name: sampling
+  description: HADDOCK3 modules for sampling.
+- name: topology
+  description: HADDOCK3 modules to create topologies.
 global:
   schema:
     type: object
@@ -72,6 +72,7 @@ global:
     required:
     - molecules
     - run_dir
+    additionalProperties: false
   uiSchema:
     molecules:
       items:
@@ -94,6 +95,7 @@ nodes:
         maximum: 9999
         minimum: -9999
     required: []
+    additionalProperties: false
   uiSchema: {}
 - id: seletopclusts
   category: analysis
@@ -114,6 +116,7 @@ nodes:
         maximum: 9999
         minimum: -9999
     required: []
+    additionalProperties: false
   uiSchema: {}
 - id: caprieval
   category: analysis
@@ -192,6 +195,7 @@ nodes:
         minLength: 0
         maxLength: 100
     required: []
+    additionalProperties: false
   uiSchema:
     reference_fname:
       ui:widget: file
@@ -206,6 +210,7 @@ nodes:
         type: string
         format: uri-reference
     required: []
+    additionalProperties: false
   uiSchema:
     ambig_fname:
       ui:widget: file
@@ -2456,6 +2461,7 @@ nodes:
         maximum: 9999
         minimum: -9999
     required: []
+    additionalProperties: false
   uiSchema:
     ambig_fname:
       ui:widget: file
@@ -2539,6 +2545,7 @@ nodes:
         default: false
         type: boolean
     required: []
+    additionalProperties: false
   uiSchema: {}
 - id: topoaa
   category: topology
@@ -2566,6 +2573,24 @@ nodes:
           this should not be done if you are defining distance restraints to specific
           hydrogen atoms (e.g. when using NMR distance restraints).
         type: boolean
+      log_level:
+        default: verbose
+        title: Log level verbosity for CNS
+        description: Set the log level verbosity for CNS (minimal or verbose)
+        $comment: CNS, the computational engine used by HADDOCK can generate a lot
+          of output messages. This parameter controls the verbosity of CNS (minimal
+          or verbose)
+        type: string
+        minLength: 0
+        maxLength: 100
+      iniseed:
+        default: 917
+        title: Random seed
+        description: Random seed used in CNS to initialize the random seed function
+        $comment: Random seed used in CNS to initialize the random seed function
+        type: number
+        maximum: 9999999999999999
+        minimum: 0
       ligand_param_fname:
         type: string
         format: uri-reference
@@ -2622,6 +2647,7 @@ nodes:
             maximum: 9999
             minimum: -9999
         required: []
+        additionalProperties: false
       mol2:
         type: object
         properties:
@@ -2664,6 +2690,7 @@ nodes:
             maximum: 9999
             minimum: -9999
         required: []
+        additionalProperties: false
       mol3:
         type: object
         properties:
@@ -2706,6 +2733,7 @@ nodes:
             maximum: 9999
             minimum: -9999
         required: []
+        additionalProperties: false
       mol4:
         type: object
         properties:
@@ -2748,6 +2776,7 @@ nodes:
             maximum: 9999
             minimum: -9999
         required: []
+        additionalProperties: false
       mol5:
         type: object
         properties:
@@ -2790,6 +2819,7 @@ nodes:
             maximum: 9999
             minimum: -9999
         required: []
+        additionalProperties: false
       mol6:
         type: object
         properties:
@@ -2832,6 +2862,7 @@ nodes:
             maximum: 9999
             minimum: -9999
         required: []
+        additionalProperties: false
       mol7:
         type: object
         properties:
@@ -2874,6 +2905,7 @@ nodes:
             maximum: 9999
             minimum: -9999
         required: []
+        additionalProperties: false
       mol8:
         type: object
         properties:
@@ -2916,6 +2948,7 @@ nodes:
             maximum: 9999
             minimum: -9999
         required: []
+        additionalProperties: false
       mol9:
         type: object
         properties:
@@ -2958,6 +2991,7 @@ nodes:
             maximum: 9999
             minimum: -9999
         required: []
+        additionalProperties: false
       mol10:
         type: object
         properties:
@@ -3000,6 +3034,7 @@ nodes:
             maximum: 9999
             minimum: -9999
         required: []
+        additionalProperties: false
       mol11:
         type: object
         properties:
@@ -3042,6 +3077,7 @@ nodes:
             maximum: 9999
             minimum: -9999
         required: []
+        additionalProperties: false
       mol12:
         type: object
         properties:
@@ -3084,6 +3120,7 @@ nodes:
             maximum: 9999
             minimum: -9999
         required: []
+        additionalProperties: false
       mol13:
         type: object
         properties:
@@ -3126,6 +3163,7 @@ nodes:
             maximum: 9999
             minimum: -9999
         required: []
+        additionalProperties: false
       mol14:
         type: object
         properties:
@@ -3168,6 +3206,7 @@ nodes:
             maximum: 9999
             minimum: -9999
         required: []
+        additionalProperties: false
       mol15:
         type: object
         properties:
@@ -3210,6 +3249,7 @@ nodes:
             maximum: 9999
             minimum: -9999
         required: []
+        additionalProperties: false
       mol16:
         type: object
         properties:
@@ -3252,6 +3292,7 @@ nodes:
             maximum: 9999
             minimum: -9999
         required: []
+        additionalProperties: false
       mol17:
         type: object
         properties:
@@ -3294,6 +3335,7 @@ nodes:
             maximum: 9999
             minimum: -9999
         required: []
+        additionalProperties: false
       mol18:
         type: object
         properties:
@@ -3336,6 +3378,7 @@ nodes:
             maximum: 9999
             minimum: -9999
         required: []
+        additionalProperties: false
       mol19:
         type: object
         properties:
@@ -3378,6 +3421,7 @@ nodes:
             maximum: 9999
             minimum: -9999
         required: []
+        additionalProperties: false
       mol20:
         type: object
         properties:
@@ -3420,11 +3464,17 @@ nodes:
             maximum: 9999
             minimum: -9999
         required: []
+        additionalProperties: false
     required: []
+    additionalProperties: false
   uiSchema:
     autohis:
       ui:group: molecule
     delenph:
+      ui:group: molecule
+    log_level:
+      ui:group: module
+    iniseed:
       ui:group: molecule
     ligand_param_fname:
       ui:widget: file
@@ -3628,6 +3678,7 @@ nodes:
         default: false
         type: boolean
     required: []
+    additionalProperties: false
   uiSchema:
     ligand_param_fname:
       ui:widget: file
@@ -6258,6 +6309,7 @@ nodes:
         maximum: 9999
         minimum: -9999
     required: []
+    additionalProperties: false
   uiSchema:
     ambig_fname:
       ui:widget: file
@@ -8686,6 +8738,7 @@ nodes:
         maximum: 9999
         minimum: -9999
     required: []
+    additionalProperties: false
   uiSchema:
     ambig_fname:
       ui:widget: file
@@ -11099,6 +11152,7 @@ nodes:
         maximum: 9999
         minimum: -9999
     required: []
+    additionalProperties: false
   uiSchema:
     ambig_fname:
       ui:widget: file
