@@ -5,7 +5,9 @@ Requires haddock3, fcc and pyyaml
 Run with
 
 ```shell
+# Reads modules from haddock3 in Python path
 util/generate_haddock3_catalog.py
+# Writes catalog files in public/catalog/ dir
 ```
 
 Translations from haddock3 -> i-VRESSE workflow builder:
@@ -255,7 +257,6 @@ def process_level(level_fn: Path, level: str):
     categories = [process_category(c) for c in set(modules_category.values())]
 
     broken_modules = {
-        'clustfcc',  # Gives `ModuleNotFoundError: No module named 'fcc.scripts'`` error
         'topocg', # Gives `AttributeError: module 'haddock.modules.topology.topocg' has no attribute 'HaddockModule'` error
     }
     nodes = [process_module(module, category, level) for module, category in modules_category.items() if module not in broken_modules]
