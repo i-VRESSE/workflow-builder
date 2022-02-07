@@ -12,13 +12,12 @@ interface IProp {
 export const VisualNode = ({ id, index }: IProp): JSX.Element => {
   const selectedNodeIndex = useSelectNodeIndex()
   const { selectNode, moveNode, addNodeToWorkflowAt } = useWorkflow()
-  const style = selectedNodeIndex === index ? { fontWeight: 'bold' } : {}
   const ref = useRef<HTMLLIElement>(null)
   const drag = useDrag(() => ({
     type: 'node',
     item: { id, index }
   }))[1]
-  const drop = useDrop({
+  const [{ isOver, canDrop }, drop] = useDrop({
     accept: ['catalognode', 'node'],
     drop (item: DragItem, monitor: DropTargetMonitor) {
       if (ref.current === null) {
@@ -38,13 +37,33 @@ export const VisualNode = ({ id, index }: IProp): JSX.Element => {
       }
 
       moveNode(dragIndex, dropIndex)
+    },
+    collect: (monitor) => {
+      return {
+        canDrop: monitor.canDrop(),
+        isOver: monitor.isOver()
+      }
     }
-  })[1]
+  })
+  const selectedStyle = selectedNodeIndex === index ? { fontWeight: 'bold' } : {}
+  let style: React.CSSProperties = { ...selectedStyle, width: `${nodeWidth}rem` }
+  if (isOver) {
+    style = { ...style, border: '1px solid gray' }
+  } else if (canDrop) {
+    style = { ...style, border: '1px dashed gray' }
+  }
+
   drag(drop(ref))
-  // TODO make area where node can be dropped bigger, now must be dropped on text
   return (
-    <li ref={ref} style={style}>
-      <button style={{ ...style, width: `${nodeWidth}rem` }} className='btn btn-light btn-sm' title='Configure' onClick={() => selectNode(index)}>{id}</button>
+    <li ref={ref} style={selectedStyle}>
+      <button
+        style={style}
+        className='btn btn-light btn-sm'
+        title='Click to configure or drag to reorder'
+        onClick={() => selectNode(index)}
+      >
+        {id}
+      </button>
     </li>
   )
 }

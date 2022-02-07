@@ -14,17 +14,17 @@ export const WorkflowPanel = (): JSX.Element => {
   const textTabStyle = { fontWeight: tab === 'text' ? 'bold' : 'normal' }
 
   return (
-    <fieldset>
+    <fieldset style={{ height: '100%' }}>
       <legend>Workflow</legend>
-      <div style={{ display: 'flex', justifyContent: 'space-between', flexFlow: 'column', height: '90vh' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', flexFlow: 'column', height: '100%', gap: '5px' }}>
         <div>
           <div className='btn-group'>
             <button className='btn btn-light' style={visualTabStyle} onClick={() => setTab('visual')}>Visual</button>
             <button className='btn btn-light' style={textTabStyle} onClick={() => setTab('text')}>Text</button>
             <WorkflowUploadButton />
           </div>
-          {selectedPanel}
         </div>
+        {selectedPanel}
         <WorkflowDownload />
       </div>
     </fieldset>

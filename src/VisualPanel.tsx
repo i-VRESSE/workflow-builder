@@ -5,7 +5,7 @@ import { VisualNode } from './VisualNode'
 
 export const VisualPanel = (): JSX.Element => {
   const { addNodeToWorkflow } = useWorkflow()
-  const drop = useDrop(
+  const [{ isCatalogNodeOver, canCatalogNodeDrop }, drop] = useDrop(
     () => ({
       accept: ['catalognode'],
       drop: (item: DragItem, monitor) => {
@@ -13,21 +13,45 @@ export const VisualPanel = (): JSX.Element => {
         if (!monitor.didDrop()) {
           addNodeToWorkflow(item.id)
         }
+      },
+      collect: (monitor) => {
+        return {
+          isCatalogNodeOver: monitor.isOver({ shallow: true }),
+          canCatalogNodeDrop: monitor.canDrop()
+        }
       }
     }),
     []
-  )[1]
+  )
   const { nodes } = useWorkflow()
+
+  const nodeList = (
+    <ol style={{ lineHeight: '2.5em' }}>
+      {nodes.map((node, i) => <VisualNode key={i} index={i} id={node.id} />)}
+    </ol>
+  )
+  const appendZoneStyle = {
+    border: isCatalogNodeOver && canCatalogNodeDrop ? '1px solid gray' : '1px dashed gray',
+    marginLeft: '4px',
+    marginRight: '4px',
+    padding: '4px',
+    height: nodes.length > 0 ? '' : '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
+  const appendZone = (
+    <div style={appendZoneStyle}>
+      <div style={{ textAlign: 'center' }}>
+        Append node to workflow by clicking node in catalog or by dragging node from catalog to here.
+      </div>
+    </div>
+  )
 
   return (
     <div ref={drop} style={{ height: '100%' }}>
-      <ol style={{ lineHeight: '2.5em' }}>
-        {nodes.map((node, i) => <VisualNode key={i} index={i} id={node.id} />)}
-      </ol>
-      <div style={{ border: '1px dashed gray', padding: '4px' }}>
-        <p>Add node by clicking node in catalog or by dragging node from catalog to here.</p>
-        <p>Reorder nodes by dragging them to the desired place. Click node to configure it.</p>
-      </div>
+      {nodeList}
+      {nodes.length === 0 || canCatalogNodeDrop ? appendZone : <></>}
     </div>
   )
 }
