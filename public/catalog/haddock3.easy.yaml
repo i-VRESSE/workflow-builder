@@ -1,13 +1,13 @@
 title: Haddock 3 on easy level
 categories:
-- name: scoring
-  description: HADDOCK3 modules to score modules.
 - name: refinement
   description: HADDOCK3 actions referring to refinement.
-- name: analysis
-  description: HADDOCK3 modules related to model analysis.
 - name: sampling
   description: HADDOCK3 modules for sampling.
+- name: analysis
+  description: HADDOCK3 modules related to model analysis.
+- name: scoring
+  description: HADDOCK3 modules to score modules.
 - name: topology
   description: HADDOCK3 modules to create topologies.
 global:
@@ -82,6 +82,42 @@ global:
     cns_exec:
       ui:widget: file
 nodes:
+- id: clustfcc
+  category: analysis
+  label: HADDOCK3 FCC clustering module.
+  description: HADDOCK3 module for clustering with FCC.
+  schema:
+    type: object
+    properties:
+      executable:
+        default: src/contact_fcc
+        type: string
+        format: uri-reference
+      contact_distance_cutoff:
+        default: 5.0
+        type: number
+        maximum: 9999
+        minimum: -9999
+      fraction_cutoff:
+        default: 0.6
+        type: number
+        maximum: 9999
+        minimum: -9999
+      threshold:
+        default: 4
+        type: number
+        maximum: 9999
+        minimum: -9999
+      strictness:
+        default: 0.75
+        type: number
+        maximum: 9999
+        minimum: -9999
+    required: []
+    additionalProperties: false
+  uiSchema:
+    executable:
+      ui:widget: file
 - id: seletop
   category: analysis
   label: HADDOCK3 module to select a top cluster/model.
