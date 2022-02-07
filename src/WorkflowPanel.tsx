@@ -23,8 +23,8 @@ export const WorkflowPanel = (): JSX.Element => {
             <button className='btn btn-light' style={textTabStyle} onClick={() => setTab('text')}>Text</button>
             <WorkflowUploadButton />
           </div>
+          {selectedPanel}
         </div>
-        {selectedPanel}
         <WorkflowDownloadButton />
       </div>
     </fieldset>
