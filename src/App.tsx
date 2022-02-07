@@ -20,11 +20,19 @@ function App (): JSX.Element {
         <ErrorBoundary>
           <React.Suspense fallback={<div>Loading...</div>}>
             <ToastContainer position='top-center' autoClose={1000} closeOnClick pauseOnFocusLoss />
-            <Header />
-            <div style={{ display: 'grid', gridTemplateColumns: '400px 0.6fr 1fr', gridAutoRows: '90vh', columnGap: '0.5em' }}>
-              <CatalogPanel />
-              <WorkflowPanel />
-              <NodePanel />
+            <div className='page'>
+              <div style={{ gridArea: 'head' }}>
+                <Header />
+              </div>
+              <div style={{ gridArea: 'catalog' }}>
+                <CatalogPanel />
+              </div>
+              <div style={{ gridArea: 'workflow' }}>
+                <WorkflowPanel />
+              </div>
+              <div style={{ gridArea: 'node' }}>
+                <NodePanel />
+              </div>
             </div>
           </React.Suspense>
         </ErrorBoundary>

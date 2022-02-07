@@ -16,7 +16,7 @@ export const WorkflowPanel = (): JSX.Element => {
   return (
     <fieldset style={{ height: '100%' }}>
       <legend>Workflow</legend>
-      <div style={{ display: 'flex', justifyContent: 'space-between', flexFlow: 'column', height: '100%', gap: '5px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', flexFlow: 'column', height: '100%', gap: '5px', paddingBottom: '5px' }}>
         <div>
           <div className='btn-group'>
             <button className='btn btn-light' style={visualTabStyle} onClick={() => setTab('visual')}>Visual</button>
