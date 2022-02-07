@@ -1,3 +1,4 @@
+import { nodeWidth } from './constants'
 import { useDrag } from 'react-dnd'
 import { useWorkflow } from './store'
 import { ICatalogNode } from './types'
@@ -8,10 +9,9 @@ export const CatalogNode = ({ id, label }: ICatalogNode): JSX.Element => {
     item: { id }
   }))[1]
   const { addNodeToWorkflow } = useWorkflow()
-  // TODO make buttons same relative size, not a absolute pixel size
   return (
     <li ref={drag}>
-      <button style={{ width: '200px' }} title={label} className='btn btn-light btn-sm' onClick={() => addNodeToWorkflow(id)}>{id}</button>
+      <button style={{ width: `${nodeWidth}rem` }} title={label} className='btn btn-light btn-sm' onClick={() => addNodeToWorkflow(id)}>{id}</button>
     </li>
   )
 }
