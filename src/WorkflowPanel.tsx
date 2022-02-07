@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { TextPanel } from './TextPanel'
 import { VisualPanel } from './VisualPanel'
 import { WorkflowDownload } from './WorkflowDownload'
-import { WorkflowUpload } from './WorkflowUpload'
+import { WorkflowUploadButton } from './WorkflowUploadButton'
 
 type ITab = 'text' | 'visual'
 
@@ -21,8 +21,8 @@ export const WorkflowPanel = (): JSX.Element => {
           <div className='btn-group'>
             <button className='btn btn-light' style={visualTabStyle} onClick={() => setTab('visual')}>Visual</button>
             <button className='btn btn-light' style={textTabStyle} onClick={() => setTab('text')}>Text</button>
+            <WorkflowUploadButton />
           </div>
-          <WorkflowUpload />
           {selectedPanel}
         </div>
         <WorkflowDownload />

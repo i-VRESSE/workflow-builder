@@ -2,7 +2,7 @@ import { useRef } from 'react'
 import { toast } from 'react-toastify'
 import { useWorkflow } from './store'
 
-export const WorkflowUpload = (): JSX.Element => {
+export const WorkflowUploadButton = (): JSX.Element => {
   const uploadRef = useRef<HTMLInputElement>(null)
   const { loadWorkflowArchive } = useWorkflow()
 
