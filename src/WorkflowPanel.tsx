@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { TextPanel } from './TextPanel'
 import { VisualPanel } from './VisualPanel'
-import { WorkflowDownload } from './WorkflowDownload'
+import { WorkflowDownloadButton } from './WorkflowDownloadButton'
 import { WorkflowUploadButton } from './WorkflowUploadButton'
 
 type ITab = 'text' | 'visual'
@@ -25,7 +25,7 @@ export const WorkflowPanel = (): JSX.Element => {
           </div>
         </div>
         {selectedPanel}
-        <WorkflowDownload />
+        <WorkflowDownloadButton />
       </div>
     </fieldset>
   )
