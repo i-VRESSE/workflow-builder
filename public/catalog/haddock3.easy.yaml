@@ -1,9 +1,9 @@
 title: Haddock 3 on easy level
 categories:
-- name: refinement
-  description: HADDOCK3 actions referring to refinement.
 - name: sampling
   description: HADDOCK3 modules for sampling.
+- name: refinement
+  description: HADDOCK3 actions referring to refinement.
 - name: analysis
   description: HADDOCK3 modules related to model analysis.
 - name: scoring
@@ -90,7 +90,6 @@ nodes:
     type: object
     properties:
       executable:
-        default: src/contact_fcc
         type: string
         format: uri-reference
       contact_distance_cutoff:

@@ -102,7 +102,9 @@ def config2schema(config):
         elif v['type'] == 'file':
             prop['type'] = 'string'
             prop['format'] = 'uri-reference'
-            if 'default' in v and v['default'] == '':
+            if 'default' in v:
+                # TODO handle clustfcc.executable.default = src/contact_fcc gracefully, now default is omitted,
+                # it should be treated as some path outside workflow archive or a file inside the workflow archive
                 # paths can not have defaults
                 del prop['default']
 
@@ -116,7 +118,7 @@ def config2schema(config):
         elif v['type'] == 'dir':
             prop['type'] = 'string'
             prop['format'] = 'uri-reference'
-            if 'default' in v and v['default'] == '':
+            if 'default' in v:
                 # paths can not have defaults
                 del prop['default']
         elif v['type'] == 'string':
