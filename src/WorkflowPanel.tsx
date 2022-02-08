@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { TextPanel } from './TextPanel'
 import { VisualPanel } from './VisualPanel'
+import { WorkflowClear } from './WorkflowClear'
 import { WorkflowDownload } from './WorkflowDownload'
 import { WorkflowUpload } from './WorkflowUpload'
 
@@ -25,7 +26,11 @@ export const WorkflowPanel = (): JSX.Element => {
           <WorkflowUpload />
           {selectedPanel}
         </div>
-        <WorkflowDownload />
+        <div className="row">
+          <WorkflowDownload />
+          <WorkflowClear />
+        </div>
+        
       </div>
     </fieldset>
   )

@@ -6,6 +6,10 @@ export function removeItemAtIndex<V> (arr: V[], index: number): V[] {
   return [...arr.slice(0, index), ...arr.slice(index + 1)]
 }
 
+export function removeAllItems<V>(arr: V[]) {
+  return (arr = []);
+}
+
 export function moveItem<V> (arr: V[], index: number, offset: number): V[] {
   const item = arr[index]
   const swappedIndex = index + offset
