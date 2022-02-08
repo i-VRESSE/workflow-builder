@@ -52,11 +52,13 @@ from yaml import dump, load, Loader
 from haddock.modules import modules_category
 from haddock import config_expert_levels
 
+
 def argparser_builder():
     parser = argparse.ArgumentParser()
     parser.add_argument('--out_dir', type=Path, default='public/catalog')
     parser.add_argument('--root_url', type=Path, default='/catalog')
     return parser
+
 
 def config2schema(config):
     """Translate haddock3 config file of a module to JSON schema"""
@@ -80,7 +82,8 @@ def config2schema(config):
             prop['$comment'] = v['long']
         if 'type' not in v:
             # if not type field treat value as dict of dicts
-            schema_uiSchema = config2schema({k2:v2 for k2,v2 in v.items() if k2 != 'explevel'})
+            schema_uiSchema = config2schema(
+                {k2: v2 for k2, v2 in v.items() if k2 != 'explevel'})
             prop = schema_uiSchema['schema']
             if schema_uiSchema['uiSchema']:
                 prop_ui = {
@@ -107,12 +110,12 @@ def config2schema(config):
                 del prop['default']
 
             # rjsf needs to render a file upload field which can be configured in uiSchema
-            prop_ui ={
+            prop_ui = {
                 "ui:widget": "file"
             }
 
             if 'accept' in v:
-                prop_ui["ui:options"] = { "accept": v['accept']}
+                prop_ui["ui:options"] = {"accept": v['accept']}
         elif v['type'] == 'dir':
             prop['type'] = 'string'
             prop['format'] = 'uri-reference'
@@ -134,7 +137,8 @@ def config2schema(config):
             if 'maxitems' in v:
                 prop['maxItems'] = v['maxitems']
             if 'itemtype' in v:
-                obj = {'a' : {'type': v['itemtype']}} # config2schema requires object
+                # config2schema requires object
+                obj = {'a': {'type': v['itemtype']}}
                 if 'accept' in v:
                     obj['a']['accept'] = v['accept']
                 schema_uiSchema = config2schema(obj)
@@ -144,7 +148,7 @@ def config2schema(config):
                         "items": schema_uiSchema['uiSchema']['a']
                     }
             elif 'items' in v:
-                obj = {'a' : v['items']} # config2schema requires object
+                obj = {'a': v['items']}  # config2schema requires object
                 schema_uiSchema = config2schema(obj)
                 prop['items'] = schema_uiSchema['schema']['properties']['a']
                 if schema_uiSchema['uiSchema'] and schema_uiSchema['uiSchema']['a']:
@@ -180,6 +184,7 @@ def config2schema(config):
         "uiSchema": uiSchema
     }
 
+
 def filter_on_level(config, level):
     # Each higher level should include parameters from previous level
     valid_levels = set()
@@ -188,6 +193,7 @@ def filter_on_level(config, level):
         if l == level:
             break
     return {k: v for k, v in config.items() if v['explevel'] in valid_levels}
+
 
 def process_module(module_name, category, level):
     package = f'haddock.modules.{category}.{module_name}'
@@ -208,6 +214,7 @@ def process_module(module_name, category, level):
         "uiSchema": schema_uiSchema['uiSchema']
     }
 
+
 def process_category(category):
     package = f'haddock.modules.{category}'
     module = importlib.import_module(package)
@@ -215,6 +222,7 @@ def process_category(category):
         'name': category,
         'description': module.__doc__,
     }
+
 
 def process_global(level):
     package = 'haddock.modules'
@@ -252,41 +260,50 @@ REQUIRED_GLOBAL_PARAMETERS = {
     }
 }
 
+
 def process_level(level_fn: Path, level: str):
-    # TODO order the categories by which category needs output from another. Now order is not reproducible
-    categories = [process_category(c) for c in set(modules_category.values())]
+    # TODO: order the categories by which category needs output from another. Now order is not reproducible
+    #  Temporary fix: The relationship between the categories is not order based, we can use nodes from different categories
+    #   in different orders. But it does make some sense to have them ordered:
+    category_order = ["topology", "sampling", "refinement", "scoring", "analysis"]
+    assert len(category_order) == len(set(modules_category.values())) and sorted(category_order) == sorted(set(modules_category.values()))
+    categories=[process_category(c) for c in category_order]
 
-    broken_modules = {
-        'topocg', # Gives `AttributeError: module 'haddock.modules.topology.topocg' has no attribute 'HaddockModule'` error
+    broken_modules={
+        'topocg',  # Gives `AttributeError: module 'haddock.modules.topology.topocg' has no attribute 'HaddockModule'` error
     }
-    nodes = [process_module(module, category, level) for module, category in modules_category.items() if module not in broken_modules]
+    nodes=[process_module(module, category, level) for module,
+             category in modules_category.items() if module not in broken_modules]
 
-    catalog = {
+    catalog={
         "title": f"Haddock 3 on {level} level",
         "categories": categories,
         'global': process_global(level),
         "nodes": nodes,
         "examples": {
-            'docking': '/examples/docking-protein-ligand.zip' # TODO get from somewhere instead of hardcoding it here
+            # TODO get from somewhere instead of hardcoding it here
+            'docking': '/examples/docking-protein-ligand.zip'
         }
     }
     with level_fn.open('w') as f:
         dump(catalog, f, sort_keys=False)
+
 
 def write_catalog_index(catalogs, file):
     with file.open('w') as f:
         json.dump(catalogs, f)
         logging.warning(f'Written {file}')
 
+
 def main(argv=sys.argv[1:]):
-    argparser = argparser_builder()
-    args = argparser.parse_args(argv)
+    argparser=argparser_builder()
+    args=argparser.parse_args(argv)
     args.out_dir.mkdir(parents=True, exist_ok=True)
 
-    catalogs = []
+    catalogs=[]
     for level in config_expert_levels:
-        level_fn = args.out_dir / f'haddock3.{level}.yaml'
-        level_url = args.root_url / f'haddock3.{level}.yaml'
+        level_fn=args.out_dir / f'haddock3.{level}.yaml'
+        level_url=args.root_url / f'haddock3.{level}.yaml'
         catalogs.append([f'haddock3{level}', str(level_url)])
         process_level(level_fn, level)
         logging.warning(f'Written {level_fn}')
