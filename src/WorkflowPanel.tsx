@@ -26,11 +26,10 @@ export const WorkflowPanel = (): JSX.Element => {
           <WorkflowUpload />
           {selectedPanel}
         </div>
-        <div className="row">
+        <div className='row'>
           <WorkflowDownload />
           <WorkflowClear />
         </div>
-        
       </div>
     </fieldset>
   )

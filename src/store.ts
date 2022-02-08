@@ -168,9 +168,9 @@ export function useWorkflow (): UseWorkflow {
       setGlobal(parameters)
       setFiles(newUsedFiles)
     },
-    clearNodes() {
-      const blankNodes = removeAllItems(nodes);
-      setNodes(blankNodes);
+    clearNodes () {
+      const blankNodes = removeAllItems(nodes)
+      setNodes(blankNodes)
     },
     setNodeParameters (inlinedParameters: IParameters) {
       const newFiles = { ...files }
