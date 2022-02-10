@@ -269,7 +269,7 @@ def process_level(level_fn: Path, level: str):
         'global': process_global(level),
         "nodes": nodes,
         "examples": {
-            'docking': '/examples/docking-protein-ligand.zip' # TODO get from somewhere instead of hardcoding it here
+            'docking-protein-ligand': '/examples/docking-protein-ligand.zip' # TODO get from somewhere instead of hardcoding it here
         }
     }
     with level_fn.open('w') as f:

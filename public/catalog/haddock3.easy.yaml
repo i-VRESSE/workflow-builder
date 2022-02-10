@@ -11794,4 +11794,4 @@ nodes:
     ligand_top_fname:
       ui:widget: file
 examples:
-  docking: /examples/docking-protein-ligand.zip
+  docking-protein-ligand: /examples/docking-protein-ligand.zip
