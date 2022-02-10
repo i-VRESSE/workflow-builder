@@ -12,6 +12,8 @@ import { Header } from './Header'
 import { ErrorBoundary } from './ErrorBoundary'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
+import { WorkflowDownloadButton } from './WorkflowDownloadButton'
+import { FormActions } from './FormActions'
 
 function App (): JSX.Element {
   return (
@@ -32,6 +34,12 @@ function App (): JSX.Element {
               </div>
               <div style={{ gridArea: 'node' }}>
                 <NodePanel />
+              </div>
+              <div className='action-row' style={{ gridArea: 'workflow-actions' }}>
+                <WorkflowDownloadButton />
+              </div>
+              <div className='action-row' style={{ gridArea: 'node-actions' }}>
+                <FormActions />
               </div>
             </div>
           </React.Suspense>

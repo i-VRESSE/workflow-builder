@@ -1,14 +1,15 @@
-import { useFiles, useSelectedCatalogNode, useSelectedNode, useSelectNodeIndex, useWorkflow } from './store'
+import { useSetRecoilState } from 'recoil'
+import { activeSubmitButtonState, useFiles, useSelectedCatalogNode, useSelectedNode, useWorkflow } from './store'
 import { internalizeDataUrls } from './dataurls'
 import { Form } from './Form'
 
 export const NodeForm = (): JSX.Element => {
-  // TODO move setParameters to useSelectedNode
-  const index = useSelectNodeIndex()
-  const { setNodeParameters, deleteNode, clearNodeSelection } = useWorkflow()
+  // TODO move setNodeParameters to useSelectedNode
+  const { setNodeParameters } = useWorkflow()
   const files = useFiles()
   const node = useSelectedNode()
   const catalogNode = useSelectedCatalogNode()
+  const submitFormRefSetter = useSetRecoilState(activeSubmitButtonState) as (instance: HTMLButtonElement | null) => void
 
   if (node === undefined) {
     return <div>No node selected</div>
@@ -31,29 +32,7 @@ export const NodeForm = (): JSX.Element => {
         formData={parametersWithDataUrls}
         onSubmit={({ formData }) => setNodeParameters(formData)}
       >
-        <div className='btn-group'>
-          <button
-            type='submit'
-            className='btn btn-primary'
-            title='Save parameters in node'
-          >
-            Submit
-          </button>
-          <button
-            className='btn btn-light'
-            onClick={() => clearNodeSelection()}
-            title='Forget changes made in form'
-          >
-            Cancel
-          </button>
-          <button
-            className='btn btn-light'
-            onClick={() => deleteNode(index)}
-            title='Delete node from workflow'
-          >
-            Delete
-          </button>
-        </div>
+        <button ref={submitFormRefSetter} style={{ display: 'none' }} />
       </Form>
     </>
   )

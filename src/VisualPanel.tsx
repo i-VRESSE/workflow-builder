@@ -35,16 +35,13 @@ export const VisualPanel = (): JSX.Element => {
     marginLeft: '4px',
     marginRight: '4px',
     padding: '4px',
-    height: nodes.length > 0 ? '' : '100%',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center'
   }
   const appendZone = (
-    <div style={appendZoneStyle}>
-      <div style={{ textAlign: 'center' }}>
-        Append node to workflow by clicking node in catalog or by dragging node from catalog to here.
-      </div>
+    <div style={{ ...appendZoneStyle, textAlign: 'center' }}>
+      Append node to workflow by clicking node in catalog or by dragging node from catalog to here.
     </div>
   )
 

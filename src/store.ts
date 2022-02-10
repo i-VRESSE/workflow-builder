@@ -60,6 +60,15 @@ const selectedNodeIndexState = atom<number>({
   default: -1
 })
 
+// Keep reference to submit button inside a rjsf form, so the button can be activated outside the form
+// See https://github.com/rjsf-team/react-jsonschema-form/issues/500#issuecomment-849051041
+// The current approach of using a singleton to store the active submit button,
+// makes it impossible to have multiple forms renderede at the same time
+export const activeSubmitButtonState = atom<HTMLButtonElement | undefined>({
+  key: 'activeSubmitButton',
+  default: undefined
+})
+
 export function useSelectNodeIndex (): number {
   return useRecoilValue(selectedNodeIndexState)
 }

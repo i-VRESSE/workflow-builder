@@ -1,13 +1,12 @@
 import React from 'react'
-
-import { CatalogPicker } from './CatalogPicker'
 import { CatalogCategory } from './CatalogCategory'
-import { useCatalog, useWorkflow } from './store'
+import { CatalogPicker } from './CatalogPicker'
 import { Example } from './Example'
+import { useCatalog } from './store'
 
 export const CatalogPanel = (): JSX.Element => {
   const catalog = useCatalog()
-  const { toggleGlobalEdit } = useWorkflow()
+
   return (
     <fieldset>
       <legend>Catalog</legend>
@@ -15,7 +14,6 @@ export const CatalogPanel = (): JSX.Element => {
         <CatalogPicker />
       </div>
       <React.Suspense fallback={<span>Loading catalog...</span>}>
-        <button className='btn btn-light' onClick={toggleGlobalEdit}>Configure global parameters</button>
         <h4>Nodes</h4>
         <ul style={{ lineHeight: '2.5em' }}>
           {catalog?.categories.map((category) => <CatalogCategory key={category.name} {...category} />)}
