@@ -40,13 +40,13 @@ export const VisualPanel = (): JSX.Element => {
     alignItems: 'center'
   }
   const appendZone = (
-    <div style={{ ...appendZoneStyle, textAlign: 'center' }}>
+    <div ref={drop} style={{ ...appendZoneStyle, textAlign: 'center' }}>
       Append node to workflow by clicking node in catalog or by dragging node from catalog to here.
     </div>
   )
 
   return (
-    <div ref={drop} style={{ height: '100%' }}>
+    <div style={{ height: '100%' }}>
       {nodeList}
       {nodes.length === 0 || canCatalogNodeDrop ? appendZone : <></>}
     </div>
