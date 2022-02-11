@@ -256,7 +256,6 @@ REQUIRED_GLOBAL_PARAMETERS = {
 }
 
 def process_level(level_fn: Path, level: str):
-    # TODO order the categories by which category needs output from another. Now order is not reproducible
     category_list = get_category_order()
     categories = [process_category(c) for c in category_list]
 
