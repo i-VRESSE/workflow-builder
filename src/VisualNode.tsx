@@ -1,6 +1,7 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { useDrag, useDrop, DropTargetMonitor } from 'react-dnd'
 import { useSelectNodeIndex, useWorkflow } from './store'
+import { GripVertical, X } from 'react-bootstrap-icons'
 import { DragItem } from './types'
 import { nodeWidth } from './constants'
 
@@ -9,9 +10,17 @@ interface IProp {
   index: number
 }
 
+function EmptyIcon(): JSX.Element {
+  return <svg width='1em' height='1em'/>
+}
+
 export const VisualNode = ({ id, index }: IProp): JSX.Element => {
+  // TODO to power hover use css :hover instead of slower JS
+  const [hover, setHover] = useState(false)
+
   const selectedNodeIndex = useSelectNodeIndex()
-  const { selectNode, moveNode, addNodeToWorkflowAt } = useWorkflow()
+  const { selectNode, moveNode, addNodeToWorkflowAt, deleteNode } = useWorkflow()
+
   const ref = useRef<HTMLLIElement>(null)
   const drag = useDrag(() => ({
     type: 'node',
@@ -45,25 +54,49 @@ export const VisualNode = ({ id, index }: IProp): JSX.Element => {
       }
     }
   })
+
   const selectedStyle = selectedNodeIndex === index ? { fontWeight: 'bold' } : {}
-  let style: React.CSSProperties = { ...selectedStyle, width: `${nodeWidth}rem` }
+  let style: React.CSSProperties = {}
   if (isOver) {
-    style = { ...style, border: '1px solid gray' }
+    style = { border: '1px solid gray' }
   } else if (canDrop) {
-    style = { ...style, border: '1px dashed gray' }
+    style = { border: '1px dashed gray' }
   }
 
+  // TODO after clicking node the active styling is not removed unless you activate another element
   drag(drop(ref))
   return (
     <li ref={ref} style={selectedStyle}>
-      <button
-        style={style}
-        className='btn btn-light btn-sm'
-        title='Click to configure or drag to reorder'
-        onClick={() => selectNode(index)}
+      <div
+        className='btn-group'
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
+        style={{ ...style, width: `${nodeWidth}rem`, justifyContent: 'space-between' }}
       >
-        {id}
-      </button>
+        <button
+          className='btn btn-light btn-sm btn-block'
+          title='Click to configure or drag to reorder'
+          onClick={() => {
+            selectNode(index)
+          }}
+        >
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <span style={selectedStyle}>
+              {id}
+            </span>
+            <span>
+              {hover && <GripVertical />}
+            </span>
+          </div>
+        </button>
+        <button
+          title='Delete'
+          className='btn btn-light btn-sm'
+          onClick={() => deleteNode(index)}
+        >
+          {hover && <X />}
+        </button>
+      </div>
     </li>
   )
 }

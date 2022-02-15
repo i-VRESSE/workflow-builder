@@ -30,6 +30,13 @@ Use desktop oriented framework
 2. blueprint
 3. Bootstrap 4 <- chosen because it is default in react-json-schema-form
 
+## Icons
+
+1. Awesome fonts
+2. Bootstrap icons <- chosen because no paid tiers and already using bootstrap for UI
+3. Ionic icons
+4. Octicons
+
 ## State management
 
 1. hooks
