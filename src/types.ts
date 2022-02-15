@@ -47,3 +47,9 @@ export interface IWorkflowSchema {
   global: IGlobal
   nodes: ICatalogNode[]
 }
+
+export interface DragItem {
+  index: number
+  id: string
+  type: string
+}

@@ -2,7 +2,7 @@ import { useRef } from 'react'
 import { toast } from 'react-toastify'
 import { useWorkflow } from './store'
 
-export const WorkflowUpload = (): JSX.Element => {
+export const WorkflowUploadButton = (): JSX.Element => {
   const uploadRef = useRef<HTMLInputElement>(null)
   const { loadWorkflowArchive } = useWorkflow()
 
@@ -34,7 +34,7 @@ export const WorkflowUpload = (): JSX.Element => {
   }
 
   return (
-    <button className='btn btn-link' onClick={() => uploadRef.current?.click()}>
+    <button className='btn btn-light' onClick={() => uploadRef.current?.click()}>
       Upload
       <input
         type='file'

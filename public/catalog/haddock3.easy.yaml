@@ -82,1531 +82,77 @@ global:
     cns_exec:
       ui:widget: file
 nodes:
-- id: topoaa
-  category: topology
-  label: Create and manage CNS all-atom topology.
-  description: HADDOCK3 module to create CNS all-atom topologies.
+- id: clustfcc
+  category: analysis
+  label: HADDOCK3 FCC clustering module.
+  description: HADDOCK3 module for clustering with FCC.
   schema:
     type: object
     properties:
-      delenph:
-        default: true
-        title: Keep or remove non-polar hydrogen atoms
-        description: If set to true, non-polar hydrogen atoms will be discarded to
-          save computing time
-        $comment: Since HADDOCK uses a united atom force field, the non-polar hydrogen
-          atoms can be in principle discarded. This saves computing time. However
-          this should not be done if you are defining distance restraints to specific
-          hydrogen atoms (e.g. when using NMR distance restraints).
-        type: boolean
-      limit:
-        default: true
-        type: boolean
-      mol1:
-        type: object
-        properties:
-          prot_segid:
-            default: A
-            title: Segment ID
-            description: Segment ID assigned to this molecule
-            $comment: Segment ID assigned to this molecule in CNS. Used to distinguish
-              different molecules
-            type: string
-            minLength: 0
-            maxLength: 4
-          cyclicpept:
-            default: false
-            title: Cyclic peptide
-            description: Defines the molecule as a cyclic peptide
-            $comment: This option defines the molecule as a cyclic peptide and HADDOCK
-              will generate a peptide bond between the N- and C-ter provided those
-              are within 2A. This cutoff can be changed in the generate-topology.cns
-              script.
-            type: boolean
-          nhisd:
-            default: 0
-            title: Number of HISD residue
-            description: Defines the number of HISD residues (neutral HIS with the
-              proton on the ND atom) residues when autohis=false
-            $comment: Defines the number of HISD residues (neutral HIS with the proton
-              on the ND atom) residues. The corresponding residue numbers must be
-              defined in the following parameter (hisd_1, hisd_2, ...). Add as many
-              as needed. Note that HIS is interpreted as a charged Histidine)
-            type: number
-            maximum: 9999
-            minimum: 0
-          hisd_1:
-            title: HISD residue number
-            description: Residue number of the Histidine to be defined as HISD
-            $comment: Residue number of the Histidine to be defined as HISD
-            type: number
-            maximum: 9999
-            minimum: -9999
-          nhise:
-            default: 0
-            title: Number of HISE residue
-            description: Defines the number of HISE residues (neutral HIS with the
-              proton on the NE atom) residues when autohis=false
-            $comment: Defines the number of HISE residues (neutral HIS with the proton
-              on the NE atom) residues. The corresponding residue numbers must be
-              defined in the following parameter (hise_1, hise_2, ...). Add as many
-              as needed. Note that HIS is interpreted as a charged Histidine)
-            type: number
-            maximum: 9999
-            minimum: 0
-          hise_1:
-            title: HISE residue number
-            description: Residue number of the Histidine to be defined as HISE
-            $comment: Residue number of the Histidine to be defined as HISE
-            type: number
-            maximum: 9999
-            minimum: -9999
-        required: []
-        additionalProperties: false
-      mol2:
-        type: object
-        properties:
-          prot_segid:
-            default: B
-            title: Segment ID
-            description: Segment ID assigned to this molecule
-            $comment: Segment ID assigned to this molecule in CNS. Used to distinguish
-              different molecules
-            type: string
-            minLength: 0
-            maxLength: 4
-          cyclicpept:
-            default: false
-            title: Cyclic peptide
-            description: Defines the molecule as a cyclic peptide
-            $comment: This option defines the molecule as a cyclic peptide and HADDOCK
-              will generate a peptide bond between the N- and C-ter provided those
-              are within 2A. This cutoff can be changed in the generate-topology.cns
-              script.
-            type: boolean
-          nhisd:
-            default: 0
-            title: Number of HISD residue
-            description: Defines the number of HISD residues (neutral HIS with the
-              proton on the ND atom) residues when autohis=false
-            $comment: Defines the number of HISD residues (neutral HIS with the proton
-              on the ND atom) residues. The corresponding residue numbers must be
-              defined in the following parameter (hisd_1, hisd_2, ...). Add as many
-              as needed. Note that HIS is interpreted as a charged Histidine)
-            type: number
-            maximum: 9999
-            minimum: 0
-          hisd_1:
-            title: HISD residue number
-            description: Residue number of the Histidine to be defined as HISD
-            $comment: Residue number of the Histidine to be defined as HISD
-            type: number
-            maximum: 9999
-            minimum: -9999
-          nhise:
-            default: 0
-            title: Number of HISE residue
-            description: Defines the number of HISE residues (neutral HIS with the
-              proton on the NE atom) residues when autohis=false
-            $comment: Defines the number of HISE residues (neutral HIS with the proton
-              on the NE atom) residues. The corresponding residue numbers must be
-              defined in the following parameter (hise_1, hise_2, ...). Add as many
-              as needed. Note that HIS is interpreted as a charged Histidine)
-            type: number
-            maximum: 9999
-            minimum: 0
-          hise_1:
-            title: HISE residue number
-            description: Residue number of the Histidine to be defined as HISE
-            $comment: Residue number of the Histidine to be defined as HISE
-            type: number
-            maximum: 9999
-            minimum: -9999
-        required: []
-        additionalProperties: false
-      mol3:
-        type: object
-        properties:
-          prot_segid:
-            default: C
-            title: Segment ID
-            description: Segment ID assigned to this molecule
-            $comment: Segment ID assigned to this molecule in CNS. Used to distinguish
-              different molecules
-            type: string
-            minLength: 0
-            maxLength: 4
-          cyclicpept:
-            default: false
-            title: Cyclic peptide
-            description: Defines the molecule as a cyclic peptide
-            $comment: This option defines the molecule as a cyclic peptide and HADDOCK
-              will generate a peptide bond between the N- and C-ter provided those
-              are within 2A. This cutoff can be changed in the generate-topology.cns
-              script.
-            type: boolean
-          nhisd:
-            default: 0
-            title: Number of HISD residue
-            description: Defines the number of HISD residues (neutral HIS with the
-              proton on the ND atom) residues when autohis=false
-            $comment: Defines the number of HISD residues (neutral HIS with the proton
-              on the ND atom) residues. The corresponding residue numbers must be
-              defined in the following parameter (hisd_1, hisd_2, ...). Add as many
-              as needed. Note that HIS is interpreted as a charged Histidine)
-            type: number
-            maximum: 9999
-            minimum: 0
-          hisd_1:
-            title: HISD residue number
-            description: Residue number of the Histidine to be defined as HISD
-            $comment: Residue number of the Histidine to be defined as HISD
-            type: number
-            maximum: 9999
-            minimum: -9999
-          nhise:
-            default: 0
-            title: Number of HISE residue
-            description: Defines the number of HISE residues (neutral HIS with the
-              proton on the NE atom) residues when autohis=false
-            $comment: Defines the number of HISE residues (neutral HIS with the proton
-              on the NE atom) residues. The corresponding residue numbers must be
-              defined in the following parameter (hise_1, hise_2, ...). Add as many
-              as needed. Note that HIS is interpreted as a charged Histidine)
-            type: number
-            maximum: 9999
-            minimum: 0
-          hise_1:
-            title: HISE residue number
-            description: Residue number of the Histidine to be defined as HISE
-            $comment: Residue number of the Histidine to be defined as HISE
-            type: number
-            maximum: 9999
-            minimum: -9999
-        required: []
-        additionalProperties: false
-      mol4:
-        type: object
-        properties:
-          prot_segid:
-            default: D
-            title: Segment ID
-            description: Segment ID assigned to this molecule
-            $comment: Segment ID assigned to this molecule in CNS. Used to distinguish
-              different molecules
-            type: string
-            minLength: 0
-            maxLength: 4
-          cyclicpept:
-            default: false
-            title: Cyclic peptide
-            description: Defines the molecule as a cyclic peptide
-            $comment: This option defines the molecule as a cyclic peptide and HADDOCK
-              will generate a peptide bond between the N- and C-ter provided those
-              are within 2A. This cutoff can be changed in the generate-topology.cns
-              script.
-            type: boolean
-          nhisd:
-            default: 0
-            title: Number of HISD residue
-            description: Defines the number of HISD residues (neutral HIS with the
-              proton on the ND atom) residues when autohis=false
-            $comment: Defines the number of HISD residues (neutral HIS with the proton
-              on the ND atom) residues. The corresponding residue numbers must be
-              defined in the following parameter (hisd_1, hisd_2, ...). Add as many
-              as needed. Note that HIS is interpreted as a charged Histidine)
-            type: number
-            maximum: 9999
-            minimum: 0
-          hisd_1:
-            title: HISD residue number
-            description: Residue number of the Histidine to be defined as HISD
-            $comment: Residue number of the Histidine to be defined as HISD
-            type: number
-            maximum: 9999
-            minimum: -9999
-          nhise:
-            default: 0
-            title: Number of HISE residue
-            description: Defines the number of HISE residues (neutral HIS with the
-              proton on the NE atom) residues when autohis=false
-            $comment: Defines the number of HISE residues (neutral HIS with the proton
-              on the NE atom) residues. The corresponding residue numbers must be
-              defined in the following parameter (hise_1, hise_2, ...). Add as many
-              as needed. Note that HIS is interpreted as a charged Histidine)
-            type: number
-            maximum: 9999
-            minimum: 0
-          hise_1:
-            title: HISE residue number
-            description: Residue number of the Histidine to be defined as HISE
-            $comment: Residue number of the Histidine to be defined as HISE
-            type: number
-            maximum: 9999
-            minimum: -9999
-        required: []
-        additionalProperties: false
-      mol5:
-        type: object
-        properties:
-          prot_segid:
-            default: E
-            title: Segment ID
-            description: Segment ID assigned to this molecule
-            $comment: Segment ID assigned to this molecule in CNS. Used to distinguish
-              different molecules
-            type: string
-            minLength: 0
-            maxLength: 4
-          cyclicpept:
-            default: false
-            title: Cyclic peptide
-            description: Defines the molecule as a cyclic peptide
-            $comment: This option defines the molecule as a cyclic peptide and HADDOCK
-              will generate a peptide bond between the N- and C-ter provided those
-              are within 2A. This cutoff can be changed in the generate-topology.cns
-              script.
-            type: boolean
-          nhisd:
-            default: 0
-            title: Number of HISD residue
-            description: Defines the number of HISD residues (neutral HIS with the
-              proton on the ND atom) residues when autohis=false
-            $comment: Defines the number of HISD residues (neutral HIS with the proton
-              on the ND atom) residues. The corresponding residue numbers must be
-              defined in the following parameter (hisd_1, hisd_2, ...). Add as many
-              as needed. Note that HIS is interpreted as a charged Histidine)
-            type: number
-            maximum: 9999
-            minimum: 0
-          hisd_1:
-            title: HISD residue number
-            description: Residue number of the Histidine to be defined as HISD
-            $comment: Residue number of the Histidine to be defined as HISD
-            type: number
-            maximum: 9999
-            minimum: -9999
-          nhise:
-            default: 0
-            title: Number of HISE residue
-            description: Defines the number of HISE residues (neutral HIS with the
-              proton on the NE atom) residues when autohis=false
-            $comment: Defines the number of HISE residues (neutral HIS with the proton
-              on the NE atom) residues. The corresponding residue numbers must be
-              defined in the following parameter (hise_1, hise_2, ...). Add as many
-              as needed. Note that HIS is interpreted as a charged Histidine)
-            type: number
-            maximum: 9999
-            minimum: 0
-          hise_1:
-            title: HISE residue number
-            description: Residue number of the Histidine to be defined as HISE
-            $comment: Residue number of the Histidine to be defined as HISE
-            type: number
-            maximum: 9999
-            minimum: -9999
-        required: []
-        additionalProperties: false
-      mol6:
-        type: object
-        properties:
-          prot_segid:
-            default: F
-            title: Segment ID
-            description: Segment ID assigned to this molecule
-            $comment: Segment ID assigned to this molecule in CNS. Used to distinguish
-              different molecules
-            type: string
-            minLength: 0
-            maxLength: 4
-          cyclicpept:
-            default: false
-            title: Cyclic peptide
-            description: Defines the molecule as a cyclic peptide
-            $comment: This option defines the molecule as a cyclic peptide and HADDOCK
-              will generate a peptide bond between the N- and C-ter provided those
-              are within 2A. This cutoff can be changed in the generate-topology.cns
-              script.
-            type: boolean
-          nhisd:
-            default: 0
-            title: Number of HISD residue
-            description: Defines the number of HISD residues (neutral HIS with the
-              proton on the ND atom) residues when autohis=false
-            $comment: Defines the number of HISD residues (neutral HIS with the proton
-              on the ND atom) residues. The corresponding residue numbers must be
-              defined in the following parameter (hisd_1, hisd_2, ...). Add as many
-              as needed. Note that HIS is interpreted as a charged Histidine)
-            type: number
-            maximum: 9999
-            minimum: 0
-          hisd_1:
-            title: HISD residue number
-            description: Residue number of the Histidine to be defined as HISD
-            $comment: Residue number of the Histidine to be defined as HISD
-            type: number
-            maximum: 9999
-            minimum: -9999
-          nhise:
-            default: 0
-            title: Number of HISE residue
-            description: Defines the number of HISE residues (neutral HIS with the
-              proton on the NE atom) residues when autohis=false
-            $comment: Defines the number of HISE residues (neutral HIS with the proton
-              on the NE atom) residues. The corresponding residue numbers must be
-              defined in the following parameter (hise_1, hise_2, ...). Add as many
-              as needed. Note that HIS is interpreted as a charged Histidine)
-            type: number
-            maximum: 9999
-            minimum: 0
-          hise_1:
-            title: HISE residue number
-            description: Residue number of the Histidine to be defined as HISE
-            $comment: Residue number of the Histidine to be defined as HISE
-            type: number
-            maximum: 9999
-            minimum: -9999
-        required: []
-        additionalProperties: false
-      mol7:
-        type: object
-        properties:
-          prot_segid:
-            default: G
-            title: Segment ID
-            description: Segment ID assigned to this molecule
-            $comment: Segment ID assigned to this molecule in CNS. Used to distinguish
-              different molecules
-            type: string
-            minLength: 0
-            maxLength: 4
-          cyclicpept:
-            default: false
-            title: Cyclic peptide
-            description: Defines the molecule as a cyclic peptide
-            $comment: This option defines the molecule as a cyclic peptide and HADDOCK
-              will generate a peptide bond between the N- and C-ter provided those
-              are within 2A. This cutoff can be changed in the generate-topology.cns
-              script.
-            type: boolean
-          nhisd:
-            default: 0
-            title: Number of HISD residue
-            description: Defines the number of HISD residues (neutral HIS with the
-              proton on the ND atom) residues when autohis=false
-            $comment: Defines the number of HISD residues (neutral HIS with the proton
-              on the ND atom) residues. The corresponding residue numbers must be
-              defined in the following parameter (hisd_1, hisd_2, ...). Add as many
-              as needed. Note that HIS is interpreted as a charged Histidine)
-            type: number
-            maximum: 9999
-            minimum: 0
-          hisd_1:
-            title: HISD residue number
-            description: Residue number of the Histidine to be defined as HISD
-            $comment: Residue number of the Histidine to be defined as HISD
-            type: number
-            maximum: 9999
-            minimum: -9999
-          nhise:
-            default: 0
-            title: Number of HISE residue
-            description: Defines the number of HISE residues (neutral HIS with the
-              proton on the NE atom) residues when autohis=false
-            $comment: Defines the number of HISE residues (neutral HIS with the proton
-              on the NE atom) residues. The corresponding residue numbers must be
-              defined in the following parameter (hise_1, hise_2, ...). Add as many
-              as needed. Note that HIS is interpreted as a charged Histidine)
-            type: number
-            maximum: 9999
-            minimum: 0
-          hise_1:
-            title: HISE residue number
-            description: Residue number of the Histidine to be defined as HISE
-            $comment: Residue number of the Histidine to be defined as HISE
-            type: number
-            maximum: 9999
-            minimum: -9999
-        required: []
-        additionalProperties: false
-      mol8:
-        type: object
-        properties:
-          prot_segid:
-            default: H
-            title: Segment ID
-            description: Segment ID assigned to this molecule
-            $comment: Segment ID assigned to this molecule in CNS. Used to distinguish
-              different molecules
-            type: string
-            minLength: 0
-            maxLength: 4
-          cyclicpept:
-            default: false
-            title: Cyclic peptide
-            description: Defines the molecule as a cyclic peptide
-            $comment: This option defines the molecule as a cyclic peptide and HADDOCK
-              will generate a peptide bond between the N- and C-ter provided those
-              are within 2A. This cutoff can be changed in the generate-topology.cns
-              script.
-            type: boolean
-          nhisd:
-            default: 0
-            title: Number of HISD residue
-            description: Defines the number of HISD residues (neutral HIS with the
-              proton on the ND atom) residues when autohis=false
-            $comment: Defines the number of HISD residues (neutral HIS with the proton
-              on the ND atom) residues. The corresponding residue numbers must be
-              defined in the following parameter (hisd_1, hisd_2, ...). Add as many
-              as needed. Note that HIS is interpreted as a charged Histidine)
-            type: number
-            maximum: 9999
-            minimum: 0
-          hisd_1:
-            title: HISD residue number
-            description: Residue number of the Histidine to be defined as HISD
-            $comment: Residue number of the Histidine to be defined as HISD
-            type: number
-            maximum: 9999
-            minimum: -9999
-          nhise:
-            default: 0
-            title: Number of HISE residue
-            description: Defines the number of HISE residues (neutral HIS with the
-              proton on the NE atom) residues when autohis=false
-            $comment: Defines the number of HISE residues (neutral HIS with the proton
-              on the NE atom) residues. The corresponding residue numbers must be
-              defined in the following parameter (hise_1, hise_2, ...). Add as many
-              as needed. Note that HIS is interpreted as a charged Histidine)
-            type: number
-            maximum: 9999
-            minimum: 0
-          hise_1:
-            title: HISE residue number
-            description: Residue number of the Histidine to be defined as HISE
-            $comment: Residue number of the Histidine to be defined as HISE
-            type: number
-            maximum: 9999
-            minimum: -9999
-        required: []
-        additionalProperties: false
-      mol9:
-        type: object
-        properties:
-          prot_segid:
-            default: I
-            title: Segment ID
-            description: Segment ID assigned to this molecule
-            $comment: Segment ID assigned to this molecule in CNS. Used to distinguish
-              different molecules
-            type: string
-            minLength: 0
-            maxLength: 4
-          cyclicpept:
-            default: false
-            title: Cyclic peptide
-            description: Defines the molecule as a cyclic peptide
-            $comment: This option defines the molecule as a cyclic peptide and HADDOCK
-              will generate a peptide bond between the N- and C-ter provided those
-              are within 2A. This cutoff can be changed in the generate-topology.cns
-              script.
-            type: boolean
-          nhisd:
-            default: 0
-            title: Number of HISD residue
-            description: Defines the number of HISD residues (neutral HIS with the
-              proton on the ND atom) residues when autohis=false
-            $comment: Defines the number of HISD residues (neutral HIS with the proton
-              on the ND atom) residues. The corresponding residue numbers must be
-              defined in the following parameter (hisd_1, hisd_2, ...). Add as many
-              as needed. Note that HIS is interpreted as a charged Histidine)
-            type: number
-            maximum: 9999
-            minimum: 0
-          hisd_1:
-            title: HISD residue number
-            description: Residue number of the Histidine to be defined as HISD
-            $comment: Residue number of the Histidine to be defined as HISD
-            type: number
-            maximum: 9999
-            minimum: -9999
-          nhise:
-            default: 0
-            title: Number of HISE residue
-            description: Defines the number of HISE residues (neutral HIS with the
-              proton on the NE atom) residues when autohis=false
-            $comment: Defines the number of HISE residues (neutral HIS with the proton
-              on the NE atom) residues. The corresponding residue numbers must be
-              defined in the following parameter (hise_1, hise_2, ...). Add as many
-              as needed. Note that HIS is interpreted as a charged Histidine)
-            type: number
-            maximum: 9999
-            minimum: 0
-          hise_1:
-            title: HISE residue number
-            description: Residue number of the Histidine to be defined as HISE
-            $comment: Residue number of the Histidine to be defined as HISE
-            type: number
-            maximum: 9999
-            minimum: -9999
-        required: []
-        additionalProperties: false
-      mol10:
-        type: object
-        properties:
-          prot_segid:
-            default: J
-            title: Segment ID
-            description: Segment ID assigned to this molecule
-            $comment: Segment ID assigned to this molecule in CNS. Used to distinguish
-              different molecules
-            type: string
-            minLength: 0
-            maxLength: 4
-          cyclicpept:
-            default: false
-            title: Cyclic peptide
-            description: Defines the molecule as a cyclic peptide
-            $comment: This option defines the molecule as a cyclic peptide and HADDOCK
-              will generate a peptide bond between the N- and C-ter provided those
-              are within 2A. This cutoff can be changed in the generate-topology.cns
-              script.
-            type: boolean
-          nhisd:
-            default: 0
-            title: Number of HISD residue
-            description: Defines the number of HISD residues (neutral HIS with the
-              proton on the ND atom) residues when autohis=false
-            $comment: Defines the number of HISD residues (neutral HIS with the proton
-              on the ND atom) residues. The corresponding residue numbers must be
-              defined in the following parameter (hisd_1, hisd_2, ...). Add as many
-              as needed. Note that HIS is interpreted as a charged Histidine)
-            type: number
-            maximum: 9999
-            minimum: 0
-          hisd_1:
-            title: HISD residue number
-            description: Residue number of the Histidine to be defined as HISD
-            $comment: Residue number of the Histidine to be defined as HISD
-            type: number
-            maximum: 9999
-            minimum: -9999
-          nhise:
-            default: 0
-            title: Number of HISE residue
-            description: Defines the number of HISE residues (neutral HIS with the
-              proton on the NE atom) residues when autohis=false
-            $comment: Defines the number of HISE residues (neutral HIS with the proton
-              on the NE atom) residues. The corresponding residue numbers must be
-              defined in the following parameter (hise_1, hise_2, ...). Add as many
-              as needed. Note that HIS is interpreted as a charged Histidine)
-            type: number
-            maximum: 9999
-            minimum: 0
-          hise_1:
-            title: HISE residue number
-            description: Residue number of the Histidine to be defined as HISE
-            $comment: Residue number of the Histidine to be defined as HISE
-            type: number
-            maximum: 9999
-            minimum: -9999
-        required: []
-        additionalProperties: false
-      mol11:
-        type: object
-        properties:
-          prot_segid:
-            default: K
-            title: Segment ID
-            description: Segment ID assigned to this molecule
-            $comment: Segment ID assigned to this molecule in CNS. Used to distinguish
-              different molecules
-            type: string
-            minLength: 0
-            maxLength: 4
-          cyclicpept:
-            default: false
-            title: Cyclic peptide
-            description: Defines the molecule as a cyclic peptide
-            $comment: This option defines the molecule as a cyclic peptide and HADDOCK
-              will generate a peptide bond between the N- and C-ter provided those
-              are within 2A. This cutoff can be changed in the generate-topology.cns
-              script.
-            type: boolean
-          nhisd:
-            default: 0
-            title: Number of HISD residue
-            description: Defines the number of HISD residues (neutral HIS with the
-              proton on the ND atom) residues when autohis=false
-            $comment: Defines the number of HISD residues (neutral HIS with the proton
-              on the ND atom) residues. The corresponding residue numbers must be
-              defined in the following parameter (hisd_1, hisd_2, ...). Add as many
-              as needed. Note that HIS is interpreted as a charged Histidine)
-            type: number
-            maximum: 9999
-            minimum: 0
-          hisd_1:
-            title: HISD residue number
-            description: Residue number of the Histidine to be defined as HISD
-            $comment: Residue number of the Histidine to be defined as HISD
-            type: number
-            maximum: 9999
-            minimum: -9999
-          nhise:
-            default: 0
-            title: Number of HISE residue
-            description: Defines the number of HISE residues (neutral HIS with the
-              proton on the NE atom) residues when autohis=false
-            $comment: Defines the number of HISE residues (neutral HIS with the proton
-              on the NE atom) residues. The corresponding residue numbers must be
-              defined in the following parameter (hise_1, hise_2, ...). Add as many
-              as needed. Note that HIS is interpreted as a charged Histidine)
-            type: number
-            maximum: 9999
-            minimum: 0
-          hise_1:
-            title: HISE residue number
-            description: Residue number of the Histidine to be defined as HISE
-            $comment: Residue number of the Histidine to be defined as HISE
-            type: number
-            maximum: 9999
-            minimum: -9999
-        required: []
-        additionalProperties: false
-      mol12:
-        type: object
-        properties:
-          prot_segid:
-            default: L
-            title: Segment ID
-            description: Segment ID assigned to this molecule
-            $comment: Segment ID assigned to this molecule in CNS. Used to distinguish
-              different molecules
-            type: string
-            minLength: 0
-            maxLength: 4
-          cyclicpept:
-            default: false
-            title: Cyclic peptide
-            description: Defines the molecule as a cyclic peptide
-            $comment: This option defines the molecule as a cyclic peptide and HADDOCK
-              will generate a peptide bond between the N- and C-ter provided those
-              are within 2A. This cutoff can be changed in the generate-topology.cns
-              script.
-            type: boolean
-          nhisd:
-            default: 0
-            title: Number of HISD residue
-            description: Defines the number of HISD residues (neutral HIS with the
-              proton on the ND atom) residues when autohis=false
-            $comment: Defines the number of HISD residues (neutral HIS with the proton
-              on the ND atom) residues. The corresponding residue numbers must be
-              defined in the following parameter (hisd_1, hisd_2, ...). Add as many
-              as needed. Note that HIS is interpreted as a charged Histidine)
-            type: number
-            maximum: 9999
-            minimum: 0
-          hisd_1:
-            title: HISD residue number
-            description: Residue number of the Histidine to be defined as HISD
-            $comment: Residue number of the Histidine to be defined as HISD
-            type: number
-            maximum: 9999
-            minimum: -9999
-          nhise:
-            default: 0
-            title: Number of HISE residue
-            description: Defines the number of HISE residues (neutral HIS with the
-              proton on the NE atom) residues when autohis=false
-            $comment: Defines the number of HISE residues (neutral HIS with the proton
-              on the NE atom) residues. The corresponding residue numbers must be
-              defined in the following parameter (hise_1, hise_2, ...). Add as many
-              as needed. Note that HIS is interpreted as a charged Histidine)
-            type: number
-            maximum: 9999
-            minimum: 0
-          hise_1:
-            title: HISE residue number
-            description: Residue number of the Histidine to be defined as HISE
-            $comment: Residue number of the Histidine to be defined as HISE
-            type: number
-            maximum: 9999
-            minimum: -9999
-        required: []
-        additionalProperties: false
-      mol13:
-        type: object
-        properties:
-          prot_segid:
-            default: M
-            title: Segment ID
-            description: Segment ID assigned to this molecule
-            $comment: Segment ID assigned to this molecule in CNS. Used to distinguish
-              different molecules
-            type: string
-            minLength: 0
-            maxLength: 4
-          cyclicpept:
-            default: false
-            title: Cyclic peptide
-            description: Defines the molecule as a cyclic peptide
-            $comment: This option defines the molecule as a cyclic peptide and HADDOCK
-              will generate a peptide bond between the N- and C-ter provided those
-              are within 2A. This cutoff can be changed in the generate-topology.cns
-              script.
-            type: boolean
-          nhisd:
-            default: 0
-            title: Number of HISD residue
-            description: Defines the number of HISD residues (neutral HIS with the
-              proton on the ND atom) residues when autohis=false
-            $comment: Defines the number of HISD residues (neutral HIS with the proton
-              on the ND atom) residues. The corresponding residue numbers must be
-              defined in the following parameter (hisd_1, hisd_2, ...). Add as many
-              as needed. Note that HIS is interpreted as a charged Histidine)
-            type: number
-            maximum: 9999
-            minimum: 0
-          hisd_1:
-            title: HISD residue number
-            description: Residue number of the Histidine to be defined as HISD
-            $comment: Residue number of the Histidine to be defined as HISD
-            type: number
-            maximum: 9999
-            minimum: -9999
-          nhise:
-            default: 0
-            title: Number of HISE residue
-            description: Defines the number of HISE residues (neutral HIS with the
-              proton on the NE atom) residues when autohis=false
-            $comment: Defines the number of HISE residues (neutral HIS with the proton
-              on the NE atom) residues. The corresponding residue numbers must be
-              defined in the following parameter (hise_1, hise_2, ...). Add as many
-              as needed. Note that HIS is interpreted as a charged Histidine)
-            type: number
-            maximum: 9999
-            minimum: 0
-          hise_1:
-            title: HISE residue number
-            description: Residue number of the Histidine to be defined as HISE
-            $comment: Residue number of the Histidine to be defined as HISE
-            type: number
-            maximum: 9999
-            minimum: -9999
-        required: []
-        additionalProperties: false
-      mol14:
-        type: object
-        properties:
-          prot_segid:
-            default: N
-            title: Segment ID
-            description: Segment ID assigned to this molecule
-            $comment: Segment ID assigned to this molecule in CNS. Used to distinguish
-              different molecules
-            type: string
-            minLength: 0
-            maxLength: 4
-          cyclicpept:
-            default: false
-            title: Cyclic peptide
-            description: Defines the molecule as a cyclic peptide
-            $comment: This option defines the molecule as a cyclic peptide and HADDOCK
-              will generate a peptide bond between the N- and C-ter provided those
-              are within 2A. This cutoff can be changed in the generate-topology.cns
-              script.
-            type: boolean
-          nhisd:
-            default: 0
-            title: Number of HISD residue
-            description: Defines the number of HISD residues (neutral HIS with the
-              proton on the ND atom) residues when autohis=false
-            $comment: Defines the number of HISD residues (neutral HIS with the proton
-              on the ND atom) residues. The corresponding residue numbers must be
-              defined in the following parameter (hisd_1, hisd_2, ...). Add as many
-              as needed. Note that HIS is interpreted as a charged Histidine)
-            type: number
-            maximum: 9999
-            minimum: 0
-          hisd_1:
-            title: HISD residue number
-            description: Residue number of the Histidine to be defined as HISD
-            $comment: Residue number of the Histidine to be defined as HISD
-            type: number
-            maximum: 9999
-            minimum: -9999
-          nhise:
-            default: 0
-            title: Number of HISE residue
-            description: Defines the number of HISE residues (neutral HIS with the
-              proton on the NE atom) residues when autohis=false
-            $comment: Defines the number of HISE residues (neutral HIS with the proton
-              on the NE atom) residues. The corresponding residue numbers must be
-              defined in the following parameter (hise_1, hise_2, ...). Add as many
-              as needed. Note that HIS is interpreted as a charged Histidine)
-            type: number
-            maximum: 9999
-            minimum: 0
-          hise_1:
-            title: HISE residue number
-            description: Residue number of the Histidine to be defined as HISE
-            $comment: Residue number of the Histidine to be defined as HISE
-            type: number
-            maximum: 9999
-            minimum: -9999
-        required: []
-        additionalProperties: false
-      mol15:
-        type: object
-        properties:
-          prot_segid:
-            default: O
-            title: Segment ID
-            description: Segment ID assigned to this molecule
-            $comment: Segment ID assigned to this molecule in CNS. Used to distinguish
-              different molecules
-            type: string
-            minLength: 0
-            maxLength: 4
-          cyclicpept:
-            default: false
-            title: Cyclic peptide
-            description: Defines the molecule as a cyclic peptide
-            $comment: This option defines the molecule as a cyclic peptide and HADDOCK
-              will generate a peptide bond between the N- and C-ter provided those
-              are within 2A. This cutoff can be changed in the generate-topology.cns
-              script.
-            type: boolean
-          nhisd:
-            default: 0
-            title: Number of HISD residue
-            description: Defines the number of HISD residues (neutral HIS with the
-              proton on the ND atom) residues when autohis=false
-            $comment: Defines the number of HISD residues (neutral HIS with the proton
-              on the ND atom) residues. The corresponding residue numbers must be
-              defined in the following parameter (hisd_1, hisd_2, ...). Add as many
-              as needed. Note that HIS is interpreted as a charged Histidine)
-            type: number
-            maximum: 9999
-            minimum: 0
-          hisd_1:
-            title: HISD residue number
-            description: Residue number of the Histidine to be defined as HISD
-            $comment: Residue number of the Histidine to be defined as HISD
-            type: number
-            maximum: 9999
-            minimum: -9999
-          nhise:
-            default: 0
-            title: Number of HISE residue
-            description: Defines the number of HISE residues (neutral HIS with the
-              proton on the NE atom) residues when autohis=false
-            $comment: Defines the number of HISE residues (neutral HIS with the proton
-              on the NE atom) residues. The corresponding residue numbers must be
-              defined in the following parameter (hise_1, hise_2, ...). Add as many
-              as needed. Note that HIS is interpreted as a charged Histidine)
-            type: number
-            maximum: 9999
-            minimum: 0
-          hise_1:
-            title: HISE residue number
-            description: Residue number of the Histidine to be defined as HISE
-            $comment: Residue number of the Histidine to be defined as HISE
-            type: number
-            maximum: 9999
-            minimum: -9999
-        required: []
-        additionalProperties: false
-      mol16:
-        type: object
-        properties:
-          prot_segid:
-            default: P
-            title: Segment ID
-            description: Segment ID assigned to this molecule
-            $comment: Segment ID assigned to this molecule in CNS. Used to distinguish
-              different molecules
-            type: string
-            minLength: 0
-            maxLength: 4
-          cyclicpept:
-            default: false
-            title: Cyclic peptide
-            description: Defines the molecule as a cyclic peptide
-            $comment: This option defines the molecule as a cyclic peptide and HADDOCK
-              will generate a peptide bond between the N- and C-ter provided those
-              are within 2A. This cutoff can be changed in the generate-topology.cns
-              script.
-            type: boolean
-          nhisd:
-            default: 0
-            title: Number of HISD residue
-            description: Defines the number of HISD residues (neutral HIS with the
-              proton on the ND atom) residues when autohis=false
-            $comment: Defines the number of HISD residues (neutral HIS with the proton
-              on the ND atom) residues. The corresponding residue numbers must be
-              defined in the following parameter (hisd_1, hisd_2, ...). Add as many
-              as needed. Note that HIS is interpreted as a charged Histidine)
-            type: number
-            maximum: 9999
-            minimum: 0
-          hisd_1:
-            title: HISD residue number
-            description: Residue number of the Histidine to be defined as HISD
-            $comment: Residue number of the Histidine to be defined as HISD
-            type: number
-            maximum: 9999
-            minimum: -9999
-          nhise:
-            default: 0
-            title: Number of HISE residue
-            description: Defines the number of HISE residues (neutral HIS with the
-              proton on the NE atom) residues when autohis=false
-            $comment: Defines the number of HISE residues (neutral HIS with the proton
-              on the NE atom) residues. The corresponding residue numbers must be
-              defined in the following parameter (hise_1, hise_2, ...). Add as many
-              as needed. Note that HIS is interpreted as a charged Histidine)
-            type: number
-            maximum: 9999
-            minimum: 0
-          hise_1:
-            title: HISE residue number
-            description: Residue number of the Histidine to be defined as HISE
-            $comment: Residue number of the Histidine to be defined as HISE
-            type: number
-            maximum: 9999
-            minimum: -9999
-        required: []
-        additionalProperties: false
-      mol17:
-        type: object
-        properties:
-          prot_segid:
-            default: Q
-            title: Segment ID
-            description: Segment ID assigned to this molecule
-            $comment: Segment ID assigned to this molecule in CNS. Used to distinguish
-              different molecules
-            type: string
-            minLength: 0
-            maxLength: 4
-          cyclicpept:
-            default: false
-            title: Cyclic peptide
-            description: Defines the molecule as a cyclic peptide
-            $comment: This option defines the molecule as a cyclic peptide and HADDOCK
-              will generate a peptide bond between the N- and C-ter provided those
-              are within 2A. This cutoff can be changed in the generate-topology.cns
-              script.
-            type: boolean
-          nhisd:
-            default: 0
-            title: Number of HISD residue
-            description: Defines the number of HISD residues (neutral HIS with the
-              proton on the ND atom) residues when autohis=false
-            $comment: Defines the number of HISD residues (neutral HIS with the proton
-              on the ND atom) residues. The corresponding residue numbers must be
-              defined in the following parameter (hisd_1, hisd_2, ...). Add as many
-              as needed. Note that HIS is interpreted as a charged Histidine)
-            type: number
-            maximum: 9999
-            minimum: 0
-          hisd_1:
-            title: HISD residue number
-            description: Residue number of the Histidine to be defined as HISD
-            $comment: Residue number of the Histidine to be defined as HISD
-            type: number
-            maximum: 9999
-            minimum: -9999
-          nhise:
-            default: 0
-            title: Number of HISE residue
-            description: Defines the number of HISE residues (neutral HIS with the
-              proton on the NE atom) residues when autohis=false
-            $comment: Defines the number of HISE residues (neutral HIS with the proton
-              on the NE atom) residues. The corresponding residue numbers must be
-              defined in the following parameter (hise_1, hise_2, ...). Add as many
-              as needed. Note that HIS is interpreted as a charged Histidine)
-            type: number
-            maximum: 9999
-            minimum: 0
-          hise_1:
-            title: HISE residue number
-            description: Residue number of the Histidine to be defined as HISE
-            $comment: Residue number of the Histidine to be defined as HISE
-            type: number
-            maximum: 9999
-            minimum: -9999
-        required: []
-        additionalProperties: false
-      mol18:
-        type: object
-        properties:
-          prot_segid:
-            default: R
-            title: Segment ID
-            description: Segment ID assigned to this molecule
-            $comment: Segment ID assigned to this molecule in CNS. Used to distinguish
-              different molecules
-            type: string
-            minLength: 0
-            maxLength: 4
-          cyclicpept:
-            default: false
-            title: Cyclic peptide
-            description: Defines the molecule as a cyclic peptide
-            $comment: This option defines the molecule as a cyclic peptide and HADDOCK
-              will generate a peptide bond between the N- and C-ter provided those
-              are within 2A. This cutoff can be changed in the generate-topology.cns
-              script.
-            type: boolean
-          nhisd:
-            default: 0
-            title: Number of HISD residue
-            description: Defines the number of HISD residues (neutral HIS with the
-              proton on the ND atom) residues when autohis=false
-            $comment: Defines the number of HISD residues (neutral HIS with the proton
-              on the ND atom) residues. The corresponding residue numbers must be
-              defined in the following parameter (hisd_1, hisd_2, ...). Add as many
-              as needed. Note that HIS is interpreted as a charged Histidine)
-            type: number
-            maximum: 9999
-            minimum: 0
-          hisd_1:
-            title: HISD residue number
-            description: Residue number of the Histidine to be defined as HISD
-            $comment: Residue number of the Histidine to be defined as HISD
-            type: number
-            maximum: 9999
-            minimum: -9999
-          nhise:
-            default: 0
-            title: Number of HISE residue
-            description: Defines the number of HISE residues (neutral HIS with the
-              proton on the NE atom) residues when autohis=false
-            $comment: Defines the number of HISE residues (neutral HIS with the proton
-              on the NE atom) residues. The corresponding residue numbers must be
-              defined in the following parameter (hise_1, hise_2, ...). Add as many
-              as needed. Note that HIS is interpreted as a charged Histidine)
-            type: number
-            maximum: 9999
-            minimum: 0
-          hise_1:
-            title: HISE residue number
-            description: Residue number of the Histidine to be defined as HISE
-            $comment: Residue number of the Histidine to be defined as HISE
-            type: number
-            maximum: 9999
-            minimum: -9999
-        required: []
-        additionalProperties: false
-      mol19:
-        type: object
-        properties:
-          prot_segid:
-            default: S
-            title: Segment ID
-            description: Segment ID assigned to this molecule
-            $comment: Segment ID assigned to this molecule in CNS. Used to distinguish
-              different molecules
-            type: string
-            minLength: 0
-            maxLength: 4
-          cyclicpept:
-            default: false
-            title: Cyclic peptide
-            description: Defines the molecule as a cyclic peptide
-            $comment: This option defines the molecule as a cyclic peptide and HADDOCK
-              will generate a peptide bond between the N- and C-ter provided those
-              are within 2A. This cutoff can be changed in the generate-topology.cns
-              script.
-            type: boolean
-          nhisd:
-            default: 0
-            title: Number of HISD residue
-            description: Defines the number of HISD residues (neutral HIS with the
-              proton on the ND atom) residues when autohis=false
-            $comment: Defines the number of HISD residues (neutral HIS with the proton
-              on the ND atom) residues. The corresponding residue numbers must be
-              defined in the following parameter (hisd_1, hisd_2, ...). Add as many
-              as needed. Note that HIS is interpreted as a charged Histidine)
-            type: number
-            maximum: 9999
-            minimum: 0
-          hisd_1:
-            title: HISD residue number
-            description: Residue number of the Histidine to be defined as HISD
-            $comment: Residue number of the Histidine to be defined as HISD
-            type: number
-            maximum: 9999
-            minimum: -9999
-          nhise:
-            default: 0
-            title: Number of HISE residue
-            description: Defines the number of HISE residues (neutral HIS with the
-              proton on the NE atom) residues when autohis=false
-            $comment: Defines the number of HISE residues (neutral HIS with the proton
-              on the NE atom) residues. The corresponding residue numbers must be
-              defined in the following parameter (hise_1, hise_2, ...). Add as many
-              as needed. Note that HIS is interpreted as a charged Histidine)
-            type: number
-            maximum: 9999
-            minimum: 0
-          hise_1:
-            title: HISE residue number
-            description: Residue number of the Histidine to be defined as HISE
-            $comment: Residue number of the Histidine to be defined as HISE
-            type: number
-            maximum: 9999
-            minimum: -9999
-        required: []
-        additionalProperties: false
-      mol20:
-        type: object
-        properties:
-          prot_segid:
-            default: T
-            title: Segment ID
-            description: Segment ID assigned to this molecule
-            $comment: Segment ID assigned to this molecule in CNS. Used to distinguish
-              different molecules
-            type: string
-            minLength: 0
-            maxLength: 4
-          cyclicpept:
-            default: false
-            title: Cyclic peptide
-            description: Defines the molecule as a cyclic peptide
-            $comment: This option defines the molecule as a cyclic peptide and HADDOCK
-              will generate a peptide bond between the N- and C-ter provided those
-              are within 2A. This cutoff can be changed in the generate-topology.cns
-              script.
-            type: boolean
-          nhisd:
-            default: 0
-            title: Number of HISD residue
-            description: Defines the number of HISD residues (neutral HIS with the
-              proton on the ND atom) residues when autohis=false
-            $comment: Defines the number of HISD residues (neutral HIS with the proton
-              on the ND atom) residues. The corresponding residue numbers must be
-              defined in the following parameter (hisd_1, hisd_2, ...). Add as many
-              as needed. Note that HIS is interpreted as a charged Histidine)
-            type: number
-            maximum: 9999
-            minimum: 0
-          hisd_1:
-            title: HISD residue number
-            description: Residue number of the Histidine to be defined as HISD
-            $comment: Residue number of the Histidine to be defined as HISD
-            type: number
-            maximum: 9999
-            minimum: -9999
-          nhise:
-            default: 0
-            title: Number of HISE residue
-            description: Defines the number of HISE residues (neutral HIS with the
-              proton on the NE atom) residues when autohis=false
-            $comment: Defines the number of HISE residues (neutral HIS with the proton
-              on the NE atom) residues. The corresponding residue numbers must be
-              defined in the following parameter (hise_1, hise_2, ...). Add as many
-              as needed. Note that HIS is interpreted as a charged Histidine)
-            type: number
-            maximum: 9999
-            minimum: 0
-          hise_1:
-            title: HISE residue number
-            description: Residue number of the Histidine to be defined as HISE
-            $comment: Residue number of the Histidine to be defined as HISE
-            type: number
-            maximum: 9999
-            minimum: -9999
-        required: []
-        additionalProperties: false
+      executable:
+        type: string
+        format: uri-reference
+      contact_distance_cutoff:
+        default: 5.0
+        type: number
+        maximum: 9999
+        minimum: -9999
+      fraction_cutoff:
+        default: 0.6
+        type: number
+        maximum: 9999
+        minimum: -9999
+      threshold:
+        default: 4
+        type: number
+        maximum: 9999
+        minimum: -9999
+      strictness:
+        default: 0.75
+        type: number
+        maximum: 9999
+        minimum: -9999
     required: []
     additionalProperties: false
   uiSchema:
-    delenph:
-      ui:group: molecule
-    mol1:
-      mol1:
-        prot_segid:
-          ui:group: molecule
-        cyclicpept:
-          ui:group: molecule
-        nhisd:
-          ui:group: molecule
-        hisd_1:
-          ui:group: molecule
-        nhise:
-          ui:group: molecule
-        hise_1:
-          ui:group: molecule
-    mol2:
-      mol2:
-        prot_segid:
-          ui:group: molecule
-        cyclicpept:
-          ui:group: molecule
-        nhisd:
-          ui:group: molecule
-        hisd_1:
-          ui:group: molecule
-        nhise:
-          ui:group: molecule
-        hise_1:
-          ui:group: molecule
-    mol3:
-      mol3:
-        prot_segid:
-          ui:group: molecule
-        cyclicpept:
-          ui:group: molecule
-        nhisd:
-          ui:group: molecule
-        hisd_1:
-          ui:group: molecule
-        nhise:
-          ui:group: molecule
-        hise_1:
-          ui:group: molecule
-    mol4:
-      mol4:
-        prot_segid:
-          ui:group: molecule
-        cyclicpept:
-          ui:group: molecule
-        nhisd:
-          ui:group: molecule
-        hisd_1:
-          ui:group: molecule
-        nhise:
-          ui:group: molecule
-        hise_1:
-          ui:group: molecule
-    mol5:
-      mol5:
-        prot_segid:
-          ui:group: molecule
-        cyclicpept:
-          ui:group: molecule
-        nhisd:
-          ui:group: molecule
-        hisd_1:
-          ui:group: molecule
-        nhise:
-          ui:group: molecule
-        hise_1:
-          ui:group: molecule
-    mol6:
-      mol6:
-        prot_segid:
-          ui:group: molecule
-        cyclicpept:
-          ui:group: molecule
-        nhisd:
-          ui:group: molecule
-        hisd_1:
-          ui:group: molecule
-        nhise:
-          ui:group: molecule
-        hise_1:
-          ui:group: molecule
-    mol7:
-      mol7:
-        prot_segid:
-          ui:group: molecule
-        cyclicpept:
-          ui:group: molecule
-        nhisd:
-          ui:group: molecule
-        hisd_1:
-          ui:group: molecule
-        nhise:
-          ui:group: molecule
-        hise_1:
-          ui:group: molecule
-    mol8:
-      mol8:
-        prot_segid:
-          ui:group: molecule
-        cyclicpept:
-          ui:group: molecule
-        nhisd:
-          ui:group: molecule
-        hisd_1:
-          ui:group: molecule
-        nhise:
-          ui:group: molecule
-        hise_1:
-          ui:group: molecule
-    mol9:
-      mol9:
-        prot_segid:
-          ui:group: molecule
-        cyclicpept:
-          ui:group: molecule
-        nhisd:
-          ui:group: molecule
-        hisd_1:
-          ui:group: molecule
-        nhise:
-          ui:group: molecule
-        hise_1:
-          ui:group: molecule
-    mol10:
-      mol10:
-        prot_segid:
-          ui:group: molecule
-        cyclicpept:
-          ui:group: molecule
-        nhisd:
-          ui:group: molecule
-        hisd_1:
-          ui:group: molecule
-        nhise:
-          ui:group: molecule
-        hise_1:
-          ui:group: molecule
-    mol11:
-      mol11:
-        prot_segid:
-          ui:group: molecule
-        cyclicpept:
-          ui:group: molecule
-        nhisd:
-          ui:group: molecule
-        hisd_1:
-          ui:group: molecule
-        nhise:
-          ui:group: molecule
-        hise_1:
-          ui:group: molecule
-    mol12:
-      mol12:
-        prot_segid:
-          ui:group: molecule
-        cyclicpept:
-          ui:group: molecule
-        nhisd:
-          ui:group: molecule
-        hisd_1:
-          ui:group: molecule
-        nhise:
-          ui:group: molecule
-        hise_1:
-          ui:group: molecule
-    mol13:
-      mol13:
-        prot_segid:
-          ui:group: molecule
-        cyclicpept:
-          ui:group: molecule
-        nhisd:
-          ui:group: molecule
-        hisd_1:
-          ui:group: molecule
-        nhise:
-          ui:group: molecule
-        hise_1:
-          ui:group: molecule
-    mol14:
-      mol14:
-        prot_segid:
-          ui:group: molecule
-        cyclicpept:
-          ui:group: molecule
-        nhisd:
-          ui:group: molecule
-        hisd_1:
-          ui:group: molecule
-        nhise:
-          ui:group: molecule
-        hise_1:
-          ui:group: molecule
-    mol15:
-      mol15:
-        prot_segid:
-          ui:group: molecule
-        cyclicpept:
-          ui:group: molecule
-        nhisd:
-          ui:group: molecule
-        hisd_1:
-          ui:group: molecule
-        nhise:
-          ui:group: molecule
-        hise_1:
-          ui:group: molecule
-    mol16:
-      mol16:
-        prot_segid:
-          ui:group: molecule
-        cyclicpept:
-          ui:group: molecule
-        nhisd:
-          ui:group: molecule
-        hisd_1:
-          ui:group: molecule
-        nhise:
-          ui:group: molecule
-        hise_1:
-          ui:group: molecule
-    mol17:
-      mol17:
-        prot_segid:
-          ui:group: molecule
-        cyclicpept:
-          ui:group: molecule
-        nhisd:
-          ui:group: molecule
-        hisd_1:
-          ui:group: molecule
-        nhise:
-          ui:group: molecule
-        hise_1:
-          ui:group: molecule
-    mol18:
-      mol18:
-        prot_segid:
-          ui:group: molecule
-        cyclicpept:
-          ui:group: molecule
-        nhisd:
-          ui:group: molecule
-        hisd_1:
-          ui:group: molecule
-        nhise:
-          ui:group: molecule
-        hise_1:
-          ui:group: molecule
-    mol19:
-      mol19:
-        prot_segid:
-          ui:group: molecule
-        cyclicpept:
-          ui:group: molecule
-        nhisd:
-          ui:group: molecule
-        hisd_1:
-          ui:group: molecule
-        nhise:
-          ui:group: molecule
-        hise_1:
-          ui:group: molecule
-    mol20:
-      mol20:
-        prot_segid:
-          ui:group: molecule
-        cyclicpept:
-          ui:group: molecule
-        nhisd:
-          ui:group: molecule
-        hisd_1:
-          ui:group: molecule
-        nhise:
-          ui:group: molecule
-        hise_1:
-          ui:group: molecule
+    executable:
+      ui:widget: file
+- id: seletop
+  category: analysis
+  label: HADDOCK3 module to select a top cluster/model.
+  description: HADDOCK3 module to select top cluster/model.
+  schema:
+    type: object
+    properties:
+      select:
+        default: 200
+        type: number
+        maximum: 9999
+        minimum: -9999
+    required: []
+    additionalProperties: false
+  uiSchema: {}
+- id: seletopclusts
+  category: analysis
+  label: HADDOCK3 module to select a top cluster/model.
+  description: Haddock Module for 'seletopclusts'.
+  schema:
+    type: object
+    properties:
+      top_cluster:
+        default: []
+        type: array
+        minItems: 0
+        maxItems: 100
+        items:
+          type: number
+      top_models:
+        type: number
+        maximum: 9999
+        minimum: -9999
+    required: []
+    additionalProperties: false
+  uiSchema: {}
 - id: caprieval
   category: analysis
   label: Calculate CAPRI metrics.
@@ -1688,152 +234,6 @@ nodes:
   uiSchema:
     reference_fname:
       ui:widget: file
-- id: seletop
-  category: analysis
-  label: HADDOCK3 module to select a top cluster/model.
-  description: HADDOCK3 module to select top cluster/model.
-  schema:
-    type: object
-    properties:
-      select:
-        default: 200
-        type: number
-        maximum: 9999
-        minimum: -9999
-    required: []
-    additionalProperties: false
-  uiSchema: {}
-- id: clustfcc
-  category: analysis
-  label: HADDOCK3 FCC clustering module.
-  description: HADDOCK3 module for clustering with FCC.
-  schema:
-    type: object
-    properties:
-      executable:
-        default: src/contact_fcc
-        type: string
-        format: uri-reference
-      contact_distance_cutoff:
-        default: 5.0
-        type: number
-        maximum: 9999
-        minimum: -9999
-      fraction_cutoff:
-        default: 0.6
-        type: number
-        maximum: 9999
-        minimum: -9999
-      threshold:
-        default: 4
-        type: number
-        maximum: 9999
-        minimum: -9999
-      strictness:
-        default: 0.75
-        type: number
-        maximum: 9999
-        minimum: -9999
-    required: []
-    additionalProperties: false
-  uiSchema:
-    executable:
-      ui:widget: file
-- id: seletopclusts
-  category: analysis
-  label: HADDOCK3 module to select a top cluster/model.
-  description: Haddock Module for 'seletopclusts'.
-  schema:
-    type: object
-    properties:
-      top_cluster:
-        default: []
-        type: array
-        minItems: 0
-        maxItems: 100
-        items:
-          type: number
-      top_models:
-        type: number
-        maximum: 9999
-        minimum: -9999
-    required: []
-    additionalProperties: false
-  uiSchema: {}
-- id: lightdock
-  category: sampling
-  label: Run Lightdock as a HADDOCK3 module.
-  description: HADDOCK3 Lightdock module.
-  schema:
-    type: object
-    properties:
-      glowworms:
-        default: 200
-        type: number
-        maximum: 9999
-        minimum: -9999
-      steps:
-        default: 100
-        type: number
-        maximum: 9999
-        minimum: -9999
-      swarms:
-        default: 400
-        type: number
-        maximum: 9999
-        minimum: -9999
-      scoring:
-        default: fastdfire
-        type: string
-        minLength: 0
-        maxLength: 100
-      top:
-        default: 10
-        type: number
-        maximum: 9999
-        minimum: -9999
-      receptor_chains:
-        default: A
-        type: string
-        minLength: 0
-        maxLength: 100
-      receptor_active:
-        default: ''
-        type: string
-        minLength: 0
-        maxLength: 100
-      receptor_passive:
-        default: ''
-        type: string
-        minLength: 0
-        maxLength: 100
-      ligand_chains:
-        default: B
-        type: string
-        minLength: 0
-        maxLength: 100
-      ligand_active:
-        default: ''
-        type: string
-        minLength: 0
-        maxLength: 100
-      ligand_passive:
-        default: ''
-        type: string
-        minLength: 0
-        maxLength: 100
-      noxt:
-        default: true
-        type: boolean
-      noh:
-        default: true
-        type: boolean
-      restraints:
-        default: false
-        type: boolean
-    required: []
-    additionalProperties: false
-  uiSchema: {}
 - id: gdock
   category: sampling
   label: HADDOCK3 gdock integration module.
@@ -4108,10 +2508,1813 @@ nodes:
       ui:widget: file
     ligand_top_fname:
       ui:widget: file
-- id: emref
+- id: lightdock
+  category: sampling
+  label: Run Lightdock as a HADDOCK3 module.
+  description: HADDOCK3 Lightdock module.
+  schema:
+    type: object
+    properties:
+      glowworms:
+        default: 200
+        type: number
+        maximum: 9999
+        minimum: -9999
+      steps:
+        default: 100
+        type: number
+        maximum: 9999
+        minimum: -9999
+      swarms:
+        default: 400
+        type: number
+        maximum: 9999
+        minimum: -9999
+      scoring:
+        default: fastdfire
+        type: string
+        minLength: 0
+        maxLength: 100
+      top:
+        default: 10
+        type: number
+        maximum: 9999
+        minimum: -9999
+      receptor_chains:
+        default: A
+        type: string
+        minLength: 0
+        maxLength: 100
+      receptor_active:
+        default: ''
+        type: string
+        minLength: 0
+        maxLength: 100
+      receptor_passive:
+        default: ''
+        type: string
+        minLength: 0
+        maxLength: 100
+      ligand_chains:
+        default: B
+        type: string
+        minLength: 0
+        maxLength: 100
+      ligand_active:
+        default: ''
+        type: string
+        minLength: 0
+        maxLength: 100
+      ligand_passive:
+        default: ''
+        type: string
+        minLength: 0
+        maxLength: 100
+      noxt:
+        default: true
+        type: boolean
+      noh:
+        default: true
+        type: boolean
+      restraints:
+        default: false
+        type: boolean
+    required: []
+    additionalProperties: false
+  uiSchema: {}
+- id: topoaa
+  category: topology
+  label: Create and manage CNS all-atom topology.
+  description: HADDOCK3 module to create CNS all-atom topologies.
+  schema:
+    type: object
+    properties:
+      delenph:
+        default: true
+        title: Keep or remove non-polar hydrogen atoms
+        description: If set to true, non-polar hydrogen atoms will be discarded to
+          save computing time
+        $comment: Since HADDOCK uses a united atom force field, the non-polar hydrogen
+          atoms can be in principle discarded. This saves computing time. However
+          this should not be done if you are defining distance restraints to specific
+          hydrogen atoms (e.g. when using NMR distance restraints).
+        type: boolean
+      limit:
+        default: true
+        type: boolean
+      mol1:
+        type: object
+        properties:
+          prot_segid:
+            default: A
+            title: Segment ID
+            description: Segment ID assigned to this molecule
+            $comment: Segment ID assigned to this molecule in CNS. Used to distinguish
+              different molecules
+            type: string
+            minLength: 0
+            maxLength: 4
+          cyclicpept:
+            default: false
+            title: Cyclic peptide
+            description: Defines the molecule as a cyclic peptide
+            $comment: This option defines the molecule as a cyclic peptide and HADDOCK
+              will generate a peptide bond between the N- and C-ter provided those
+              are within 2A. This cutoff can be changed in the generate-topology.cns
+              script.
+            type: boolean
+          nhisd:
+            default: 0
+            title: Number of HISD residue
+            description: Defines the number of HISD residues (neutral HIS with the
+              proton on the ND atom) residues when autohis=false
+            $comment: Defines the number of HISD residues (neutral HIS with the proton
+              on the ND atom) residues. The corresponding residue numbers must be
+              defined in the following parameter (hisd_1, hisd_2, ...). Add as many
+              as needed. Note that HIS is interpreted as a charged Histidine)
+            type: number
+            maximum: 9999
+            minimum: 0
+          hisd_1:
+            title: HISD residue number
+            description: Residue number of the Histidine to be defined as HISD
+            $comment: Residue number of the Histidine to be defined as HISD
+            type: number
+            maximum: 9999
+            minimum: -9999
+          nhise:
+            default: 0
+            title: Number of HISE residue
+            description: Defines the number of HISE residues (neutral HIS with the
+              proton on the NE atom) residues when autohis=false
+            $comment: Defines the number of HISE residues (neutral HIS with the proton
+              on the NE atom) residues. The corresponding residue numbers must be
+              defined in the following parameter (hise_1, hise_2, ...). Add as many
+              as needed. Note that HIS is interpreted as a charged Histidine)
+            type: number
+            maximum: 9999
+            minimum: 0
+          hise_1:
+            title: HISE residue number
+            description: Residue number of the Histidine to be defined as HISE
+            $comment: Residue number of the Histidine to be defined as HISE
+            type: number
+            maximum: 9999
+            minimum: -9999
+        required: []
+        additionalProperties: false
+      mol2:
+        type: object
+        properties:
+          prot_segid:
+            default: B
+            title: Segment ID
+            description: Segment ID assigned to this molecule
+            $comment: Segment ID assigned to this molecule in CNS. Used to distinguish
+              different molecules
+            type: string
+            minLength: 0
+            maxLength: 4
+          cyclicpept:
+            default: false
+            title: Cyclic peptide
+            description: Defines the molecule as a cyclic peptide
+            $comment: This option defines the molecule as a cyclic peptide and HADDOCK
+              will generate a peptide bond between the N- and C-ter provided those
+              are within 2A. This cutoff can be changed in the generate-topology.cns
+              script.
+            type: boolean
+          nhisd:
+            default: 0
+            title: Number of HISD residue
+            description: Defines the number of HISD residues (neutral HIS with the
+              proton on the ND atom) residues when autohis=false
+            $comment: Defines the number of HISD residues (neutral HIS with the proton
+              on the ND atom) residues. The corresponding residue numbers must be
+              defined in the following parameter (hisd_1, hisd_2, ...). Add as many
+              as needed. Note that HIS is interpreted as a charged Histidine)
+            type: number
+            maximum: 9999
+            minimum: 0
+          hisd_1:
+            title: HISD residue number
+            description: Residue number of the Histidine to be defined as HISD
+            $comment: Residue number of the Histidine to be defined as HISD
+            type: number
+            maximum: 9999
+            minimum: -9999
+          nhise:
+            default: 0
+            title: Number of HISE residue
+            description: Defines the number of HISE residues (neutral HIS with the
+              proton on the NE atom) residues when autohis=false
+            $comment: Defines the number of HISE residues (neutral HIS with the proton
+              on the NE atom) residues. The corresponding residue numbers must be
+              defined in the following parameter (hise_1, hise_2, ...). Add as many
+              as needed. Note that HIS is interpreted as a charged Histidine)
+            type: number
+            maximum: 9999
+            minimum: 0
+          hise_1:
+            title: HISE residue number
+            description: Residue number of the Histidine to be defined as HISE
+            $comment: Residue number of the Histidine to be defined as HISE
+            type: number
+            maximum: 9999
+            minimum: -9999
+        required: []
+        additionalProperties: false
+      mol3:
+        type: object
+        properties:
+          prot_segid:
+            default: C
+            title: Segment ID
+            description: Segment ID assigned to this molecule
+            $comment: Segment ID assigned to this molecule in CNS. Used to distinguish
+              different molecules
+            type: string
+            minLength: 0
+            maxLength: 4
+          cyclicpept:
+            default: false
+            title: Cyclic peptide
+            description: Defines the molecule as a cyclic peptide
+            $comment: This option defines the molecule as a cyclic peptide and HADDOCK
+              will generate a peptide bond between the N- and C-ter provided those
+              are within 2A. This cutoff can be changed in the generate-topology.cns
+              script.
+            type: boolean
+          nhisd:
+            default: 0
+            title: Number of HISD residue
+            description: Defines the number of HISD residues (neutral HIS with the
+              proton on the ND atom) residues when autohis=false
+            $comment: Defines the number of HISD residues (neutral HIS with the proton
+              on the ND atom) residues. The corresponding residue numbers must be
+              defined in the following parameter (hisd_1, hisd_2, ...). Add as many
+              as needed. Note that HIS is interpreted as a charged Histidine)
+            type: number
+            maximum: 9999
+            minimum: 0
+          hisd_1:
+            title: HISD residue number
+            description: Residue number of the Histidine to be defined as HISD
+            $comment: Residue number of the Histidine to be defined as HISD
+            type: number
+            maximum: 9999
+            minimum: -9999
+          nhise:
+            default: 0
+            title: Number of HISE residue
+            description: Defines the number of HISE residues (neutral HIS with the
+              proton on the NE atom) residues when autohis=false
+            $comment: Defines the number of HISE residues (neutral HIS with the proton
+              on the NE atom) residues. The corresponding residue numbers must be
+              defined in the following parameter (hise_1, hise_2, ...). Add as many
+              as needed. Note that HIS is interpreted as a charged Histidine)
+            type: number
+            maximum: 9999
+            minimum: 0
+          hise_1:
+            title: HISE residue number
+            description: Residue number of the Histidine to be defined as HISE
+            $comment: Residue number of the Histidine to be defined as HISE
+            type: number
+            maximum: 9999
+            minimum: -9999
+        required: []
+        additionalProperties: false
+      mol4:
+        type: object
+        properties:
+          prot_segid:
+            default: D
+            title: Segment ID
+            description: Segment ID assigned to this molecule
+            $comment: Segment ID assigned to this molecule in CNS. Used to distinguish
+              different molecules
+            type: string
+            minLength: 0
+            maxLength: 4
+          cyclicpept:
+            default: false
+            title: Cyclic peptide
+            description: Defines the molecule as a cyclic peptide
+            $comment: This option defines the molecule as a cyclic peptide and HADDOCK
+              will generate a peptide bond between the N- and C-ter provided those
+              are within 2A. This cutoff can be changed in the generate-topology.cns
+              script.
+            type: boolean
+          nhisd:
+            default: 0
+            title: Number of HISD residue
+            description: Defines the number of HISD residues (neutral HIS with the
+              proton on the ND atom) residues when autohis=false
+            $comment: Defines the number of HISD residues (neutral HIS with the proton
+              on the ND atom) residues. The corresponding residue numbers must be
+              defined in the following parameter (hisd_1, hisd_2, ...). Add as many
+              as needed. Note that HIS is interpreted as a charged Histidine)
+            type: number
+            maximum: 9999
+            minimum: 0
+          hisd_1:
+            title: HISD residue number
+            description: Residue number of the Histidine to be defined as HISD
+            $comment: Residue number of the Histidine to be defined as HISD
+            type: number
+            maximum: 9999
+            minimum: -9999
+          nhise:
+            default: 0
+            title: Number of HISE residue
+            description: Defines the number of HISE residues (neutral HIS with the
+              proton on the NE atom) residues when autohis=false
+            $comment: Defines the number of HISE residues (neutral HIS with the proton
+              on the NE atom) residues. The corresponding residue numbers must be
+              defined in the following parameter (hise_1, hise_2, ...). Add as many
+              as needed. Note that HIS is interpreted as a charged Histidine)
+            type: number
+            maximum: 9999
+            minimum: 0
+          hise_1:
+            title: HISE residue number
+            description: Residue number of the Histidine to be defined as HISE
+            $comment: Residue number of the Histidine to be defined as HISE
+            type: number
+            maximum: 9999
+            minimum: -9999
+        required: []
+        additionalProperties: false
+      mol5:
+        type: object
+        properties:
+          prot_segid:
+            default: E
+            title: Segment ID
+            description: Segment ID assigned to this molecule
+            $comment: Segment ID assigned to this molecule in CNS. Used to distinguish
+              different molecules
+            type: string
+            minLength: 0
+            maxLength: 4
+          cyclicpept:
+            default: false
+            title: Cyclic peptide
+            description: Defines the molecule as a cyclic peptide
+            $comment: This option defines the molecule as a cyclic peptide and HADDOCK
+              will generate a peptide bond between the N- and C-ter provided those
+              are within 2A. This cutoff can be changed in the generate-topology.cns
+              script.
+            type: boolean
+          nhisd:
+            default: 0
+            title: Number of HISD residue
+            description: Defines the number of HISD residues (neutral HIS with the
+              proton on the ND atom) residues when autohis=false
+            $comment: Defines the number of HISD residues (neutral HIS with the proton
+              on the ND atom) residues. The corresponding residue numbers must be
+              defined in the following parameter (hisd_1, hisd_2, ...). Add as many
+              as needed. Note that HIS is interpreted as a charged Histidine)
+            type: number
+            maximum: 9999
+            minimum: 0
+          hisd_1:
+            title: HISD residue number
+            description: Residue number of the Histidine to be defined as HISD
+            $comment: Residue number of the Histidine to be defined as HISD
+            type: number
+            maximum: 9999
+            minimum: -9999
+          nhise:
+            default: 0
+            title: Number of HISE residue
+            description: Defines the number of HISE residues (neutral HIS with the
+              proton on the NE atom) residues when autohis=false
+            $comment: Defines the number of HISE residues (neutral HIS with the proton
+              on the NE atom) residues. The corresponding residue numbers must be
+              defined in the following parameter (hise_1, hise_2, ...). Add as many
+              as needed. Note that HIS is interpreted as a charged Histidine)
+            type: number
+            maximum: 9999
+            minimum: 0
+          hise_1:
+            title: HISE residue number
+            description: Residue number of the Histidine to be defined as HISE
+            $comment: Residue number of the Histidine to be defined as HISE
+            type: number
+            maximum: 9999
+            minimum: -9999
+        required: []
+        additionalProperties: false
+      mol6:
+        type: object
+        properties:
+          prot_segid:
+            default: F
+            title: Segment ID
+            description: Segment ID assigned to this molecule
+            $comment: Segment ID assigned to this molecule in CNS. Used to distinguish
+              different molecules
+            type: string
+            minLength: 0
+            maxLength: 4
+          cyclicpept:
+            default: false
+            title: Cyclic peptide
+            description: Defines the molecule as a cyclic peptide
+            $comment: This option defines the molecule as a cyclic peptide and HADDOCK
+              will generate a peptide bond between the N- and C-ter provided those
+              are within 2A. This cutoff can be changed in the generate-topology.cns
+              script.
+            type: boolean
+          nhisd:
+            default: 0
+            title: Number of HISD residue
+            description: Defines the number of HISD residues (neutral HIS with the
+              proton on the ND atom) residues when autohis=false
+            $comment: Defines the number of HISD residues (neutral HIS with the proton
+              on the ND atom) residues. The corresponding residue numbers must be
+              defined in the following parameter (hisd_1, hisd_2, ...). Add as many
+              as needed. Note that HIS is interpreted as a charged Histidine)
+            type: number
+            maximum: 9999
+            minimum: 0
+          hisd_1:
+            title: HISD residue number
+            description: Residue number of the Histidine to be defined as HISD
+            $comment: Residue number of the Histidine to be defined as HISD
+            type: number
+            maximum: 9999
+            minimum: -9999
+          nhise:
+            default: 0
+            title: Number of HISE residue
+            description: Defines the number of HISE residues (neutral HIS with the
+              proton on the NE atom) residues when autohis=false
+            $comment: Defines the number of HISE residues (neutral HIS with the proton
+              on the NE atom) residues. The corresponding residue numbers must be
+              defined in the following parameter (hise_1, hise_2, ...). Add as many
+              as needed. Note that HIS is interpreted as a charged Histidine)
+            type: number
+            maximum: 9999
+            minimum: 0
+          hise_1:
+            title: HISE residue number
+            description: Residue number of the Histidine to be defined as HISE
+            $comment: Residue number of the Histidine to be defined as HISE
+            type: number
+            maximum: 9999
+            minimum: -9999
+        required: []
+        additionalProperties: false
+      mol7:
+        type: object
+        properties:
+          prot_segid:
+            default: G
+            title: Segment ID
+            description: Segment ID assigned to this molecule
+            $comment: Segment ID assigned to this molecule in CNS. Used to distinguish
+              different molecules
+            type: string
+            minLength: 0
+            maxLength: 4
+          cyclicpept:
+            default: false
+            title: Cyclic peptide
+            description: Defines the molecule as a cyclic peptide
+            $comment: This option defines the molecule as a cyclic peptide and HADDOCK
+              will generate a peptide bond between the N- and C-ter provided those
+              are within 2A. This cutoff can be changed in the generate-topology.cns
+              script.
+            type: boolean
+          nhisd:
+            default: 0
+            title: Number of HISD residue
+            description: Defines the number of HISD residues (neutral HIS with the
+              proton on the ND atom) residues when autohis=false
+            $comment: Defines the number of HISD residues (neutral HIS with the proton
+              on the ND atom) residues. The corresponding residue numbers must be
+              defined in the following parameter (hisd_1, hisd_2, ...). Add as many
+              as needed. Note that HIS is interpreted as a charged Histidine)
+            type: number
+            maximum: 9999
+            minimum: 0
+          hisd_1:
+            title: HISD residue number
+            description: Residue number of the Histidine to be defined as HISD
+            $comment: Residue number of the Histidine to be defined as HISD
+            type: number
+            maximum: 9999
+            minimum: -9999
+          nhise:
+            default: 0
+            title: Number of HISE residue
+            description: Defines the number of HISE residues (neutral HIS with the
+              proton on the NE atom) residues when autohis=false
+            $comment: Defines the number of HISE residues (neutral HIS with the proton
+              on the NE atom) residues. The corresponding residue numbers must be
+              defined in the following parameter (hise_1, hise_2, ...). Add as many
+              as needed. Note that HIS is interpreted as a charged Histidine)
+            type: number
+            maximum: 9999
+            minimum: 0
+          hise_1:
+            title: HISE residue number
+            description: Residue number of the Histidine to be defined as HISE
+            $comment: Residue number of the Histidine to be defined as HISE
+            type: number
+            maximum: 9999
+            minimum: -9999
+        required: []
+        additionalProperties: false
+      mol8:
+        type: object
+        properties:
+          prot_segid:
+            default: H
+            title: Segment ID
+            description: Segment ID assigned to this molecule
+            $comment: Segment ID assigned to this molecule in CNS. Used to distinguish
+              different molecules
+            type: string
+            minLength: 0
+            maxLength: 4
+          cyclicpept:
+            default: false
+            title: Cyclic peptide
+            description: Defines the molecule as a cyclic peptide
+            $comment: This option defines the molecule as a cyclic peptide and HADDOCK
+              will generate a peptide bond between the N- and C-ter provided those
+              are within 2A. This cutoff can be changed in the generate-topology.cns
+              script.
+            type: boolean
+          nhisd:
+            default: 0
+            title: Number of HISD residue
+            description: Defines the number of HISD residues (neutral HIS with the
+              proton on the ND atom) residues when autohis=false
+            $comment: Defines the number of HISD residues (neutral HIS with the proton
+              on the ND atom) residues. The corresponding residue numbers must be
+              defined in the following parameter (hisd_1, hisd_2, ...). Add as many
+              as needed. Note that HIS is interpreted as a charged Histidine)
+            type: number
+            maximum: 9999
+            minimum: 0
+          hisd_1:
+            title: HISD residue number
+            description: Residue number of the Histidine to be defined as HISD
+            $comment: Residue number of the Histidine to be defined as HISD
+            type: number
+            maximum: 9999
+            minimum: -9999
+          nhise:
+            default: 0
+            title: Number of HISE residue
+            description: Defines the number of HISE residues (neutral HIS with the
+              proton on the NE atom) residues when autohis=false
+            $comment: Defines the number of HISE residues (neutral HIS with the proton
+              on the NE atom) residues. The corresponding residue numbers must be
+              defined in the following parameter (hise_1, hise_2, ...). Add as many
+              as needed. Note that HIS is interpreted as a charged Histidine)
+            type: number
+            maximum: 9999
+            minimum: 0
+          hise_1:
+            title: HISE residue number
+            description: Residue number of the Histidine to be defined as HISE
+            $comment: Residue number of the Histidine to be defined as HISE
+            type: number
+            maximum: 9999
+            minimum: -9999
+        required: []
+        additionalProperties: false
+      mol9:
+        type: object
+        properties:
+          prot_segid:
+            default: I
+            title: Segment ID
+            description: Segment ID assigned to this molecule
+            $comment: Segment ID assigned to this molecule in CNS. Used to distinguish
+              different molecules
+            type: string
+            minLength: 0
+            maxLength: 4
+          cyclicpept:
+            default: false
+            title: Cyclic peptide
+            description: Defines the molecule as a cyclic peptide
+            $comment: This option defines the molecule as a cyclic peptide and HADDOCK
+              will generate a peptide bond between the N- and C-ter provided those
+              are within 2A. This cutoff can be changed in the generate-topology.cns
+              script.
+            type: boolean
+          nhisd:
+            default: 0
+            title: Number of HISD residue
+            description: Defines the number of HISD residues (neutral HIS with the
+              proton on the ND atom) residues when autohis=false
+            $comment: Defines the number of HISD residues (neutral HIS with the proton
+              on the ND atom) residues. The corresponding residue numbers must be
+              defined in the following parameter (hisd_1, hisd_2, ...). Add as many
+              as needed. Note that HIS is interpreted as a charged Histidine)
+            type: number
+            maximum: 9999
+            minimum: 0
+          hisd_1:
+            title: HISD residue number
+            description: Residue number of the Histidine to be defined as HISD
+            $comment: Residue number of the Histidine to be defined as HISD
+            type: number
+            maximum: 9999
+            minimum: -9999
+          nhise:
+            default: 0
+            title: Number of HISE residue
+            description: Defines the number of HISE residues (neutral HIS with the
+              proton on the NE atom) residues when autohis=false
+            $comment: Defines the number of HISE residues (neutral HIS with the proton
+              on the NE atom) residues. The corresponding residue numbers must be
+              defined in the following parameter (hise_1, hise_2, ...). Add as many
+              as needed. Note that HIS is interpreted as a charged Histidine)
+            type: number
+            maximum: 9999
+            minimum: 0
+          hise_1:
+            title: HISE residue number
+            description: Residue number of the Histidine to be defined as HISE
+            $comment: Residue number of the Histidine to be defined as HISE
+            type: number
+            maximum: 9999
+            minimum: -9999
+        required: []
+        additionalProperties: false
+      mol10:
+        type: object
+        properties:
+          prot_segid:
+            default: J
+            title: Segment ID
+            description: Segment ID assigned to this molecule
+            $comment: Segment ID assigned to this molecule in CNS. Used to distinguish
+              different molecules
+            type: string
+            minLength: 0
+            maxLength: 4
+          cyclicpept:
+            default: false
+            title: Cyclic peptide
+            description: Defines the molecule as a cyclic peptide
+            $comment: This option defines the molecule as a cyclic peptide and HADDOCK
+              will generate a peptide bond between the N- and C-ter provided those
+              are within 2A. This cutoff can be changed in the generate-topology.cns
+              script.
+            type: boolean
+          nhisd:
+            default: 0
+            title: Number of HISD residue
+            description: Defines the number of HISD residues (neutral HIS with the
+              proton on the ND atom) residues when autohis=false
+            $comment: Defines the number of HISD residues (neutral HIS with the proton
+              on the ND atom) residues. The corresponding residue numbers must be
+              defined in the following parameter (hisd_1, hisd_2, ...). Add as many
+              as needed. Note that HIS is interpreted as a charged Histidine)
+            type: number
+            maximum: 9999
+            minimum: 0
+          hisd_1:
+            title: HISD residue number
+            description: Residue number of the Histidine to be defined as HISD
+            $comment: Residue number of the Histidine to be defined as HISD
+            type: number
+            maximum: 9999
+            minimum: -9999
+          nhise:
+            default: 0
+            title: Number of HISE residue
+            description: Defines the number of HISE residues (neutral HIS with the
+              proton on the NE atom) residues when autohis=false
+            $comment: Defines the number of HISE residues (neutral HIS with the proton
+              on the NE atom) residues. The corresponding residue numbers must be
+              defined in the following parameter (hise_1, hise_2, ...). Add as many
+              as needed. Note that HIS is interpreted as a charged Histidine)
+            type: number
+            maximum: 9999
+            minimum: 0
+          hise_1:
+            title: HISE residue number
+            description: Residue number of the Histidine to be defined as HISE
+            $comment: Residue number of the Histidine to be defined as HISE
+            type: number
+            maximum: 9999
+            minimum: -9999
+        required: []
+        additionalProperties: false
+      mol11:
+        type: object
+        properties:
+          prot_segid:
+            default: K
+            title: Segment ID
+            description: Segment ID assigned to this molecule
+            $comment: Segment ID assigned to this molecule in CNS. Used to distinguish
+              different molecules
+            type: string
+            minLength: 0
+            maxLength: 4
+          cyclicpept:
+            default: false
+            title: Cyclic peptide
+            description: Defines the molecule as a cyclic peptide
+            $comment: This option defines the molecule as a cyclic peptide and HADDOCK
+              will generate a peptide bond between the N- and C-ter provided those
+              are within 2A. This cutoff can be changed in the generate-topology.cns
+              script.
+            type: boolean
+          nhisd:
+            default: 0
+            title: Number of HISD residue
+            description: Defines the number of HISD residues (neutral HIS with the
+              proton on the ND atom) residues when autohis=false
+            $comment: Defines the number of HISD residues (neutral HIS with the proton
+              on the ND atom) residues. The corresponding residue numbers must be
+              defined in the following parameter (hisd_1, hisd_2, ...). Add as many
+              as needed. Note that HIS is interpreted as a charged Histidine)
+            type: number
+            maximum: 9999
+            minimum: 0
+          hisd_1:
+            title: HISD residue number
+            description: Residue number of the Histidine to be defined as HISD
+            $comment: Residue number of the Histidine to be defined as HISD
+            type: number
+            maximum: 9999
+            minimum: -9999
+          nhise:
+            default: 0
+            title: Number of HISE residue
+            description: Defines the number of HISE residues (neutral HIS with the
+              proton on the NE atom) residues when autohis=false
+            $comment: Defines the number of HISE residues (neutral HIS with the proton
+              on the NE atom) residues. The corresponding residue numbers must be
+              defined in the following parameter (hise_1, hise_2, ...). Add as many
+              as needed. Note that HIS is interpreted as a charged Histidine)
+            type: number
+            maximum: 9999
+            minimum: 0
+          hise_1:
+            title: HISE residue number
+            description: Residue number of the Histidine to be defined as HISE
+            $comment: Residue number of the Histidine to be defined as HISE
+            type: number
+            maximum: 9999
+            minimum: -9999
+        required: []
+        additionalProperties: false
+      mol12:
+        type: object
+        properties:
+          prot_segid:
+            default: L
+            title: Segment ID
+            description: Segment ID assigned to this molecule
+            $comment: Segment ID assigned to this molecule in CNS. Used to distinguish
+              different molecules
+            type: string
+            minLength: 0
+            maxLength: 4
+          cyclicpept:
+            default: false
+            title: Cyclic peptide
+            description: Defines the molecule as a cyclic peptide
+            $comment: This option defines the molecule as a cyclic peptide and HADDOCK
+              will generate a peptide bond between the N- and C-ter provided those
+              are within 2A. This cutoff can be changed in the generate-topology.cns
+              script.
+            type: boolean
+          nhisd:
+            default: 0
+            title: Number of HISD residue
+            description: Defines the number of HISD residues (neutral HIS with the
+              proton on the ND atom) residues when autohis=false
+            $comment: Defines the number of HISD residues (neutral HIS with the proton
+              on the ND atom) residues. The corresponding residue numbers must be
+              defined in the following parameter (hisd_1, hisd_2, ...). Add as many
+              as needed. Note that HIS is interpreted as a charged Histidine)
+            type: number
+            maximum: 9999
+            minimum: 0
+          hisd_1:
+            title: HISD residue number
+            description: Residue number of the Histidine to be defined as HISD
+            $comment: Residue number of the Histidine to be defined as HISD
+            type: number
+            maximum: 9999
+            minimum: -9999
+          nhise:
+            default: 0
+            title: Number of HISE residue
+            description: Defines the number of HISE residues (neutral HIS with the
+              proton on the NE atom) residues when autohis=false
+            $comment: Defines the number of HISE residues (neutral HIS with the proton
+              on the NE atom) residues. The corresponding residue numbers must be
+              defined in the following parameter (hise_1, hise_2, ...). Add as many
+              as needed. Note that HIS is interpreted as a charged Histidine)
+            type: number
+            maximum: 9999
+            minimum: 0
+          hise_1:
+            title: HISE residue number
+            description: Residue number of the Histidine to be defined as HISE
+            $comment: Residue number of the Histidine to be defined as HISE
+            type: number
+            maximum: 9999
+            minimum: -9999
+        required: []
+        additionalProperties: false
+      mol13:
+        type: object
+        properties:
+          prot_segid:
+            default: M
+            title: Segment ID
+            description: Segment ID assigned to this molecule
+            $comment: Segment ID assigned to this molecule in CNS. Used to distinguish
+              different molecules
+            type: string
+            minLength: 0
+            maxLength: 4
+          cyclicpept:
+            default: false
+            title: Cyclic peptide
+            description: Defines the molecule as a cyclic peptide
+            $comment: This option defines the molecule as a cyclic peptide and HADDOCK
+              will generate a peptide bond between the N- and C-ter provided those
+              are within 2A. This cutoff can be changed in the generate-topology.cns
+              script.
+            type: boolean
+          nhisd:
+            default: 0
+            title: Number of HISD residue
+            description: Defines the number of HISD residues (neutral HIS with the
+              proton on the ND atom) residues when autohis=false
+            $comment: Defines the number of HISD residues (neutral HIS with the proton
+              on the ND atom) residues. The corresponding residue numbers must be
+              defined in the following parameter (hisd_1, hisd_2, ...). Add as many
+              as needed. Note that HIS is interpreted as a charged Histidine)
+            type: number
+            maximum: 9999
+            minimum: 0
+          hisd_1:
+            title: HISD residue number
+            description: Residue number of the Histidine to be defined as HISD
+            $comment: Residue number of the Histidine to be defined as HISD
+            type: number
+            maximum: 9999
+            minimum: -9999
+          nhise:
+            default: 0
+            title: Number of HISE residue
+            description: Defines the number of HISE residues (neutral HIS with the
+              proton on the NE atom) residues when autohis=false
+            $comment: Defines the number of HISE residues (neutral HIS with the proton
+              on the NE atom) residues. The corresponding residue numbers must be
+              defined in the following parameter (hise_1, hise_2, ...). Add as many
+              as needed. Note that HIS is interpreted as a charged Histidine)
+            type: number
+            maximum: 9999
+            minimum: 0
+          hise_1:
+            title: HISE residue number
+            description: Residue number of the Histidine to be defined as HISE
+            $comment: Residue number of the Histidine to be defined as HISE
+            type: number
+            maximum: 9999
+            minimum: -9999
+        required: []
+        additionalProperties: false
+      mol14:
+        type: object
+        properties:
+          prot_segid:
+            default: N
+            title: Segment ID
+            description: Segment ID assigned to this molecule
+            $comment: Segment ID assigned to this molecule in CNS. Used to distinguish
+              different molecules
+            type: string
+            minLength: 0
+            maxLength: 4
+          cyclicpept:
+            default: false
+            title: Cyclic peptide
+            description: Defines the molecule as a cyclic peptide
+            $comment: This option defines the molecule as a cyclic peptide and HADDOCK
+              will generate a peptide bond between the N- and C-ter provided those
+              are within 2A. This cutoff can be changed in the generate-topology.cns
+              script.
+            type: boolean
+          nhisd:
+            default: 0
+            title: Number of HISD residue
+            description: Defines the number of HISD residues (neutral HIS with the
+              proton on the ND atom) residues when autohis=false
+            $comment: Defines the number of HISD residues (neutral HIS with the proton
+              on the ND atom) residues. The corresponding residue numbers must be
+              defined in the following parameter (hisd_1, hisd_2, ...). Add as many
+              as needed. Note that HIS is interpreted as a charged Histidine)
+            type: number
+            maximum: 9999
+            minimum: 0
+          hisd_1:
+            title: HISD residue number
+            description: Residue number of the Histidine to be defined as HISD
+            $comment: Residue number of the Histidine to be defined as HISD
+            type: number
+            maximum: 9999
+            minimum: -9999
+          nhise:
+            default: 0
+            title: Number of HISE residue
+            description: Defines the number of HISE residues (neutral HIS with the
+              proton on the NE atom) residues when autohis=false
+            $comment: Defines the number of HISE residues (neutral HIS with the proton
+              on the NE atom) residues. The corresponding residue numbers must be
+              defined in the following parameter (hise_1, hise_2, ...). Add as many
+              as needed. Note that HIS is interpreted as a charged Histidine)
+            type: number
+            maximum: 9999
+            minimum: 0
+          hise_1:
+            title: HISE residue number
+            description: Residue number of the Histidine to be defined as HISE
+            $comment: Residue number of the Histidine to be defined as HISE
+            type: number
+            maximum: 9999
+            minimum: -9999
+        required: []
+        additionalProperties: false
+      mol15:
+        type: object
+        properties:
+          prot_segid:
+            default: O
+            title: Segment ID
+            description: Segment ID assigned to this molecule
+            $comment: Segment ID assigned to this molecule in CNS. Used to distinguish
+              different molecules
+            type: string
+            minLength: 0
+            maxLength: 4
+          cyclicpept:
+            default: false
+            title: Cyclic peptide
+            description: Defines the molecule as a cyclic peptide
+            $comment: This option defines the molecule as a cyclic peptide and HADDOCK
+              will generate a peptide bond between the N- and C-ter provided those
+              are within 2A. This cutoff can be changed in the generate-topology.cns
+              script.
+            type: boolean
+          nhisd:
+            default: 0
+            title: Number of HISD residue
+            description: Defines the number of HISD residues (neutral HIS with the
+              proton on the ND atom) residues when autohis=false
+            $comment: Defines the number of HISD residues (neutral HIS with the proton
+              on the ND atom) residues. The corresponding residue numbers must be
+              defined in the following parameter (hisd_1, hisd_2, ...). Add as many
+              as needed. Note that HIS is interpreted as a charged Histidine)
+            type: number
+            maximum: 9999
+            minimum: 0
+          hisd_1:
+            title: HISD residue number
+            description: Residue number of the Histidine to be defined as HISD
+            $comment: Residue number of the Histidine to be defined as HISD
+            type: number
+            maximum: 9999
+            minimum: -9999
+          nhise:
+            default: 0
+            title: Number of HISE residue
+            description: Defines the number of HISE residues (neutral HIS with the
+              proton on the NE atom) residues when autohis=false
+            $comment: Defines the number of HISE residues (neutral HIS with the proton
+              on the NE atom) residues. The corresponding residue numbers must be
+              defined in the following parameter (hise_1, hise_2, ...). Add as many
+              as needed. Note that HIS is interpreted as a charged Histidine)
+            type: number
+            maximum: 9999
+            minimum: 0
+          hise_1:
+            title: HISE residue number
+            description: Residue number of the Histidine to be defined as HISE
+            $comment: Residue number of the Histidine to be defined as HISE
+            type: number
+            maximum: 9999
+            minimum: -9999
+        required: []
+        additionalProperties: false
+      mol16:
+        type: object
+        properties:
+          prot_segid:
+            default: P
+            title: Segment ID
+            description: Segment ID assigned to this molecule
+            $comment: Segment ID assigned to this molecule in CNS. Used to distinguish
+              different molecules
+            type: string
+            minLength: 0
+            maxLength: 4
+          cyclicpept:
+            default: false
+            title: Cyclic peptide
+            description: Defines the molecule as a cyclic peptide
+            $comment: This option defines the molecule as a cyclic peptide and HADDOCK
+              will generate a peptide bond between the N- and C-ter provided those
+              are within 2A. This cutoff can be changed in the generate-topology.cns
+              script.
+            type: boolean
+          nhisd:
+            default: 0
+            title: Number of HISD residue
+            description: Defines the number of HISD residues (neutral HIS with the
+              proton on the ND atom) residues when autohis=false
+            $comment: Defines the number of HISD residues (neutral HIS with the proton
+              on the ND atom) residues. The corresponding residue numbers must be
+              defined in the following parameter (hisd_1, hisd_2, ...). Add as many
+              as needed. Note that HIS is interpreted as a charged Histidine)
+            type: number
+            maximum: 9999
+            minimum: 0
+          hisd_1:
+            title: HISD residue number
+            description: Residue number of the Histidine to be defined as HISD
+            $comment: Residue number of the Histidine to be defined as HISD
+            type: number
+            maximum: 9999
+            minimum: -9999
+          nhise:
+            default: 0
+            title: Number of HISE residue
+            description: Defines the number of HISE residues (neutral HIS with the
+              proton on the NE atom) residues when autohis=false
+            $comment: Defines the number of HISE residues (neutral HIS with the proton
+              on the NE atom) residues. The corresponding residue numbers must be
+              defined in the following parameter (hise_1, hise_2, ...). Add as many
+              as needed. Note that HIS is interpreted as a charged Histidine)
+            type: number
+            maximum: 9999
+            minimum: 0
+          hise_1:
+            title: HISE residue number
+            description: Residue number of the Histidine to be defined as HISE
+            $comment: Residue number of the Histidine to be defined as HISE
+            type: number
+            maximum: 9999
+            minimum: -9999
+        required: []
+        additionalProperties: false
+      mol17:
+        type: object
+        properties:
+          prot_segid:
+            default: Q
+            title: Segment ID
+            description: Segment ID assigned to this molecule
+            $comment: Segment ID assigned to this molecule in CNS. Used to distinguish
+              different molecules
+            type: string
+            minLength: 0
+            maxLength: 4
+          cyclicpept:
+            default: false
+            title: Cyclic peptide
+            description: Defines the molecule as a cyclic peptide
+            $comment: This option defines the molecule as a cyclic peptide and HADDOCK
+              will generate a peptide bond between the N- and C-ter provided those
+              are within 2A. This cutoff can be changed in the generate-topology.cns
+              script.
+            type: boolean
+          nhisd:
+            default: 0
+            title: Number of HISD residue
+            description: Defines the number of HISD residues (neutral HIS with the
+              proton on the ND atom) residues when autohis=false
+            $comment: Defines the number of HISD residues (neutral HIS with the proton
+              on the ND atom) residues. The corresponding residue numbers must be
+              defined in the following parameter (hisd_1, hisd_2, ...). Add as many
+              as needed. Note that HIS is interpreted as a charged Histidine)
+            type: number
+            maximum: 9999
+            minimum: 0
+          hisd_1:
+            title: HISD residue number
+            description: Residue number of the Histidine to be defined as HISD
+            $comment: Residue number of the Histidine to be defined as HISD
+            type: number
+            maximum: 9999
+            minimum: -9999
+          nhise:
+            default: 0
+            title: Number of HISE residue
+            description: Defines the number of HISE residues (neutral HIS with the
+              proton on the NE atom) residues when autohis=false
+            $comment: Defines the number of HISE residues (neutral HIS with the proton
+              on the NE atom) residues. The corresponding residue numbers must be
+              defined in the following parameter (hise_1, hise_2, ...). Add as many
+              as needed. Note that HIS is interpreted as a charged Histidine)
+            type: number
+            maximum: 9999
+            minimum: 0
+          hise_1:
+            title: HISE residue number
+            description: Residue number of the Histidine to be defined as HISE
+            $comment: Residue number of the Histidine to be defined as HISE
+            type: number
+            maximum: 9999
+            minimum: -9999
+        required: []
+        additionalProperties: false
+      mol18:
+        type: object
+        properties:
+          prot_segid:
+            default: R
+            title: Segment ID
+            description: Segment ID assigned to this molecule
+            $comment: Segment ID assigned to this molecule in CNS. Used to distinguish
+              different molecules
+            type: string
+            minLength: 0
+            maxLength: 4
+          cyclicpept:
+            default: false
+            title: Cyclic peptide
+            description: Defines the molecule as a cyclic peptide
+            $comment: This option defines the molecule as a cyclic peptide and HADDOCK
+              will generate a peptide bond between the N- and C-ter provided those
+              are within 2A. This cutoff can be changed in the generate-topology.cns
+              script.
+            type: boolean
+          nhisd:
+            default: 0
+            title: Number of HISD residue
+            description: Defines the number of HISD residues (neutral HIS with the
+              proton on the ND atom) residues when autohis=false
+            $comment: Defines the number of HISD residues (neutral HIS with the proton
+              on the ND atom) residues. The corresponding residue numbers must be
+              defined in the following parameter (hisd_1, hisd_2, ...). Add as many
+              as needed. Note that HIS is interpreted as a charged Histidine)
+            type: number
+            maximum: 9999
+            minimum: 0
+          hisd_1:
+            title: HISD residue number
+            description: Residue number of the Histidine to be defined as HISD
+            $comment: Residue number of the Histidine to be defined as HISD
+            type: number
+            maximum: 9999
+            minimum: -9999
+          nhise:
+            default: 0
+            title: Number of HISE residue
+            description: Defines the number of HISE residues (neutral HIS with the
+              proton on the NE atom) residues when autohis=false
+            $comment: Defines the number of HISE residues (neutral HIS with the proton
+              on the NE atom) residues. The corresponding residue numbers must be
+              defined in the following parameter (hise_1, hise_2, ...). Add as many
+              as needed. Note that HIS is interpreted as a charged Histidine)
+            type: number
+            maximum: 9999
+            minimum: 0
+          hise_1:
+            title: HISE residue number
+            description: Residue number of the Histidine to be defined as HISE
+            $comment: Residue number of the Histidine to be defined as HISE
+            type: number
+            maximum: 9999
+            minimum: -9999
+        required: []
+        additionalProperties: false
+      mol19:
+        type: object
+        properties:
+          prot_segid:
+            default: S
+            title: Segment ID
+            description: Segment ID assigned to this molecule
+            $comment: Segment ID assigned to this molecule in CNS. Used to distinguish
+              different molecules
+            type: string
+            minLength: 0
+            maxLength: 4
+          cyclicpept:
+            default: false
+            title: Cyclic peptide
+            description: Defines the molecule as a cyclic peptide
+            $comment: This option defines the molecule as a cyclic peptide and HADDOCK
+              will generate a peptide bond between the N- and C-ter provided those
+              are within 2A. This cutoff can be changed in the generate-topology.cns
+              script.
+            type: boolean
+          nhisd:
+            default: 0
+            title: Number of HISD residue
+            description: Defines the number of HISD residues (neutral HIS with the
+              proton on the ND atom) residues when autohis=false
+            $comment: Defines the number of HISD residues (neutral HIS with the proton
+              on the ND atom) residues. The corresponding residue numbers must be
+              defined in the following parameter (hisd_1, hisd_2, ...). Add as many
+              as needed. Note that HIS is interpreted as a charged Histidine)
+            type: number
+            maximum: 9999
+            minimum: 0
+          hisd_1:
+            title: HISD residue number
+            description: Residue number of the Histidine to be defined as HISD
+            $comment: Residue number of the Histidine to be defined as HISD
+            type: number
+            maximum: 9999
+            minimum: -9999
+          nhise:
+            default: 0
+            title: Number of HISE residue
+            description: Defines the number of HISE residues (neutral HIS with the
+              proton on the NE atom) residues when autohis=false
+            $comment: Defines the number of HISE residues (neutral HIS with the proton
+              on the NE atom) residues. The corresponding residue numbers must be
+              defined in the following parameter (hise_1, hise_2, ...). Add as many
+              as needed. Note that HIS is interpreted as a charged Histidine)
+            type: number
+            maximum: 9999
+            minimum: 0
+          hise_1:
+            title: HISE residue number
+            description: Residue number of the Histidine to be defined as HISE
+            $comment: Residue number of the Histidine to be defined as HISE
+            type: number
+            maximum: 9999
+            minimum: -9999
+        required: []
+        additionalProperties: false
+      mol20:
+        type: object
+        properties:
+          prot_segid:
+            default: T
+            title: Segment ID
+            description: Segment ID assigned to this molecule
+            $comment: Segment ID assigned to this molecule in CNS. Used to distinguish
+              different molecules
+            type: string
+            minLength: 0
+            maxLength: 4
+          cyclicpept:
+            default: false
+            title: Cyclic peptide
+            description: Defines the molecule as a cyclic peptide
+            $comment: This option defines the molecule as a cyclic peptide and HADDOCK
+              will generate a peptide bond between the N- and C-ter provided those
+              are within 2A. This cutoff can be changed in the generate-topology.cns
+              script.
+            type: boolean
+          nhisd:
+            default: 0
+            title: Number of HISD residue
+            description: Defines the number of HISD residues (neutral HIS with the
+              proton on the ND atom) residues when autohis=false
+            $comment: Defines the number of HISD residues (neutral HIS with the proton
+              on the ND atom) residues. The corresponding residue numbers must be
+              defined in the following parameter (hisd_1, hisd_2, ...). Add as many
+              as needed. Note that HIS is interpreted as a charged Histidine)
+            type: number
+            maximum: 9999
+            minimum: 0
+          hisd_1:
+            title: HISD residue number
+            description: Residue number of the Histidine to be defined as HISD
+            $comment: Residue number of the Histidine to be defined as HISD
+            type: number
+            maximum: 9999
+            minimum: -9999
+          nhise:
+            default: 0
+            title: Number of HISE residue
+            description: Defines the number of HISE residues (neutral HIS with the
+              proton on the NE atom) residues when autohis=false
+            $comment: Defines the number of HISE residues (neutral HIS with the proton
+              on the NE atom) residues. The corresponding residue numbers must be
+              defined in the following parameter (hise_1, hise_2, ...). Add as many
+              as needed. Note that HIS is interpreted as a charged Histidine)
+            type: number
+            maximum: 9999
+            minimum: 0
+          hise_1:
+            title: HISE residue number
+            description: Residue number of the Histidine to be defined as HISE
+            $comment: Residue number of the Histidine to be defined as HISE
+            type: number
+            maximum: 9999
+            minimum: -9999
+        required: []
+        additionalProperties: false
+    required: []
+    additionalProperties: false
+  uiSchema:
+    delenph:
+      ui:group: molecule
+    mol1:
+      mol1:
+        prot_segid:
+          ui:group: molecule
+        cyclicpept:
+          ui:group: molecule
+        nhisd:
+          ui:group: molecule
+        hisd_1:
+          ui:group: molecule
+        nhise:
+          ui:group: molecule
+        hise_1:
+          ui:group: molecule
+    mol2:
+      mol2:
+        prot_segid:
+          ui:group: molecule
+        cyclicpept:
+          ui:group: molecule
+        nhisd:
+          ui:group: molecule
+        hisd_1:
+          ui:group: molecule
+        nhise:
+          ui:group: molecule
+        hise_1:
+          ui:group: molecule
+    mol3:
+      mol3:
+        prot_segid:
+          ui:group: molecule
+        cyclicpept:
+          ui:group: molecule
+        nhisd:
+          ui:group: molecule
+        hisd_1:
+          ui:group: molecule
+        nhise:
+          ui:group: molecule
+        hise_1:
+          ui:group: molecule
+    mol4:
+      mol4:
+        prot_segid:
+          ui:group: molecule
+        cyclicpept:
+          ui:group: molecule
+        nhisd:
+          ui:group: molecule
+        hisd_1:
+          ui:group: molecule
+        nhise:
+          ui:group: molecule
+        hise_1:
+          ui:group: molecule
+    mol5:
+      mol5:
+        prot_segid:
+          ui:group: molecule
+        cyclicpept:
+          ui:group: molecule
+        nhisd:
+          ui:group: molecule
+        hisd_1:
+          ui:group: molecule
+        nhise:
+          ui:group: molecule
+        hise_1:
+          ui:group: molecule
+    mol6:
+      mol6:
+        prot_segid:
+          ui:group: molecule
+        cyclicpept:
+          ui:group: molecule
+        nhisd:
+          ui:group: molecule
+        hisd_1:
+          ui:group: molecule
+        nhise:
+          ui:group: molecule
+        hise_1:
+          ui:group: molecule
+    mol7:
+      mol7:
+        prot_segid:
+          ui:group: molecule
+        cyclicpept:
+          ui:group: molecule
+        nhisd:
+          ui:group: molecule
+        hisd_1:
+          ui:group: molecule
+        nhise:
+          ui:group: molecule
+        hise_1:
+          ui:group: molecule
+    mol8:
+      mol8:
+        prot_segid:
+          ui:group: molecule
+        cyclicpept:
+          ui:group: molecule
+        nhisd:
+          ui:group: molecule
+        hisd_1:
+          ui:group: molecule
+        nhise:
+          ui:group: molecule
+        hise_1:
+          ui:group: molecule
+    mol9:
+      mol9:
+        prot_segid:
+          ui:group: molecule
+        cyclicpept:
+          ui:group: molecule
+        nhisd:
+          ui:group: molecule
+        hisd_1:
+          ui:group: molecule
+        nhise:
+          ui:group: molecule
+        hise_1:
+          ui:group: molecule
+    mol10:
+      mol10:
+        prot_segid:
+          ui:group: molecule
+        cyclicpept:
+          ui:group: molecule
+        nhisd:
+          ui:group: molecule
+        hisd_1:
+          ui:group: molecule
+        nhise:
+          ui:group: molecule
+        hise_1:
+          ui:group: molecule
+    mol11:
+      mol11:
+        prot_segid:
+          ui:group: molecule
+        cyclicpept:
+          ui:group: molecule
+        nhisd:
+          ui:group: molecule
+        hisd_1:
+          ui:group: molecule
+        nhise:
+          ui:group: molecule
+        hise_1:
+          ui:group: molecule
+    mol12:
+      mol12:
+        prot_segid:
+          ui:group: molecule
+        cyclicpept:
+          ui:group: molecule
+        nhisd:
+          ui:group: molecule
+        hisd_1:
+          ui:group: molecule
+        nhise:
+          ui:group: molecule
+        hise_1:
+          ui:group: molecule
+    mol13:
+      mol13:
+        prot_segid:
+          ui:group: molecule
+        cyclicpept:
+          ui:group: molecule
+        nhisd:
+          ui:group: molecule
+        hisd_1:
+          ui:group: molecule
+        nhise:
+          ui:group: molecule
+        hise_1:
+          ui:group: molecule
+    mol14:
+      mol14:
+        prot_segid:
+          ui:group: molecule
+        cyclicpept:
+          ui:group: molecule
+        nhisd:
+          ui:group: molecule
+        hisd_1:
+          ui:group: molecule
+        nhise:
+          ui:group: molecule
+        hise_1:
+          ui:group: molecule
+    mol15:
+      mol15:
+        prot_segid:
+          ui:group: molecule
+        cyclicpept:
+          ui:group: molecule
+        nhisd:
+          ui:group: molecule
+        hisd_1:
+          ui:group: molecule
+        nhise:
+          ui:group: molecule
+        hise_1:
+          ui:group: molecule
+    mol16:
+      mol16:
+        prot_segid:
+          ui:group: molecule
+        cyclicpept:
+          ui:group: molecule
+        nhisd:
+          ui:group: molecule
+        hisd_1:
+          ui:group: molecule
+        nhise:
+          ui:group: molecule
+        hise_1:
+          ui:group: molecule
+    mol17:
+      mol17:
+        prot_segid:
+          ui:group: molecule
+        cyclicpept:
+          ui:group: molecule
+        nhisd:
+          ui:group: molecule
+        hisd_1:
+          ui:group: molecule
+        nhise:
+          ui:group: molecule
+        hise_1:
+          ui:group: molecule
+    mol18:
+      mol18:
+        prot_segid:
+          ui:group: molecule
+        cyclicpept:
+          ui:group: molecule
+        nhisd:
+          ui:group: molecule
+        hisd_1:
+          ui:group: molecule
+        nhise:
+          ui:group: molecule
+        hise_1:
+          ui:group: molecule
+    mol19:
+      mol19:
+        prot_segid:
+          ui:group: molecule
+        cyclicpept:
+          ui:group: molecule
+        nhisd:
+          ui:group: molecule
+        hisd_1:
+          ui:group: molecule
+        nhise:
+          ui:group: molecule
+        hise_1:
+          ui:group: molecule
+    mol20:
+      mol20:
+        prot_segid:
+          ui:group: molecule
+        cyclicpept:
+          ui:group: molecule
+        nhisd:
+          ui:group: molecule
+        hisd_1:
+          ui:group: molecule
+        nhise:
+          ui:group: molecule
+        hise_1:
+          ui:group: molecule
+- id: emscoring
+  category: scoring
+  label: HADDOCK3 scoring module.
+  description: HADDOCK3 module to perform energy minimization scoring.
+  schema:
+    type: object
+    properties:
+      tolerance:
+        default: 5
+        type: number
+        maximum: 9999
+        minimum: -9999
+      log_level:
+        default: verbose
+        type: string
+        minLength: 0
+        maxLength: 100
+      ligand_param_fname:
+        type: string
+        format: uri-reference
+      ligand_top_fname:
+        type: string
+        format: uri-reference
+      individualize:
+        default: true
+        type: boolean
+      nemsteps:
+        default: 40
+        type: number
+        maximum: 9999
+        minimum: -9999
+      elecflag:
+        default: true
+        type: boolean
+      dielec:
+        default: cdie
+        type: string
+        minLength: 0
+        maxLength: 100
+      epsilon:
+        default: 1.0
+        type: number
+        maximum: 9999
+        minimum: -9999
+      dihedflag:
+        default: true
+        type: boolean
+      par_nonbonded:
+        default: OPLSX
+        type: string
+        minLength: 0
+        maxLength: 100
+      w_air:
+        default: 0.0
+        type: number
+        maximum: 9999
+        minimum: -9999
+      w_bsa:
+        default: 0.0
+        type: number
+        maximum: 9999
+        minimum: -9999
+      w_cdih:
+        default: 0.0
+        type: number
+        maximum: 9999
+        minimum: -9999
+      w_dani:
+        default: 0.0
+        type: number
+        maximum: 9999
+        minimum: -9999
+      w_deint:
+        default: 0.0
+        type: number
+        maximum: 9999
+        minimum: -9999
+      w_desolv:
+        default: 1.0
+        type: number
+        maximum: 9999
+        minimum: -9999
+      w_dist:
+        default: 0.0
+        type: number
+        maximum: 9999
+        minimum: -9999
+      w_elec:
+        default: 0.2
+        type: number
+        maximum: 9999
+        minimum: -9999
+      w_lcc:
+        default: 0.0
+        type: number
+        maximum: 9999
+        minimum: -9999
+      w_rg:
+        default: 0.0
+        type: number
+        maximum: 9999
+        minimum: -9999
+      w_sani:
+        default: 0.0
+        type: number
+        maximum: 9999
+        minimum: -9999
+      w_sym:
+        default: 0.0
+        type: number
+        maximum: 9999
+        minimum: -9999
+      w_vdw:
+        default: 1.0
+        type: number
+        maximum: 9999
+        minimum: -9999
+      w_vean:
+        default: 0.0
+        type: number
+        maximum: 9999
+        minimum: -9999
+      w_xpcs:
+        default: 0.0
+        type: number
+        maximum: 9999
+        minimum: -9999
+      w_xrdc:
+        default: 0.0
+        type: number
+        maximum: 9999
+        minimum: -9999
+      w_zres:
+        default: 0.0
+        type: number
+        maximum: 9999
+        minimum: -9999
+      shape_1:
+        default: false
+        type: boolean
+      shape_2:
+        default: false
+        type: boolean
+      shape_3:
+        default: false
+        type: boolean
+      shape_4:
+        default: false
+        type: boolean
+      shape_5:
+        default: false
+        type: boolean
+      shape_6:
+        default: false
+        type: boolean
+      shape_7:
+        default: false
+        type: boolean
+      shape_8:
+        default: false
+        type: boolean
+      shape_9:
+        default: false
+        type: boolean
+      shape_10:
+        default: false
+        type: boolean
+      shape_11:
+        default: false
+        type: boolean
+      shape_12:
+        default: false
+        type: boolean
+      shape_13:
+        default: false
+        type: boolean
+      shape_14:
+        default: false
+        type: boolean
+      shape_15:
+        default: false
+        type: boolean
+      shape_16:
+        default: false
+        type: boolean
+      shape_17:
+        default: false
+        type: boolean
+      shape_18:
+        default: false
+        type: boolean
+      shape_19:
+        default: false
+        type: boolean
+      shape_20:
+        default: false
+        type: boolean
+    required: []
+    additionalProperties: false
+  uiSchema:
+    ligand_param_fname:
+      ui:widget: file
+    ligand_top_fname:
+      ui:widget: file
+- id: flexref
   category: refinement
-  label: HADDOCK3 module for energy minimization refinement.
-  description: HADDOCK3 module energy minimization refinement.
+  label: HADDOCK3 module for flexible refinement.
+  description: HADDOCK3 module for flexible refinement.
   schema:
     type: object
     properties:
@@ -4143,18 +4346,8 @@ nodes:
       ligand_top_fname:
         type: string
         format: uri-reference
-      sampling:
-        default: 5
-        type: number
-        maximum: 9999
-        minimum: -9999
       sampling_factor:
         default: 1
-        type: number
-        maximum: 9999
-        minimum: -9999
-      nemsteps:
-        default: 200
         type: number
         maximum: 9999
         minimum: -9999
@@ -4166,6 +4359,101 @@ nodes:
       keepwater:
         default: false
         type: boolean
+      mdsteps_rigid:
+        default: 500
+        type: number
+        maximum: 9999
+        minimum: -9999
+      mdsteps_cool1:
+        default: 500
+        type: number
+        maximum: 9999
+        minimum: -9999
+      mdsteps_cool2:
+        default: 1000
+        type: number
+        maximum: 9999
+        minimum: -9999
+      mdsteps_cool3:
+        default: 1000
+        type: number
+        maximum: 9999
+        minimum: -9999
+      timestep:
+        default: 0.002
+        type: number
+        maximum: 9999
+        minimum: -9999
+      tadfactor:
+        default: 8
+        type: number
+        maximum: 9999
+        minimum: -9999
+      sinter_rigid_init:
+        default: 0.001
+        type: number
+        maximum: 9999
+        minimum: -9999
+      sinter_rigid_final:
+        default: 0.001
+        type: number
+        maximum: 9999
+        minimum: -9999
+      sinter_cool2_init:
+        default: 0.001
+        type: number
+        maximum: 9999
+        minimum: -9999
+      sinter_cool2_final:
+        default: 1.0
+        type: number
+        maximum: 9999
+        minimum: -9999
+      sinter_cool3_init:
+        default: 0.05
+        type: number
+        maximum: 9999
+        minimum: -9999
+      sinter_cool3_final:
+        default: 1.0
+        type: number
+        maximum: 9999
+        minimum: -9999
+      temp_high:
+        default: 2000
+        type: number
+        maximum: 9999
+        minimum: -9999
+      temp_cool1_init:
+        default: 2000
+        type: number
+        maximum: 9999
+        minimum: -9999
+      temp_cool1_final:
+        default: 500
+        type: number
+        maximum: 9999
+        minimum: -9999
+      temp_cool2_init:
+        default: 1000
+        type: number
+        maximum: 9999
+        minimum: -9999
+      temp_cool2_final:
+        default: 50
+        type: number
+        maximum: 9999
+        minimum: -9999
+      temp_cool3_init:
+        default: 1000
+        type: number
+        maximum: 9999
+        minimum: -9999
+      temp_cool3_final:
+        default: 50
+        type: number
+        maximum: 9999
+        minimum: -9999
       prot_segid_1:
         default: A
         type: string
@@ -4326,17 +4614,62 @@ nodes:
       shape_20:
         default: false
         type: boolean
-      amb_scale:
+      amb_hot:
+        default: 10
+        type: number
+        maximum: 9999
+        minimum: -9999
+      amb_cool1:
+        default: 10
+        type: number
+        maximum: 9999
+        minimum: -9999
+      amb_cool2:
         default: 50
         type: number
         maximum: 9999
         minimum: -9999
-      unamb_scale:
+      amb_cool3:
         default: 50
         type: number
         maximum: 9999
         minimum: -9999
-      hbond_scale:
+      unamb_hot:
+        default: 10
+        type: number
+        maximum: 9999
+        minimum: -9999
+      unamb_cool1:
+        default: 10
+        type: number
+        maximum: 9999
+        minimum: -9999
+      unamb_cool2:
+        default: 50
+        type: number
+        maximum: 9999
+        minimum: -9999
+      unamb_cool3:
+        default: 50
+        type: number
+        maximum: 9999
+        minimum: -9999
+      hbond_hot:
+        default: 10
+        type: number
+        maximum: 9999
+        minimum: -9999
+      hbond_cool1:
+        default: 10
+        type: number
+        maximum: 9999
+        minimum: -9999
+      hbond_cool2:
+        default: 50
+        type: number
+        maximum: 9999
+        minimum: -9999
+      hbond_cool3:
         default: 50
         type: number
         maximum: 9999
@@ -4349,6 +4682,86 @@ nodes:
         type: boolean
       ncvpart:
         default: 2
+        type: number
+        maximum: 9999
+        minimum: -9999
+      mrswi_hot:
+        default: 0.5
+        type: number
+        maximum: 9999
+        minimum: -9999
+      mrswi_cool1:
+        default: 0.5
+        type: number
+        maximum: 9999
+        minimum: -9999
+      mrswi_cool2:
+        default: 0.5
+        type: number
+        maximum: 9999
+        minimum: -9999
+      mrswi_cool3:
+        default: 0.5
+        type: number
+        maximum: 9999
+        minimum: -9999
+      rswi_hot:
+        default: 0.5
+        type: number
+        maximum: 9999
+        minimum: -9999
+      rswi_cool1:
+        default: 0.5
+        type: number
+        maximum: 9999
+        minimum: -9999
+      rswi_cool2:
+        default: 0.5
+        type: number
+        maximum: 9999
+        minimum: -9999
+      rswi_cool3:
+        default: 0.5
+        type: number
+        maximum: 9999
+        minimum: -9999
+      masy_hot:
+        default: -1.0
+        type: number
+        maximum: 9999
+        minimum: -9999
+      masy_cool1:
+        default: -1.0
+        type: number
+        maximum: 9999
+        minimum: -9999
+      masy_cool2:
+        default: -0.1
+        type: number
+        maximum: 9999
+        minimum: -9999
+      masy_cool3:
+        default: -0.1
+        type: number
+        maximum: 9999
+        minimum: -9999
+      asy_hot:
+        default: 1.0
+        type: number
+        maximum: 9999
+        minimum: -9999
+      asy_cool1:
+        default: 1.0
+        type: number
+        maximum: 9999
+        minimum: -9999
+      asy_cool2:
+        default: 0.1
+        type: number
+        maximum: 9999
+        minimum: -9999
+      asy_cool3:
+        default: 0.1
         type: number
         maximum: 9999
         minimum: -9999
@@ -4377,7 +4790,22 @@ nodes:
       dihedrals_on:
         default: false
         type: boolean
-      dihedrals_scale:
+      dihedrals_hot:
+        default: 5
+        type: number
+        maximum: 9999
+        minimum: -9999
+      dihedrals_cool1:
+        default: 5
+        type: number
+        maximum: 9999
+        minimum: -9999
+      dihedrals_cool2:
+        default: 50
+        type: number
+        maximum: 9999
+        minimum: -9999
+      dihedrals_cool3:
         default: 200
         type: number
         maximum: 9999
@@ -5357,7 +5785,7 @@ nodes:
         maximum: 9999
         minimum: -9999
       w_bsa:
-        default: 0.0
+        default: -0.01
         type: number
         maximum: 9999
         minimum: -9999
@@ -5387,7 +5815,7 @@ nodes:
         maximum: 9999
         minimum: -9999
       w_elec:
-        default: 0.2
+        default: 1.0
         type: number
         maximum: 9999
         minimum: -9999
@@ -5440,7 +5868,7 @@ nodes:
         default: true
         type: boolean
       dielec:
-        default: cdie
+        default: rdie
         type: string
         minLength: 0
         maxLength: 100
@@ -8951,10 +9379,10 @@ nodes:
       ui:widget: file
     ligand_top_fname:
       ui:widget: file
-- id: flexref
+- id: emref
   category: refinement
-  label: HADDOCK3 module for flexible refinement.
-  description: HADDOCK3 module for flexible refinement.
+  label: HADDOCK3 module for energy minimization refinement.
+  description: HADDOCK3 module energy minimization refinement.
   schema:
     type: object
     properties:
@@ -8986,8 +9414,18 @@ nodes:
       ligand_top_fname:
         type: string
         format: uri-reference
+      sampling:
+        default: 5
+        type: number
+        maximum: 9999
+        minimum: -9999
       sampling_factor:
         default: 1
+        type: number
+        maximum: 9999
+        minimum: -9999
+      nemsteps:
+        default: 200
         type: number
         maximum: 9999
         minimum: -9999
@@ -8999,101 +9437,6 @@ nodes:
       keepwater:
         default: false
         type: boolean
-      mdsteps_rigid:
-        default: 500
-        type: number
-        maximum: 9999
-        minimum: -9999
-      mdsteps_cool1:
-        default: 500
-        type: number
-        maximum: 9999
-        minimum: -9999
-      mdsteps_cool2:
-        default: 1000
-        type: number
-        maximum: 9999
-        minimum: -9999
-      mdsteps_cool3:
-        default: 1000
-        type: number
-        maximum: 9999
-        minimum: -9999
-      timestep:
-        default: 0.002
-        type: number
-        maximum: 9999
-        minimum: -9999
-      tadfactor:
-        default: 8
-        type: number
-        maximum: 9999
-        minimum: -9999
-      sinter_rigid_init:
-        default: 0.001
-        type: number
-        maximum: 9999
-        minimum: -9999
-      sinter_rigid_final:
-        default: 0.001
-        type: number
-        maximum: 9999
-        minimum: -9999
-      sinter_cool2_init:
-        default: 0.001
-        type: number
-        maximum: 9999
-        minimum: -9999
-      sinter_cool2_final:
-        default: 1.0
-        type: number
-        maximum: 9999
-        minimum: -9999
-      sinter_cool3_init:
-        default: 0.05
-        type: number
-        maximum: 9999
-        minimum: -9999
-      sinter_cool3_final:
-        default: 1.0
-        type: number
-        maximum: 9999
-        minimum: -9999
-      temp_high:
-        default: 2000
-        type: number
-        maximum: 9999
-        minimum: -9999
-      temp_cool1_init:
-        default: 2000
-        type: number
-        maximum: 9999
-        minimum: -9999
-      temp_cool1_final:
-        default: 500
-        type: number
-        maximum: 9999
-        minimum: -9999
-      temp_cool2_init:
-        default: 1000
-        type: number
-        maximum: 9999
-        minimum: -9999
-      temp_cool2_final:
-        default: 50
-        type: number
-        maximum: 9999
-        minimum: -9999
-      temp_cool3_init:
-        default: 1000
-        type: number
-        maximum: 9999
-        minimum: -9999
-      temp_cool3_final:
-        default: 50
-        type: number
-        maximum: 9999
-        minimum: -9999
       prot_segid_1:
         default: A
         type: string
@@ -9254,62 +9597,17 @@ nodes:
       shape_20:
         default: false
         type: boolean
-      amb_hot:
-        default: 10
-        type: number
-        maximum: 9999
-        minimum: -9999
-      amb_cool1:
-        default: 10
-        type: number
-        maximum: 9999
-        minimum: -9999
-      amb_cool2:
+      amb_scale:
         default: 50
         type: number
         maximum: 9999
         minimum: -9999
-      amb_cool3:
+      unamb_scale:
         default: 50
         type: number
         maximum: 9999
         minimum: -9999
-      unamb_hot:
-        default: 10
-        type: number
-        maximum: 9999
-        minimum: -9999
-      unamb_cool1:
-        default: 10
-        type: number
-        maximum: 9999
-        minimum: -9999
-      unamb_cool2:
-        default: 50
-        type: number
-        maximum: 9999
-        minimum: -9999
-      unamb_cool3:
-        default: 50
-        type: number
-        maximum: 9999
-        minimum: -9999
-      hbond_hot:
-        default: 10
-        type: number
-        maximum: 9999
-        minimum: -9999
-      hbond_cool1:
-        default: 10
-        type: number
-        maximum: 9999
-        minimum: -9999
-      hbond_cool2:
-        default: 50
-        type: number
-        maximum: 9999
-        minimum: -9999
-      hbond_cool3:
+      hbond_scale:
         default: 50
         type: number
         maximum: 9999
@@ -9322,86 +9620,6 @@ nodes:
         type: boolean
       ncvpart:
         default: 2
-        type: number
-        maximum: 9999
-        minimum: -9999
-      mrswi_hot:
-        default: 0.5
-        type: number
-        maximum: 9999
-        minimum: -9999
-      mrswi_cool1:
-        default: 0.5
-        type: number
-        maximum: 9999
-        minimum: -9999
-      mrswi_cool2:
-        default: 0.5
-        type: number
-        maximum: 9999
-        minimum: -9999
-      mrswi_cool3:
-        default: 0.5
-        type: number
-        maximum: 9999
-        minimum: -9999
-      rswi_hot:
-        default: 0.5
-        type: number
-        maximum: 9999
-        minimum: -9999
-      rswi_cool1:
-        default: 0.5
-        type: number
-        maximum: 9999
-        minimum: -9999
-      rswi_cool2:
-        default: 0.5
-        type: number
-        maximum: 9999
-        minimum: -9999
-      rswi_cool3:
-        default: 0.5
-        type: number
-        maximum: 9999
-        minimum: -9999
-      masy_hot:
-        default: -1.0
-        type: number
-        maximum: 9999
-        minimum: -9999
-      masy_cool1:
-        default: -1.0
-        type: number
-        maximum: 9999
-        minimum: -9999
-      masy_cool2:
-        default: -0.1
-        type: number
-        maximum: 9999
-        minimum: -9999
-      masy_cool3:
-        default: -0.1
-        type: number
-        maximum: 9999
-        minimum: -9999
-      asy_hot:
-        default: 1.0
-        type: number
-        maximum: 9999
-        minimum: -9999
-      asy_cool1:
-        default: 1.0
-        type: number
-        maximum: 9999
-        minimum: -9999
-      asy_cool2:
-        default: 0.1
-        type: number
-        maximum: 9999
-        minimum: -9999
-      asy_cool3:
-        default: 0.1
         type: number
         maximum: 9999
         minimum: -9999
@@ -9430,22 +9648,7 @@ nodes:
       dihedrals_on:
         default: false
         type: boolean
-      dihedrals_hot:
-        default: 5
-        type: number
-        maximum: 9999
-        minimum: -9999
-      dihedrals_cool1:
-        default: 5
-        type: number
-        maximum: 9999
-        minimum: -9999
-      dihedrals_cool2:
-        default: 50
-        type: number
-        maximum: 9999
-        minimum: -9999
-      dihedrals_cool3:
+      dihedrals_scale:
         default: 200
         type: number
         maximum: 9999
@@ -10425,7 +10628,7 @@ nodes:
         maximum: 9999
         minimum: -9999
       w_bsa:
-        default: -0.01
+        default: 0.0
         type: number
         maximum: 9999
         minimum: -9999
@@ -10455,7 +10658,7 @@ nodes:
         maximum: 9999
         minimum: -9999
       w_elec:
-        default: 1.0
+        default: 0.2
         type: number
         maximum: 9999
         minimum: -9999
@@ -10508,7 +10711,7 @@ nodes:
         default: true
         type: boolean
       dielec:
-        default: rdie
+        default: cdie
         type: string
         minLength: 0
         maxLength: 100
@@ -11590,209 +11793,5 @@ nodes:
       ui:widget: file
     ligand_top_fname:
       ui:widget: file
-- id: emscoring
-  category: scoring
-  label: HADDOCK3 scoring module.
-  description: HADDOCK3 module to perform energy minimization scoring.
-  schema:
-    type: object
-    properties:
-      tolerance:
-        default: 5
-        type: number
-        maximum: 9999
-        minimum: -9999
-      log_level:
-        default: verbose
-        type: string
-        minLength: 0
-        maxLength: 100
-      ligand_param_fname:
-        type: string
-        format: uri-reference
-      ligand_top_fname:
-        type: string
-        format: uri-reference
-      individualize:
-        default: true
-        type: boolean
-      nemsteps:
-        default: 40
-        type: number
-        maximum: 9999
-        minimum: -9999
-      elecflag:
-        default: true
-        type: boolean
-      dielec:
-        default: cdie
-        type: string
-        minLength: 0
-        maxLength: 100
-      epsilon:
-        default: 1.0
-        type: number
-        maximum: 9999
-        minimum: -9999
-      dihedflag:
-        default: true
-        type: boolean
-      par_nonbonded:
-        default: OPLSX
-        type: string
-        minLength: 0
-        maxLength: 100
-      w_air:
-        default: 0.0
-        type: number
-        maximum: 9999
-        minimum: -9999
-      w_bsa:
-        default: 0.0
-        type: number
-        maximum: 9999
-        minimum: -9999
-      w_cdih:
-        default: 0.0
-        type: number
-        maximum: 9999
-        minimum: -9999
-      w_dani:
-        default: 0.0
-        type: number
-        maximum: 9999
-        minimum: -9999
-      w_deint:
-        default: 0.0
-        type: number
-        maximum: 9999
-        minimum: -9999
-      w_desolv:
-        default: 1.0
-        type: number
-        maximum: 9999
-        minimum: -9999
-      w_dist:
-        default: 0.0
-        type: number
-        maximum: 9999
-        minimum: -9999
-      w_elec:
-        default: 0.2
-        type: number
-        maximum: 9999
-        minimum: -9999
-      w_lcc:
-        default: 0.0
-        type: number
-        maximum: 9999
-        minimum: -9999
-      w_rg:
-        default: 0.0
-        type: number
-        maximum: 9999
-        minimum: -9999
-      w_sani:
-        default: 0.0
-        type: number
-        maximum: 9999
-        minimum: -9999
-      w_sym:
-        default: 0.0
-        type: number
-        maximum: 9999
-        minimum: -9999
-      w_vdw:
-        default: 1.0
-        type: number
-        maximum: 9999
-        minimum: -9999
-      w_vean:
-        default: 0.0
-        type: number
-        maximum: 9999
-        minimum: -9999
-      w_xpcs:
-        default: 0.0
-        type: number
-        maximum: 9999
-        minimum: -9999
-      w_xrdc:
-        default: 0.0
-        type: number
-        maximum: 9999
-        minimum: -9999
-      w_zres:
-        default: 0.0
-        type: number
-        maximum: 9999
-        minimum: -9999
-      shape_1:
-        default: false
-        type: boolean
-      shape_2:
-        default: false
-        type: boolean
-      shape_3:
-        default: false
-        type: boolean
-      shape_4:
-        default: false
-        type: boolean
-      shape_5:
-        default: false
-        type: boolean
-      shape_6:
-        default: false
-        type: boolean
-      shape_7:
-        default: false
-        type: boolean
-      shape_8:
-        default: false
-        type: boolean
-      shape_9:
-        default: false
-        type: boolean
-      shape_10:
-        default: false
-        type: boolean
-      shape_11:
-        default: false
-        type: boolean
-      shape_12:
-        default: false
-        type: boolean
-      shape_13:
-        default: false
-        type: boolean
-      shape_14:
-        default: false
-        type: boolean
-      shape_15:
-        default: false
-        type: boolean
-      shape_16:
-        default: false
-        type: boolean
-      shape_17:
-        default: false
-        type: boolean
-      shape_18:
-        default: false
-        type: boolean
-      shape_19:
-        default: false
-        type: boolean
-      shape_20:
-        default: false
-        type: boolean
-    required: []
-    additionalProperties: false
-  uiSchema:
-    ligand_param_fname:
-      ui:widget: file
-    ligand_top_fname:
-      ui:widget: file
 examples:
-  docking: /examples/docking-protein-ligand.zip
+  docking-protein-ligand: /examples/docking-protein-ligand.zip

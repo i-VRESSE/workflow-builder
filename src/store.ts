@@ -4,10 +4,10 @@ import { externalizeDataUrls } from './dataurls'
 import { saveArchive } from './archive'
 import { ICatalog, IWorkflowNode, IFiles, IParameters, ICatalogNode, ICatalogIndex } from './types'
 import { workflow2tomltext } from './toml'
-import { catalogIndexURL } from './constants'
-import { moveItem, removeItemAtIndex, replaceItemAtIndex } from './utils/array'
-import { fetchCatalog, fetchCatalogIndex } from './catalog'
 import { dropUnusedFiles, loadWorkflowArchive } from './workflow'
+import { fetchCatalogIndex, fetchCatalog } from './catalog'
+import { catalogIndexURL } from './constants'
+import { removeItemAtIndex, replaceItemAtIndex, moveItem, swapItem } from './utils/array'
 
 export const catalogIndexState = selector<ICatalogIndex>({
   key: 'catalogIndex',
@@ -58,6 +58,15 @@ const workflowNodesState = atom<IWorkflowNode[]>({
 const selectedNodeIndexState = atom<number>({
   key: 'selectedNodeIndex',
   default: -1
+})
+
+// Keep reference to submit button inside a rjsf form, so the button can be activated outside the form
+// See https://github.com/rjsf-team/react-jsonschema-form/issues/500#issuecomment-849051041
+// The current approach of using a singleton to store the active submit button,
+// makes it impossible to have multiple forms renderede at the same time
+export const activeSubmitButtonState = atom<HTMLButtonElement | undefined>({
+  key: 'activeSubmitButton',
+  default: undefined
 })
 
 export function useSelectNodeIndex (): number {
@@ -111,6 +120,7 @@ interface UseWorkflow {
   global: IParameters
   toggleGlobalEdit: () => void
   addNodeToWorkflow: (nodeId: string) => void
+  addNodeToWorkflowAt: (nodeId: string, targetIndex: number) => void
   setGlobalParameters: (inlinedParameters: IParameters) => void
   setNodeParameters: (inlinedParameters: IParameters) => void
   loadWorkflowArchive: (archiveURL: string) => Promise<void>
@@ -120,6 +130,7 @@ interface UseWorkflow {
   clearNodeSelection: () => void
   moveNodeDown: (nodeIndex: number) => void
   moveNodeUp: (nodeIndex: number) => void
+  moveNode: (sourceIndex: number, targetIndex: number) => void
 }
 
 export function useWorkflow (): UseWorkflow {
@@ -138,8 +149,17 @@ export function useWorkflow (): UseWorkflow {
       setEditingGlobal(!editingGlobal)
       setSelectedNodeIndex(-1)
     },
+    addNodeToWorkflowAt (nodeId: string, targetIndex: number) {
+      setNodes((oldNodes) => {
+        const newNodes = [...oldNodes, { id: nodeId, parameters: {} }]
+        return moveItem(newNodes, newNodes.length - 1, targetIndex)
+      })
+      if (selectedNodeIndex === -1 && !editingGlobal) {
+        setSelectedNodeIndex(targetIndex)
+      }
+    },
     addNodeToWorkflow (nodeId: string) {
-      setNodes([...nodes, { id: nodeId, parameters: {} }])
+      setNodes((oldNodes) => [...oldNodes, { id: nodeId, parameters: {} }])
       if (selectedNodeIndex === -1 && !editingGlobal) {
         setSelectedNodeIndex(nodes.length)
       }
@@ -151,8 +171,12 @@ export function useWorkflow (): UseWorkflow {
       setSelectedNodeIndex(nodeIndex)
     },
     deleteNode (nodeIndex: number) {
-      if (nodeIndex === selectedNodeIndex) {
-        setSelectedNodeIndex(-1)
+      if (selectedNodeIndex !== -1) {
+        if (nodeIndex === selectedNodeIndex) {
+          setSelectedNodeIndex(-1)
+        } else if (nodeIndex < selectedNodeIndex) {
+          setSelectedNodeIndex(selectedNodeIndex - 1)
+        }
       }
       const newNodes = removeItemAtIndex(nodes, nodeIndex)
       const newFiles = dropUnusedFiles(global, newNodes, files)
@@ -187,17 +211,22 @@ export function useWorkflow (): UseWorkflow {
     },
     moveNodeDown (nodeIndex: number) {
       if (nodeIndex + 1 < nodes.length) {
-        const newNodes = moveItem(nodes, nodeIndex, 1)
+        const newNodes = swapItem(nodes, nodeIndex, 1)
         setSelectedNodeIndex(-1)
         setNodes(newNodes)
       }
     },
     moveNodeUp (nodeIndex: number) {
       if (nodeIndex > 0) {
-        const newNodes = moveItem(nodes, nodeIndex, -1)
+        const newNodes = swapItem(nodes, nodeIndex, -1)
         setSelectedNodeIndex(-1)
         setNodes(newNodes)
       }
+    },
+    moveNode (sourceIndex: number, targetIndex: number) {
+      const newNodes = moveItem(nodes, sourceIndex, targetIndex)
+      setSelectedNodeIndex(-1)
+      setNodes(newNodes)
     }
   }
 }
