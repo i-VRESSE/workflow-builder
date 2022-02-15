@@ -10,10 +10,6 @@ interface IProp {
   index: number
 }
 
-function EmptyIcon(): JSX.Element {
-  return <svg width='1em' height='1em'/>
-}
-
 export const VisualNode = ({ id, index }: IProp): JSX.Element => {
   // TODO to power hover use css :hover instead of slower JS
   const [hover, setHover] = useState(false)
