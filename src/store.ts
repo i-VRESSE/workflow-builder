@@ -171,8 +171,12 @@ export function useWorkflow (): UseWorkflow {
       setSelectedNodeIndex(nodeIndex)
     },
     deleteNode (nodeIndex: number) {
-      if (nodeIndex === selectedNodeIndex) {
-        setSelectedNodeIndex(-1)
+      if (selectedNodeIndex !== -1) {
+        if (nodeIndex === selectedNodeIndex) {
+          setSelectedNodeIndex(-1)
+        } else if (nodeIndex < selectedNodeIndex) {
+          setSelectedNodeIndex(selectedNodeIndex - 1)
+        }
       }
       const newNodes = removeItemAtIndex(nodes, nodeIndex)
       const newFiles = dropUnusedFiles(global, newNodes, files)
