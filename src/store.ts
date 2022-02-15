@@ -7,7 +7,7 @@ import { workflow2tomltext } from './toml'
 import { catalogIndexURL } from './constants'
 import { moveItem, removeItemAtIndex, replaceItemAtIndex, removeAllItems } from './utils/array'
 import { fetchCatalog, fetchCatalogIndex } from './catalog'
-import { dropUnusedFiles, loadWorkflowArchive, emptyParams } from './workflow'
+import { dropUnusedFiles, loadWorkflowArchive, emptyParams, clearFiles } from './workflow'
 
 export const catalogIndexState = selector<ICatalogIndex>({
   key: 'catalogIndex',
@@ -115,7 +115,7 @@ interface UseWorkflow {
   setNodeParameters: (inlinedParameters: IParameters) => void
   loadWorkflowArchive: (archiveURL: string) => Promise<void>
   save: () => Promise<void>
-  clearNodes: () => void
+  clear: () => void
   deleteNode: (nodeIndex: number) => void
   selectNode: (nodeIndex: number) => void
   clearNodeSelection: () => void
@@ -168,11 +168,13 @@ export function useWorkflow (): UseWorkflow {
       setGlobal(parameters)
       setFiles(newUsedFiles)
     },
-    clearNodes () {
+    clear () {
       const blankNodes = removeAllItems(nodes)
       const blankGlobals = emptyParams()
+      const blankFiles = clearFiles()
       setNodes(blankNodes)
       setGlobal(blankGlobals)
+      setFiles(blankFiles)
     },
     setNodeParameters (inlinedParameters: IParameters) {
       const newFiles = { ...files }

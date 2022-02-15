@@ -1,10 +1,10 @@
 import { useWorkflow } from './store'
 
 export const WorkflowClear = (): JSX.Element => {
-  const { clearNodes } = useWorkflow()
+  const { clear } = useWorkflow()
 
   return (
-    <button className='btn btn-outline-danger' onClick={clearNodes}>
+    <button className='btn btn-outline-danger' onClick={clear}>
       Clear
     </button>
   )
