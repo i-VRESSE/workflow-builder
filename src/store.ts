@@ -8,6 +8,7 @@ import { dropUnusedFiles, loadWorkflowArchive } from './workflow'
 import { fetchCatalogIndex, fetchCatalog } from './catalog'
 import { catalogIndexURL } from './constants'
 import { removeItemAtIndex, replaceItemAtIndex, moveItem, swapItem } from './utils/array'
+import { unGroupParameters } from './grouper'
 
 export const catalogIndexState = selector<ICatalogIndex>({
   key: 'catalogIndex',
@@ -139,6 +140,7 @@ export function useWorkflow (): UseWorkflow {
   const [editingGlobal, setEditingGlobal] = useRecoilState(editingGlobalParametersState)
   const [selectedNodeIndex, setSelectedNodeIndex] = useRecoilState(selectedNodeIndexState)
   const [files, setFiles] = useRecoilState(filesState)
+  const catalogNode = useSelectedCatalogNode()
   const catalog = useCatalog()
 
   return {
@@ -186,14 +188,17 @@ export function useWorkflow (): UseWorkflow {
     clearNodeSelection: () => setSelectedNodeIndex(-1),
     setGlobalParameters (inlinedParameters: IParameters) {
       const newFiles = { ...files }
-      const parameters = externalizeDataUrls(inlinedParameters, newFiles)
+      const parameters = externalizeDataUrls(unGroupParameters(inlinedParameters, catalog.global.uiSchema), newFiles)
       const newUsedFiles = dropUnusedFiles(parameters, nodes, newFiles)
       setGlobal(parameters)
       setFiles(newUsedFiles)
     },
     setNodeParameters (inlinedParameters: IParameters) {
       const newFiles = { ...files }
-      const parameters = externalizeDataUrls(inlinedParameters, newFiles)
+      if (catalogNode === undefined) {
+        return
+      }
+      const parameters = externalizeDataUrls(unGroupParameters(inlinedParameters, catalogNode.uiSchema), newFiles)
       const newNode = { ...nodes[selectedNodeIndex], parameters }
       const newNodes = replaceItemAtIndex(nodes, selectedNodeIndex, newNode)
       const newUsedFiles = dropUnusedFiles(global, newNodes, newFiles)

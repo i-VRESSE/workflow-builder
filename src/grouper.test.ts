@@ -1,8 +1,8 @@
 import { expect, describe, it, beforeEach } from 'vitest'
 import { JSONSchema7 } from 'json-schema'
 import { UiSchema } from '@rjsf/core'
-import { groupParameters, groupSchema, groupUiSchema, unGroupParameters } from './grouper'
-import { IParameters } from './types'
+import { groupCatalog, groupParameters, groupSchema, groupUiSchema, unGroupParameters } from './grouper'
+import { ICatalog, IParameters } from './types'
 
 function deepCopy<T> (value: T): T {
   return JSON.parse(JSON.stringify(value))
@@ -236,14 +236,14 @@ describe('given a schema with a 2 props with ui:group in uiSchema and 1 without'
     it('should move property inside an object with group name as key', () => {
       const groupedUiSchema = groupUiSchema(uiSchema)
 
-      const expecteduiSchema: UiSchema = {
+      const expectedIiSchema: UiSchema = {
         group1: {
           prop1: {
             'ui:widget': 'textarea'
           }
         }
       }
-      expect(groupedUiSchema).toEqual(expecteduiSchema)
+      expect(groupedUiSchema).toEqual(expectedIiSchema)
     })
   })
 
@@ -263,7 +263,7 @@ describe('given a schema with a 2 props with ui:group in uiSchema and 1 without'
   })
 
   describe('unGroupParameters()', () => {
-    it.only('should move property outside an object with group name as key', () => {
+    it('should move property outside an object with group name as key', () => {
       const groupedParameters = {
         prop2: 'val2',
         group1: {
@@ -275,6 +275,87 @@ describe('given a schema with a 2 props with ui:group in uiSchema and 1 without'
       const actual = unGroupParameters(groupedParameters, uiSchema)
 
       expect(actual).toEqual(parameters)
+    })
+  })
+
+  describe('groupCatalog', () => {
+    it('should add formSchema and update uiSchema for global and each node', () => {
+      const catalog: ICatalog = {
+        title: 'Test catalog',
+        global: {
+          schema,
+          uiSchema
+        },
+        categories: [{
+          name: 'category1',
+          description: 'Category 1'
+        }],
+        nodes: [{
+          schema,
+          uiSchema,
+          id: 'node1',
+          label: 'Node 1',
+          description: 'Description 1',
+          category: 'category1'
+        }],
+        examples: {}
+      }
+
+      const actual = groupCatalog(catalog)
+
+      const expectedSchema = {
+        type: 'object',
+        properties: {
+          prop2: {
+            type: 'string'
+          },
+          group1: {
+            type: 'object',
+            properties: {
+              prop1: {
+                type: 'string'
+              },
+              prop3: {
+                type: 'string'
+              }
+            },
+            additionalProperties: false
+          }
+        },
+        additionalProperties: false
+      }
+      const expecteduiSchema = {
+        group1: {
+          prop1: {
+            'ui:widget': 'textarea'
+          }
+        }
+      }
+      const expected = {
+        title: 'Test catalog',
+        global: {
+          schema,
+          uiSchema,
+          formSchema: expectedSchema,
+          formUiSchema: expecteduiSchema
+        },
+        categories: [{
+          name: 'category1',
+          description: 'Category 1'
+        }],
+        nodes: [{
+          schema,
+          uiSchema,
+          formSchema: expectedSchema,
+          formUiSchema: expecteduiSchema,
+          id: 'node1',
+          label: 'Node 1',
+          description: 'Description 1',
+          category: 'category1'
+        }],
+        examples: {}
+      }
+      expect(actual).toEqual(expected)
     })
   })
 })

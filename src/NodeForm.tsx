@@ -2,6 +2,7 @@ import { useSetRecoilState } from 'recoil'
 import { activeSubmitButtonState, useFiles, useSelectedCatalogNode, useSelectedNode, useWorkflow } from './store'
 import { internalizeDataUrls } from './dataurls'
 import { Form } from './Form'
+import { groupParameters } from './grouper'
 
 export const NodeForm = (): JSX.Element => {
   // TODO move setNodeParameters to useSelectedNode
@@ -17,9 +18,9 @@ export const NodeForm = (): JSX.Element => {
   if (catalogNode === undefined) {
     return <div>Unable to find schema belonging to node</div>
   }
-  const parametersWithDataUrls = internalizeDataUrls(node.parameters, files)
+  const formData = groupParameters(internalizeDataUrls(node.parameters, files), catalogNode.uiSchema)
 
-  const uiSchema = (catalogNode?.uiSchema != null) ? catalogNode.uiSchema : {}
+  const uiSchema = (catalogNode?.formUiSchema != null) ? catalogNode.formUiSchema : {}
   return (
     <>
       <h4>{catalogNode.label} ({node.id})</h4>
@@ -27,9 +28,9 @@ export const NodeForm = (): JSX.Element => {
         {catalogNode.description}
       </div>
       <Form
-        schema={catalogNode.schema}
+        schema={catalogNode.formSchema ?? {}}
         uiSchema={uiSchema}
-        formData={parametersWithDataUrls}
+        formData={formData}
         onSubmit={({ formData }) => setNodeParameters(formData)}
       >
         <button ref={submitFormRefSetter} style={{ display: 'none' }} />

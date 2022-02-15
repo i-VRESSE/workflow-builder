@@ -1,5 +1,5 @@
 import { UiSchema } from '@rjsf/core'
-import { IParameters } from './types'
+import { ICatalog, IParameters } from './types'
 import { JSONSchema7 } from 'json-schema'
 import { isObject } from './utils/isObject'
 
@@ -75,6 +75,7 @@ export function groupParameters (parameters: IParameters, uiSchema: UiSchema): I
 
 // TODO call when retrieving parameters from form
 export function unGroupParameters (parameters: IParameters, uiSchema: UiSchema): IParameters {
+  // TODO order return by first ungrouped params and then all previously grouped params
   const newParameters: IParameters = {}
   Object.entries(parameters).forEach(([k, v]) => {
     if (isObject(v)) {
@@ -90,4 +91,25 @@ export function unGroupParameters (parameters: IParameters, uiSchema: UiSchema):
   })
 
   return newParameters
+}
+
+export function groupCatalog (catalog: ICatalog): ICatalog {
+  const global = {
+    ...catalog.global,
+    formUiSchema: groupUiSchema(catalog.global.uiSchema),
+    formSchema: groupSchema(catalog.global.schema, catalog.global.uiSchema)
+  }
+  const nodes = catalog.nodes.map(n => {
+    return {
+      ...n,
+      formUiSchema: groupUiSchema(n.uiSchema),
+      formSchema: groupSchema(n.schema, n.uiSchema)
+    }
+  })
+
+  return {
+    ...catalog,
+    global,
+    nodes
+  }
 }

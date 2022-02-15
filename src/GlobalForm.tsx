@@ -2,16 +2,23 @@ import { activeSubmitButtonState, useCatalog, useFiles, useWorkflow } from './st
 import { internalizeDataUrls } from './dataurls'
 import { Form } from './Form'
 import { useSetRecoilState } from 'recoil'
+import { groupParameters } from './grouper'
 
 export const GlobalForm = (): JSX.Element => {
   const { global: globalSchemas } = useCatalog()
   const { setGlobalParameters, global: parameters } = useWorkflow()
   const files = useFiles()
   const submitFormRefSetter = useSetRecoilState(activeSubmitButtonState) as (instance: HTMLButtonElement | null) => void
-  const parametersWithDataUrls = internalizeDataUrls(parameters, files) // TODO move to hook, each time component is re-rendered this method will be called
-  const uiSchema = (globalSchemas.uiSchema != null) ? globalSchemas.uiSchema : {}
+  // TODO move to hook, each time component is re-rendered this method will be called
+  const formData = groupParameters(internalizeDataUrls(parameters, files), globalSchemas.uiSchema)
+  const uiSchema = (globalSchemas.formUiSchema != null) ? globalSchemas.formUiSchema : {}
   return (
-    <Form schema={globalSchemas.schema} uiSchema={uiSchema} formData={parametersWithDataUrls} onSubmit={({ formData }) => setGlobalParameters(formData)}>
+    <Form
+      schema={globalSchemas.formSchema ?? {}}
+      uiSchema={uiSchema}
+      formData={formData}
+      onSubmit={({ formData }) => setGlobalParameters(formData)}
+    >
       <button ref={submitFormRefSetter} style={{ display: 'none' }} />
     </Form>
   )
