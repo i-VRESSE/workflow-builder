@@ -1,13 +1,15 @@
-import { useFiles, useSelectedCatalogNode, useSelectedNode, useWorkflow } from './store'
+import { useSetRecoilState } from 'recoil'
+import { activeSubmitButtonState, useFiles, useSelectedCatalogNode, useSelectedNode, useWorkflow } from './store'
 import { internalizeDataUrls } from './dataurls'
 import { Form } from './Form'
 
 export const NodeForm = (): JSX.Element => {
-  // TODO move setParameters to useSelectedNode
+  // TODO move setNodeParameters to useSelectedNode
   const { setNodeParameters } = useWorkflow()
   const files = useFiles()
   const node = useSelectedNode()
   const catalogNode = useSelectedCatalogNode()
+  const submitFormRefSetter = useSetRecoilState(activeSubmitButtonState) as (instance: HTMLButtonElement | null) => void
 
   if (node === undefined) {
     return <div>No node selected</div>
@@ -24,7 +26,14 @@ export const NodeForm = (): JSX.Element => {
       <div>
         {catalogNode.description}
       </div>
-      <Form schema={catalogNode.schema} uiSchema={uiSchema} formData={parametersWithDataUrls} onSubmit={({ formData }) => setNodeParameters(formData)} />
+      <Form
+        schema={catalogNode.schema}
+        uiSchema={uiSchema}
+        formData={parametersWithDataUrls}
+        onSubmit={({ formData }) => setNodeParameters(formData)}
+      >
+        <button ref={submitFormRefSetter} style={{ display: 'none' }} />
+      </Form>
     </>
   )
 }

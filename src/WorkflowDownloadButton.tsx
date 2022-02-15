@@ -1,7 +1,7 @@
 import { toast } from 'react-toastify'
 import { useWorkflow } from './store'
 
-export const WorkflowDownload = (): JSX.Element => {
+export const WorkflowDownloadButton = (): JSX.Element => {
   const { save } = useWorkflow()
 
   async function downloadWorkflow (): Promise<void> {

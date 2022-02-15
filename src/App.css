@@ -1,4 +1,20 @@
-#root {
-    padding-left: 0.25em;
-    padding-right: 0.25em;
+.page {
+    padding: 1em;
+    display: grid;
+    width: 100%;
+    height: 100vh;
+    grid-template-areas: "head head head"
+                         "catalog workflow node"
+                         "catalog workflow-actions node-actions";
+    grid-template-columns: 1fr 1fr 2fr;
+    grid-template-rows: auto 1fr auto;
+    column-gap: 0.5rem;
+}
+
+.page > div {
+    overflow: auto;
+}
+
+.action-row {
+    padding: 0.25rem
 }

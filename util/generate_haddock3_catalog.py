@@ -102,7 +102,9 @@ def config2schema(config):
         elif v['type'] == 'file':
             prop['type'] = 'string'
             prop['format'] = 'uri-reference'
-            if 'default' in v and v['default'] == '':
+            if 'default' in v:
+                # TODO handle clustfcc.executable.default = src/contact_fcc gracefully, now default is omitted,
+                # it should be treated as some path outside workflow archive or a file inside the workflow archive
                 # paths can not have defaults
                 del prop['default']
 
@@ -116,7 +118,7 @@ def config2schema(config):
         elif v['type'] == 'dir':
             prop['type'] = 'string'
             prop['format'] = 'uri-reference'
-            if 'default' in v and v['default'] == '':
+            if 'default' in v:
                 # paths can not have defaults
                 del prop['default']
         elif v['type'] == 'string':
@@ -216,6 +218,9 @@ def process_category(category):
         'description': module.__doc__,
     }
 
+def get_category_order():
+    return importlib.import_module('haddock.modules').category_hierarchy
+
 def process_global(level):
     package = 'haddock.modules'
     module = importlib.import_module(package)
@@ -253,8 +258,8 @@ REQUIRED_GLOBAL_PARAMETERS = {
 }
 
 def process_level(level_fn: Path, level: str):
-    # TODO order the categories by which category needs output from another. Now order is not reproducible
-    categories = [process_category(c) for c in set(modules_category.values())]
+    category_list = get_category_order()
+    categories = [process_category(c) for c in category_list]
 
     broken_modules = {
         'topocg', # Gives `AttributeError: module 'haddock.modules.topology.topocg' has no attribute 'HaddockModule'` error
@@ -267,7 +272,7 @@ def process_level(level_fn: Path, level: str):
         'global': process_global(level),
         "nodes": nodes,
         "examples": {
-            'docking': '/examples/docking-protein-ligand.zip' # TODO get from somewhere instead of hardcoding it here
+            'docking-protein-ligand': '/examples/docking-protein-ligand.zip' # TODO get from somewhere instead of hardcoding it here
         }
     }
     with level_fn.open('w') as f:

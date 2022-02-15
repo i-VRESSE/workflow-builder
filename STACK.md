@@ -30,6 +30,13 @@ Use desktop oriented framework
 2. blueprint
 3. Bootstrap 4 <- chosen because it is default in react-json-schema-form
 
+## Icons
+
+1. Awesome fonts
+2. Bootstrap icons <- chosen because no paid tiers and already using bootstrap for UI
+3. Ionic icons
+4. Octicons
+
 ## State management
 
 1. hooks
@@ -89,8 +96,10 @@ Save to disk
 Drag step from catalog to workflow visualization
 Should place nice with workflow viz library.
 
-1. react-beautiful-dnd
+1. ~react-beautiful-dnd~ No longer activly maintained
 2. react-dnd
+3. ~react-dragula~ No longer activly maintained
+4. react-draggable
 
 ## Desktop app
 

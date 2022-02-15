@@ -1,31 +1,48 @@
-import React from 'react'
-import { RecoilRoot } from 'recoil'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import { ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
+import type { PropsWithChildren } from 'react'
 
+import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
 import { CatalogPanel } from './CatalogPanel'
 import { NodePanel } from './NodePanel'
 import { WorkflowPanel } from './WorkflowPanel'
 import { Header } from './Header'
-import { ErrorBoundary } from './ErrorBoundary'
+
+import { WorkflowDownloadButton } from './WorkflowDownloadButton'
+import { FormActions } from './FormActions'
+import { Wrapper } from './Wrapper'
+
+function GridArea ({ area, className, children }: PropsWithChildren<{area: string, className?: string}>): JSX.Element {
+  return (
+    <div className={className} style={{ gridArea: area }}>
+      {children}
+    </div>
+  )
+}
 
 function App (): JSX.Element {
   return (
-    <RecoilRoot>
-      <ErrorBoundary>
-        <React.Suspense fallback={<div>Loading...</div>}>
-          <ToastContainer position='top-center' autoClose={1000} closeOnClick pauseOnFocusLoss />
+    <Wrapper>
+      <div className='page'>
+        <GridArea area='head'>
           <Header />
-          <div style={{ display: 'grid', gridTemplateColumns: '400px 0.6fr 1fr', gridAutoRows: '90vh', columnGap: '0.5em' }}>
-            <CatalogPanel />
-            <WorkflowPanel />
-            <NodePanel />
-          </div>
-        </React.Suspense>
-      </ErrorBoundary>
-    </RecoilRoot>
+        </GridArea>
+        <GridArea area='catalog'>
+          <CatalogPanel />
+        </GridArea>
+        <GridArea area='workflow'>
+          <WorkflowPanel />
+        </GridArea>
+        <GridArea area='node'>
+          <NodePanel />
+        </GridArea>
+        <GridArea className='action-row' area='workflow-actions'>
+          <WorkflowDownloadButton />
+        </GridArea>
+        <GridArea className='action-row' area='node-actions'>
+          <FormActions />
+        </GridArea>
+      </div>
+    </Wrapper>
   )
 }
 
