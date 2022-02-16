@@ -1,10 +1,9 @@
-import { useRecoilValue } from 'recoil'
-import { activeSubmitButtonState, useSelectNodeIndex, useWorkflow } from './store'
+import { useSelectNodeIndex, useActiveSubmitButton, useWorkflow } from './store'
 
 export const FormActions = (): JSX.Element => {
   const index = useSelectNodeIndex()
   const { deleteNode, clearNodeSelection } = useWorkflow()
-  const submitFormRef = useRecoilValue(activeSubmitButtonState)
+  const submitFormRef = useActiveSubmitButton()
   const { editingGlobal, toggleGlobalEdit } = useWorkflow()
   if (submitFormRef === undefined || !(index > -1 || editingGlobal)) {
     return <></>

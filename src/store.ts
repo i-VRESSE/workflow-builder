@@ -1,4 +1,4 @@
-import { atom, selector, useRecoilState, useRecoilValue } from 'recoil'
+import { atom, selector, SetterOrUpdater, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 
 import { externalizeDataUrls } from './dataurls'
 import { saveArchive } from './archive'
@@ -10,12 +10,16 @@ import { catalogIndexURL } from './constants'
 import { removeItemAtIndex, replaceItemAtIndex, moveItem, swapItem } from './utils/array'
 import { unGroupParameters } from './grouper'
 
-export const catalogIndexState = selector<ICatalogIndex>({
+const catalogIndexState = selector<ICatalogIndex>({
   key: 'catalogIndex',
   get: async () => {
     return await fetchCatalogIndex(catalogIndexURL)
   }
 })
+
+export function useCatalogIndex (): ICatalogIndex {
+  return useRecoilValue(catalogIndexState)
+}
 
 const defaultCatalogURLState = selector<string>({
   key: 'defaultCatalogURL',
@@ -24,10 +28,14 @@ const defaultCatalogURLState = selector<string>({
   }
 })
 
-export const catalogURLState = atom<string>({
+const catalogURLState = atom<string>({
   key: 'catalogURL',
   default: defaultCatalogURLState
 })
+
+export function useCatalogURL (): [string, SetterOrUpdater<string>] {
+  return useRecoilState(catalogURLState)
+}
 
 const catalogState = selector<ICatalog>({
   key: 'catalog',
@@ -69,6 +77,15 @@ export const activeSubmitButtonState = atom<HTMLButtonElement | undefined>({
   key: 'activeSubmitButton',
   default: undefined
 })
+
+export function useSetActiveSubmitButton (): (instance: HTMLButtonElement | null) => void {
+  return useSetRecoilState(activeSubmitButtonState) as (instance: HTMLButtonElement | null) => void
+}
+
+export function useActiveSubmitButton (): HTMLButtonElement | undefined {
+  return useRecoilValue(activeSubmitButtonState)
+}
+
 
 export function useSelectNodeIndex (): number {
   return useRecoilValue(selectedNodeIndexState)

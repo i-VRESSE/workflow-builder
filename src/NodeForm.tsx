@@ -1,5 +1,4 @@
-import { useSetRecoilState } from 'recoil'
-import { activeSubmitButtonState, useFiles, useSelectedCatalogNode, useSelectedNode, useWorkflow } from './store'
+import { useSetActiveSubmitButton, useFiles, useSelectedCatalogNode, useSelectedNode, useWorkflow } from './store'
 import { internalizeDataUrls } from './dataurls'
 import { Form } from './Form'
 import { groupParameters } from './grouper'
@@ -10,7 +9,7 @@ export const NodeForm = (): JSX.Element => {
   const files = useFiles()
   const node = useSelectedNode()
   const catalogNode = useSelectedCatalogNode()
-  const submitFormRefSetter = useSetRecoilState(activeSubmitButtonState) as (instance: HTMLButtonElement | null) => void
+  const submitFormRefSetter = useSetActiveSubmitButton()
 
   if (node === undefined) {
     return <div>No node selected</div>
