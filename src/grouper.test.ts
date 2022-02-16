@@ -129,6 +129,7 @@ describe('given a schema with a property with ui:group in uiSchema', () => {
 
       const expecteduiSchema: UiSchema = {
         group1: {
+          'ui:field': 'collapsible',
           prop1: {
             'ui:widget': 'textarea'
           }
@@ -238,6 +239,7 @@ describe('given a schema with a 2 props with ui:group in uiSchema and 1 without'
 
       const expectedIiSchema: UiSchema = {
         group1: {
+          'ui:field': 'collapsible',
           prop1: {
             'ui:widget': 'textarea'
           }
@@ -326,6 +328,7 @@ describe('given a schema with a 2 props with ui:group in uiSchema and 1 without'
       }
       const expecteduiSchema = {
         group1: {
+          'ui:field': 'collapsible',
           prop1: {
             'ui:widget': 'textarea'
           }

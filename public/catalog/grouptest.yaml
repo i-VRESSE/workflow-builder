@@ -2,6 +2,7 @@
 title: Test catalog
 global:
   schema:
+    title: Test to render group1 collapsed
     type: object
     properties:
       prop1:
@@ -22,6 +23,7 @@ categories:
   description: Category 1
 nodes:
 - schema:
+    title: Test to render group1 collapsed
     type: object
     properties:
       prop1:
@@ -40,5 +42,28 @@ nodes:
   id: node1
   label: Node 1
   description: Description 1
+  category: category1
+- schema:
+    title: Test to render group1 expanded
+    type: object
+    properties:
+      prop1:
+        type: string
+      prop2:
+        type: string
+      prop3:
+        type: string
+    additionalProperties: false
+  uiSchema:
+    prop1:
+      ui:widget: textarea
+      ui:group: group1
+    prop3:
+      ui:group: group1
+    group1:
+      ui:collapsed: false
+  id: node2
+  label: Node 2
+  description: Description 2
   category: category1
 examples: {}

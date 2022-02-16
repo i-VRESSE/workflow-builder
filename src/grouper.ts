@@ -40,10 +40,16 @@ export function groupUiSchema (uiSchema: UiSchema): UiSchema {
       /* eslint-enable @typescript-eslint/no-dynamic-delete */
       if (Object.keys(newuiProp).length > 0) {
         if (!(group in newUiSchema)) {
-          newUiSchema[group] = {}
+          if (group in uiSchema) {
+            newUiSchema[group] = { 'ui:field': 'collapsible', ...uiSchema[group] }
+          } else {
+            newUiSchema[group] = { 'ui:field': 'collapsible' }
+          }
         }
         newUiSchema[group][k] = newuiProp
       }
+    } else if (k in newUiSchema) {
+      newUiSchema[k] = { ...newUiSchema[k], ...v }
     } else {
       newUiSchema[k] = v
     }

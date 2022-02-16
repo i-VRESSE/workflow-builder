@@ -1,9 +1,5 @@
 [
     [
-        "grouptest",
-        "/catalog/grouptest.yaml"
-    ],
-    [
         "haddock3easy",
         "/catalog/haddock3.easy.yaml"
     ],
@@ -14,5 +10,9 @@
     [
         "haddock3guru",
         "/catalog/haddock3.guru.yaml"
+    ],
+    [
+        "grouptest",
+        "/catalog/grouptest.yaml"
     ]
 ]
