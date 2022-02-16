@@ -86,7 +86,6 @@ export function useActiveSubmitButton (): HTMLButtonElement | undefined {
   return useRecoilValue(activeSubmitButtonState)
 }
 
-
 export function useSelectNodeIndex (): number {
   return useRecoilValue(selectedNodeIndexState)
 }
