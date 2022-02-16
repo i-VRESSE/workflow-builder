@@ -101,6 +101,23 @@ The catalog is a YAML formatted file which tells the app what nodes are availabl
     * map with title as key and link as value
 5. title: Title of the catalog
 
+#### uiSchema
+
+The global and node parameters are edited in a form generated from the JSON schema.
+To customize the look and feel of the form the uiSchema can be used. For example rendering a radio group or a text area. The [react-json-schema-form](https://react-jsonschema-form.readthedocs.io/en/latest/api-reference/uiSchema/) docs describes the uiSchema format.
+
+Besides the built-in react-json-schema-form uiSchema fields the workflow builder adds the following:
+
+```json
+{
+    "prop1": {
+        "ui:group": "<group name>"
+    }
+}
+```
+
+Any property with a group uiSchema field will be grouped together with other properties with the same group in the form. The generate toml file will have the props ungrouped.
+
 ### Catalog index
 
 In the worklfow builder you can pick a catalog from a list. This list gets downloaded from [public/catalog/index.json](public/catalog/index.json) and is formatted like
