@@ -51,6 +51,7 @@ from yaml import dump, load, Loader
 
 from haddock.modules import modules_category
 from haddock import config_expert_levels
+from haddock.gear.parameters import _mandatory_parameters
 
 def argparser_builder():
     parser = argparse.ArgumentParser()
@@ -153,17 +154,20 @@ def config2schema(config):
                     prop_ui = {
                         "items": schema_uiSchema['uiSchema']['a']
                     }
-            elif len(v['default']) and (isinstance(v['default'][0], int) or isinstance(v['default'][0], float)):
+            elif k == 'molecules':
+                # TODO dont hardcode item type for global.molecules, but use itemtype defined in haddock3
                 # Use default value to determine type of items in array/list
+                prop['items'] = {
+                    "type": "string",
+                    "format": "uri-reference"
+                }
+            elif k == 'top_cluster':
+                # TODO dont hardcode item type for seletopclusts:top_cluster, but use itemtype defined in haddock3
                 prop['items'] = {
                     "type": "number"
                 }
             else:
-                # TODO dont fallback to number, for example seletopclusts:top_cluster
-                prop['items'] = {
-                    "type": "number"
-                }
-                # raise ValueError(f"Don't know how to determine type of items of {v}")
+                raise ValueError(f"Don't know how to determine type of items of {v}")
         else:
             raise ValueError(f"Don't know what to do with {k}:{v}")
         properties[k] = prop
@@ -221,12 +225,16 @@ def process_category(category):
 def get_category_order():
     return importlib.import_module('haddock.modules').category_hierarchy
 
+
 def process_global(level):
     package = 'haddock.modules'
     module = importlib.import_module(package)
     with open(module.modules_defaults_path) as f:
         optional_global_parameters = load(f, Loader=Loader)
-    config = REQUIRED_GLOBAL_PARAMETERS | optional_global_parameters
+    gmodule = importlib.import_module('haddock.gear.parameters')
+    with open(gmodule.MANDATORY_YAML) as f:
+        mandatory_parameters = load(f, Loader=Loader)
+    config = mandatory_parameters | optional_global_parameters
     config4level = filter_on_level(config, level)
 
     schema_uiSchema = config2schema(config4level)
@@ -235,27 +243,6 @@ def process_global(level):
         "schema": schema_uiSchema['schema'],
         "uiSchema": schema_uiSchema['uiSchema']
     }
-
-
-# TODO retrieve required global config from haddock3 code
-REQUIRED_GLOBAL_PARAMETERS = {
-    'molecules': {
-        'type': 'list',
-        'itemtype': 'file',
-        'accept': '.pdb',
-        'minitems': 1,
-        'maxitems': 20,
-        'title': 'Molecules',
-        'group': '',
-        'explevel': 'easy'
-    },
-    'run_dir': {
-        'type': 'dir',
-        'title': 'Run directory',
-        'group': '',
-        'explevel': 'easy'
-    }
-}
 
 def process_level(level_fn: Path, level: str):
     category_list = get_category_order()
