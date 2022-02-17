@@ -36,7 +36,7 @@ Translations from haddock3 -> i-VRESSE workflow builder:
     * accept -> ui:options={accept}
     * choices -> enum
     * explevel -> each explevel gets generated into own catalog
-    * group -> ui:group in prop
+    * group -> ui:group in ui schema
 
 TODO move script outside workflow-builder repo as this repo should be generic and not have any haddock specific scripts
 """
