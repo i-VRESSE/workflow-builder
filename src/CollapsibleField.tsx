@@ -1,4 +1,4 @@
-import { FieldProps } from '@rjsf/core'
+import { FieldProps, utils } from '@rjsf/core'
 import { useState } from 'react'
 import { CaretDownSquare, CaretUpSquare } from 'react-bootstrap-icons'
 
@@ -7,8 +7,17 @@ export const CollapsibleField = (props: FieldProps): JSX.Element => {
     throw Error('CollapsibleField only works with type:object')
   }
   const ObjectField = props.registry.fields.ObjectField
-  const initialCollapsed: boolean = 'ui:collapsed' in props.uiSchema ? props.uiSchema['ui:collapsed'] : true
+  const uiOptions = utils.getUiOptions(props.uiSchema)
+  const initialCollapsed = uiOptions !== undefined && 'collapsed' in uiOptions ? uiOptions.collapsed === true : true
   const [collapsed, setCollapsed] = useState(initialCollapsed)
+  let title = props.name
+  if ('title' in props.schema && props.schema.title !== undefined) {
+    title = props.schema.title
+  }
+  if (uiOptions !== undefined && 'title' in uiOptions && typeof uiOptions.title === 'string') {
+    title = uiOptions.title
+  }
+
   const CollapsedIcon = CaretDownSquare
   const ExpandedIcon = CaretUpSquare
   // TODO animate expansing or collapsing
@@ -19,23 +28,37 @@ export const CollapsibleField = (props: FieldProps): JSX.Element => {
       <div className='my-1'>
         <h5 onClick={() => setCollapsed(false)}>
           <CollapsedIcon />
-          &nbsp;
-          {props.name}
+          <span className='align-middle'>
+            &nbsp;{title}
+          </span>
         </h5>
-        <hr className='border-0 bg-secondary' style={{ height: '1px' }} />
       </div>
     )
   }
 
-  const { name, ...oprops } = props
-  // By setting name to falsy the TitleField component is not rendered
+  // TitleField inside the ObjectField is not rendered when there is no title or name
+  const oprops = { ...props }
   oprops.name = ''
+  if ('title' in oprops.schema) {
+    oprops.schema = { ...oprops.schema }
+    oprops.schema.title = ''
+  }
+  if ('ui:title' in props.uiSchema) {
+    oprops.uiSchema = { ...oprops.uiSchema }
+    oprops.uiSchema['ui:title'] = ''
+  }
+  if ('ui:options' in props.uiSchema && props.uiSchema['ui:options'] !== undefined && 'title' in props.uiSchema['ui:options']) {
+    oprops.uiSchema = { ...oprops.uiSchema }
+    oprops.uiSchema['ui:options'] = { ...props.uiSchema['ui:options'] }
+    oprops.uiSchema['ui:options'].title = ''
+  }
   return (
     <div className='my-1'>
       <h5 onClick={() => setCollapsed(true)}>
         <ExpandedIcon />
-        &nbsp;
-        {name}
+        <span className='align-middle'>
+          &nbsp;{title}
+        </span>
       </h5>
       <hr className='border-0 bg-secondary' style={{ height: '1px' }} />
       <ObjectField {...oprops as FieldProps} />
