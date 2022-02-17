@@ -1,0 +1,107 @@
+---
+title: Test catalog
+global:
+  schema:
+    title: Test builtin custom fields
+    type: object
+    properties:
+      prop1:
+        type: string
+      prop2:
+        type: boolean
+        default: false
+      prop3:
+        type: string
+      prop4:
+        type: number
+        minimum: 0
+        maximum: 100
+      prop5:
+        type: string
+        default: easy
+        enum:
+          - easy
+          - expert
+          - guru
+    additionalProperties: false
+  uiSchema:
+    prop1:
+      ui:widget: textarea
+    prop2:
+      ui:widget: radio
+    prop3:
+      ui:widget: file
+    prop4:
+      ui:widget: range
+    prop5:
+      ui:widget: radio
+categories:
+- name: grouptests
+  description: Category 1
+nodes:
+- schema:
+    title: Test to render group11 collapsed
+    type: object
+    properties:
+      prop1:
+        type: string
+      prop2:
+        type: string
+      prop3:
+        type: string
+    additionalProperties: false
+  uiSchema:
+    prop1:
+      ui:widget: textarea
+      ui:group: group11
+    prop3:
+      ui:group: group11
+  id: node1
+  label: Node 1
+  description: Description 1
+  category: grouptests
+- schema:
+    title: Test to render group21 collapsed
+    type: object
+    properties:
+      prop1:
+        type: string
+      prop2:
+        type: string
+      prop3:
+        type: string
+    additionalProperties: false
+  uiSchema:
+    prop1:
+      ui:widget: textarea
+      ui:group: group21
+    prop3:
+      ui:group: group21
+  id: node2
+  label: Node 2
+  description: Description 2
+  category: grouptests
+- schema:
+    title: Test to render group31 expanded
+    type: object
+    properties:
+      prop1:
+        type: string
+      prop2:
+        type: string
+      prop3:
+        type: string
+    additionalProperties: false
+  uiSchema:
+    prop1:
+      ui:widget: textarea
+      ui:group: group31
+    prop3:
+      ui:group: group31
+    group31:
+      ui:collapsed: false
+  id: node3
+  label: Node 3
+  description: Description 3
+  category: grouptests
+examples: {}
