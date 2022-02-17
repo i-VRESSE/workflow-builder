@@ -362,3 +362,79 @@ describe('given a schema with a 2 props with ui:group in uiSchema and 1 without'
     })
   })
 })
+
+describe('given a schema with an object prop and no ui:group', () => {
+  let schema: JSONSchema7
+  let uiSchema: UiSchema
+  let parameters: IParameters
+
+  beforeEach(() => {
+    schema = {
+      type: 'object',
+      properties: {
+        prop1: {
+          type: 'object',
+          properties: {
+            prop2: {
+              type: 'string'
+            }
+          },
+          additionalProperties: false
+        }
+      },
+      additionalProperties: false
+    }
+    uiSchema = {
+      prop1: {
+        prop2: {
+          'ui:widget': 'textarea'
+        }
+      }
+    }
+    parameters = {
+      prop1: {
+        prop2: 'val1'
+      }
+    }
+  })
+
+  describe('groupSchema()', () => {
+    it('should return unchanged', () => {
+      const expectedSchema = deepCopy(schema)
+
+      const groupedSchema = groupSchema(schema, uiSchema)
+
+      expect(groupedSchema).toEqual(expectedSchema)
+    })
+  })
+
+  describe('groupUiSchema()', () => {
+    it('should return unchanged', () => {
+      const expecteduiSchema = deepCopy(uiSchema)
+
+      const groupedUiSchema = groupUiSchema(uiSchema)
+
+      expect(groupedUiSchema).toEqual(expecteduiSchema)
+    })
+  })
+
+  describe('groupParameters()', () => {
+    it('should return unchanged', () => {
+      const expectedParameters = deepCopy(parameters)
+
+      const actual = groupParameters(parameters, uiSchema)
+
+      expect(actual).toEqual(expectedParameters)
+    })
+  })
+
+  describe('ungroupParameters()', () => {
+    it('should return unchanged', () => {
+      const expectedParameters = deepCopy(parameters)
+
+      const actual = unGroupParameters(parameters, uiSchema)
+
+      expect(actual).toEqual(expectedParameters)
+    })
+  })
+})

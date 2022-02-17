@@ -81,12 +81,17 @@ def config2schema(config):
             prop['$comment'] = v['long']
         if 'type' not in v:
             # if not type field treat value as dict of dicts
-            schema_uiSchema = config2schema({k2:v2 for k2,v2 in v.items() if k2 != 'explevel'})
+            # TODO instead of removing group and explevel from mol1.prot_segid dict do proper filtering and support group recursivly
+            config2 = {
+                k2:{
+                    k3:v3 for k3,v3 in v2.items() if k3 != 'group' and k3 != 'explevel'
+                } for k2,v2 in v.items() if k2 != 'explevel'
+            }
+            schema_uiSchema = config2schema(config2)
             prop = schema_uiSchema['schema']
+            prop_ui = { 'ui:field': 'collapsible'}
             if schema_uiSchema['uiSchema']:
-                prop_ui = {
-                    k: schema_uiSchema['uiSchema']
-                }
+                prop_ui.update(schema_uiSchema['uiSchema'])
             # molXX in topaa are not required
             required.pop()
         elif v['type'] == 'boolean':
