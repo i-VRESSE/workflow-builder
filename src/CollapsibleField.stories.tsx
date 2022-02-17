@@ -269,7 +269,7 @@ export const Multi: ComponentStory<typeof Form> = () => {
   return render(schema, uiSchema)
 }
 
-export const Title: ComponentStory<typeof Form> = () => {
+export const TitleFromSchema: ComponentStory<typeof Form> = () => {
   const schema: JSONSchema7 = {
     type: 'object',
     properties: {
