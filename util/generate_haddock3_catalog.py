@@ -50,7 +50,7 @@ import sys
 from yaml import dump, load, Loader
 
 from haddock.modules import modules_category
-from haddock import config_expert_levels
+from haddock import config_expert_levels, _hidden_level
 from haddock.gear.parameters import _mandatory_parameters
 
 def argparser_builder():
@@ -193,7 +193,7 @@ def filter_on_level(config, level):
         valid_levels.add(l)
         if l == level:
             break
-    return {k: v for k, v in config.items() if v['explevel'] in valid_levels}
+    return {k: v for k, v in config.items() if v['explevel'] in valid_levels and not v['explevel'] == _hidden_level}
 
 def process_module(module_name, category, level):
     package = f'haddock.modules.{category}.{module_name}'
