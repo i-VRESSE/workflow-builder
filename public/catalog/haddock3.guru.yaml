@@ -79,6 +79,11 @@ global:
     - molecules
     additionalProperties: false
   uiSchema:
+    molecules:
+      items:
+        ui:widget: file
+        ui:options:
+          accept: .pdb
     cns_exec:
       ui:widget: file
 nodes:

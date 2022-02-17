@@ -33,7 +33,7 @@ Translations from haddock3 -> i-VRESSE workflow builder:
     * maxchars -> maxLength
     * minitems -> minItems
     * maxitems -> maxItems
-    * accept -> ui:options={accept}
+    * accept -> ui:options={accept: ','.join(...)}
     * choices -> enum
     * explevel -> each explevel gets generated into own catalog
 
@@ -115,7 +115,7 @@ def config2schema(config):
             }
 
             if 'accept' in v:
-                prop_ui["ui:options"] = { "accept": v['accept']}
+                prop_ui["ui:options"] = { "accept": ",".join(v['accept'])}
         elif v['type'] == 'dir':
             prop['type'] = 'string'
             prop['format'] = 'uri-reference'
@@ -139,7 +139,7 @@ def config2schema(config):
             if 'itemtype' in v:
                 obj = {'a' : {'type': v['itemtype']}} # config2schema requires object
                 if 'accept' in v:
-                    obj['a']['accept'] = v['accept']
+                    obj['a']['accept'] = ",".join(v['accept'])
                 schema_uiSchema = config2schema(obj)
                 prop['items'] = schema_uiSchema['schema']['properties']['a']
                 if schema_uiSchema['uiSchema'] and schema_uiSchema['uiSchema']['a']:
@@ -155,11 +155,20 @@ def config2schema(config):
                         "items": schema_uiSchema['uiSchema']['a']
                     }
             elif k == 'molecules':
-                # TODO dont hardcode item type for global.molecules, but use itemtype defined in haddock3
+                # TODO dont hardcode item type and ui for global.molecules, but use itemtype defined in haddock3
                 # Use default value to determine type of items in array/list
                 prop['items'] = {
                     "type": "string",
                     "format": "uri-reference"
+                }
+                prop_ui = {
+                    'items': {
+                         'ui:widget': 'file',
+                         'ui:options': {
+                             # Make comma seperated string, see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file#accept
+                             'accept': ",".join(v['accept'])
+                         }
+                    }
                 }
             elif k == 'top_cluster':
                 # TODO dont hardcode item type for seletopclusts:top_cluster, but use itemtype defined in haddock3
