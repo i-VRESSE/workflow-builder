@@ -4,10 +4,10 @@ import { externalizeDataUrls } from './dataurls'
 import { saveArchive } from './archive'
 import { ICatalog, IWorkflowNode, IFiles, IParameters, ICatalogNode, ICatalogIndex } from './types'
 import { workflow2tomltext } from './toml'
-import { dropUnusedFiles, loadWorkflowArchive } from './workflow'
+import { dropUnusedFiles, loadWorkflowArchive, emptyParams, clearFiles } from './workflow'
 import { fetchCatalogIndex, fetchCatalog } from './catalog'
 import { catalogIndexURL } from './constants'
-import { removeItemAtIndex, replaceItemAtIndex, moveItem, swapItem } from './utils/array'
+import { removeItemAtIndex, replaceItemAtIndex, moveItem, swapItem, removeAllItems } from './utils/array'
 import { unGroupParameters } from './grouper'
 
 const catalogIndexState = selector<ICatalogIndex>({
@@ -142,6 +142,7 @@ interface UseWorkflow {
   setNodeParameters: (inlinedParameters: IParameters) => void
   loadWorkflowArchive: (archiveURL: string) => Promise<void>
   save: () => Promise<void>
+  clear: () => void
   deleteNode: (nodeIndex: number) => void
   selectNode: (nodeIndex: number) => void
   clearNodeSelection: () => void
@@ -208,6 +209,14 @@ export function useWorkflow (): UseWorkflow {
       const newUsedFiles = dropUnusedFiles(parameters, nodes, newFiles)
       setGlobal(parameters)
       setFiles(newUsedFiles)
+    },
+    clear () {
+      const blankNodes = removeAllItems(nodes)
+      const blankGlobals = emptyParams()
+      const blankFiles = clearFiles()
+      setNodes(blankNodes)
+      setGlobal(blankGlobals)
+      setFiles(blankFiles)
     },
     setNodeParameters (inlinedParameters: IParameters) {
       const newFiles = { ...files }
