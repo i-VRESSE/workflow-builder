@@ -9,12 +9,12 @@ export async function fetchCatalog (catalogUrl: string): Promise<ICatalog> {
     throw new Error('Error retrieving catalog')
   }
   const body = await response.text()
-  const unGroupedcatalog = load(body)
+  const unGroupedCatalog = load(body)
 
-  if (!isCatalog(unGroupedcatalog)) {
+  if (!isCatalog(unGroupedCatalog)) {
     throw new Error('Retrieved catalog is malformed')
   }
-  const catalog = groupCatalog(unGroupedcatalog)
+  const catalog = groupCatalog(unGroupedCatalog)
   const errors = validateCatalog(catalog)
   if (errors.length > 0) {
     throw new ValidationError('Invalid catalog loaded', errors)
