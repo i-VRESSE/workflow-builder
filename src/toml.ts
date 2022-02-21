@@ -1,10 +1,6 @@
 import { Section, stringify, parse } from '@ltd/j-toml'
+import { isObject } from './utils/isObject'
 import { IWorkflowNode, IParameters, IWorkflow } from './types'
-
-function isObject (o: unknown): boolean {
-  return typeof o === 'object' &&
-    Object.prototype.toString.call(o) === '[object Object]'
-}
 
 function nodes2tomltable (nodes: IWorkflowNode[]): Record<string, unknown> {
   const table: Record<string, unknown> = {}

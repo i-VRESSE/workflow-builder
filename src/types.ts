@@ -7,18 +7,23 @@ export interface ICatalogNode {
   id: string
   label: string
   schema: JSONSchema7
-  uiSchema?: UiSchema
+  uiSchema: UiSchema
+  formSchema?: JSONSchema7
+  formUiSchema?: UiSchema
   description: string
   category: string
 }
 
 export interface ICategory {
   name: string
+  description: string
 }
 
 export interface IGlobal {
   schema: JSONSchema7
-  uiSchema?: UiSchema
+  uiSchema: UiSchema
+  formSchema?: JSONSchema7
+  formUiSchema?: UiSchema
 }
 
 export interface ICatalog {
