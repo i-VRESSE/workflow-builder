@@ -8,6 +8,7 @@ import { WorkflowPanel } from './WorkflowPanel'
 import { Header } from './Header'
 
 import { WorkflowDownloadButton } from './WorkflowDownloadButton'
+import { WorkflowClear } from './WorkflowClear'
 import { FormActions } from './FormActions'
 import { Wrapper } from './Wrapper'
 
@@ -37,6 +38,7 @@ function App (): JSX.Element {
         </GridArea>
         <GridArea className='action-row' area='workflow-actions'>
           <WorkflowDownloadButton />
+          <WorkflowClear />
         </GridArea>
         <GridArea className='action-row' area='node-actions'>
           <FormActions />
