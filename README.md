@@ -126,7 +126,7 @@ Besides the built-in react-json-schema-form uiSchema fields the workflow builder
 }
 ```
 
-Any property with a group uiSchema field will be grouped together with other properties with the same group in the form. The generate toml file will have the props ungrouped.
+Any property with a group uiSchema field will be grouped together with other properties with the same group in the form. The generated toml file will have the props ungrouped.
 
 ### Catalog index
 

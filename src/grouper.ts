@@ -3,7 +3,6 @@ import { ICatalog, IParameters } from './types'
 import { JSONSchema7 } from 'json-schema'
 import { isObject } from './utils/isObject'
 
-// TODO call when loading catalog and store in catalog.node.grouped...
 export function groupSchema (schema: JSONSchema7, uiSchema: UiSchema): JSONSchema7 {
   const newSchema = JSON.parse(JSON.stringify(schema))
 
@@ -54,7 +53,6 @@ export function groupUiSchema (uiSchema: UiSchema): UiSchema {
   return newUiSchema
 }
 
-// TODO call when passing parameters to form
 export function groupParameters (parameters: IParameters, uiSchema: UiSchema): IParameters {
   const newParameters: IParameters = {}
 
@@ -73,7 +71,6 @@ export function groupParameters (parameters: IParameters, uiSchema: UiSchema): I
   return newParameters
 }
 
-// TODO call when retrieving parameters from form
 export function unGroupParameters (parameters: IParameters, uiSchema: UiSchema): IParameters {
   // TODO order return by first ungrouped params and then all previously grouped params
   const newParameters: IParameters = {}

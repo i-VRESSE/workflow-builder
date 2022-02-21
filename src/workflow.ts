@@ -55,3 +55,11 @@ export function dropUnusedFiles (global: IParameters, nodes: IWorkflowNode[], fi
   }
   return newFiles
 }
+
+export function emptyParams (): IParameters {
+  return {}
+}
+
+export function clearFiles (): IFiles {
+  return {}
+}
