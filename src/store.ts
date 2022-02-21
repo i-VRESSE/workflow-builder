@@ -78,8 +78,8 @@ export const activeSubmitButtonState = atom<HTMLButtonElement | undefined>({
   default: undefined
 })
 
-export function useSetActiveSubmitButton (): (instance: HTMLButtonElement | undefined) => void {
-  return useSetRecoilState(activeSubmitButtonState)
+export function useSetActiveSubmitButton (): (instance: HTMLButtonElement | null) => void {
+  return useSetRecoilState(activeSubmitButtonState) as (instance: HTMLButtonElement | null) => void
 }
 
 export function useActiveSubmitButton (): HTMLButtonElement | undefined {
