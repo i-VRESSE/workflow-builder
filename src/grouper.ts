@@ -33,7 +33,7 @@ export function groupUiSchema (uiSchema: UiSchema): UiSchema {
   Object.entries(uiSchema).forEach(([k, v]) => {
     // TODO recursivly, now only loops over first direct props
     if ('ui:group' in v) {
-      const { 'ui:group': group, ...newuiProp } = v
+      const { 'ui:group': group, ...newUiProp } = v
       if (!(group in newUiSchema)) {
         if (group in uiSchema) {
           newUiSchema[group] = { 'ui:field': 'collapsible', ...uiSchema[group] }
@@ -41,8 +41,8 @@ export function groupUiSchema (uiSchema: UiSchema): UiSchema {
           newUiSchema[group] = { 'ui:field': 'collapsible' }
         }
       }
-      if (Object.keys(newuiProp).length > 0) {
-        newUiSchema[group][k] = newuiProp
+      if (Object.keys(newUiProp).length > 0) {
+        newUiSchema[group][k] = newUiProp
       }
     } else if (k in newUiSchema) {
       newUiSchema[k] = { ...newUiSchema[k], ...v }
