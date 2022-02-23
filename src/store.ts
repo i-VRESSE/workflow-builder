@@ -1,6 +1,6 @@
-import { atom, selector, SetterOrUpdater, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import { atom, DefaultValue, selector, SetterOrUpdater, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 
-import { externalizeDataUrls } from './dataurls'
+import { externalizeDataUrls, internalizeDataUrls } from './dataurls'
 import { saveArchive } from './archive'
 import { ICatalog, IWorkflowNode, IFiles, IParameters, ICatalogNode, ICatalogIndex } from './types'
 import { workflow2tomltext } from './toml'
@@ -8,7 +8,7 @@ import { dropUnusedFiles, loadWorkflowArchive, emptyParams, clearFiles } from '.
 import { fetchCatalogIndex, fetchCatalog } from './catalog'
 import { catalogIndexURL } from './constants'
 import { removeItemAtIndex, replaceItemAtIndex, moveItem, swapItem, removeAllItems } from './utils/array'
-import { unGroupParameters } from './grouper'
+import { groupParameters, unGroupParameters } from './grouper'
 
 const catalogIndexState = selector<ICatalogIndex>({
   key: 'catalogIndex',
@@ -95,6 +95,39 @@ const filesState = atom<IFiles>({
   default: {}
 })
 
+const globalFormDataState = selector<IParameters>({
+  key: 'globalFormData',
+  get: ({ get }) => {
+    const parameters = get(globalParametersState)
+    const files = get(filesState)
+    const catalog = get(catalogState)
+    const formData = groupParameters(internalizeDataUrls(parameters, files), catalog.global.uiSchema)
+    return formData
+  },
+  set: ({ get, set }, inlinedParameters) => {
+    if (inlinedParameters === undefined) {
+      return
+    }
+    const files = get(filesState)
+    const newFiles = { ...files }
+    const catalog = get(catalogState)
+    let parameters: IParameters
+    if (inlinedParameters instanceof DefaultValue) {
+      parameters = {}
+    } else {
+      parameters = externalizeDataUrls(unGroupParameters(inlinedParameters, catalog.global.uiSchema), newFiles)
+    }
+    const nodes = get(workflowNodesState)
+    const newUsedFiles = dropUnusedFiles(parameters, nodes, newFiles)
+    set(globalParametersState, parameters)
+    set(filesState, newUsedFiles)
+  }
+})
+
+export function useGlobalFormData (): [IParameters, SetterOrUpdater<IParameters>] {
+  return useRecoilState(globalFormDataState)
+}
+
 const selectedNodeState = selector<IWorkflowNode | undefined>({
   key: 'selectedNode',
   get: ({ get }) => {
@@ -131,6 +164,52 @@ export function useSelectedCatalogNode (): ICatalogNode | undefined {
   return useRecoilValue(selectedCatalogNodeState)
 }
 
+const selectedNodeFormDataState = selector<IParameters | undefined>({
+  key: 'selectedNodeFormData',
+  get: ({ get }) => {
+    const node = get(selectedNodeState)
+    if (node === undefined) {
+      return undefined
+    }
+    const catalogNode = get(selectedCatalogNodeState)
+    if (catalogNode === undefined) {
+      return undefined
+    }
+    const files = get(filesState)
+    const formData = groupParameters(internalizeDataUrls(node.parameters, files), catalogNode.uiSchema)
+    return formData
+  },
+  set: ({ set, get }, inlinedParameters) => {
+    if (inlinedParameters === undefined) {
+      return
+    }
+    const catalogNode = get(selectedCatalogNodeState)
+    if (catalogNode === undefined) {
+      return
+    }
+    const files = get(filesState)
+    const newFiles = { ...files }
+    let parameters: IParameters
+    if (inlinedParameters instanceof DefaultValue) {
+      parameters = {}
+    } else {
+      parameters = externalizeDataUrls(unGroupParameters(inlinedParameters, catalogNode.uiSchema), newFiles)
+    }
+    const nodes = get(workflowNodesState)
+    const selectedNodeIndex = get(selectedNodeIndexState)
+    const newNode = { ...nodes[selectedNodeIndex], parameters }
+    const newNodes = replaceItemAtIndex(nodes, selectedNodeIndex, newNode)
+    const global = get(globalParametersState)
+    const newUsedFiles = dropUnusedFiles(global, newNodes, newFiles)
+    set(workflowNodesState, newNodes)
+    set(filesState, newUsedFiles)
+  }
+})
+
+export function useSelectedNodeFormData (): [IParameters | undefined, SetterOrUpdater<IParameters | undefined>] {
+  return useRecoilState(selectedNodeFormDataState)
+}
+
 interface UseWorkflow {
   nodes: IWorkflowNode[]
   editingGlobal: boolean
@@ -138,8 +217,6 @@ interface UseWorkflow {
   toggleGlobalEdit: () => void
   addNodeToWorkflow: (nodeId: string) => void
   addNodeToWorkflowAt: (nodeId: string, targetIndex: number) => void
-  setGlobalParameters: (inlinedParameters: IParameters) => void
-  setNodeParameters: (inlinedParameters: IParameters) => void
   loadWorkflowArchive: (archiveURL: string) => Promise<void>
   save: () => Promise<void>
   clear: () => void
@@ -157,7 +234,6 @@ export function useWorkflow (): UseWorkflow {
   const [editingGlobal, setEditingGlobal] = useRecoilState(editingGlobalParametersState)
   const [selectedNodeIndex, setSelectedNodeIndex] = useRecoilState(selectedNodeIndexState)
   const [files, setFiles] = useRecoilState(filesState)
-  const catalogNode = useSelectedCatalogNode()
   const catalog = useCatalog()
 
   return {
@@ -203,13 +279,6 @@ export function useWorkflow (): UseWorkflow {
       setNodes(newNodes)
     },
     clearNodeSelection: () => setSelectedNodeIndex(-1),
-    setGlobalParameters (inlinedParameters: IParameters) {
-      const newFiles = { ...files }
-      const parameters = externalizeDataUrls(unGroupParameters(inlinedParameters, catalog.global.uiSchema), newFiles)
-      const newUsedFiles = dropUnusedFiles(parameters, nodes, newFiles)
-      setGlobal(parameters)
-      setFiles(newUsedFiles)
-    },
     clear () {
       const blankNodes = removeAllItems(nodes)
       const blankGlobals = emptyParams()
@@ -217,18 +286,6 @@ export function useWorkflow (): UseWorkflow {
       setNodes(blankNodes)
       setGlobal(blankGlobals)
       setFiles(blankFiles)
-    },
-    setNodeParameters (inlinedParameters: IParameters) {
-      const newFiles = { ...files }
-      if (catalogNode === undefined) {
-        return
-      }
-      const parameters = externalizeDataUrls(unGroupParameters(inlinedParameters, catalogNode.uiSchema), newFiles)
-      const newNode = { ...nodes[selectedNodeIndex], parameters }
-      const newNodes = replaceItemAtIndex(nodes, selectedNodeIndex, newNode)
-      const newUsedFiles = dropUnusedFiles(global, newNodes, newFiles)
-      setNodes(newNodes)
-      setFiles(newUsedFiles)
     },
     async loadWorkflowArchive (archiveURL: string) {
       const r = await loadWorkflowArchive(archiveURL, catalog)
