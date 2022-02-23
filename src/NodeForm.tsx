@@ -15,7 +15,7 @@ export const NodeForm = (): JSX.Element => {
     return <div>Unable to find schema belonging to node</div>
   }
 
-  const uiSchema = (catalogNode?.formUiSchema != null) ? catalogNode.formUiSchema : {}
+  const uiSchema = catalogNode.formUiSchema
   return (
     <>
       <h4>{catalogNode.label} ({node.id})</h4>

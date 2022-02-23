@@ -5,7 +5,7 @@ export const GlobalForm = (): JSX.Element => {
   const { global: globalSchemas } = useCatalog()
   const [formData, setFormData] = useGlobalFormData()
   const submitFormRefSetter = useSetActiveSubmitButton()
-  const uiSchema = (globalSchemas.formUiSchema != null) ? globalSchemas.formUiSchema : {}
+  const uiSchema = globalSchemas.formUiSchema
   return (
     <Form
       schema={globalSchemas.formSchema ?? {}}
