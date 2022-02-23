@@ -14,7 +14,6 @@ export const CollapsibleField = (props: FieldProps): JSX.Element => {
 
   const CollapsedIcon = CaretDownSquare
   const ExpandedIcon = CaretUpSquare
-  // TODO animate expansing or collapsing
 
   // To render button + name use styling from https://github.com/rjsf-team/react-jsonschema-form/blob/master/packages/bootstrap-4/src/TitleField/TitleField.tsx
   if (collapsed) {
