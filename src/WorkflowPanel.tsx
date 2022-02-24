@@ -2,13 +2,13 @@ import { useState } from 'react'
 import { TextPanel } from './TextPanel'
 import { VisualPanel } from './VisualPanel'
 import { WorkflowUploadButton } from './WorkflowUploadButton'
-import { useWorkflow } from './store'
+import { useFormSelection } from './store'
 
 type ITab = 'text' | 'visual'
 
 export const WorkflowPanel = (): JSX.Element => {
   const [tab, setTab] = useState<ITab>('visual')
-  const { toggleGlobalEdit } = useWorkflow()
+  const { editGlobal } = useFormSelection()
 
   const selectedPanel = tab === 'visual' ? <VisualPanel /> : <TextPanel />
   const visualTabStyle = tab === 'visual' ? 'nav-link active' : 'nav-link'
@@ -19,7 +19,7 @@ export const WorkflowPanel = (): JSX.Element => {
       <legend>Workflow</legend>
       <div style={{ display: 'flex', flexFlow: 'column', height: '100%', gap: '5px', paddingBottom: '5px' }}>
         <div className='btn-toolbar'>
-          <button className='btn btn-light' onClick={toggleGlobalEdit}>Global parameters</button>
+          <button className='btn btn-light' onClick={editGlobal}>Global parameters</button>
           <WorkflowUploadButton />
         </div>
         <ul className='nav nav-tabs'>

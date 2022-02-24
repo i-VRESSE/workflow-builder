@@ -7,7 +7,7 @@ import { workflow2tomltext } from './toml'
 import { dropUnusedFiles, loadWorkflowArchive, emptyParams, clearFiles } from './workflow'
 import { fetchCatalogIndex, fetchCatalog } from './catalog'
 import { catalogIndexURL } from './constants'
-import { removeItemAtIndex, replaceItemAtIndex, moveItem, swapItem, removeAllItems } from './utils/array'
+import { removeItemAtIndex, replaceItemAtIndex, moveItem, removeAllItems } from './utils/array'
 import { groupParameters, unGroupParameters } from './grouper'
 
 const catalogIndexState = selector<ICatalogIndex>({
@@ -59,21 +59,56 @@ const editingGlobalParametersState = atom<boolean>({
   default: false
 })
 
+export function useEditGlobalParameters (): [boolean, SetterOrUpdater<boolean>] {
+  return useRecoilState(editingGlobalParametersState)
+}
+
 const workflowNodesState = atom<IWorkflowNode[]>({
   key: 'workflowNodes',
   default: []
 })
 
-const selectedNodeIndexState = atom<number>({
-  key: 'selectedNodeIndex',
-  default: -1
+type IFormSelection = false | 'global' | number
+
+const formSelectionState = atom<IFormSelection>({
+  key: 'formSelection',
+  default: false
 })
+
+interface UseFormSelection {
+  editGlobal: () => void
+  editNode: (nodeIndex: number) => void
+  clearSelection: () => void
+  isSelected: boolean
+  isGlobalSelected: boolean
+  isNodeSelected: boolean
+  selectedNodeIndex: number
+}
+
+export function useFormSelection (): UseFormSelection {
+  const [formSelection, setFormSelection] = useRecoilState(formSelectionState)
+  return {
+    editGlobal () {
+      setFormSelection('global')
+    },
+    editNode (nodeIndex: number) {
+      setFormSelection(nodeIndex)
+    },
+    clearSelection () {
+      setFormSelection(false)
+    },
+    isSelected: formSelection !== false,
+    isGlobalSelected: formSelection === 'global',
+    isNodeSelected: typeof formSelection === 'number',
+    selectedNodeIndex: formSelection as number
+  }
+}
 
 // Keep reference to submit button inside a rjsf form, so the button can be activated outside the form
 // See https://github.com/rjsf-team/react-jsonschema-form/issues/500#issuecomment-849051041
 // The current approach of using a singleton to store the active submit button,
 // makes it impossible to have multiple forms renderede at the same time
-export const activeSubmitButtonState = atom<HTMLButtonElement | undefined>({
+const activeSubmitButtonState = atom<HTMLButtonElement | undefined>({
   key: 'activeSubmitButton',
   default: undefined
 })
@@ -84,10 +119,6 @@ export function useSetActiveSubmitButton (): (instance: HTMLButtonElement | null
 
 export function useActiveSubmitButton (): HTMLButtonElement | undefined {
   return useRecoilValue(activeSubmitButtonState)
-}
-
-export function useSelectNodeIndex (): number {
-  return useRecoilValue(selectedNodeIndexState)
 }
 
 const filesState = atom<IFiles>({
@@ -131,9 +162,9 @@ export function useGlobalFormData (): [IParameters, SetterOrUpdater<IParameters>
 const selectedNodeState = selector<IWorkflowNode | undefined>({
   key: 'selectedNode',
   get: ({ get }) => {
-    const index = get(selectedNodeIndexState)
+    const index = get(formSelectionState)
     const nodes = get(workflowNodesState)
-    if (index in nodes) {
+    if (typeof index === 'number' && index in nodes) {
       return nodes[index]
     }
     return undefined
@@ -196,13 +227,15 @@ const selectedNodeFormDataState = selector<IParameters | undefined>({
       parameters = externalizeDataUrls(unGroupParameters(inlinedParameters, catalogNode.uiSchema), newFiles)
     }
     const nodes = get(workflowNodesState)
-    const selectedNodeIndex = get(selectedNodeIndexState)
-    const newNode = { ...nodes[selectedNodeIndex], parameters }
-    const newNodes = replaceItemAtIndex(nodes, selectedNodeIndex, newNode)
-    const global = get(globalParametersState)
-    const newUsedFiles = dropUnusedFiles(global, newNodes, newFiles)
-    set(workflowNodesState, newNodes)
-    set(filesState, newUsedFiles)
+    const selectedNodeIndex = get(formSelectionState)
+    if (typeof selectedNodeIndex === 'number') {
+      const newNode = { ...nodes[selectedNodeIndex], parameters }
+      const newNodes = replaceItemAtIndex(nodes, selectedNodeIndex, newNode)
+      const global = get(globalParametersState)
+      const newUsedFiles = dropUnusedFiles(global, newNodes, newFiles)
+      set(workflowNodesState, newNodes)
+      set(filesState, newUsedFiles)
+    }
   }
 })
 
@@ -210,67 +243,40 @@ export function useSelectedNodeFormData (): [IParameters | undefined, SetterOrUp
   return useRecoilState(selectedNodeFormDataState)
 }
 
-interface UseWorkflow {
-  nodes: IWorkflowNode[]
-  editingGlobal: boolean
-  global: IParameters
-  toggleGlobalEdit: () => void
-  addNodeToWorkflow: (nodeId: string) => void
-  addNodeToWorkflowAt: (nodeId: string, targetIndex: number) => void
-  loadWorkflowArchive: (archiveURL: string) => Promise<void>
-  save: () => Promise<void>
-  clear: () => void
-  deleteNode: (nodeIndex: number) => void
-  selectNode: (nodeIndex: number) => void
-  clearNodeSelection: () => void
-  moveNodeDown: (nodeIndex: number) => void
-  moveNodeUp: (nodeIndex: number) => void
-  moveNode: (sourceIndex: number, targetIndex: number) => void
+export function useLoadWorkflowArchive (): (archiveURL: string) => Promise<void> {
+  const catalog = useCatalog()
+  const setNodes = useSetRecoilState(workflowNodesState)
+  const setFiles = useSetRecoilState(filesState)
+  const setGlobal = useSetRecoilState(globalFormDataState)
+
+  return async function (archiveURL: string) {
+    const r = await loadWorkflowArchive(archiveURL, catalog)
+    setNodes(r.nodes)
+    setFiles(r.files)
+    setGlobal(r.global)
+  }
 }
 
-export function useWorkflow (): UseWorkflow {
-  const [nodes, setNodes] = useRecoilState(workflowNodesState)
+interface UseWorkflowIO {
+  deleteNode: (nodeIndex: number) => void
+  save: () => Promise<void>
+  clear: () => void
+
+}
+
+export function useWorkflowIO (): UseWorkflowIO {
   const [global, setGlobal] = useRecoilState(globalParametersState)
-  const [editingGlobal, setEditingGlobal] = useRecoilState(editingGlobalParametersState)
-  const [selectedNodeIndex, setSelectedNodeIndex] = useRecoilState(selectedNodeIndexState)
+  const [nodes, setNodes] = useRecoilState(workflowNodesState)
   const [files, setFiles] = useRecoilState(filesState)
-  const catalog = useCatalog()
+  const { isNodeSelected, selectedNodeIndex, clearSelection, editNode } = useFormSelection()
 
   return {
-    nodes,
-    editingGlobal,
-    global,
-    toggleGlobalEdit () {
-      setEditingGlobal(!editingGlobal)
-      setSelectedNodeIndex(-1)
-    },
-    addNodeToWorkflowAt (nodeId: string, targetIndex: number) {
-      setNodes((oldNodes) => {
-        const newNodes = [...oldNodes, { id: nodeId, parameters: {} }]
-        return moveItem(newNodes, newNodes.length - 1, targetIndex)
-      })
-      if (selectedNodeIndex === -1 && !editingGlobal) {
-        setSelectedNodeIndex(targetIndex)
-      }
-    },
-    addNodeToWorkflow (nodeId: string) {
-      setNodes((oldNodes) => [...oldNodes, { id: nodeId, parameters: {} }])
-      if (selectedNodeIndex === -1 && !editingGlobal) {
-        setSelectedNodeIndex(nodes.length)
-      }
-    },
-    selectNode: (nodeIndex: number) => {
-      if (editingGlobal) {
-        setEditingGlobal(false)
-      }
-      setSelectedNodeIndex(nodeIndex)
-    },
     deleteNode (nodeIndex: number) {
-      if (selectedNodeIndex !== -1) {
+      if (isNodeSelected) {
         if (nodeIndex === selectedNodeIndex) {
-          setSelectedNodeIndex(-1)
+          clearSelection()
         } else if (nodeIndex < selectedNodeIndex) {
-          setSelectedNodeIndex(selectedNodeIndex - 1)
+          editNode(selectedNodeIndex - 1)
         }
       }
       const newNodes = removeItemAtIndex(nodes, nodeIndex)
@@ -278,7 +284,6 @@ export function useWorkflow (): UseWorkflow {
       setFiles(newFiles)
       setNodes(newNodes)
     },
-    clearNodeSelection: () => setSelectedNodeIndex(-1),
     clear () {
       const blankNodes = removeAllItems(nodes)
       const blankGlobals = emptyParams()
@@ -287,33 +292,49 @@ export function useWorkflow (): UseWorkflow {
       setGlobal(blankGlobals)
       setFiles(blankFiles)
     },
-    async loadWorkflowArchive (archiveURL: string) {
-      const r = await loadWorkflowArchive(archiveURL, catalog)
-      setNodes(r.nodes)
-      setFiles(r.files)
-      setGlobal(r.global)
-    },
     async save () {
       await saveArchive(nodes, global, files)
-    },
-    moveNodeDown (nodeIndex: number) {
-      if (nodeIndex + 1 < nodes.length) {
-        const newNodes = swapItem(nodes, nodeIndex, 1)
-        setSelectedNodeIndex(-1)
-        setNodes(newNodes)
+    }
+  }
+}
+
+interface UseWorkflow {
+  nodes: IWorkflowNode[]
+  addNodeToWorkflow: (nodeId: string) => void
+  addNodeToWorkflowAt: (nodeId: string, targetIndex: number) => void
+  moveNode: (sourceIndex: number, targetIndex: number) => void
+}
+
+export function useWorkflowNodes (): UseWorkflow {
+  const [nodes, setNodes] = useRecoilState(workflowNodesState)
+  const { isSelected, editNode, isNodeSelected, clearSelection } = useFormSelection()
+
+  return {
+    nodes,
+    addNodeToWorkflowAt (nodeId: string, targetIndex: number) {
+      setNodes((oldNodes) => {
+        const newNodes = [...oldNodes, { id: nodeId, parameters: {} }]
+        return moveItem(newNodes, newNodes.length - 1, targetIndex)
+      })
+      if (!isSelected) {
+        editNode(targetIndex)
       }
     },
-    moveNodeUp (nodeIndex: number) {
-      if (nodeIndex > 0) {
-        const newNodes = swapItem(nodes, nodeIndex, -1)
-        setSelectedNodeIndex(-1)
-        setNodes(newNodes)
+    addNodeToWorkflow (nodeId: string) {
+      setNodes((oldNodes) => [...oldNodes, { id: nodeId, parameters: {} }])
+      if (!isSelected) {
+        editNode(nodes.length)
       }
     },
     moveNode (sourceIndex: number, targetIndex: number) {
       const newNodes = moveItem(nodes, sourceIndex, targetIndex)
-      setSelectedNodeIndex(-1)
       setNodes(newNodes)
+      if (isNodeSelected) {
+        // TODO do not change selected node.
+        // For example given topaa node is selected and its parameter form is shown
+        // then moving it or other nodes should keep the parameter form of topaa shown.
+        clearSelection()
+      }
     }
   }
 }
@@ -323,6 +344,7 @@ export function useFiles (): IFiles {
 }
 
 export function useText (): string {
-  const { nodes, global } = useWorkflow()
+  const nodes = useRecoilValue(workflowNodesState)
+  const global = useRecoilValue(globalParametersState)
   return workflow2tomltext(nodes, global)
 }

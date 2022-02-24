@@ -30,7 +30,7 @@
     "react-dom": "^17.0.0",
     "react-syntax-highlighter": "^15.4.5",
     "react-toastify": "^8.1.0",
-    "recoil": "^0.5.2"
+    "recoil": "^0.6.0"
   },
   "devDependencies": {
     "@storybook/addon-a11y": "^6.4.0",

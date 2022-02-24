@@ -1,18 +1,17 @@
 import { GlobalForm } from './GlobalForm'
 import { NodeForm } from './NodeForm'
-import { useSelectNodeIndex, useWorkflow } from './store'
+import { useFormSelection } from './store'
 
 export const NodePanel = (): JSX.Element => {
-  const selectedNodeIndex = useSelectNodeIndex()
-  const { editingGlobal } = useWorkflow()
+  const { isNodeSelected, isGlobalSelected } = useFormSelection()
   let form = <div>No node or global parameters selected for configuration.</div>
-  let legend = 'Node'
-  if (editingGlobal) {
-    form = <GlobalForm />
-    legend = 'Global parameters'
-  }
-  if (selectedNodeIndex !== -1) {
+  let legend = ''
+  if (isNodeSelected) {
+    legend = 'Node'
     form = <NodeForm />
+  } else if (isGlobalSelected) {
+    legend = 'Global parameters'
+    form = <GlobalForm />
   }
   return (
     <fieldset>
