@@ -298,16 +298,16 @@ export function useWorkflowIO (): UseWorkflowIO {
   }
 }
 
-interface UseWorkflow {
+interface UseWorkflowNodes {
   nodes: IWorkflowNode[]
   addNodeToWorkflow: (nodeId: string) => void
   addNodeToWorkflowAt: (nodeId: string, targetIndex: number) => void
   moveNode: (sourceIndex: number, targetIndex: number) => void
 }
 
-export function useWorkflowNodes (): UseWorkflow {
+export function useWorkflowNodes (): UseWorkflowNodes {
   const [nodes, setNodes] = useRecoilState(workflowNodesState)
-  const { isSelected, editNode, isNodeSelected, clearSelection } = useFormSelection()
+  const { isSelected, editNode, isNodeSelected, selectedNodeIndex } = useFormSelection()
 
   return {
     nodes,
@@ -329,11 +329,19 @@ export function useWorkflowNodes (): UseWorkflow {
     moveNode (sourceIndex: number, targetIndex: number) {
       const newNodes = moveItem(nodes, sourceIndex, targetIndex)
       setNodes(newNodes)
+      // Make sure selected node stays selected
       if (isNodeSelected) {
-        // TODO do not change selected node.
-        // For example given topaa node is selected and its parameter form is shown
-        // then moving it or other nodes should keep the parameter form of topaa shown.
-        clearSelection()
+        // TODO make sure unsaved changes in form are retained
+        if (selectedNodeIndex === sourceIndex) {
+          // Selected node is being moved
+          editNode(targetIndex)
+        } else if (sourceIndex < selectedNodeIndex && targetIndex >= selectedNodeIndex) {
+          // Node moves over selected node downwards
+          editNode(selectedNodeIndex - 1)
+        } else if (sourceIndex > selectedNodeIndex && targetIndex <= selectedNodeIndex) {
+          // Node moves over selected node upwards
+          editNode(selectedNodeIndex + 1)
+        }
       }
     }
   }
