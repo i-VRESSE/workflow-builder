@@ -1,10 +1,10 @@
 import { useRef } from 'react'
 import { toast } from 'react-toastify'
-import { useWorkflow } from './store'
+import { useLoadWorkflowArchive } from './store'
 
 export const WorkflowUploadButton = (): JSX.Element => {
   const uploadRef = useRef<HTMLInputElement>(null)
-  const { loadWorkflowArchive } = useWorkflow()
+  const loadWorkflowArchive = useLoadWorkflowArchive()
 
   async function uploadWorkflow (event: React.ChangeEvent<HTMLInputElement>): Promise<void> {
     if (event.target.files == null) {

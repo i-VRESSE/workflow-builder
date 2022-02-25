@@ -1,17 +1,16 @@
-import { useSelectNodeIndex, useActiveSubmitButton, useWorkflow } from './store'
+import { useActiveSubmitButton, useFormSelection, useWorkflowIO } from './store'
 
 export const FormActions = (): JSX.Element => {
-  const index = useSelectNodeIndex()
-  const { deleteNode, clearNodeSelection } = useWorkflow()
   const submitFormRef = useActiveSubmitButton()
-  const { editingGlobal, toggleGlobalEdit } = useWorkflow()
-  if (submitFormRef === undefined || !(index > -1 || editingGlobal)) {
+  const { clearSelection, isNodeSelected, isSelected, selectedNodeIndex } = useFormSelection()
+  const { deleteNode } = useWorkflowIO()
+  if (!isSelected) {
     return <></>
   }
   const DeleteButton = (
     <button
       className='btn btn-light'
-      onClick={() => deleteNode(index)}
+      onClick={() => deleteNode(selectedNodeIndex)}
       title='Delete node from workflow'
     >
       Delete
@@ -23,18 +22,18 @@ export const FormActions = (): JSX.Element => {
         type='submit'
         className='btn btn-primary'
         title='Save parameters in node'
-        onClick={() => submitFormRef.click()}
+        onClick={() => submitFormRef?.click()}
       >
         Submit
       </button>
       <button
         className='btn btn-light'
-        onClick={() => editingGlobal ? toggleGlobalEdit() : clearNodeSelection()}
+        onClick={() => clearSelection()}
         title='Forget changes made in form'
       >
         Cancel
       </button>
-      {!editingGlobal && DeleteButton}
+      {isNodeSelected && DeleteButton}
     </div>
   )
 }

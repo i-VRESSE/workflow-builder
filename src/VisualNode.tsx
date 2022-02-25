@@ -1,9 +1,9 @@
 import { useRef, useState } from 'react'
 import { useDrag, useDrop, DropTargetMonitor } from 'react-dnd'
-import { useSelectNodeIndex, useWorkflow } from './store'
 import { GripVertical, X } from 'react-bootstrap-icons'
 import { DragItem } from './types'
 import { nodeWidth } from './constants'
+import { useFormSelection, useWorkflowIO, useWorkflowNodes } from './store'
 
 interface IProp {
   id: string
@@ -13,9 +13,10 @@ interface IProp {
 export const VisualNode = ({ id, index }: IProp): JSX.Element => {
   // TODO to power hover use css :hover instead of slower JS
   const [hover, setHover] = useState(false)
-
-  const selectedNodeIndex = useSelectNodeIndex()
-  const { selectNode, moveNode, addNodeToWorkflowAt, deleteNode } = useWorkflow()
+  const { selectedNodeIndex } = useFormSelection()
+  const { editNode } = useFormSelection()
+  const { deleteNode } = useWorkflowIO()
+  const { moveNode, addNodeToWorkflowAt } = useWorkflowNodes()
 
   const ref = useRef<HTMLLIElement>(null)
   const drag = useDrag(() => ({
@@ -73,7 +74,7 @@ export const VisualNode = ({ id, index }: IProp): JSX.Element => {
           className='btn btn-light btn-sm btn-block'
           title='Click to configure or drag to reorder'
           onClick={() => {
-            selectNode(index)
+            editNode(index)
           }}
         >
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>

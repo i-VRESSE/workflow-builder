@@ -1,9 +1,10 @@
 import { nodeWidth } from './constants'
 import { useDrag } from 'react-dnd'
-import { useWorkflow } from './store'
+
 import { ICatalogNode } from './types'
 import { GripVertical } from 'react-bootstrap-icons'
 import { useState } from 'react'
+import { useWorkflowNodes } from './store'
 
 export const CatalogNode = ({ id, label }: ICatalogNode): JSX.Element => {
   const [hover, setHover] = useState(false)
@@ -13,7 +14,7 @@ export const CatalogNode = ({ id, label }: ICatalogNode): JSX.Element => {
     item: { id }
   }))[1]
 
-  const { addNodeToWorkflow } = useWorkflow()
+  const { addNodeToWorkflow } = useWorkflowNodes()
 
   return (
     <li ref={drag}>

@@ -1,10 +1,10 @@
 import { useDrop } from 'react-dnd'
-import { useWorkflow } from './store'
+import { useWorkflowNodes } from './store'
 import { DragItem } from './types'
 import { VisualNode } from './VisualNode'
 
 export const VisualPanel = (): JSX.Element => {
-  const { addNodeToWorkflow } = useWorkflow()
+  const { addNodeToWorkflow } = useWorkflowNodes()
   const [{ isCatalogNodeOver, canCatalogNodeDrop }, drop] = useDrop(
     () => ({
       accept: ['catalognode'],
@@ -23,7 +23,7 @@ export const VisualPanel = (): JSX.Element => {
     }),
     []
   )
-  const { nodes } = useWorkflow()
+  const { nodes } = useWorkflowNodes()
 
   const nodeList = (
     <ol style={{ lineHeight: '2.5em' }}>

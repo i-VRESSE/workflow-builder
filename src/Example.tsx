@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify'
-import { useWorkflow } from './store'
+import { useLoadWorkflowArchive } from './store'
 
 interface IProps {
   name: string
@@ -7,7 +7,7 @@ interface IProps {
 }
 
 export const Example = ({ name, workflow }: IProps): JSX.Element => {
-  const { loadWorkflowArchive } = useWorkflow()
+  const loadWorkflowArchive = useLoadWorkflowArchive()
 
   async function onClick (): Promise<void> {
     await toast.promise(
