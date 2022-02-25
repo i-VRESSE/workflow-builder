@@ -3828,285 +3828,45 @@ nodes:
     delenph:
       ui:group: molecule
     mol1:
-      mol1:
-        prot_segid:
-          ui:group: molecule
-        cyclicpept:
-          ui:group: molecule
-        nhisd:
-          ui:group: molecule
-        hisd_1:
-          ui:group: molecule
-        nhise:
-          ui:group: molecule
-        hise_1:
-          ui:group: molecule
+      ui:field: collapsible
     mol2:
-      mol2:
-        prot_segid:
-          ui:group: molecule
-        cyclicpept:
-          ui:group: molecule
-        nhisd:
-          ui:group: molecule
-        hisd_1:
-          ui:group: molecule
-        nhise:
-          ui:group: molecule
-        hise_1:
-          ui:group: molecule
+      ui:field: collapsible
     mol3:
-      mol3:
-        prot_segid:
-          ui:group: molecule
-        cyclicpept:
-          ui:group: molecule
-        nhisd:
-          ui:group: molecule
-        hisd_1:
-          ui:group: molecule
-        nhise:
-          ui:group: molecule
-        hise_1:
-          ui:group: molecule
+      ui:field: collapsible
     mol4:
-      mol4:
-        prot_segid:
-          ui:group: molecule
-        cyclicpept:
-          ui:group: molecule
-        nhisd:
-          ui:group: molecule
-        hisd_1:
-          ui:group: molecule
-        nhise:
-          ui:group: molecule
-        hise_1:
-          ui:group: molecule
+      ui:field: collapsible
     mol5:
-      mol5:
-        prot_segid:
-          ui:group: molecule
-        cyclicpept:
-          ui:group: molecule
-        nhisd:
-          ui:group: molecule
-        hisd_1:
-          ui:group: molecule
-        nhise:
-          ui:group: molecule
-        hise_1:
-          ui:group: molecule
+      ui:field: collapsible
     mol6:
-      mol6:
-        prot_segid:
-          ui:group: molecule
-        cyclicpept:
-          ui:group: molecule
-        nhisd:
-          ui:group: molecule
-        hisd_1:
-          ui:group: molecule
-        nhise:
-          ui:group: molecule
-        hise_1:
-          ui:group: molecule
+      ui:field: collapsible
     mol7:
-      mol7:
-        prot_segid:
-          ui:group: molecule
-        cyclicpept:
-          ui:group: molecule
-        nhisd:
-          ui:group: molecule
-        hisd_1:
-          ui:group: molecule
-        nhise:
-          ui:group: molecule
-        hise_1:
-          ui:group: molecule
+      ui:field: collapsible
     mol8:
-      mol8:
-        prot_segid:
-          ui:group: molecule
-        cyclicpept:
-          ui:group: molecule
-        nhisd:
-          ui:group: molecule
-        hisd_1:
-          ui:group: molecule
-        nhise:
-          ui:group: molecule
-        hise_1:
-          ui:group: molecule
+      ui:field: collapsible
     mol9:
-      mol9:
-        prot_segid:
-          ui:group: molecule
-        cyclicpept:
-          ui:group: molecule
-        nhisd:
-          ui:group: molecule
-        hisd_1:
-          ui:group: molecule
-        nhise:
-          ui:group: molecule
-        hise_1:
-          ui:group: molecule
+      ui:field: collapsible
     mol10:
-      mol10:
-        prot_segid:
-          ui:group: molecule
-        cyclicpept:
-          ui:group: molecule
-        nhisd:
-          ui:group: molecule
-        hisd_1:
-          ui:group: molecule
-        nhise:
-          ui:group: molecule
-        hise_1:
-          ui:group: molecule
+      ui:field: collapsible
     mol11:
-      mol11:
-        prot_segid:
-          ui:group: molecule
-        cyclicpept:
-          ui:group: molecule
-        nhisd:
-          ui:group: molecule
-        hisd_1:
-          ui:group: molecule
-        nhise:
-          ui:group: molecule
-        hise_1:
-          ui:group: molecule
+      ui:field: collapsible
     mol12:
-      mol12:
-        prot_segid:
-          ui:group: molecule
-        cyclicpept:
-          ui:group: molecule
-        nhisd:
-          ui:group: molecule
-        hisd_1:
-          ui:group: molecule
-        nhise:
-          ui:group: molecule
-        hise_1:
-          ui:group: molecule
+      ui:field: collapsible
     mol13:
-      mol13:
-        prot_segid:
-          ui:group: molecule
-        cyclicpept:
-          ui:group: molecule
-        nhisd:
-          ui:group: molecule
-        hisd_1:
-          ui:group: molecule
-        nhise:
-          ui:group: molecule
-        hise_1:
-          ui:group: molecule
+      ui:field: collapsible
     mol14:
-      mol14:
-        prot_segid:
-          ui:group: molecule
-        cyclicpept:
-          ui:group: molecule
-        nhisd:
-          ui:group: molecule
-        hisd_1:
-          ui:group: molecule
-        nhise:
-          ui:group: molecule
-        hise_1:
-          ui:group: molecule
+      ui:field: collapsible
     mol15:
-      mol15:
-        prot_segid:
-          ui:group: molecule
-        cyclicpept:
-          ui:group: molecule
-        nhisd:
-          ui:group: molecule
-        hisd_1:
-          ui:group: molecule
-        nhise:
-          ui:group: molecule
-        hise_1:
-          ui:group: molecule
+      ui:field: collapsible
     mol16:
-      mol16:
-        prot_segid:
-          ui:group: molecule
-        cyclicpept:
-          ui:group: molecule
-        nhisd:
-          ui:group: molecule
-        hisd_1:
-          ui:group: molecule
-        nhise:
-          ui:group: molecule
-        hise_1:
-          ui:group: molecule
+      ui:field: collapsible
     mol17:
-      mol17:
-        prot_segid:
-          ui:group: molecule
-        cyclicpept:
-          ui:group: molecule
-        nhisd:
-          ui:group: molecule
-        hisd_1:
-          ui:group: molecule
-        nhise:
-          ui:group: molecule
-        hise_1:
-          ui:group: molecule
+      ui:field: collapsible
     mol18:
-      mol18:
-        prot_segid:
-          ui:group: molecule
-        cyclicpept:
-          ui:group: molecule
-        nhisd:
-          ui:group: molecule
-        hisd_1:
-          ui:group: molecule
-        nhise:
-          ui:group: molecule
-        hise_1:
-          ui:group: molecule
+      ui:field: collapsible
     mol19:
-      mol19:
-        prot_segid:
-          ui:group: molecule
-        cyclicpept:
-          ui:group: molecule
-        nhisd:
-          ui:group: molecule
-        hisd_1:
-          ui:group: molecule
-        nhise:
-          ui:group: molecule
-        hise_1:
-          ui:group: molecule
+      ui:field: collapsible
     mol20:
-      mol20:
-        prot_segid:
-          ui:group: molecule
-        cyclicpept:
-          ui:group: molecule
-        nhisd:
-          ui:group: molecule
-        hisd_1:
-          ui:group: molecule
-        nhise:
-          ui:group: molecule
-        hise_1:
-          ui:group: molecule
+      ui:field: collapsible
 - id: emscoring
   category: scoring
   label: HADDOCK3 scoring module.

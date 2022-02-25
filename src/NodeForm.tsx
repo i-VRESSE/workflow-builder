@@ -1,12 +1,9 @@
-import { useSetActiveSubmitButton, useFiles, useSelectedCatalogNode, useSelectedNode, useWorkflow } from './store'
-import { internalizeDataUrls } from './dataurls'
+import { useSetActiveSubmitButton, useSelectedCatalogNode, useSelectedNode, useSelectedNodeFormData } from './store'
 import { Form } from './Form'
-import { groupParameters } from './grouper'
 
 export const NodeForm = (): JSX.Element => {
   // TODO move setNodeParameters to useSelectedNode
-  const { setNodeParameters } = useWorkflow()
-  const files = useFiles()
+  const [formData, setFormData] = useSelectedNodeFormData()
   const node = useSelectedNode()
   const catalogNode = useSelectedCatalogNode()
   const submitFormRefSetter = useSetActiveSubmitButton()
@@ -17,9 +14,8 @@ export const NodeForm = (): JSX.Element => {
   if (catalogNode === undefined) {
     return <div>Unable to find schema belonging to node</div>
   }
-  const formData = groupParameters(internalizeDataUrls(node.parameters, files), catalogNode.uiSchema)
 
-  const uiSchema = (catalogNode?.formUiSchema != null) ? catalogNode.formUiSchema : {}
+  const uiSchema = catalogNode.formUiSchema
   return (
     <>
       <h4>{catalogNode.label} ({node.id})</h4>
@@ -30,7 +26,7 @@ export const NodeForm = (): JSX.Element => {
         schema={catalogNode.formSchema ?? {}}
         uiSchema={uiSchema}
         formData={formData}
-        onSubmit={({ formData }) => setNodeParameters(formData)}
+        onSubmit={({ formData }) => setFormData(formData)}
       >
         <button ref={submitFormRefSetter} style={{ display: 'none' }} />
       </Form>

@@ -59,6 +59,10 @@ Use desktop oriented framework
 1. vitest, similar api as jest, wip
 1. vite-jest, connects vite compiler machinery to jest, wip
 
+## UI development
+
+1. Storybook
+
 ## Code formatter
 
 1. Prettier

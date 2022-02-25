@@ -64,6 +64,16 @@ yarn build
 
 Which will create `dist/` directory which should be hosted on the web somewhere.
 
+### Component development
+
+Components can be developed/tested/documented using [storybook](https://storybook.js.org/).
+
+Storybook can be started with
+
+```shell
+yarn storybook
+```
+
 ## Format
 
 ### Workflow archive

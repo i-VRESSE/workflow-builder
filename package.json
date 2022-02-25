@@ -7,12 +7,15 @@
     "build": "tsc && vite build",
     "serve": "vite preview",
     "test": "vitest",
-    "lint": "ts-standard"
+    "lint": "ts-standard",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "dependencies": {
     "@ltd/j-toml": "^1.24.0",
     "@rjsf/bootstrap-4": "^3.2.1",
     "@rjsf/core": "^3.2.1",
+    "@storybook/testing-library": "^0.0.9",
     "@zip.js/zip.js": "^2.3.23",
     "ajv": "^8.9.0",
     "ajv-formats": "^2.1.1",
@@ -30,6 +33,11 @@
     "recoil": "^0.5.2"
   },
   "devDependencies": {
+    "@storybook/addon-a11y": "^6.4.0",
+    "@storybook/addon-docs": "^6.4.0",
+    "@storybook/addon-essentials": "^6.4.19",
+    "@storybook/addon-links": "^6.4.19",
+    "@storybook/react": "^6.4.19",
     "@types/file-saver": "^2.0.4",
     "@types/hoist-non-react-statics": "^3.3.1",
     "@types/js-yaml": "^4.0.5",
@@ -39,6 +47,7 @@
     "@types/react-syntax-highlighter": "^13.5.2",
     "@vitejs/plugin-react": "^1.0.0",
     "c8": "^7.11.0",
+    "storybook-builder-vite": "^0.1.15",
     "ts-standard": "^11.0.0",
     "typescript": "^4.3.2",
     "vite": "^2.6.4",

@@ -18,6 +18,7 @@ export function groupSchema (schema: JSONSchema7, uiSchema: UiSchema): JSONSchem
         }
       }
       newSchema.properties[group].properties[k] = newSchema.properties[k]
+      // Remove k as it now is in the group
       /* eslint-disable @typescript-eslint/no-dynamic-delete */
       delete newSchema.properties[k]
       /* eslint-enable @typescript-eslint/no-dynamic-delete */
@@ -32,17 +33,19 @@ export function groupUiSchema (uiSchema: UiSchema): UiSchema {
   Object.entries(uiSchema).forEach(([k, v]) => {
     // TODO recursivly, now only loops over first direct props
     if ('ui:group' in v) {
-      const group = v['ui:group']
-      const newuiProp = { ...v } // Shallow copy
-      /* eslint-disable @typescript-eslint/no-dynamic-delete */
-      delete newuiProp['ui:group']
-      /* eslint-enable @typescript-eslint/no-dynamic-delete */
-      if (Object.keys(newuiProp).length > 0) {
-        if (!(group in newUiSchema)) {
-          newUiSchema[group] = {}
+      const { 'ui:group': group, ...newUiProp } = v
+      if (!(group in newUiSchema)) {
+        if (group in uiSchema) {
+          newUiSchema[group] = { 'ui:field': 'collapsible', ...uiSchema[group] }
+        } else {
+          newUiSchema[group] = { 'ui:field': 'collapsible' }
         }
-        newUiSchema[group][k] = newuiProp
       }
+      if (Object.keys(newUiProp).length > 0) {
+        newUiSchema[group][k] = newUiProp
+      }
+    } else if (k in newUiSchema) {
+      newUiSchema[k] = { ...newUiSchema[k], ...v }
     } else {
       newUiSchema[k] = v
     }
@@ -60,9 +63,6 @@ export function groupParameters (parameters: IParameters, uiSchema: UiSchema): I
         newParameters[group] = {}
       }
       (newParameters[group] as IParameters)[k] = v
-      /* eslint-disable @typescript-eslint/no-dynamic-delete */
-      delete newParameters[k]
-      /* eslint-enable @typescript-eslint/no-dynamic-delete */
     } else {
       newParameters[k] = v
     }
@@ -80,6 +80,11 @@ export function unGroupParameters (parameters: IParameters, uiSchema: UiSchema):
       Object.entries(v as IParameters).forEach(([gk, gv]) => {
         if (gk in uiSchema && 'ui:group' in uiSchema[gk]) {
           newParameters[gk] = gv
+        } else {
+          if (!(k in newParameters)) {
+            newParameters[k] = {}
+          }
+          (newParameters[k] as IParameters)[gk] = gv
         }
       })
     } else {
