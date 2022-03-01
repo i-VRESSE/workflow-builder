@@ -9,6 +9,7 @@ import { fetchCatalogIndex, fetchCatalog } from './catalog'
 import { catalogIndexURL } from './constants'
 import { removeItemAtIndex, replaceItemAtIndex, moveItem, swapItem, removeAllItems } from './utils/array'
 import { groupParameters, unGroupParameters } from './grouper'
+import { pruneDefaults } from './pruner'
 
 const catalogIndexState = selector<ICatalogIndex>({
   key: 'catalogIndex',
@@ -115,7 +116,7 @@ const globalFormDataState = selector<IParameters>({
     if (inlinedParameters instanceof DefaultValue) {
       parameters = {}
     } else {
-      parameters = externalizeDataUrls(unGroupParameters(inlinedParameters, catalog.global.uiSchema), newFiles)
+      parameters = pruneDefaults(externalizeDataUrls(unGroupParameters(inlinedParameters, catalog.global.uiSchema), newFiles), catalog.global.schema)
     }
     const nodes = get(workflowNodesState)
     const newUsedFiles = dropUnusedFiles(parameters, nodes, newFiles)
@@ -193,7 +194,7 @@ const selectedNodeFormDataState = selector<IParameters | undefined>({
     if (inlinedParameters instanceof DefaultValue) {
       parameters = {}
     } else {
-      parameters = externalizeDataUrls(unGroupParameters(inlinedParameters, catalogNode.uiSchema), newFiles)
+      parameters = pruneDefaults(externalizeDataUrls(unGroupParameters(inlinedParameters, catalogNode.uiSchema), newFiles), catalogNode.schema)
     }
     const nodes = get(workflowNodesState)
     const selectedNodeIndex = get(selectedNodeIndexState)
