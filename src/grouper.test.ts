@@ -438,3 +438,116 @@ describe('given a schema with an object prop and no ui:group', () => {
     })
   })
 })
+
+describe('given a prop with same name as group', () => {
+  describe('groupSchema()', () => {
+    it('should move property inside object with same name', () => {
+      const schema: JSONSchema7 = {
+        type: 'object',
+        properties: {
+          prop1: {
+            type: 'string'
+          }
+        },
+        additionalProperties: false
+      }
+      const uiSchema: UiSchema = {
+        prop1: {
+          'ui:group': 'prop1'
+        }
+      }
+      const groupedSchema = groupSchema(schema, uiSchema)
+
+      const expectedSchema: JSONSchema7 = {
+        type: 'object',
+        properties: {
+          prop1: {
+            type: 'object',
+            properties: {
+              prop1: {
+                type: 'string'
+              }
+            },
+            additionalProperties: false
+          }
+        },
+        additionalProperties: false
+      }
+      expect(groupedSchema).toEqual(expectedSchema)
+    })
+  })
+})
+
+describe('given a un-grouped prop with same name as group', () => {
+  describe('groupSchema()', () => {
+    it('should move property inside object with same name', () => {
+      const schema: JSONSchema7 = {
+        type: 'object',
+        properties: {
+          prop1: {
+            type: 'string'
+          },
+          prop2: {
+            type: 'string'
+          }
+        },
+        additionalProperties: false
+      }
+      const uiSchema: UiSchema = {
+        prop1: {
+          'ui:group': 'prop2'
+        }
+      }
+
+      expect(() => groupSchema(schema, uiSchema)).toThrow('Can not have group and un-grouped parameter with same name prop2')
+    })
+  })
+})
+
+describe('given a prop with same name as group and another prop in same group', () => {
+  describe('groupSchema()', () => {
+    it('should move property inside object with same name', () => {
+      const schema: JSONSchema7 = {
+        type: 'object',
+        properties: {
+          prop1: {
+            type: 'string'
+          },
+          prop2: {
+            type: 'string'
+          }
+        },
+        additionalProperties: false
+      }
+      const uiSchema: UiSchema = {
+        prop1: {
+          'ui:group': 'prop1'
+        },
+        prop2: {
+          'ui:group': 'prop1'
+        }
+      }
+      const groupedSchema = groupSchema(schema, uiSchema)
+
+      const expectedSchema: JSONSchema7 = {
+        type: 'object',
+        properties: {
+          prop1: {
+            type: 'object',
+            properties: {
+              prop1: {
+                type: 'string'
+              },
+              prop2: {
+                type: 'string'
+              }
+            },
+            additionalProperties: false
+          }
+        },
+        additionalProperties: false
+      }
+      expect(groupedSchema).toEqual(expectedSchema)
+    })
+  })
+})

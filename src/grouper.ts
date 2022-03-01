@@ -6,9 +6,29 @@ import { isObject } from './utils/isObject'
 export function groupSchema (schema: JSONSchema7, uiSchema: UiSchema): JSONSchema7 {
   const newSchema = JSON.parse(JSON.stringify(schema))
 
+  // Handle overlap between groups and direct prop names.
+  const definedGroups = new Set(Object.values(uiSchema).filter(v => 'ui:group' in v).map(v => v['ui:group']))
+  const directProps = schema.properties ?? {}
+  const directPropNamesWithSameNameAsGroup = new Set(Object.keys(directProps).filter(k => definedGroups.has(k)))
+  for (const k of directPropNamesWithSameNameAsGroup) {
+    const propHasGroup = k in uiSchema && 'ui:group' in uiSchema[k] && 'ui:group' in uiSchema[k]
+    if (!(propHasGroup && uiSchema[k]['ui:group'] === k)) {
+      throw new Error(`Can not have group and un-grouped parameter with same name ${k}`)
+    }
+    // Prop has same name as its group so nest it
+    const v = newSchema.properties[k]
+    newSchema.properties[k] = {
+      type: 'object',
+      properties: {
+        [k]: v
+      },
+      additionalProperties: false
+    }
+  }
+
   Object.entries(uiSchema).forEach(([k, v]) => {
     // TODO recursivly, now only loops over first direct props
-    if ('ui:group' in v) {
+    if ('ui:group' in v && !directPropNamesWithSameNameAsGroup.has(k)) {
       const group = v['ui:group']
       if (!(group in newSchema.properties)) {
         newSchema.properties[group] = {
