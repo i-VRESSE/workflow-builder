@@ -3,6 +3,16 @@ import { UiSchema } from '@rjsf/core'
 
 export type ICatalogIndex = Array<[string, string]>
 
+interface TomlScalarSchema {
+  indexed?: boolean
+  flatten?: boolean
+  items?: TomlScalarSchema
+}
+
+export interface TomlObjectSchema {
+  [name: string]: TomlScalarSchema
+}
+
 export interface ICatalogNode {
   id: string
   label: string
@@ -10,6 +20,7 @@ export interface ICatalogNode {
   uiSchema: UiSchema
   formSchema?: JSONSchema7
   formUiSchema?: UiSchema
+  tomlSchema?: TomlObjectSchema
   description: string
   category: string
 }
@@ -24,6 +35,7 @@ export interface IGlobal {
   uiSchema: UiSchema
   formSchema?: JSONSchema7
   formUiSchema?: UiSchema
+  tomlSchema?: TomlObjectSchema
 }
 
 export interface ICatalog {
