@@ -228,8 +228,6 @@ hisd_2 = 512
     }
     const tomlSchema = {}
     const result = workflow2tomltext([], globalParameters, {}, tomlSchema)
-    // TODO keep order of keys in toml same as in source
-    /* eslint-disable no-tabs */
     const expected = `
 key1 = [
   1,
@@ -276,7 +274,6 @@ key8 = [
   ],
 ]
 `
-    /* eslint-enable no-tabs */
     expect(result).toEqual(expected)
   })
 
