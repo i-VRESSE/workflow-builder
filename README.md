@@ -97,7 +97,7 @@ The catalog is a YAML formatted file which tells the app what nodes are availabl
 1. global: Description of global parameters
     * schema: What parameters are valid. Formatted as JSON schema draft 7.
     * uiSchema: How the form for filling the parameters should be rendered.
-    * tomlSchema: How toml keys are mapped in memory representation.
+    * tomlSchema: How toml keys are mapped to in-memory representation.
 2. nodes: Description of available nodes.
     * id: Identifier of node, for computers
     * label: Label of node, for humans
@@ -105,7 +105,7 @@ The catalog is a YAML formatted file which tells the app what nodes are availabl
     * description: Text describing what node needs, does and produces.
     * schema: What parameters are valid. Formatted as JSON schema draft 7.
     * uiSchema: How the form for filling the parameters should be rendered.
-    * tomlSchema: How toml keys are mapped in memory representation.
+    * tomlSchema: How toml keys are mapped to in-memory representation.
 3. catagories: Descriptions of node categories
     * name: Name of category
     * description: Description of category
