@@ -338,9 +338,9 @@ In memory parameters for node called `somenode`.
 
 ```json
 {
-  foo: {
-    bar: {
-      bla: 'hi'
+  "foo": {
+    "bar": {
+      "bla": "hi"
     }
   }
 }
