@@ -9,14 +9,14 @@ In memory have parameter object like
 
 ```js
 {
-    key1:  [ 1, 2 ] // Array of scalar
-    key2: [ "a", "b" ]  // Array of scalar
-    key3: { a: 1, b: 2}  // Object as inline table
-    key4: { a: [ 1, 2 ]}  // Object with array of scalar
-    key5: [ { a: 1 }, { a: 2 }]  // Array with objects
-    key6: [ { a: [ 1, 2 ]} ]  // Array with oboject with array of scalar
-    key7: [ [ 1, 2], [ 3 ,4 ] ]  // Array of array of scalar
-    key7: [ [ { a: 1 }, { a: 2 }], [ { a: 3 } ,{ a: 4 } ] ]  // Array of array of object
+    key1: [ 1, 2 ], // Array of scalar
+    key2: [ "a", "b" ],  // Array of scalar
+    key3: { a: 1, b: 2},  // Object
+    key4: { a: [ 1, 2 ]},  // Object with array of scalar
+    key5: [ { a: 1 }, { a: 2 }],  // Array with objects
+    key6: [ { a: [ 1, 2 ]} ],  // Array with oboject with array of scalar
+    key7: [ [ 1, 2], [ 3 ,4 ] ],  // Array of array of scalar
+    key8: [ [ { a: 1 }, { a: 2 }], [ { a: 3 } ,{ a: 4 } ] ],  // Array of array of object
 }
 ```
 
@@ -27,12 +27,13 @@ The resulting toml would look like
 ```toml
 key1 = [ 1, 2 ]
 key2 = [ "a", "b" ]
-key3 = { a = 1, b = 2}
-key4 = { a = [ 1, 2 ]}
+key3.a = 1
+key3.b = 2
+key4.a = [ 1, 2 ]
 key5 = [ { a = 1 }, { a = 2 }]
 key6 = [ { a = [ 1, 2 ]} ]
 key7 = [ [ 1, 2], [ 3 ,4 ] ]
-key7 = [ [ { a = 1 }, { a = 2 }], [ { a = 3 } ,{ a = 4 } ] ]
+key8 = [ [ { a = 1 }, { a = 2 }], [ { a = 3 } ,{ a = 4 } ] ]
 ```
 
 The tomlSchema object follows the tree structure of the schema hierarchy.
@@ -80,7 +81,7 @@ In memory
 }
 ```
 
-## Array of objects
+## Array of objects flattened
 
 In toml
 
@@ -111,6 +112,55 @@ tomlSchema:
     indexed: true
     items:
       flatten: true
+```
+
+In memory
+
+```json
+{
+  "name": [{
+    "something": 11,
+    "else": 22,
+  }, {
+    "something": 33,
+    "else": 44,
+  }]
+}
+```
+
+## Array of objects sectioned
+
+In toml
+
+```toml
+[[name]]
+something = 11
+else = 22
+
+[[name]]
+something = 33
+else = 44
+```
+
+In catalog
+
+```yaml
+schema:
+  type: object
+  properties:
+    name:
+      type: array
+      items:
+        type: object
+        properties:
+          something:
+            type: number
+          else:
+            type: number
+tomlSchema:
+  name:
+    items:
+      sectioned: true
 ```
 
 In memory
@@ -197,17 +247,17 @@ In memory
 }
 ```
 
-## Array of objects with object as toml table and scalar array prop
+## Array of objects with object as toml table and scalar as array prop
 
 In toml
 
 ```toml
-[topoaa.mol1]
+[topoaa.mol_1]
 cyclicpept = false
 hisd_1 = 13
 hisd_2 = 42
 
-[topoaa.mol2]
+[topoaa.mol_2]
 cyclicpept = true
 hisd_1 = 314
 hisd_2 = 512
@@ -251,5 +301,47 @@ In memory
     "cyclicpept": true,
     "hisd": [314, 512]
   }]
+}
+```
+
+## Node parameter where value is an object as section
+
+In toml
+
+```toml
+[somenode]
+
+[somenode.foo]
+bar.bla = 'hi'
+```
+
+In catalog
+
+```yaml
+schema:
+  type: object
+  properties:
+    foo:
+      type: object
+      properties:
+        bar:
+          type: object
+          properties:
+            bla:
+              type: string
+tomlSchema:
+  foo:
+    sectioned: true
+```
+
+In memory parameters for node called `somenode`.
+
+```json
+{
+  foo: {
+    bar: {
+      bla: 'hi'
+    }
+  }
 }
 ```

@@ -6,7 +6,9 @@ export type ICatalogIndex = Array<[string, string]>
 interface TomlScalarSchema {
   indexed?: boolean
   flatten?: boolean
+  sectioned?: boolean
   items?: TomlScalarSchema
+  properties?: TomlObjectSchema
 }
 
 export interface TomlObjectSchema {
