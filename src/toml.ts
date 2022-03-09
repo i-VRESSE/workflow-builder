@@ -87,6 +87,7 @@ export function workflow2tomltext (
   }
   const text = stringify(table, {
     newline: '\n',
+    indent: 2,
     integer: Number.MAX_SAFE_INTEGER
   })
   return text
