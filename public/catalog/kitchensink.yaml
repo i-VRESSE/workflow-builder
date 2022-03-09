@@ -152,6 +152,19 @@ nodes:
         items:
           type: boolean
           default: false
+      mol:
+        title: topoaa.mol use case
+        description: each mol in own section with hisd_N keys
+        type: array
+        items:
+          type: object
+          properties:
+            cyclicpept:
+              type: boolean
+            hisd:
+              type: array
+              items:
+                  type: number
   uiSchema:
     prop1:
       ui:options:
@@ -167,6 +180,12 @@ nodes:
         ui:widget: radio  # default checkbox widget is only valid when checked
       ui:options:
         orderable: false
+    mol:
+      items:
+        cyclicpept:
+          ui:widget: radio  # default checkbox widget is only valid when checked
+      ui:options:
+        orderable: false
   tomlSchema:  # How to read and write expandanble parameters in toml files
     prop1:
       indexed: true  # X in prop1_something_X
@@ -180,6 +199,13 @@ nodes:
           flatten: true  # something in name_something_X_Y
     paramX:
       indexed: true # Y in param_Y
+    mol:
+      indexed: true
+      items:
+        sectioned: true
+        properties:
+          hisd:
+            indexed: true
   id: node4
   label: Node 4
   description: Description 3
