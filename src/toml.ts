@@ -93,22 +93,83 @@ export function workflow2tomltext (
   return text
 }
 
-export function parseWorkflow (workflow: string, globalKeys: Set<string>): IWorkflow {
+function toml2parameters (tomledParameters: IParameters, tomlSchema: TomlObjectSchema): IParameters {
+  const parameters: IParameters = {}
+  Object.entries(tomledParameters).forEach(([k, v]) => {
+    const [kFirstPart, ...kParts] = k.split('_')
+    const hasTomlSchema = kFirstPart in tomlSchema
+    const isIndexed = hasTomlSchema && tomlSchema[kFirstPart].indexed === true
+    const kLastPart = kParts.pop() ?? 'NaN'
+    const kLastIndex = parseInt(kLastPart) - 1
+    const lastPartIsIndex = !isNaN(kLastIndex)
+    const isArrayFlatten = tomlSchema[kFirstPart]?.items?.flatten === true
+    const isArrayOfArrayFlatten = tomlSchema[kFirstPart]?.items?.items?.flatten === true
+    const isMultiPartIndexed = kParts.length > 0 && isIndexed && lastPartIsIndex
+    if (isIndexed && isObject(v)) {
+      if (!(kFirstPart in parameters)) {
+        parameters[kFirstPart] = []
+      }
+      const tomlSchemaOfK = tomlSchema[kFirstPart]?.items?.properties ?? {}
+      const arrayOfK: IParameters = parameters[kFirstPart] as any
+      arrayOfK[kLastIndex] = toml2parameters(v as IParameters, tomlSchemaOfK)
+    } else if (kParts.length === 0 && isIndexed && lastPartIsIndex) {
+      if (!(kFirstPart in parameters)) {
+        parameters[kFirstPart] = []
+      }
+      const arrayOfK: IParameters = parameters[kFirstPart] as any
+      arrayOfK[kLastIndex] = v
+    } else if (isMultiPartIndexed && isArrayFlatten) {
+      if (!(kFirstPart in parameters)) {
+        parameters[kFirstPart] = []
+      }
+      const arrayOfK = parameters[kFirstPart] as any
+      if (arrayOfK[kLastIndex] === undefined) {
+        arrayOfK[kLastIndex] = {}
+      }
+      const k2 = kParts.join('_')
+      arrayOfK[kLastIndex][k2] = v
+    } else if (isMultiPartIndexed && isArrayOfArrayFlatten) {
+      const kSecond2LastIndex = parseInt(kParts.pop() ?? 'NaN') - 1
+      if (!(kFirstPart in parameters)) {
+        parameters[kFirstPart] = []
+      }
+      const arrayOfK = parameters[kFirstPart] as any
+      if (arrayOfK[kSecond2LastIndex] === undefined) {
+        arrayOfK[kSecond2LastIndex] = []
+      }
+      if (arrayOfK[kSecond2LastIndex][kLastIndex] === undefined) {
+        arrayOfK[kSecond2LastIndex][kLastIndex] = {}
+      }
+      const k2 = kParts.join('_')
+      arrayOfK[kSecond2LastIndex][kLastIndex][k2] = v
+    } else {
+      parameters[k] = v
+    }
+  })
+  return parameters
+}
+
+export function parseWorkflow (workflow: string, globalKeys: Set<string>, tomlSchema4global: TomlObjectSchema, tomSchema4nodes: Record<string, TomlObjectSchema>): IWorkflow {
   const table = parse(workflow, { bigint: false })
   const global: IParameters = {}
   const nodes: IWorkflowNode[] = []
   const sectionwithindex = /\.\d+$/
   Object.entries(table).forEach(([k, v]) => {
     const section = k.replace(sectionwithindex, '')
-    if (globalKeys.has(section)) {
+    const sectionParts = section.split('_') // TODO fragile as node name and first part of global key could overlap
+    if (globalKeys.has(section) || globalKeys.has(sectionParts[0])) {
       global[k] = v
     } else {
+      const tomlSchema4node = tomSchema4nodes[section] ?? {}
       nodes.push({
         id: section,
-        parameters: v as IParameters
+        parameters: toml2parameters(v as IParameters, tomlSchema4node)
       })
     }
   })
   // TODO validate nodes and global parameters against schemas in catalog
-  return { nodes, global }
+  return {
+    nodes,
+    global: toml2parameters(global, tomlSchema4global)
+  }
 }
