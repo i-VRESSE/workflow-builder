@@ -64,11 +64,13 @@ def config2schema(config):
     """Translate haddock3 config file of a module to JSON schema"""
     properties = {}
     uiSchema = {}
+    tomlSchema = {}
 
     required = []
     for k, v in config.items():
         prop = {}
         prop_ui = {}
+        prop_toml = {}
         if 'default' in v:
             prop["default"] = v['default']
         else:
@@ -85,16 +87,53 @@ def config2schema(config):
             # TODO instead of removing group and explevel from mol1.prot_segid dict do proper filtering and support group recursivly
             config2 = {
                 k2:{
-                    k3:v3 for k3,v3 in v2.items() if k3 != 'group' and k3 != 'explevel'
-                } for k2,v2 in v.items() if k2 != 'explevel'
+                    k3:v3 for k3,v3 in v2.items() if k3 not in {'group','explevel'}
+                } for k2,v2 in v.items() if k2 not in {'explevel', 'title', 'short', 'long'}
             }
-            schema_uiSchema = config2schema(config2)
-            prop = schema_uiSchema['schema']
-            prop_ui = { 'ui:field': 'collapsible'}
-            if schema_uiSchema['uiSchema']:
-                prop_ui.update(schema_uiSchema['uiSchema'])
+            schemas = config2schema(config2)
+            prop.update({
+                'type': 'array',
+                'items': schemas['schema'],
+            })
+
+            if schemas['uiSchema']:
+                prop_ui['items'] = schemas['uiSchema']
+
+            prop_toml = {
+                'indexed': True,
+                'items': {
+                    'sectioned': True
+                }
+            }
+            # Rename as parameter is array and does not need extra index
+            if k == 'mol1':
+                k = 'mol'
             # molXX in topaa are not required
             required.pop()
+        elif k.count('_') == 1 and k.endswith('_1'):
+            # array of scalar
+            new_k = k.replace('_1', '')
+            config2 = {
+                new_k: v
+            }
+            schemas = config2schema(config2)
+            prop.update({
+                'type': 'array',
+                'items': schemas['schema']['properties'][new_k],
+                'title': v['title'] + 's',
+            })
+            if 'default' in v:
+                # array has no default
+                del prop['default']
+            del prop['description']
+            del prop['$comment']
+            if new_k in schemas['uiSchema']:
+                prop_ui['items'] = schemas['uiSchema'][new_k]
+            prop_toml = {
+                'indexed': True
+            }
+            k = new_k
+            # TODO complete it
         elif v['type'] == 'boolean':
             prop['type'] = "boolean"
         elif v['type'] in {'float', 'integer'}:
@@ -146,19 +185,19 @@ def config2schema(config):
                 obj = {'a' : {'type': v['itemtype']}} # config2schema requires object
                 if 'accept' in v:
                     obj['a']['accept'] = ",".join(v['accept'])
-                schema_uiSchema = config2schema(obj)
-                prop['items'] = schema_uiSchema['schema']['properties']['a']
-                if schema_uiSchema['uiSchema'] and schema_uiSchema['uiSchema']['a']:
+                schemas = config2schema(obj)
+                prop['items'] = schemas['schema']['properties']['a']
+                if schemas['uiSchema'] and schemas['uiSchema']['a']:
                     prop_ui = {
-                        "items": schema_uiSchema['uiSchema']['a']
+                        "items": schemas['uiSchema']['a']
                     }
             elif 'items' in v:
                 obj = {'a' : v['items']} # config2schema requires object
-                schema_uiSchema = config2schema(obj)
-                prop['items'] = schema_uiSchema['schema']['properties']['a']
-                if schema_uiSchema['uiSchema'] and schema_uiSchema['uiSchema']['a']:
+                schemas = config2schema(obj)
+                prop['items'] = schemas['schema']['properties']['a']
+                if schemas['uiSchema'] and schemas['uiSchema']['a']:
                     prop_ui = {
-                        "items": schema_uiSchema['uiSchema']['a']
+                        "items": schemas['uiSchema']['a']
                     }
             elif k == 'molecules':
                 # TODO dont hardcode item type and ui for global.molecules, but use itemtype defined in haddock3
@@ -190,6 +229,8 @@ def config2schema(config):
             prop_ui['ui:group'] = v['group']
         if prop_ui:
             uiSchema[k] = prop_ui
+        if prop_toml:
+            tomlSchema[k] = prop_toml
     schema = {
         "type": "object",
         "properties": properties,
@@ -198,7 +239,8 @@ def config2schema(config):
     }
     return {
         "schema": schema,
-        "uiSchema": uiSchema
+        "uiSchema": uiSchema,
+        "tomlSchema": tomlSchema,
     }
 
 def filter_on_level(config, level):
@@ -218,15 +260,16 @@ def process_module(module_name, category, level):
         config = load(f, Loader=Loader)
 
     config4level = filter_on_level(config, level)
-    schema_uiSchema = config2schema(config4level)
+    schemas = config2schema(config4level)
     # TODO add $schema and $id to schema
     return {
         "id": module_name,
         "category": category,
         "label": module.__doc__,
         "description": cls.__doc__,
-        "schema": schema_uiSchema['schema'],
-        "uiSchema": schema_uiSchema['uiSchema']
+        "schema": schemas['schema'],
+        "uiSchema": schemas['uiSchema'],
+        "tomlSchema": schemas['tomlSchema'],
     }
 
 def process_category(category):
@@ -252,11 +295,12 @@ def process_global(level):
     config = mandatory_parameters | optional_global_parameters
     config4level = filter_on_level(config, level)
 
-    schema_uiSchema = config2schema(config4level)
+    schemas = config2schema(config4level)
     # TODO add $schema and $id to schema
     return {
-        "schema": schema_uiSchema['schema'],
-        "uiSchema": schema_uiSchema['uiSchema']
+        "schema": schemas['schema'],
+        "uiSchema": schemas['uiSchema'],
+        "tomlSchema": schemas['tomlSchema'],
     }
 
 def process_level(level_fn: Path, level: str):
