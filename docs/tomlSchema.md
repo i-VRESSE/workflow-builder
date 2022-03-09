@@ -40,7 +40,7 @@ The tomlSchema object follows the tree structure of the schema hierarchy.
 Special keywords in tomlSchema:
 
 1. **indexed**, when true will have array index appended to key
-2. **flatten**, when true will have object key append to key
+2. **flatten**, when true will have object property names appended to key
 3. **sectioned**, when true will write children inside own table (for example `[<module>.<key>]`)
 4. **items**, to nest a toml schema for an array item
 5. **properties**, to nest a toml schema for an object property
