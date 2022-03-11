@@ -37,6 +37,7 @@ Translations from haddock3 -> i-VRESSE workflow builder:
     * choices -> enum
     * explevel -> each explevel gets generated into own catalog
     * group -> ui:group in ui schema
+    * expandable (*_1) -> arrays and objects + tomlschema
 
 TODO move script outside workflow-builder repo as this repo should be generic and not have any haddock specific scripts
 """
@@ -54,7 +55,6 @@ from yaml import dump, load, Loader
 
 from haddock.modules import modules_category
 from haddock import config_expert_levels, _hidden_level
-from haddock.gear.parameters import _mandatory_parameters
 
 def argparser_builder():
     parser = argparse.ArgumentParser()
@@ -67,29 +67,34 @@ def collapse_expandable(config):
     array_of_object = r'(\w+)_(\w+)_1'
     array_of_array_of_scalar = r'(\w+)_1_1'
     array_of_array_of_object = r'(\w+)_(\w+)_1_1'
+    skip = r'\w+_\d[2-20]_\d[2-20]'
     new_config = {}
     for k, v in config.items():
-        if match := re.match(array_of_array_of_object, k):
+        logging.warning(f'Processing var: {k}')
+        if re.match(skip, k):
+            # Skip non-first indexes as their schema will be captured by first index.
+            continue
+        elif match := re.match(array_of_array_of_object, k):
             p, n = match.groups()
             if p not in new_config:
-                new_config[p] = {'dim': 2, 'properties': {}, 'type': 'array'}
+                new_config[p] = {'dim': 2, 'properties': {}, 'type': 'list'}
             new_config[p]['properties'][n] = v
         elif match := re.match(array_of_array_of_scalar, k):
             p, = match.groups()
             new_config[p] = {
-                'type': 'array',
+                'type': 'list',
                 'dim': 2,
                 'itemtype': v
             }
         elif match := re.match(array_of_object, k):
             p, n = match.groups()
             if p not in new_config:
-                new_config[p] = {'dim': 1, 'properties': {}, 'type': 'array'}
+                new_config[p] = {'dim': 1, 'properties': {}, 'type': 'list'}
             new_config[p]['properties'][n] = v
         elif match := re.match(array_of_scalar, k):
             p, = match.groups()
             new_config[p] = {
-                'type': 'array',
+                'type': 'list',
                 'dim': 1,
                 'itemtype': v
             }
@@ -107,8 +112,7 @@ def config2schema(config):
 
     required = []
     collapsed_config = collapse_expandable(config)
-    pprint(collapsed_config)
-    for k, v in config.items():
+    for k, v in config.items(collapsed_config):
         prop = {}
         prop_ui = {}
         prop_toml = {}
@@ -129,7 +133,7 @@ def config2schema(config):
             config2 = {
                 k2:{
                     k3:v3 for k3,v3 in v2.items() if k3 not in {'group','explevel'}
-                } for k2,v2 in v.items() if k2 not in {'explevel', 'title', 'short', 'long'}
+                } for k2,v2 in v.items() if k2 not in {'explevel', 'title', 'short', 'long', 'group'}
             }
             schemas = config2schema(config2)
             prop.update({
@@ -222,16 +226,65 @@ def config2schema(config):
                 prop['minItems'] = v['minitems']
             if 'maxitems' in v:
                 prop['maxItems'] = v['maxitems']
-            if 'itemtype' in v:
+            if 'properties' in v:
+                obj = {
+                    'type': 'object',
+                    'properties': v['properties'],
+                    "additionalProperties": False
+                }
+                obj_schemas = config2schema(obj)
+                if v['dim'] == 1:
+                    prop['items'] = obj_schemas['schema']
+                    if obj_schemas['uiSchema']:
+                        prop_ui = {
+                            "items": obj_schemas['uiSchema']
+                        }
+                    prop_toml = {
+                        'indexed': True,
+                        'items': {
+                            'flatten': True
+                        }
+                    }
+                elif v['dim'] == 2:
+                    prop['items'] = {
+                        'type': 'array',
+                        'items': obj_schemas['schema']
+                    }
+                    if obj_schemas['uiSchema']:
+                        prop_ui = {
+                            "items": {
+                                'items': obj_schemas['uiSchema']
+                            }
+                        }
+                    prop_toml = {
+                        'indexed': True,
+                        'items': {
+                            'indexed': True,
+                            'items': {
+                                'flatten': True
+                            }
+                        }
+                    }
+                else:
+                    raise Exception('Unknown dim')
+            elif 'itemtype' in v:
                 obj = {'a' : {'type': v['itemtype']}} # config2schema requires object
                 if 'accept' in v:
                     obj['a']['accept'] = ",".join(v['accept'])
                 schemas = config2schema(obj)
-                prop['items'] = schemas['schema']['properties']['a']
-                if schemas['uiSchema'] and schemas['uiSchema']['a']:
-                    prop_ui = {
-                        "items": schemas['uiSchema']['a']
-                    }
+                
+                if 'dim' in v and v['dim'] == 2:
+                    prop['items'] = schemas['schema']['properties']['a']
+                    if schemas['uiSchema'] and schemas['uiSchema']['a']:
+                        prop_ui = {
+                          "items": schemas['uiSchema']['a']
+                        }
+                else:
+                    prop['items'] = schemas['schema']['properties']['a']
+                    if schemas['uiSchema'] and schemas['uiSchema']['a']:
+                        prop_ui = {
+                          "items": schemas['uiSchema']['a']
+                        }
             elif 'items' in v:
                 obj = {'a' : v['items']} # config2schema requires object
                 schemas = config2schema(obj)
@@ -294,6 +347,7 @@ def filter_on_level(config, level):
     return {k: v for k, v in config.items() if v['explevel'] in valid_levels and not v['explevel'] == _hidden_level}
 
 def process_module(module_name, category, level):
+    logging.warning(f'Processing module: {module_name}')
     package = f'haddock.modules.{category}.{module_name}'
     module = importlib.import_module(package)
     cls = module.HaddockModule
@@ -382,6 +436,7 @@ def main(argv=sys.argv[1:]):
         catalogs.append([f'haddock3{level}', str(level_url)])
         process_level(level_fn, level)
         logging.warning(f'Written {level_fn}')
+        break # Just to first
 
     write_catalog_index(catalogs, args.out_dir / 'index.json')
 
