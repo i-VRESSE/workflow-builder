@@ -45,8 +45,10 @@ import argparse
 import importlib
 import json
 import logging
+from pprint import pprint
 from math import isnan
 from pathlib import Path
+import re
 import sys
 from yaml import dump, load, Loader
 
@@ -60,6 +62,43 @@ def argparser_builder():
     parser.add_argument('--root_url', type=Path, default='/catalog')
     return parser
 
+def collapse_expandable(config):
+    array_of_scalar = r'(\w+)_1'
+    array_of_object = r'(\w+)_(\w+)_1'
+    array_of_array_of_scalar = r'(\w+)_1_1'
+    array_of_array_of_object = r'(\w+)_(\w+)_1_1'
+    new_config = {}
+    for k, v in config.items():
+        if match := re.match(array_of_array_of_object, k):
+            p, n = match.groups()
+            if p not in new_config:
+                new_config[p] = {'dim': 2, 'properties': {}, 'type': 'array'}
+            new_config[p]['properties'][n] = v
+        elif match := re.match(array_of_array_of_scalar, k):
+            p, = match.groups()
+            new_config[p] = {
+                'type': 'array',
+                'dim': 2,
+                'itemtype': v
+            }
+        elif match := re.match(array_of_object, k):
+            p, n = match.groups()
+            if p not in new_config:
+                new_config[p] = {'dim': 1, 'properties': {}, 'type': 'array'}
+            new_config[p]['properties'][n] = v
+        elif match := re.match(array_of_scalar, k):
+            p, = match.groups()
+            new_config[p] = {
+                'type': 'array',
+                'dim': 1,
+                'itemtype': v
+            }
+        else:
+            pass
+            # new_config[k] = v
+
+    return new_config
+
 def config2schema(config):
     """Translate haddock3 config file of a module to JSON schema"""
     properties = {}
@@ -67,6 +106,8 @@ def config2schema(config):
     tomlSchema = {}
 
     required = []
+    collapsed_config = collapse_expandable(config)
+    pprint(collapsed_config)
     for k, v in config.items():
         prop = {}
         prop_ui = {}
@@ -133,7 +174,7 @@ def config2schema(config):
                 'indexed': True
             }
             k = new_k
-            # TODO complete it
+            # TODO complete it using collapsed_config
         elif v['type'] == 'boolean':
             prop['type'] = "boolean"
         elif v['type'] in {'float', 'integer'}:
