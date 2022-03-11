@@ -46,7 +46,6 @@ import argparse
 import importlib
 import json
 import logging
-from pprint import pprint
 from math import isnan
 from pathlib import Path
 import re
@@ -70,7 +69,7 @@ def collapse_expandable(config):
     skip = r'\w+_\d[2-20]_\d[2-20]'
     new_config = {}
     for k, v in config.items():
-        logging.warning(f'Processing var: {k}')
+        logging.info(f'Processing var: {k}')
         if re.match(skip, k):
             # Skip non-first indexes as their schema will be captured by first index.
             continue
@@ -84,7 +83,7 @@ def collapse_expandable(config):
             new_config[p] = {
                 'type': 'list',
                 'dim': 2,
-                'itemtype': v
+                'items': v
             }
         elif match := re.match(array_of_object, k):
             p, n = match.groups()
@@ -96,11 +95,10 @@ def collapse_expandable(config):
             new_config[p] = {
                 'type': 'list',
                 'dim': 1,
-                'itemtype': v
+                'items': v
             }
         else:
-            pass
-            # new_config[k] = v
+            new_config[k] = v
 
     return new_config
 
@@ -112,7 +110,7 @@ def config2schema(config):
 
     required = []
     collapsed_config = collapse_expandable(config)
-    for k, v in config.items(collapsed_config):
+    for k, v in collapsed_config.items():
         prop = {}
         prop_ui = {}
         prop_toml = {}
@@ -227,12 +225,7 @@ def config2schema(config):
             if 'maxitems' in v:
                 prop['maxItems'] = v['maxitems']
             if 'properties' in v:
-                obj = {
-                    'type': 'object',
-                    'properties': v['properties'],
-                    "additionalProperties": False
-                }
-                obj_schemas = config2schema(obj)
+                obj_schemas = config2schema( v['properties'])
                 if v['dim'] == 1:
                     prop['items'] = obj_schemas['schema']
                     if obj_schemas['uiSchema']:
@@ -263,6 +256,36 @@ def config2schema(config):
                             'items': {
                                 'flatten': True
                             }
+                        }
+                    }
+                else:
+                    raise Exception('Unknown dim')
+            elif 'items' in v:
+                obj_schemas = config2schema({'a': v['items']})
+                if v['dim'] == 1:
+                    prop['items'] = obj_schemas['schema']['properties']['a']
+                    if 'a' in obj_schemas['uiSchema']:
+                        prop_ui = {
+                            "items": obj_schemas['uiSchema']['a']
+                        }
+                    prop_toml = {
+                        'indexed': True
+                    }
+                elif v['dim'] == 2:
+                    prop['items'] = {
+                        'type': 'array',
+                        'items': obj_schemas['schema']['properties']['a']
+                    }
+                    if 'a' in obj_schemas['uiSchema']:
+                        prop_ui = {
+                            "items": {
+                                'items': obj_schemas['uiSchema']['a']
+                            }
+                        }
+                    prop_toml = {
+                        'indexed': True,
+                        'items': {
+                            'indexed': True
                         }
                     }
                 else:
@@ -436,7 +459,6 @@ def main(argv=sys.argv[1:]):
         catalogs.append([f'haddock3{level}', str(level_url)])
         process_level(level_fn, level)
         logging.warning(f'Written {level_fn}')
-        break # Just to first
 
     write_catalog_index(catalogs, args.out_dir / 'index.json')
 
