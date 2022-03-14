@@ -78,7 +78,6 @@ global:
         - slurm
         - torque
       queue:
-        default: ''
         title: Queue name
         description: Name of the batch queue to which jobs will be submitted
         $comment: Name of the batch queue to which jobs will be submitted. If not
@@ -121,7 +120,6 @@ global:
         type: boolean
     required:
     - run_dir
-    - molecules
     additionalProperties: false
   uiSchema:
     molecules:
@@ -358,7 +356,6 @@ nodes:
         - structure
         - sequence
       lovoalign_exec:
-        default: ''
         title: Location (path) of the LovoAlign executable
         description: Location (path) of the LovoAlign executable.
         $comment: Location (path) of the LovoAlign executable.
@@ -788,7 +785,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg1:
-              default: ''
               title: Segment ID of first C2 segment
               description: Segment ID of first C2 segment
               $comment: Segment ID of first C2 segment
@@ -813,7 +809,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg2:
-              default: ''
               title: Segment ID of second C2 segment
               description: Segment ID of second C2 segment
               $comment: Segment ID of second C2 segment
@@ -854,7 +849,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg1:
-              default: ''
               title: Segment ID of first C3 segment
               description: Segment ID of first C3 segment
               $comment: Segment ID of first C3 segment
@@ -879,7 +873,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg2:
-              default: ''
               title: Segment ID of second C3 segment
               description: Segment ID of second C3 segment
               $comment: Segment ID of second C3 segment
@@ -903,7 +896,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg3:
-              default: ''
               title: Segment ID of third C3 segment
               description: Segment ID of third C3 segment
               $comment: Segment ID of third C3 segment
@@ -944,7 +936,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg1:
-              default: ''
               title: Segment ID of first C4 segment
               description: Segment ID of first C4 segment
               $comment: Segment ID of first C4 segment
@@ -969,7 +960,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg2:
-              default: ''
               title: Segment ID of second C4 segment
               description: Segment ID of second C4 segment
               $comment: Segment ID of second C4 segment
@@ -993,7 +983,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg3:
-              default: ''
               title: Segment ID of third C4 segment
               description: Segment ID of third C4 segment
               $comment: Segment ID of third C4 segment
@@ -1018,7 +1007,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg4:
-              default: ''
               title: Segment ID of fourth C4 segment
               description: Segment ID of fourth C4 segment
               $comment: Segment ID of fourth C4 segment
@@ -1059,7 +1047,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg1:
-              default: ''
               title: Segment ID of first C5 segment
               description: Segment ID of first C5 segment
               $comment: Segment ID of first C5 segment
@@ -1084,7 +1071,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg2:
-              default: ''
               title: Segment ID of second C5 segment
               description: Segment ID of second C5 segment
               $comment: Segment ID of second C5 segment
@@ -1108,7 +1094,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg3:
-              default: ''
               title: Segment ID of third C5 segment
               description: Segment ID of third C5 segment
               $comment: Segment ID of third C5 segment
@@ -1133,7 +1118,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg4:
-              default: ''
               title: Segment ID of fourth C5 segment
               description: Segment ID of fourth C5 segment
               $comment: Segment ID of fourth C5 segment
@@ -1157,7 +1141,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg5:
-              default: ''
               title: Segment ID of fifth C5 segment
               description: Segment ID of fifth C5 segment
               $comment: Segment ID of fifth C5 segment
@@ -1198,7 +1181,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg1:
-              default: ''
               title: Segment ID of first C6 segment
               description: Segment ID of first C6 segment
               $comment: Segment ID of first C6 segment
@@ -1223,7 +1205,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg2:
-              default: ''
               title: Segment ID of second C6 segment
               description: Segment ID of second C6 segment
               $comment: Segment ID of second C6 segment
@@ -1247,7 +1228,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg3:
-              default: ''
               title: Segment ID of third C6 segment
               description: Segment ID of third C6 segment
               $comment: Segment ID of third C6 segment
@@ -1272,7 +1252,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg4:
-              default: ''
               title: Segment ID of fourth C6 segment
               description: Segment ID of fourth C6 segment
               $comment: Segment ID of fourth C6 segment
@@ -1296,7 +1275,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg5:
-              default: ''
               title: Segment ID of fifth C6 segment
               description: Segment ID of fifth C6 segment
               $comment: Segment ID of fifth C6 segment
@@ -1320,7 +1298,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg6:
-              default: ''
               title: Segment ID of sixth C6 segment
               description: Segment ID of sixth C6 segment
               $comment: Segment ID of sixth C6 segment
@@ -1361,7 +1338,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg1:
-              default: ''
               title: Segment ID of first S3 segment
               description: Segment ID of first S3 segment
               $comment: Segment ID of first S3 segment
@@ -1386,7 +1362,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg2:
-              default: ''
               title: Segment ID of second S3 segment
               description: Segment ID of second S3 segment
               $comment: Segment ID of second S3 segment
@@ -1410,7 +1385,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg3:
-              default: ''
               title: Segment ID of third S3 segment
               description: Segment ID of third S3 segment
               $comment: Segment ID of third S3 segment
@@ -1467,7 +1441,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg1:
-              default: ''
               title: Segment ID of first NCS segment
               description: Segment ID of first NCS segment
               $comment: Segment ID of first NCS segment
@@ -1489,7 +1462,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg2:
-              default: ''
               title: Segment ID of second NCS segment
               description: Segment ID of second NCS segment
               $comment: Segment ID of second NCS segment
@@ -1621,18 +1593,7 @@ nodes:
         type: number
         maximum: 78
         minimum: 1
-    required:
-    - mol_fix_origin
-    - mol_shape
-    - nrair
-    - rair
-    - c2sym
-    - c3sym
-    - c4sym
-    - c5sym
-    - c6sym
-    - s3sym
-    - ncs
+    required: []
     additionalProperties: false
   uiSchema:
     mol_fix_origin:
@@ -1842,12 +1803,10 @@ nodes:
         minLength: 0
         maxLength: 100
       receptor_active:
-        default: ''
         type: string
         minLength: 0
         maxLength: 100
       receptor_passive:
-        default: ''
         type: string
         minLength: 0
         maxLength: 100
@@ -1857,12 +1816,10 @@ nodes:
         minLength: 0
         maxLength: 100
       ligand_active:
-        default: ''
         type: string
         minLength: 0
         maxLength: 100
       ligand_passive:
-        default: ''
         type: string
         minLength: 0
         maxLength: 100
@@ -2025,9 +1982,7 @@ nodes:
                 type: number
                 maximum: 9999
                 minimum: -9999
-          required:
-          - hisd
-          - hise
+          required: []
           additionalProperties: false
     required: []
     additionalProperties: false
@@ -3064,7 +3019,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg1:
-              default: ''
               title: Segment ID of first C2 segment
               description: Segment ID of first C2 segment
               $comment: Segment ID of first C2 segment
@@ -3089,7 +3043,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg2:
-              default: ''
               title: Segment ID of second C2 segment
               description: Segment ID of second C2 segment
               $comment: Segment ID of second C2 segment
@@ -3130,7 +3083,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg1:
-              default: ''
               title: Segment ID of first C3 segment
               description: Segment ID of first C3 segment
               $comment: Segment ID of first C3 segment
@@ -3155,7 +3107,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg2:
-              default: ''
               title: Segment ID of second C3 segment
               description: Segment ID of second C3 segment
               $comment: Segment ID of second C3 segment
@@ -3179,7 +3130,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg3:
-              default: ''
               title: Segment ID of third C3 segment
               description: Segment ID of third C3 segment
               $comment: Segment ID of third C3 segment
@@ -3220,7 +3170,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg1:
-              default: ''
               title: Segment ID of first C4 segment
               description: Segment ID of first C4 segment
               $comment: Segment ID of first C4 segment
@@ -3245,7 +3194,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg2:
-              default: ''
               title: Segment ID of second C4 segment
               description: Segment ID of second C4 segment
               $comment: Segment ID of second C4 segment
@@ -3269,7 +3217,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg3:
-              default: ''
               title: Segment ID of third C4 segment
               description: Segment ID of third C4 segment
               $comment: Segment ID of third C4 segment
@@ -3294,7 +3241,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg4:
-              default: ''
               title: Segment ID of fourth C4 segment
               description: Segment ID of fourth C4 segment
               $comment: Segment ID of fourth C4 segment
@@ -3335,7 +3281,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg1:
-              default: ''
               title: Segment ID of first C5 segment
               description: Segment ID of first C5 segment
               $comment: Segment ID of first C5 segment
@@ -3360,7 +3305,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg2:
-              default: ''
               title: Segment ID of second C5 segment
               description: Segment ID of second C5 segment
               $comment: Segment ID of second C5 segment
@@ -3384,7 +3328,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg3:
-              default: ''
               title: Segment ID of third C5 segment
               description: Segment ID of third C5 segment
               $comment: Segment ID of third C5 segment
@@ -3409,7 +3352,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg4:
-              default: ''
               title: Segment ID of fourth C5 segment
               description: Segment ID of fourth C5 segment
               $comment: Segment ID of fourth C5 segment
@@ -3433,7 +3375,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg5:
-              default: ''
               title: Segment ID of fifth C5 segment
               description: Segment ID of fifth C5 segment
               $comment: Segment ID of fifth C5 segment
@@ -3474,7 +3415,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg1:
-              default: ''
               title: Segment ID of first C6 segment
               description: Segment ID of first C6 segment
               $comment: Segment ID of first C6 segment
@@ -3499,7 +3439,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg2:
-              default: ''
               title: Segment ID of second C6 segment
               description: Segment ID of second C6 segment
               $comment: Segment ID of second C6 segment
@@ -3523,7 +3462,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg3:
-              default: ''
               title: Segment ID of third C6 segment
               description: Segment ID of third C6 segment
               $comment: Segment ID of third C6 segment
@@ -3548,7 +3486,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg4:
-              default: ''
               title: Segment ID of fourth C6 segment
               description: Segment ID of fourth C6 segment
               $comment: Segment ID of fourth C6 segment
@@ -3572,7 +3509,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg5:
-              default: ''
               title: Segment ID of fifth C6 segment
               description: Segment ID of fifth C6 segment
               $comment: Segment ID of fifth C6 segment
@@ -3596,7 +3532,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg6:
-              default: ''
               title: Segment ID of sixth C6 segment
               description: Segment ID of sixth C6 segment
               $comment: Segment ID of sixth C6 segment
@@ -3637,7 +3572,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg1:
-              default: ''
               title: Segment ID of first S3 segment
               description: Segment ID of first S3 segment
               $comment: Segment ID of first S3 segment
@@ -3662,7 +3596,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg2:
-              default: ''
               title: Segment ID of second S3 segment
               description: Segment ID of second S3 segment
               $comment: Segment ID of second S3 segment
@@ -3686,7 +3619,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg3:
-              default: ''
               title: Segment ID of third S3 segment
               description: Segment ID of third S3 segment
               $comment: Segment ID of third S3 segment
@@ -3743,7 +3675,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg1:
-              default: ''
               title: Segment ID of first NCS segment
               description: Segment ID of first NCS segment
               $comment: Segment ID of first NCS segment
@@ -3765,7 +3696,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg2:
-              default: ''
               title: Segment ID of second NCS segment
               description: Segment ID of second NCS segment
               $comment: Segment ID of second NCS segment
@@ -4701,18 +4631,7 @@ nodes:
         type: number
         maximum: 1000
         minimum: 0
-    required:
-    - mol_fix_origin
-    - mol_shape
-    - c2sym
-    - c3sym
-    - c4sym
-    - c5sym
-    - c6sym
-    - s3sym
-    - ncs
-    - seg
-    - fle
+    required: []
     additionalProperties: false
   uiSchema:
     mol_fix_origin:
@@ -5303,7 +5222,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg1:
-              default: ''
               title: Segment ID of first C2 segment
               description: Segment ID of first C2 segment
               $comment: Segment ID of first C2 segment
@@ -5328,7 +5246,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg2:
-              default: ''
               title: Segment ID of second C2 segment
               description: Segment ID of second C2 segment
               $comment: Segment ID of second C2 segment
@@ -5369,7 +5286,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg1:
-              default: ''
               title: Segment ID of first C3 segment
               description: Segment ID of first C3 segment
               $comment: Segment ID of first C3 segment
@@ -5394,7 +5310,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg2:
-              default: ''
               title: Segment ID of second C3 segment
               description: Segment ID of second C3 segment
               $comment: Segment ID of second C3 segment
@@ -5418,7 +5333,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg3:
-              default: ''
               title: Segment ID of third C3 segment
               description: Segment ID of third C3 segment
               $comment: Segment ID of third C3 segment
@@ -5459,7 +5373,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg1:
-              default: ''
               title: Segment ID of first C4 segment
               description: Segment ID of first C4 segment
               $comment: Segment ID of first C4 segment
@@ -5484,7 +5397,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg2:
-              default: ''
               title: Segment ID of second C4 segment
               description: Segment ID of second C4 segment
               $comment: Segment ID of second C4 segment
@@ -5508,7 +5420,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg3:
-              default: ''
               title: Segment ID of third C4 segment
               description: Segment ID of third C4 segment
               $comment: Segment ID of third C4 segment
@@ -5533,7 +5444,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg4:
-              default: ''
               title: Segment ID of fourth C4 segment
               description: Segment ID of fourth C4 segment
               $comment: Segment ID of fourth C4 segment
@@ -5574,7 +5484,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg1:
-              default: ''
               title: Segment ID of first C5 segment
               description: Segment ID of first C5 segment
               $comment: Segment ID of first C5 segment
@@ -5599,7 +5508,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg2:
-              default: ''
               title: Segment ID of second C5 segment
               description: Segment ID of second C5 segment
               $comment: Segment ID of second C5 segment
@@ -5623,7 +5531,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg3:
-              default: ''
               title: Segment ID of third C5 segment
               description: Segment ID of third C5 segment
               $comment: Segment ID of third C5 segment
@@ -5648,7 +5555,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg4:
-              default: ''
               title: Segment ID of fourth C5 segment
               description: Segment ID of fourth C5 segment
               $comment: Segment ID of fourth C5 segment
@@ -5672,7 +5578,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg5:
-              default: ''
               title: Segment ID of fifth C5 segment
               description: Segment ID of fifth C5 segment
               $comment: Segment ID of fifth C5 segment
@@ -5713,7 +5618,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg1:
-              default: ''
               title: Segment ID of first C6 segment
               description: Segment ID of first C6 segment
               $comment: Segment ID of first C6 segment
@@ -5738,7 +5642,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg2:
-              default: ''
               title: Segment ID of second C6 segment
               description: Segment ID of second C6 segment
               $comment: Segment ID of second C6 segment
@@ -5762,7 +5665,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg3:
-              default: ''
               title: Segment ID of third C6 segment
               description: Segment ID of third C6 segment
               $comment: Segment ID of third C6 segment
@@ -5787,7 +5689,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg4:
-              default: ''
               title: Segment ID of fourth C6 segment
               description: Segment ID of fourth C6 segment
               $comment: Segment ID of fourth C6 segment
@@ -5811,7 +5712,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg5:
-              default: ''
               title: Segment ID of fifth C6 segment
               description: Segment ID of fifth C6 segment
               $comment: Segment ID of fifth C6 segment
@@ -5835,7 +5735,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg6:
-              default: ''
               title: Segment ID of sixth C6 segment
               description: Segment ID of sixth C6 segment
               $comment: Segment ID of sixth C6 segment
@@ -5876,7 +5775,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg1:
-              default: ''
               title: Segment ID of first S3 segment
               description: Segment ID of first S3 segment
               $comment: Segment ID of first S3 segment
@@ -5901,7 +5799,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg2:
-              default: ''
               title: Segment ID of second S3 segment
               description: Segment ID of second S3 segment
               $comment: Segment ID of second S3 segment
@@ -5925,7 +5822,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg3:
-              default: ''
               title: Segment ID of third S3 segment
               description: Segment ID of third S3 segment
               $comment: Segment ID of third S3 segment
@@ -5982,7 +5878,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg1:
-              default: ''
               title: Segment ID of first NCS segment
               description: Segment ID of first NCS segment
               $comment: Segment ID of first NCS segment
@@ -6004,7 +5899,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg2:
-              default: ''
               title: Segment ID of second NCS segment
               description: Segment ID of second NCS segment
               $comment: Segment ID of second NCS segment
@@ -6790,18 +6684,7 @@ nodes:
         type: number
         maximum: 1000
         minimum: 0
-    required:
-    - mol_fix_origin
-    - mol_shape
-    - c2sym
-    - c3sym
-    - c4sym
-    - c5sym
-    - c6sym
-    - s3sym
-    - ncs
-    - seg
-    - fle
+    required: []
     additionalProperties: false
   uiSchema:
     mol_fix_origin:
@@ -7299,7 +7182,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg1:
-              default: ''
               title: Segment ID of first C2 segment
               description: Segment ID of first C2 segment
               $comment: Segment ID of first C2 segment
@@ -7324,7 +7206,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg2:
-              default: ''
               title: Segment ID of second C2 segment
               description: Segment ID of second C2 segment
               $comment: Segment ID of second C2 segment
@@ -7365,7 +7246,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg1:
-              default: ''
               title: Segment ID of first C3 segment
               description: Segment ID of first C3 segment
               $comment: Segment ID of first C3 segment
@@ -7390,7 +7270,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg2:
-              default: ''
               title: Segment ID of second C3 segment
               description: Segment ID of second C3 segment
               $comment: Segment ID of second C3 segment
@@ -7414,7 +7293,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg3:
-              default: ''
               title: Segment ID of third C3 segment
               description: Segment ID of third C3 segment
               $comment: Segment ID of third C3 segment
@@ -7455,7 +7333,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg1:
-              default: ''
               title: Segment ID of first C4 segment
               description: Segment ID of first C4 segment
               $comment: Segment ID of first C4 segment
@@ -7480,7 +7357,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg2:
-              default: ''
               title: Segment ID of second C4 segment
               description: Segment ID of second C4 segment
               $comment: Segment ID of second C4 segment
@@ -7504,7 +7380,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg3:
-              default: ''
               title: Segment ID of third C4 segment
               description: Segment ID of third C4 segment
               $comment: Segment ID of third C4 segment
@@ -7529,7 +7404,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg4:
-              default: ''
               title: Segment ID of fourth C4 segment
               description: Segment ID of fourth C4 segment
               $comment: Segment ID of fourth C4 segment
@@ -7570,7 +7444,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg1:
-              default: ''
               title: Segment ID of first C5 segment
               description: Segment ID of first C5 segment
               $comment: Segment ID of first C5 segment
@@ -7595,7 +7468,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg2:
-              default: ''
               title: Segment ID of second C5 segment
               description: Segment ID of second C5 segment
               $comment: Segment ID of second C5 segment
@@ -7619,7 +7491,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg3:
-              default: ''
               title: Segment ID of third C5 segment
               description: Segment ID of third C5 segment
               $comment: Segment ID of third C5 segment
@@ -7644,7 +7515,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg4:
-              default: ''
               title: Segment ID of fourth C5 segment
               description: Segment ID of fourth C5 segment
               $comment: Segment ID of fourth C5 segment
@@ -7668,7 +7538,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg5:
-              default: ''
               title: Segment ID of fifth C5 segment
               description: Segment ID of fifth C5 segment
               $comment: Segment ID of fifth C5 segment
@@ -7709,7 +7578,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg1:
-              default: ''
               title: Segment ID of first C6 segment
               description: Segment ID of first C6 segment
               $comment: Segment ID of first C6 segment
@@ -7734,7 +7602,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg2:
-              default: ''
               title: Segment ID of second C6 segment
               description: Segment ID of second C6 segment
               $comment: Segment ID of second C6 segment
@@ -7758,7 +7625,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg3:
-              default: ''
               title: Segment ID of third C6 segment
               description: Segment ID of third C6 segment
               $comment: Segment ID of third C6 segment
@@ -7783,7 +7649,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg4:
-              default: ''
               title: Segment ID of fourth C6 segment
               description: Segment ID of fourth C6 segment
               $comment: Segment ID of fourth C6 segment
@@ -7807,7 +7672,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg5:
-              default: ''
               title: Segment ID of fifth C6 segment
               description: Segment ID of fifth C6 segment
               $comment: Segment ID of fifth C6 segment
@@ -7831,7 +7695,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg6:
-              default: ''
               title: Segment ID of sixth C6 segment
               description: Segment ID of sixth C6 segment
               $comment: Segment ID of sixth C6 segment
@@ -7872,7 +7735,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg1:
-              default: ''
               title: Segment ID of first S3 segment
               description: Segment ID of first S3 segment
               $comment: Segment ID of first S3 segment
@@ -7897,7 +7759,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg2:
-              default: ''
               title: Segment ID of second S3 segment
               description: Segment ID of second S3 segment
               $comment: Segment ID of second S3 segment
@@ -7921,7 +7782,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg3:
-              default: ''
               title: Segment ID of third S3 segment
               description: Segment ID of third S3 segment
               $comment: Segment ID of third S3 segment
@@ -7978,7 +7838,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg1:
-              default: ''
               title: Segment ID of first NCS segment
               description: Segment ID of first NCS segment
               $comment: Segment ID of first NCS segment
@@ -8000,7 +7859,6 @@ nodes:
               maximum: 9999
               minimum: -9999
             seg2:
-              default: ''
               title: Segment ID of second NCS segment
               description: Segment ID of second NCS segment
               $comment: Segment ID of second NCS segment
@@ -8741,18 +8599,7 @@ nodes:
         type: number
         maximum: 1000
         minimum: 0
-    required:
-    - mol_fix_origin
-    - mol_shape
-    - c2sym
-    - c3sym
-    - c4sym
-    - c5sym
-    - c6sym
-    - s3sym
-    - ncs
-    - seg
-    - fle
+    required: []
     additionalProperties: false
   uiSchema:
     mol_fix_origin:

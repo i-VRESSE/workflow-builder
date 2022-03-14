@@ -72,9 +72,9 @@ def collapse_expandable(config):
     for k, v in config.items():
         logging.info(f'Processing var: {k}')
         if (match := re.match(skip, k)) and not (match.groups()[0] == '_1' and (match.groups()[1] in {None,'_1'})):
-            logging.info(f'Skipping {k} as their schema will be captured by first index.')
+            logging.info(f'SKipping {k} as their schema will be captured by first index.')
             continue
-            # TODO store maxitems with type:array
+            # TODO nice to store maxitems with type:array
             # for example rair_end_20_1 -> outer array should have maxitems:20
             # for example int_20_20 ->  both array should have maxitems:20
         elif match := re.match(array_of_array_of_object, k):
@@ -133,7 +133,7 @@ def config2schema(config):
         prop_toml = {}
         if 'default' in v:
             prop["default"] = v['default']
-        else:
+        elif 'type' in v and v['type'] != 'list':
             # If there is no default then user must supply a value so prop is required
             required.append(k)
         if 'title' in v and v['title'] != 'No title yet':
@@ -168,8 +168,6 @@ def config2schema(config):
             # Rename as parameter is array and does not need extra index
             if k == 'mol1':
                 k = 'mol'
-            # molXX in topaa are not required
-            required.pop()
         elif v['type'] == 'boolean':
             prop['type'] = "boolean"
         elif v['type'] in {'float', 'integer'}:
@@ -179,7 +177,7 @@ def config2schema(config):
             if 'min' in v:
                 prop['minimum'] = v['min']
             if 'default' in v and isnan(v['default']):
-                # TODO handle nan's more gracefully
+                # TODO handle nan's more gracefully, instead of now just deleting it
                 del prop['default']
         elif v['type'] == 'file':
             prop['type'] = 'string'
@@ -211,6 +209,8 @@ def config2schema(config):
                 prop['maxLength'] = v['maxchars']
             if 'choices' in v:
                 prop['enum'] = v['choices']
+            if v['default'] == '':
+                del prop['default']
         elif v['type'] == 'list':
             prop['type'] = "array"
             if 'minitems' in v:
@@ -300,7 +300,7 @@ def config2schema(config):
                     }
                 }
             elif k == 'top_cluster':
-                # TODO dont hardcode item type for seletopclusts:top_cluster, but use itemtype defined in haddock3
+                # TODO dont hardcode item type for seletopclusts:top_cluster, but use items:type defined in haddock3
                 prop['items'] = {
                     "type": "number"
                 }

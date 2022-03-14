@@ -78,7 +78,6 @@ global:
         - slurm
         - torque
       queue:
-        default: ''
         title: Queue name
         description: Name of the batch queue to which jobs will be submitted
         $comment: Name of the batch queue to which jobs will be submitted. If not
@@ -111,7 +110,6 @@ global:
         minimum: 1
     required:
     - run_dir
-    - molecules
     additionalProperties: false
   uiSchema:
     molecules:
@@ -346,7 +344,6 @@ nodes:
         - structure
         - sequence
       lovoalign_exec:
-        default: ''
         title: Location (path) of the LovoAlign executable
         description: Location (path) of the LovoAlign executable.
         $comment: Location (path) of the LovoAlign executable.
@@ -472,8 +469,7 @@ nodes:
         $comment: Include electrostatics energy during the calculations. If set to
           false electrostatics will not be considered.
         type: boolean
-    required:
-    - mol_shape
+    required: []
     additionalProperties: false
   uiSchema:
     mol_shape:
@@ -534,12 +530,10 @@ nodes:
         minLength: 0
         maxLength: 100
       receptor_active:
-        default: ''
         type: string
         minLength: 0
         maxLength: 100
       receptor_passive:
-        default: ''
         type: string
         minLength: 0
         maxLength: 100
@@ -549,12 +543,10 @@ nodes:
         minLength: 0
         maxLength: 100
       ligand_active:
-        default: ''
         type: string
         minLength: 0
         maxLength: 100
       ligand_passive:
-        default: ''
         type: string
         minLength: 0
         maxLength: 100
@@ -662,9 +654,7 @@ nodes:
                 type: number
                 maximum: 9999
                 minimum: -9999
-          required:
-          - hisd
-          - hise
+          required: []
           additionalProperties: false
     required: []
     additionalProperties: false
@@ -967,8 +957,7 @@ nodes:
         type: number
         maximum: 1
         minimum: 1.0e-05
-    required:
-    - mol_shape
+    required: []
     additionalProperties: false
   uiSchema:
     mol_shape:
@@ -1111,8 +1100,7 @@ nodes:
         enum:
         - water
         - dmso
-    required:
-    - mol_shape
+    required: []
     additionalProperties: false
   uiSchema:
     mol_shape:
@@ -1259,8 +1247,7 @@ nodes:
         type: number
         maximum: 50000
         minimum: 1
-    required:
-    - mol_shape
+    required: []
     additionalProperties: false
   uiSchema:
     mol_shape:
