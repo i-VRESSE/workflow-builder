@@ -141,7 +141,7 @@ export const TableFieldTemplate = (props: FieldProps): JSX.Element => {
   }
   return (
     <fieldset className={props.idSchema.$id}>
-      <legend>{props.schema.title}</legend>
+      <legend>{props.title}</legend>
       <p className='field-description'>{props.schema.description}</p>
       <Table striped bordered size='sm' className='table-field'>
         <thead>
