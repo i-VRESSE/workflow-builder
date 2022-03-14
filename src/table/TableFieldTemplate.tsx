@@ -90,7 +90,7 @@ export const TableFieldTemplate = (props: FieldProps): JSX.Element => {
           </>
         )
       }
-      const width = widths[i.toString()]
+      const width = widths[key]
       return (
         <th
           key={key}
