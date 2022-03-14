@@ -40,6 +40,8 @@ categories:
   description: Category 1
 - name: expandabletests
   description: Nodes with expandable parameters
+- name: tabletests
+  description: Nodes with tables
 nodes:
 - schema:
     title: Test to render group11 collapsed
@@ -210,4 +212,35 @@ nodes:
   label: Node 4
   description: Description 3
   category: expandabletests
+- schema:
+    title: Test to render nested1 as a table
+    type: object
+    properties:
+      nested1:
+        type: 'array'
+        title: 'Array of {prop1,prop2}'
+        items:
+          type: 'object'
+          properties:
+            prop1:
+              title: 'Prop 1'
+              description: 'Description 1'
+              type: 'string'
+            prop2:
+              title: 'Prop 2'
+              description: 'Description 2'
+              type: 'string'
+    additionalProperties: false
+  uiSchema:
+    nested1:
+      ui:field: table
+  tomlSchema:
+    nested1:
+      indexed: true
+      items:
+        flatten: true
+  id: node5
+  label: Node 5
+  description: Description 5
+  category: tabletests
 examples: {}
