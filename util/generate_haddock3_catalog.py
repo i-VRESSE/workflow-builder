@@ -66,18 +66,26 @@ def collapse_expandable(config):
     array_of_object = r'(\w+)_(\w+)_1'
     array_of_array_of_scalar = r'(\w+)_1_1'
     array_of_array_of_object = r'(\w+)_(\w+)_1_1'
-    skip = r'\w+_\d[2-20]_\d[2-20]'
+    skip = r'\w+?(_\d\d?)(_\d\d?)?'
+    must_be_array_of_scalar = {'mol_fix_origin_1', 'mol_shape_1'}
     new_config = {}
     for k, v in config.items():
         logging.info(f'Processing var: {k}')
-        if re.match(skip, k):
-            # Skip non-first indexes as their schema will be captured by first index.
+        if (match := re.match(skip, k)) and not (match.groups()[0] == '_1' and (match.groups()[1] in {None,'_1'})):
+            logging.info(f'Skipping {k} as their schema will be captured by first index.')
             continue
+            # TODO store maxitems with type:array
+            # for example rair_end_20_1 -> outer array should have maxitems:20
+            # for example int_20_20 ->  both array should have maxitems:20
         elif match := re.match(array_of_array_of_object, k):
             p, n = match.groups()
             if p not in new_config:
                 new_config[p] = {'dim': 2, 'properties': {}, 'type': 'list'}
             new_config[p]['properties'][n] = v
+            if 'group' in v:
+                # Move group from nested prop to outer array
+                new_config[p]['group'] = v['group']
+                del v['group']
         elif match := re.match(array_of_array_of_scalar, k):
             p, = match.groups()
             new_config[p] = {
@@ -85,11 +93,17 @@ def collapse_expandable(config):
                 'dim': 2,
                 'items': v
             }
-        elif match := re.match(array_of_object, k):
+            if 'group' in v:
+                new_config[p]['group'] = v['group']
+                del v['group']
+        elif (match := re.match(array_of_object, k)) and k not in must_be_array_of_scalar:
             p, n = match.groups()
             if p not in new_config:
                 new_config[p] = {'dim': 1, 'properties': {}, 'type': 'list'}
             new_config[p]['properties'][n] = v
+            if 'group' in v:
+                new_config[p]['group'] = v['group']
+                del v['group']
         elif match := re.match(array_of_scalar, k):
             p, = match.groups()
             new_config[p] = {
@@ -97,6 +111,9 @@ def collapse_expandable(config):
                 'dim': 1,
                 'items': v
             }
+            if 'group' in v:
+                new_config[p]['group'] = v['group']
+                del v['group']
         else:
             new_config[k] = v
 
@@ -153,30 +170,6 @@ def config2schema(config):
                 k = 'mol'
             # molXX in topaa are not required
             required.pop()
-        elif k.count('_') == 1 and k.endswith('_1'):
-            # array of scalar
-            new_k = k.replace('_1', '')
-            config2 = {
-                new_k: v
-            }
-            schemas = config2schema(config2)
-            prop.update({
-                'type': 'array',
-                'items': schemas['schema']['properties'][new_k],
-                'title': v['title'] + 's',
-            })
-            if 'default' in v:
-                # array has no default
-                del prop['default']
-            del prop['description']
-            del prop['$comment']
-            if new_k in schemas['uiSchema']:
-                prop_ui['items'] = schemas['uiSchema'][new_k]
-            prop_toml = {
-                'indexed': True
-            }
-            k = new_k
-            # TODO complete it using collapsed_config
         elif v['type'] == 'boolean':
             prop['type'] = "boolean"
         elif v['type'] in {'float', 'integer'}:
@@ -290,32 +283,6 @@ def config2schema(config):
                     }
                 else:
                     raise Exception('Unknown dim')
-            elif 'itemtype' in v:
-                obj = {'a' : {'type': v['itemtype']}} # config2schema requires object
-                if 'accept' in v:
-                    obj['a']['accept'] = ",".join(v['accept'])
-                schemas = config2schema(obj)
-                
-                if 'dim' in v and v['dim'] == 2:
-                    prop['items'] = schemas['schema']['properties']['a']
-                    if schemas['uiSchema'] and schemas['uiSchema']['a']:
-                        prop_ui = {
-                          "items": schemas['uiSchema']['a']
-                        }
-                else:
-                    prop['items'] = schemas['schema']['properties']['a']
-                    if schemas['uiSchema'] and schemas['uiSchema']['a']:
-                        prop_ui = {
-                          "items": schemas['uiSchema']['a']
-                        }
-            elif 'items' in v:
-                obj = {'a' : v['items']} # config2schema requires object
-                schemas = config2schema(obj)
-                prop['items'] = schemas['schema']['properties']['a']
-                if schemas['uiSchema'] and schemas['uiSchema']['a']:
-                    prop_ui = {
-                        "items": schemas['uiSchema']['a']
-                    }
             elif k == 'molecules':
                 # TODO dont hardcode item type and ui for global.molecules, but use itemtype defined in haddock3
                 # Use default value to determine type of items in array/list

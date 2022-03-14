@@ -422,12 +422,14 @@ nodes:
   schema:
     type: object
     properties:
-      mol_shape_1:
-        default: false
-        title: Is the molecule a shape?
-        description: Defines a molecule as a shape.
-        $comment: Defines a molecule as a shape, which is a collection of beads.
-        type: boolean
+      mol_shape:
+        type: array
+        items:
+          default: false
+          title: Is the molecule a shape?
+          description: Defines a molecule as a shape.
+          $comment: Defines a molecule as a shape, which is a collection of beads.
+          type: boolean
       ambig_fname:
         title: Ambiguous distance restraints filename
         description: Filename of the ambiguous distance restraints file
@@ -470,10 +472,11 @@ nodes:
         $comment: Include electrostatics energy during the calculations. If set to
           false electrostatics will not be considered.
         type: boolean
-    required: []
+    required:
+    - mol_shape
     additionalProperties: false
   uiSchema:
-    mol_shape_1:
+    mol_shape:
       ui:group: molecule
     ambig_fname:
       ui:widget: file
@@ -490,7 +493,9 @@ nodes:
       ui:group: sampling
     elecflag:
       ui:group: force field
-  tomlSchema: {}
+  tomlSchema:
+    mol_shape:
+      indexed: true
 - id: lightdock
   category: sampling
   label: Run Lightdock as a HADDOCK3 module.
@@ -628,7 +633,6 @@ nodes:
               maximum: 9999
               minimum: 0
             hisd:
-              title: HISD residue numbers
               type: array
               items:
                 title: HISD residue number
@@ -650,7 +654,6 @@ nodes:
               maximum: 9999
               minimum: 0
             hise:
-              title: HISE residue numbers
               type: array
               items:
                 title: HISE residue number
@@ -659,13 +662,17 @@ nodes:
                 type: number
                 maximum: 9999
                 minimum: -9999
-          required: []
+          required:
+          - hisd
+          - hise
           additionalProperties: false
     required: []
     additionalProperties: false
   uiSchema:
     delenph:
       ui:group: molecule
+    mol:
+      ui:group: input molecules
   tomlSchema:
     mol:
       indexed: true
@@ -778,12 +785,14 @@ nodes:
   schema:
     type: object
     properties:
-      mol_shape_1:
-        default: false
-        title: Is the molecule a shape?
-        description: Defines a molecule as a shape.
-        $comment: Defines a molecule as a shape, which is a collection of beads.
-        type: boolean
+      mol_shape:
+        type: array
+        items:
+          default: false
+          title: Is the molecule a shape?
+          description: Defines a molecule as a shape.
+          $comment: Defines a molecule as a shape, which is a collection of beads.
+          type: boolean
       ambig_fname:
         title: Ambiguous distance restraints filename
         description: Filename of the ambiguous distance restraints file
@@ -958,10 +967,11 @@ nodes:
         type: number
         maximum: 1
         minimum: 1.0e-05
-    required: []
+    required:
+    - mol_shape
     additionalProperties: false
   uiSchema:
-    mol_shape_1:
+    mol_shape:
       ui:group: molecule
     ambig_fname:
       ui:widget: file
@@ -985,7 +995,9 @@ nodes:
       ui:group: other restraints
     elecflag:
       ui:group: force field
-  tomlSchema: {}
+  tomlSchema:
+    mol_shape:
+      indexed: true
 - id: mdref
   category: refinement
   label: HADDOCK3 module for water refinement.
@@ -993,12 +1005,14 @@ nodes:
   schema:
     type: object
     properties:
-      mol_shape_1:
-        default: false
-        title: Is the molecule a shape?
-        description: Defines a molecule as a shape.
-        $comment: Defines a molecule as a shape, which is a collection of beads.
-        type: boolean
+      mol_shape:
+        type: array
+        items:
+          default: false
+          title: Is the molecule a shape?
+          description: Defines a molecule as a shape.
+          $comment: Defines a molecule as a shape, which is a collection of beads.
+          type: boolean
       ambig_fname:
         title: Ambiguous distance restraints filename
         description: Filename of the ambiguous distance restraints file
@@ -1097,10 +1111,11 @@ nodes:
         enum:
         - water
         - dmso
-    required: []
+    required:
+    - mol_shape
     additionalProperties: false
   uiSchema:
-    mol_shape_1:
+    mol_shape:
       ui:group: molecule
     ambig_fname:
       ui:widget: file
@@ -1124,7 +1139,9 @@ nodes:
       ui:group: other restraints
     elecflag:
       ui:group: force field
-  tomlSchema: {}
+  tomlSchema:
+    mol_shape:
+      indexed: true
 - id: emref
   category: refinement
   label: HADDOCK3 module for energy minimization refinement.
@@ -1132,12 +1149,14 @@ nodes:
   schema:
     type: object
     properties:
-      mol_shape_1:
-        default: false
-        title: Is the molecule a shape?
-        description: Defines a molecule as a shape.
-        $comment: Defines a molecule as a shape, which is a collection of beads.
-        type: boolean
+      mol_shape:
+        type: array
+        items:
+          default: false
+          title: Is the molecule a shape?
+          description: Defines a molecule as a shape.
+          $comment: Defines a molecule as a shape, which is a collection of beads.
+          type: boolean
       ambig_fname:
         title: Ambiguous distance restraints filename
         description: Filename of the ambiguous distance restraints file
@@ -1240,10 +1259,11 @@ nodes:
         type: number
         maximum: 50000
         minimum: 1
-    required: []
+    required:
+    - mol_shape
     additionalProperties: false
   uiSchema:
-    mol_shape_1:
+    mol_shape:
       ui:group: molecule
     ambig_fname:
       ui:widget: file
@@ -1271,6 +1291,8 @@ nodes:
       ui:group: force field
     sampling:
       ui:group: sampling
-  tomlSchema: {}
+  tomlSchema:
+    mol_shape:
+      indexed: true
 examples:
   docking-protein-ligand: /examples/docking-protein-ligand.zip
