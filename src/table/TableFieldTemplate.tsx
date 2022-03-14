@@ -20,8 +20,8 @@ export const TableFieldTemplate = (props: FieldProps): JSX.Element => {
   const rowSchema = (props.schema as any).items.properties
   let widths: { [name: string]: string } = {}
   if (
-    props.uiSchema['ui:options'] != null &&
-    props.uiSchema['ui:options'].widths &&
+    props.uiSchema['ui:options'] !== undefined &&
+    'widths' in props.uiSchema['ui:options'] &&
     isObject(props.uiSchema['ui:options'].widths)
   ) {
     widths = props.uiSchema['ui:options'].widths as { [name: string]: string }
@@ -55,7 +55,7 @@ export const TableFieldTemplate = (props: FieldProps): JSX.Element => {
           ))
         const depDescs: any[] = []
         const depCache = new Set()
-        if (s.dependencies) {
+        if (isObject(s.dependencies)) {
           Object.values(s.dependencies).forEach((oneOf: any) => {
             oneOf.oneOf.forEach((o: any) => {
               Object.entries(o.properties)
@@ -90,11 +90,12 @@ export const TableFieldTemplate = (props: FieldProps): JSX.Element => {
           </>
         )
       }
+      const width = widths[i.toString()]
       return (
         <th
           key={key}
           title={s.description}
-          style={widths[i.toString()] ? { width: widths[i.toString()] } : {}}
+          style={{ width }}
         >
           {s.title}
           <OverlayTrigger
@@ -118,7 +119,7 @@ export const TableFieldTemplate = (props: FieldProps): JSX.Element => {
   )
   headers.push(<th key='actions-th' />)
   let rows: JSX.Element[] = []
-  if (props.items) {
+  if ('items' in props) {
     rows = props.items.map((element: any) => {
       return (
         <tr key={element.key} className={element.className}>
