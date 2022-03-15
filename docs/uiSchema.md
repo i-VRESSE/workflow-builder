@@ -18,6 +18,47 @@ Besides the built-in react-json-schema-form uiSchema fields the workflow builder
 
 Any property with a group uiSchema field will be grouped together with other properties with the same group in the form. The generated toml file will have the props ungrouped.
 
+## ui:field: collapsible
+
+An property of type object can be rendered as a collapsible sub-form with
+
+```json
+{
+    "prop1": {
+        "ui:field": "collapsible"
+    }
+}
+```
+
+This will render the children of `prop1` in a initially collapsed sub-form.
+To expand press the expand icon button.
+
+### Initially expanded
+
+Render the sub-form initially expanded with
+
+```json
+{
+    "prop1": {
+        "ui:field": "collapsible",
+        "ui:collapsed": true
+    }
+}
+```
+
+Or alternativly using `ui:options` with
+
+```json
+{
+    "prop1": {
+        "ui:field": "collapsible",
+        "ui:options": {
+            "collapsed": true
+      }
+    }
+}
+```
+
 ## ui:field: table
 
 A property which is an array of objects can be rendered as a table with
