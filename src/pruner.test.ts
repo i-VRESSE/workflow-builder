@@ -346,6 +346,30 @@ describe('given array items is string and has default', () => {
   })
 })
 
+describe('given array item is untyped and has default', () => {
+  it('should include prop', () => {
+    const parameters = {
+      prop1: ['something']
+    }
+    const schema: JSONSchema7 = {
+      type: 'object',
+      properties: {
+        prop1: {
+          type: 'array'
+        }
+      },
+      additionalProperties: false
+    }
+
+    const result = pruneDefaults(parameters, schema)
+
+    const expected = {
+      prop1: ['something']
+    }
+    expect(result).toEqual(expected)
+  })
+})
+
 describe('given array items is string and has item equal to default and item which is non-default', () => {
   it('should not include prop', () => {
     const parameters = {
