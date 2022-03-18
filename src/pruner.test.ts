@@ -396,7 +396,7 @@ describe('given array item is untyped and has default', () => {
 })
 
 describe('given array items is string and has item equal to default and item which is non-default', () => {
-  it('should not include prop', () => {
+  it('should not have item as undefined', () => {
     const parameters = {
       prop1: ['something', 'somethingelse']
     }
@@ -417,14 +417,14 @@ describe('given array items is string and has item equal to default and item whi
     const result = pruneDefaults(parameters, schema)
 
     const expected = {
-      prop1: ['somethingelse']
+      prop1: [undefined, 'somethingelse']
     }
     expect(result).toEqual(expected)
   })
 })
 
 describe('given array items is object and has nested prop equal to default and another item with same prop with non-default value', () => {
-  it('should not include prop', () => {
+  it('should not have item as undefined', () => {
     const parameters = {
       prop1: [{ prop2: 'something' }, { prop2: 'somethingelse' }]
     }
@@ -451,7 +451,7 @@ describe('given array items is object and has nested prop equal to default and a
     const result = pruneDefaults(parameters, schema)
 
     const expected = {
-      prop1: [{ prop2: 'somethingelse' }]
+      prop1: [undefined, { prop2: 'somethingelse' }]
     }
     expect(result).toEqual(expected)
   })
@@ -496,7 +496,7 @@ describe('given array items is object and has nested prop equal to default and o
 })
 
 describe('given array items is object and has nested prop equal to default and other nested prop also equal to default', () => {
-  it('should not include prop', () => {
+  it('should not have item as undefined', () => {
     const parameters = {
       prop1: [{ prop2: 'something', prop3: 42 }, { prop2: 'somethingelse', prop3: 0 }]
     }
@@ -527,7 +527,7 @@ describe('given array items is object and has nested prop equal to default and o
     const result = pruneDefaults(parameters, schema)
 
     const expected = {
-      prop1: [{ prop2: 'somethingelse', prop3: 0 }]
+      prop1: [undefined, { prop2: 'somethingelse', prop3: 0 }]
     }
     expect(result).toEqual(expected)
   })
@@ -560,7 +560,34 @@ describe('given array items is object and has nested prop equal to default', () 
 
     const result = pruneDefaults(parameters, schema)
 
+    const expected = {}
+    expect(result).toEqual(expected)
+  })
+})
+
+describe('given an array of booleans where the default is false', () => {
+  it('should replace false with undefined and remove trailing items which are false', () => {
+    const parameters = {
+      prop1: [false, true, true, false, true, false, false]
+    }
+    const schema: JSONSchema7 = {
+      type: 'object',
+      properties: {
+        prop1: {
+          type: 'array',
+          items: {
+            type: 'boolean',
+            default: false
+          }
+        }
+      },
+      additionalProperties: false
+    }
+
+    const result = pruneDefaults(parameters, schema)
+
     const expected = {
+      prop1: [undefined, true, true, undefined, true]
     }
     expect(result).toEqual(expected)
   })

@@ -1,6 +1,18 @@
 import { JSONSchema7 } from 'json-schema'
 import { IParameters } from './types'
 
+function removeTrailing<T> (a: T[], c: T | undefined): T[] {
+  let trailIndex = a.length
+  for (let index = a.length; index >= 0; index--) {
+    if (a[index] === c) {
+      trailIndex = index
+    } else {
+      break
+    }
+  }
+  return a.slice(0, trailIndex)
+}
+
 /**
  * Any parameter whose value is same as the default defined in the schema will be pruned and not returned.
  */
@@ -9,7 +21,7 @@ export function pruneDefaults (parameters: IParameters, schema: JSONSchema7): IP
   Object.entries(parameters).forEach(([k, v]) => {
     if (schema.properties !== undefined && k in schema.properties) {
       const schemaOfK = schema.properties[k] as JSONSchema7
-      if (v === schemaOfK.default) {
+      if (v === schemaOfK.default || v === undefined) {
         // skip it
       } else if (schemaOfK.type === 'object') {
         const prunedV = pruneDefaults(v as IParameters, schemaOfK)
@@ -29,9 +41,10 @@ export function pruneDefaults (parameters: IParameters, schema: JSONSchema7): IP
               }
             }
             return pruneDefaults({ a: v2 }, schemaOfItemAsObject).a
-          }).filter(v2 => v2 !== undefined)
-          if (prunedV.length > 0) {
-            newParameters[k] = prunedV
+          })
+          const prunedV2 = removeTrailing(prunedV, undefined)
+          if (prunedV2.length > 0) {
+            newParameters[k] = prunedV2
           }
         } else {
           // TODO handle defaults in prefixItems, see https://json-schema.org/understanding-json-schema/reference/array.html#id7
