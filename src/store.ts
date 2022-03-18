@@ -13,7 +13,6 @@ import { removeItemAtIndex, replaceItemAtIndex, moveItem, swapItem, removeAllIte
 import { groupParameters, unGroupParameters } from './grouper'
 import { pruneDefaults } from './pruner'
 
-
 const catalogIndexState = selector<ICatalogIndex>({
   key: 'catalogIndex',
   get: async () => {
@@ -99,14 +98,14 @@ const filesState = atom<IFiles>({
   default: {}
 })
 
-function formData2parameters(formData: IParameters, newFiles: IFiles, schema: JSONSchema7, uiSchema: UiSchema): IParameters {
+function formData2parameters (formData: IParameters, newFiles: IFiles, schema: JSONSchema7, uiSchema: UiSchema): IParameters {
   const ungrouped = unGroupParameters(formData, uiSchema)
   const externailized = externalizeDataUrls(ungrouped, newFiles)
   const pruned = pruneDefaults(externailized, schema)
   return pruned
 }
 
-function parameters2formData(parameters: IParameters, files: IFiles, uiSchema: UiSchema): IParameters {
+function parameters2formData (parameters: IParameters, files: IFiles, uiSchema: UiSchema): IParameters {
   const internalized = internalizeDataUrls(parameters, files)
   const grouped = groupParameters(internalized, uiSchema)
   return grouped
