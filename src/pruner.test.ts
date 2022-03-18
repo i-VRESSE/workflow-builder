@@ -560,8 +560,7 @@ describe('given array items is object and has nested prop equal to default', () 
 
     const result = pruneDefaults(parameters, schema)
 
-    const expected = {
-    }
+    const expected = {}
     expect(result).toEqual(expected)
   })
 })
