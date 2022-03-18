@@ -107,6 +107,31 @@ describe('pruneDefaults()', () => {
     })
   })
 
+  describe('given an empty string and default is something', () => {
+    it('should include prop', () => {
+      const parameters = {
+        prop1: ''
+      }
+      const schema: JSONSchema7 = {
+        type: 'object',
+        properties: {
+          prop1: {
+            type: 'string',
+            default: 'something'
+          }
+        },
+        additionalProperties: false
+      }
+
+      const result = pruneDefaults(parameters, schema)
+
+      const expected = {
+        prop1: ''
+      }
+      expect(result).toEqual(expected)
+    })
+  })
+
   describe('given a integer and is set to default', () => {
     it('should not include prop', () => {
       const parameters = {
