@@ -174,11 +174,6 @@ export const ArrayOfObjectsOfObjectsAsTable: ComponentStory<typeof Form> = () =>
                   description: 'Description 1 b'
                 }
               }
-            },
-            prop2: {
-              title: 'Prop 2',
-              description: 'Description 2',
-              type: 'string'
             }
           },
           additionalProperties: false
@@ -194,11 +189,15 @@ export const ArrayOfObjectsOfObjectsAsTable: ComponentStory<typeof Form> = () =>
   }
   const formData = {
     nested1: [{
-      prop1: '11',
-      prop2: '22'
+      prop1: {
+        prop1a: '11',
+        prop1b: '22'
+      }
     }, {
-      prop1: '33',
-      prop2: '44'
+      prop1: {
+        prop1a: '44',
+        prop1b: '55'
+      }
     }]
   }
   return render(schema, uiSchema, formData)
