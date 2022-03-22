@@ -1,22 +1,12 @@
 # UI schema
 
 The global and node parameters are edited in a form generated from the JSON schema.
-To customize the look and feel of the form the uiSchema can be used.
-For example rendering a radio group or a text area. The [react-json-schema-form](https://react-jsonschema-form.readthedocs.io/en/latest/api-reference/uiSchema/) docs describes the uiSchema format.
+To customize the look and feel of the form the `uiSchema` can be defined in the catalog.
+For example rendering a radio group or a text area can be done by filling the `uiSchema`.
 
-Besides the built-in react-json-schema-form uiSchema fields the workflow builder adds the following.
+The [react-json-schema-form](https://react-jsonschema-form.readthedocs.io/en/latest/api-reference/uiSchema/) docs describes the uiSchema format and which built-in fields are avaiable.
 
-## ui:group
-
-```json
-{
-    "prop1": {
-        "ui:group": "<group name>"
-    }
-}
-```
-
-Any property with a group uiSchema field will be grouped together with other properties with the same group in the form. The generated toml file will have the props ungrouped.
+Besides the built-in react-json-schema-form uiSchema fields, the workflow builder adds the following:
 
 ## ui:field: collapsible
 
@@ -58,6 +48,19 @@ Or alternativly using `ui:options` with
     }
 }
 ```
+
+## ui:group
+
+```json
+{
+    "prop1": {
+        "ui:group": "<group name>"
+    }
+}
+```
+
+Any property with a group uiSchema field will be grouped together with other properties with the same group in the form. The generated toml file will have the props ungrouped.
+The group will also be collapsible and collapsed by default.
 
 ## ui:field: table
 
