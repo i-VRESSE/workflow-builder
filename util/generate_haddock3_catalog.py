@@ -62,6 +62,17 @@ def argparser_builder():
     return parser
 
 def collapse_expandable(config):
+    """
+    The haddock3 defaults.yaml files define complex shape inside the parameter name.
+    The workflow builder uses type:array, type:object from JSON schema to define complex data types.
+
+    The method converts the shape in parameter name into a shortened parameter name and a shape
+    1. arrays of scalars (X_1 -> X:[1]),
+    2. arrays of objects (X_Y_1 -> X:[{Y}]),
+    3. array of arrays of scalars (X_1_1 -> X:[[1]]) and
+    4. array of arrays of object (X_Y_1_1 -> X:[[{Y}]])
+
+    """
     array_of_scalar = r'(\w+)_1'
     array_of_object = r'(\w+)_(\w+)_1'
     array_of_array_of_scalar = r'(\w+)_1_1'
