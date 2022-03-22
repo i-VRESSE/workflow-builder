@@ -1,4 +1,4 @@
-import { FieldProps } from '@rjsf/core'
+import { ArrayFieldTemplateProps } from '@rjsf/core'
 import { Button, Table, OverlayTrigger, Popover, Row, Container, Col } from 'react-bootstrap'
 import { Dash, Plus, QuestionCircle } from 'react-bootstrap-icons'
 
@@ -15,7 +15,7 @@ function isObject (value: unknown): value is object {
   return value !== null && typeof value === 'object'
 }
 
-export const TableFieldTemplate = (props: FieldProps): JSX.Element => {
+export const TableFieldTemplate = (props: ArrayFieldTemplateProps): JSX.Element => {
   const required = new Set((props.schema as any).items.required)
   const rowSchema = (props.schema as any).items.properties
   let widths: { [name: string]: string } = {}

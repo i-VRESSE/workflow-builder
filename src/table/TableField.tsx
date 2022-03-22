@@ -5,7 +5,7 @@ import { TableRowFieldTemplate } from './TableRowFieldTemplate'
 import { TableCellFieldTemplate } from './TableCellFieldTemplate'
 
 export const TableField = (props: FieldProps): JSX.Element => {
-  (props.uiSchema as any)['ui:ArrayFieldTemplate'] = TableFieldTemplate
+  props.uiSchema['ui:ArrayFieldTemplate'] = TableFieldTemplate
   if (!('items' in props.uiSchema)) {
     props.uiSchema.items = {}
   }
