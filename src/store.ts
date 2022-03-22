@@ -324,5 +324,7 @@ export function useFiles (): IFiles {
 
 export function useText (): string {
   const { nodes, global } = useWorkflow()
-  return workflow2tomltext(nodes, global)
+  const catalog = useCatalog()
+  const tomlSchema4nodes = Object.fromEntries(catalog.nodes.map(n => [n.id, n.tomlSchema !== undefined ? n.tomlSchema : {}]))
+  return workflow2tomltext(nodes, global, tomlSchema4nodes)
 }

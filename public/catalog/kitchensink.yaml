@@ -38,6 +38,8 @@ global:
 categories:
 - name: grouptests
   description: Category 1
+- name: expandabletests
+  description: Nodes with expandable parameters
 nodes:
 - schema:
     title: Test to render group11 collapsed
@@ -104,4 +106,108 @@ nodes:
   label: Node 3
   description: Description 3
   category: grouptests
+- schema:
+    type: object
+    additionalProperties: false
+    properties:
+      prop1:
+        title: Array of objects
+        description: prop1_something_1 and prop1_something_else_1 and numprop1=4
+        type: array
+        minItems: 0
+        maxItems: 4
+        items:
+          type: object
+          properties:
+            something:
+              type: string
+            something_else:
+              type: string
+          additionalProperties: false
+        additionalProperties: false
+      fle:
+        title: Array of array of objects
+        description: nfle1=2 and fle_sta_1_1 and fle_end_1_1 . Outer array is molecule index
+        type: array
+        items:
+          type: array
+          description: Inner array is segment index
+          minItems: 0
+          maxItems: 2
+          items:
+            type: object
+            properties:
+              sta:
+                title: Starting residue number
+                type: number
+              end:
+                title: End residue number
+                type: number
+            additionalProperties: false
+      paramX:
+        title: Array of scalars
+        description: param_1 + param_2 + param_3
+        type: array
+        maxItems: 3
+        items:
+          type: boolean
+          default: false
+      mol:
+        title: topoaa.mol use case
+        description: each mol in own section with hisd_N keys
+        type: array
+        items:
+          type: object
+          properties:
+            cyclicpept:
+              type: boolean
+            hisd:
+              type: array
+              items:
+                  type: number
+  uiSchema:
+    prop1:
+      ui:options:
+        orderable: false
+    fle:
+      items:
+        ui:options:
+          orderable: false
+      ui:options:
+        orderable: false
+    paramX:
+      items:
+        ui:widget: radio  # default checkbox widget is only valid when checked
+      ui:options:
+        orderable: false
+    mol:
+      items:
+        cyclicpept:
+          ui:widget: radio  # default checkbox widget is only valid when checked
+      ui:options:
+        orderable: false
+  tomlSchema:  # How to read and write expandanble parameters in toml files
+    prop1:
+      indexed: true  # X in prop1_something_X
+      items:
+        flatten: true # something in prop1_something_X
+    fle:
+      indexed: true  # X in name_something_X_Y
+      items:
+        indexed: true  # Y in name_something_X_Y
+        items:
+          flatten: true  # something in name_something_X_Y
+    paramX:
+      indexed: true # Y in param_Y
+    mol:
+      indexed: true
+      items:
+        sectioned: true
+        properties:
+          hisd:
+            indexed: true
+  id: node4
+  label: Node 4
+  description: Description 3
+  category: expandabletests
 examples: {}
