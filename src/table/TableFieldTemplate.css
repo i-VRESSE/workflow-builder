@@ -9,8 +9,11 @@
 .table-cell-field > div > fieldset > .field-description,
 .table-cell-field > div > .control-label,
 .table-cell-field > div > .field-description,
-.table-cell-field > div > .form-group > .form-label,
-.table-cell-field > div > .form-text
+.table-cell-field > .form-group > .form-label,
+.table-cell-field > .form-group > div > hr,
+.table-cell-field > .form-group > div > h5,  /* title of object */
+.table-cell-field > .form-group .mb-3, /* description of object */
+.table-cell-field .form-text /* description of object property */
 {
     display: none;
 }
