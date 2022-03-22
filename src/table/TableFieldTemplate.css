@@ -1,11 +1,9 @@
-/* .table-field .control-label, .table-field .field-description, .table-field legend {
-    display: none;
-} */
-
+/* Make rows compact */
 .table-field .form-group {
-    margin-bottom: 1px;
+    margin-bottom: 0px;
 }
 
+/* Hide any label or description in cells as they are rendered in column headers */
 .table-cell-field > div > fieldset > legend,
 .table-cell-field > div > fieldset > div > .field-description,
 .table-cell-field > div > fieldset > .field-description,
