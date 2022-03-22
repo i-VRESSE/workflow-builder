@@ -53,39 +53,11 @@ export const TableFieldTemplate = (props: ArrayFieldTemplateProps): JSX.Element 
               />
             </li>
           ))
-        const depDescs: any[] = []
-        const depCache = new Set()
-        if (isObject(s.dependencies)) {
-          Object.values(s.dependencies).forEach((oneOf: any) => {
-            oneOf.oneOf.forEach((o: any) => {
-              Object.entries(o.properties)
-                .filter((d: any) => d[1].description)
-                .forEach(([okey, oschema]: any) => {
-                  if (depCache.has(oschema.title)) {
-                    return
-                  }
-                  depCache.add(oschema.title)
-                  depDescs.push(
-                    <li key={okey}>
-                      <label className='control-label'>{oschema.title}</label>
-                      <p
-                        dangerouslySetInnerHTML={{
-                          __html: oschema.description
-                        }}
-                        className='field-description'
-                      />
-                    </li>
-                  )
-                })
-            })
-          })
-        }
         description = (
           <>
             <span dangerouslySetInnerHTML={{ __html: s.description }} />
             <ul>
               {propDescs}
-              {depDescs}
             </ul>
           </>
         )
