@@ -128,6 +128,7 @@ export const TableFieldTemplate = (props: ArrayFieldTemplateProps): JSX.Element 
             <Button
               type='danger'
               className='array-item-remove'
+              title='Remove'
               style={btnStyle}
               disabled={props.disabled || props.readonly}
               onClick={element.onDropIndexClick(element.index)}
@@ -155,6 +156,7 @@ export const TableFieldTemplate = (props: ArrayFieldTemplateProps): JSX.Element 
           <Col xs={1}>
             <Button
               className='array-item-add'
+              title='Add'
               onClick={props.onAddClick}
               disabled={props.disabled || props.readonly}
             >
