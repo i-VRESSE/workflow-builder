@@ -14,18 +14,23 @@ global:
   schema:
     type: object
     properties:
+      run_dir:
+        title: Run directory
+        description: Folder to store the HADDOCK3 run
+        $comment: The new folder that will be created to save the HADDOCK3 run
+        type: string
+        format: uri-reference
       molecules:
-        title: Molecules
+        title: Input Molecules
+        description: The input molecules that will be used for docking.
+        $comment: Molecules must be provided in PDB format. These PDB files can be
+          single molecules or ensembles using the MODEL/ENDMDL statements.
         type: array
         minItems: 1
         maxItems: 20
         items:
           type: string
           format: uri-reference
-      run_dir:
-        title: Run directory
-        type: string
-        format: uri-reference
       cns_exec:
         title: Path to the CNS executable
         description: If not provided, HADDOCK3 will use the cns path configured during
@@ -105,8 +110,8 @@ global:
         maximum: 9999
         minimum: 1
     required:
-    - molecules
     - run_dir
+    - molecules
     additionalProperties: false
   uiSchema:
     molecules:
