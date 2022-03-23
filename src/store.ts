@@ -1,20 +1,25 @@
-import { atom, selector, useRecoilState, useRecoilValue } from 'recoil'
+import { atom, DefaultValue, selector, SetterOrUpdater, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 
-import { externalizeDataUrls } from './dataurls'
+import { externalizeDataUrls, internalizeDataUrls } from './dataurls'
 import { saveArchive } from './archive'
 import { ICatalog, IWorkflowNode, IFiles, IParameters, ICatalogNode, ICatalogIndex } from './types'
 import { workflow2tomltext } from './toml'
-import { dropUnusedFiles, loadWorkflowArchive } from './workflow'
+import { dropUnusedFiles, loadWorkflowArchive, emptyParams, clearFiles } from './workflow'
 import { fetchCatalogIndex, fetchCatalog } from './catalog'
 import { catalogIndexURL } from './constants'
-import { removeItemAtIndex, replaceItemAtIndex, moveItem, swapItem } from './utils/array'
+import { removeItemAtIndex, replaceItemAtIndex, moveItem, swapItem, removeAllItems } from './utils/array'
+import { groupParameters, unGroupParameters } from './grouper'
 
-export const catalogIndexState = selector<ICatalogIndex>({
+const catalogIndexState = selector<ICatalogIndex>({
   key: 'catalogIndex',
   get: async () => {
     return await fetchCatalogIndex(catalogIndexURL)
   }
 })
+
+export function useCatalogIndex (): ICatalogIndex {
+  return useRecoilValue(catalogIndexState)
+}
 
 const defaultCatalogURLState = selector<string>({
   key: 'defaultCatalogURL',
@@ -23,10 +28,14 @@ const defaultCatalogURLState = selector<string>({
   }
 })
 
-export const catalogURLState = atom<string>({
+const catalogURLState = atom<string>({
   key: 'catalogURL',
   default: defaultCatalogURLState
 })
+
+export function useCatalogURL (): [string, SetterOrUpdater<string>] {
+  return useRecoilState(catalogURLState)
+}
 
 const catalogState = selector<ICatalog>({
   key: 'catalog',
@@ -69,6 +78,14 @@ export const activeSubmitButtonState = atom<HTMLButtonElement | undefined>({
   default: undefined
 })
 
+export function useSetActiveSubmitButton (): (instance: HTMLButtonElement | null) => void {
+  return useSetRecoilState(activeSubmitButtonState) as (instance: HTMLButtonElement | null) => void
+}
+
+export function useActiveSubmitButton (): HTMLButtonElement | undefined {
+  return useRecoilValue(activeSubmitButtonState)
+}
+
 export function useSelectNodeIndex (): number {
   return useRecoilValue(selectedNodeIndexState)
 }
@@ -77,6 +94,39 @@ const filesState = atom<IFiles>({
   key: 'files',
   default: {}
 })
+
+const globalFormDataState = selector<IParameters>({
+  key: 'globalFormData',
+  get: ({ get }) => {
+    const parameters = get(globalParametersState)
+    const files = get(filesState)
+    const catalog = get(catalogState)
+    const formData = groupParameters(internalizeDataUrls(parameters, files), catalog.global.uiSchema)
+    return formData
+  },
+  set: ({ get, set }, inlinedParameters) => {
+    if (inlinedParameters === undefined) {
+      return
+    }
+    const files = get(filesState)
+    const newFiles = { ...files }
+    const catalog = get(catalogState)
+    let parameters: IParameters
+    if (inlinedParameters instanceof DefaultValue) {
+      parameters = {}
+    } else {
+      parameters = externalizeDataUrls(unGroupParameters(inlinedParameters, catalog.global.uiSchema), newFiles)
+    }
+    const nodes = get(workflowNodesState)
+    const newUsedFiles = dropUnusedFiles(parameters, nodes, newFiles)
+    set(globalParametersState, parameters)
+    set(filesState, newUsedFiles)
+  }
+})
+
+export function useGlobalFormData (): [IParameters, SetterOrUpdater<IParameters>] {
+  return useRecoilState(globalFormDataState)
+}
 
 const selectedNodeState = selector<IWorkflowNode | undefined>({
   key: 'selectedNode',
@@ -114,6 +164,52 @@ export function useSelectedCatalogNode (): ICatalogNode | undefined {
   return useRecoilValue(selectedCatalogNodeState)
 }
 
+const selectedNodeFormDataState = selector<IParameters | undefined>({
+  key: 'selectedNodeFormData',
+  get: ({ get }) => {
+    const node = get(selectedNodeState)
+    if (node === undefined) {
+      return undefined
+    }
+    const catalogNode = get(selectedCatalogNodeState)
+    if (catalogNode === undefined) {
+      return undefined
+    }
+    const files = get(filesState)
+    const formData = groupParameters(internalizeDataUrls(node.parameters, files), catalogNode.uiSchema)
+    return formData
+  },
+  set: ({ set, get }, inlinedParameters) => {
+    if (inlinedParameters === undefined) {
+      return
+    }
+    const catalogNode = get(selectedCatalogNodeState)
+    if (catalogNode === undefined) {
+      return
+    }
+    const files = get(filesState)
+    const newFiles = { ...files }
+    let parameters: IParameters
+    if (inlinedParameters instanceof DefaultValue) {
+      parameters = {}
+    } else {
+      parameters = externalizeDataUrls(unGroupParameters(inlinedParameters, catalogNode.uiSchema), newFiles)
+    }
+    const nodes = get(workflowNodesState)
+    const selectedNodeIndex = get(selectedNodeIndexState)
+    const newNode = { ...nodes[selectedNodeIndex], parameters }
+    const newNodes = replaceItemAtIndex(nodes, selectedNodeIndex, newNode)
+    const global = get(globalParametersState)
+    const newUsedFiles = dropUnusedFiles(global, newNodes, newFiles)
+    set(workflowNodesState, newNodes)
+    set(filesState, newUsedFiles)
+  }
+})
+
+export function useSelectedNodeFormData (): [IParameters | undefined, SetterOrUpdater<IParameters | undefined>] {
+  return useRecoilState(selectedNodeFormDataState)
+}
+
 interface UseWorkflow {
   nodes: IWorkflowNode[]
   editingGlobal: boolean
@@ -121,10 +217,9 @@ interface UseWorkflow {
   toggleGlobalEdit: () => void
   addNodeToWorkflow: (nodeId: string) => void
   addNodeToWorkflowAt: (nodeId: string, targetIndex: number) => void
-  setGlobalParameters: (inlinedParameters: IParameters) => void
-  setNodeParameters: (inlinedParameters: IParameters) => void
   loadWorkflowArchive: (archiveURL: string) => Promise<void>
   save: () => Promise<void>
+  clear: () => void
   deleteNode: (nodeIndex: number) => void
   selectNode: (nodeIndex: number) => void
   clearNodeSelection: () => void
@@ -184,21 +279,13 @@ export function useWorkflow (): UseWorkflow {
       setNodes(newNodes)
     },
     clearNodeSelection: () => setSelectedNodeIndex(-1),
-    setGlobalParameters (inlinedParameters: IParameters) {
-      const newFiles = { ...files }
-      const parameters = externalizeDataUrls(inlinedParameters, newFiles)
-      const newUsedFiles = dropUnusedFiles(parameters, nodes, newFiles)
-      setGlobal(parameters)
-      setFiles(newUsedFiles)
-    },
-    setNodeParameters (inlinedParameters: IParameters) {
-      const newFiles = { ...files }
-      const parameters = externalizeDataUrls(inlinedParameters, newFiles)
-      const newNode = { ...nodes[selectedNodeIndex], parameters }
-      const newNodes = replaceItemAtIndex(nodes, selectedNodeIndex, newNode)
-      const newUsedFiles = dropUnusedFiles(global, newNodes, newFiles)
-      setNodes(newNodes)
-      setFiles(newUsedFiles)
+    clear () {
+      const blankNodes = removeAllItems(nodes)
+      const blankGlobals = emptyParams()
+      const blankFiles = clearFiles()
+      setNodes(blankNodes)
+      setGlobal(blankGlobals)
+      setFiles(blankFiles)
     },
     async loadWorkflowArchive (archiveURL: string) {
       const r = await loadWorkflowArchive(archiveURL, catalog)
@@ -237,5 +324,7 @@ export function useFiles (): IFiles {
 
 export function useText (): string {
   const { nodes, global } = useWorkflow()
-  return workflow2tomltext(nodes, global)
+  const catalog = useCatalog()
+  const tomlSchema4nodes = Object.fromEntries(catalog.nodes.map(n => [n.id, n.tomlSchema !== undefined ? n.tomlSchema : {}]))
+  return workflow2tomltext(nodes, global, tomlSchema4nodes)
 }

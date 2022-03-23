@@ -1,17 +1,18 @@
-import { activeSubmitButtonState, useCatalog, useFiles, useWorkflow } from './store'
-import { internalizeDataUrls } from './dataurls'
+import { useSetActiveSubmitButton, useCatalog, useGlobalFormData } from './store'
 import { Form } from './Form'
-import { useSetRecoilState } from 'recoil'
 
 export const GlobalForm = (): JSX.Element => {
   const { global: globalSchemas } = useCatalog()
-  const { setGlobalParameters, global: parameters } = useWorkflow()
-  const files = useFiles()
-  const submitFormRefSetter = useSetRecoilState(activeSubmitButtonState) as (instance: HTMLButtonElement | null) => void
-  const parametersWithDataUrls = internalizeDataUrls(parameters, files) // TODO move to hook, each time component is re-rendered this method will be called
-  const uiSchema = (globalSchemas.uiSchema != null) ? globalSchemas.uiSchema : {}
+  const [formData, setFormData] = useGlobalFormData()
+  const submitFormRefSetter = useSetActiveSubmitButton()
+  const uiSchema = globalSchemas.formUiSchema
   return (
-    <Form schema={globalSchemas.schema} uiSchema={uiSchema} formData={parametersWithDataUrls} onSubmit={({ formData }) => setGlobalParameters(formData)}>
+    <Form
+      schema={globalSchemas.formSchema ?? {}}
+      uiSchema={uiSchema}
+      formData={formData}
+      onSubmit={({ formData }) => setFormData(formData)}
+    >
       <button ref={submitFormRefSetter} style={{ display: 'none' }} />
     </Form>
   )

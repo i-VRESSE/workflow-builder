@@ -20,7 +20,8 @@ describe('validateWorkflow()', () => {
       }
       schemas = {
         global: {
-          schema: globalSchema
+          schema: globalSchema,
+          uiSchema: {}
         },
         nodes: []
       }
@@ -82,7 +83,8 @@ describe('validateWorkflow()', () => {
       }
       schemas = {
         global: {
-          schema: globalSchema
+          schema: globalSchema,
+          uiSchema: {}
         },
         nodes: [
           {
@@ -90,7 +92,8 @@ describe('validateWorkflow()', () => {
             label: 'My node',
             description: 'My node description',
             category: 'My category',
-            schema: nodeSchema
+            schema: nodeSchema,
+            uiSchema: {}
           }
         ]
       }
@@ -184,7 +187,8 @@ describe('validateCatalog', () => {
                 type: 'string'
               }
             }
-          }
+          },
+          uiSchema: {}
         },
         nodes: [{
           id: 'mynode',
@@ -198,7 +202,8 @@ describe('validateCatalog', () => {
                 type: 'string'
               }
             }
-          }
+          },
+          uiSchema: {}
         }],
         examples: {},
         categories: []
@@ -248,7 +253,8 @@ describe('validateCatalog', () => {
                 type: 'string'
               }
             }
-          }
+          },
+          uiSchema: {}
         },
         nodes: [{
           id: 'mynode',
@@ -263,7 +269,8 @@ describe('validateCatalog', () => {
                 type: 'nonexistingtype'
               }
             }
-          }
+          },
+          uiSchema: {}
         }]
       }
 

@@ -64,6 +64,16 @@ yarn build
 
 Which will create `dist/` directory which should be hosted on the web somewhere.
 
+### Component development
+
+Components can be developed/tested/documented using [storybook](https://storybook.js.org/).
+
+Storybook can be started with
+
+```shell
+yarn storybook
+```
+
 ## Format
 
 ### Workflow archive
@@ -87,6 +97,7 @@ The catalog is a YAML formatted file which tells the app what nodes are availabl
 1. global: Description of global parameters
     * schema: What parameters are valid. Formatted as JSON schema draft 7.
     * uiSchema: How the form for filling the parameters should be rendered.
+    * tomlSchema: How toml keys are mapped to in-memory representation.
 2. nodes: Description of available nodes.
     * id: Identifier of node, for computers
     * label: Label of node, for humans
@@ -94,12 +105,34 @@ The catalog is a YAML formatted file which tells the app what nodes are availabl
     * description: Text describing what node needs, does and produces.
     * schema: What parameters are valid. Formatted as JSON schema draft 7.
     * uiSchema: How the form for filling the parameters should be rendered.
+    * tomlSchema: How toml keys are mapped to in-memory representation.
 3. catagories: Descriptions of node categories
     * name: Name of category
     * description: Description of category
 4. examples: Title and link to example workflows
     * map with title as key and link as value
 5. title: Title of the catalog
+
+#### uiSchema
+
+The global and node parameters are edited in a form generated from the JSON schema.
+To customize the look and feel of the form the uiSchema can be used. For example rendering a radio group or a text area. The [react-json-schema-form](https://react-jsonschema-form.readthedocs.io/en/latest/api-reference/uiSchema/) docs describes the uiSchema format.
+
+Besides the built-in react-json-schema-form uiSchema fields the workflow builder adds the following:
+
+```json
+{
+    "prop1": {
+        "ui:group": "<group name>"
+    }
+}
+```
+
+Any property with a group uiSchema field will be grouped together with other properties with the same group in the form. The generated toml file will have the props ungrouped.
+
+### tomlSchema
+
+See [docs/tomlSchema.md](docs/tomlSchema.md).
 
 ### Catalog index
 

@@ -1,4 +1,5 @@
 import { load } from 'js-yaml'
+import { groupCatalog } from './grouper'
 import { ICatalog, ICatalogIndex, IGlobal } from './types'
 import { validateCatalog, ValidationError } from './validate'
 
@@ -8,10 +9,12 @@ export async function fetchCatalog (catalogUrl: string): Promise<ICatalog> {
     throw new Error('Error retrieving catalog')
   }
   const body = await response.text()
-  const catalog = load(body)
-  if (!isCatalog(catalog)) {
+  const unGroupedCatalog = load(body)
+
+  if (!isCatalog(unGroupedCatalog)) {
     throw new Error('Retrieved catalog is malformed')
   }
+  const catalog = groupCatalog(unGroupedCatalog)
   const errors = validateCatalog(catalog)
   if (errors.length > 0) {
     throw new ValidationError('Invalid catalog loaded', errors)

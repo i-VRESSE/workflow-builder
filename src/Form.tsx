@@ -1,5 +1,6 @@
 import { withTheme, utils, WidgetProps } from '@rjsf/core'
 import { Theme } from '@rjsf/bootstrap-4'
+import { CollapsibleField } from './CollapsibleField'
 
 // TODO workaround for broken bootsrap-4 file widget, see https://github.com/rjsf-team/react-jsonschema-form/issues/2095
 const registry = utils.getDefaultRegistry()
@@ -15,4 +16,9 @@ const DefaultFileWidget = registry.widgets.FileWidget;
     </div>
   )
 }
+
+if (Theme.fields !== undefined) {
+  Theme.fields.collapsible = CollapsibleField
+}
+
 export const Form = withTheme(Theme)
