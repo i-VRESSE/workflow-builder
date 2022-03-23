@@ -934,11 +934,18 @@ describe('given read/write array with undefined', () => {
   })
 
   describe('parseWorkflow()', () => {
-    it.each(cases)('should write undefined given %s',
+    const parseableCases = cases.filter(d => Object.entries(d[2]).length !== 0)
+    it.each(parseableCases)('should write undefined given %s',
       (_msg, expected, tomlSchema, workflow) => {
         const globalKeys = new Set<string>()
-        const result = parseWorkflow(workflow, globalKeys, {}, { n1: tomlSchema })
-        expect(result).toEqual(expected)
+        const result = parseWorkflow(workflow, globalKeys, {}, { n1: { foo: tomlSchema } })
+        expect(result).toEqual({
+          global: {},
+          nodes: [{
+            id: 'n1',
+            parameters: expected
+          }]
+        })
       }
     )
   })
