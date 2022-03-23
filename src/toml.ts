@@ -21,6 +21,9 @@ function nodes2tomltable (nodes: IWorkflowNode[], tomlSchema4nodes: Record<strin
 
 function parameters2toml (parameters: IParameters, tomlSchema: TomlObjectSchema): any {
   const tomledParameters: Record<string, unknown> = {}
+  if (parameters === undefined) {
+    return parameters
+  }
   Object.entries(parameters).forEach(([k, v]) => {
     const isArray = Array.isArray(v)
     const hasTomlSchema = k in tomlSchema
@@ -35,6 +38,9 @@ function parameters2toml (parameters: IParameters, tomlSchema: TomlObjectSchema)
       // indexed array of flattened objects
       if (isArrayFlatten) {
         v.forEach((d, i) => {
+          if (d === undefined) {
+            return
+          }
           Object.entries(d).forEach(([k2, v2]) => {
             tomledParameters[`${k}_${k2}_${i + 1}`] = v2
           })
@@ -42,7 +48,13 @@ function parameters2toml (parameters: IParameters, tomlSchema: TomlObjectSchema)
       } else if (isArrayOfArrayFlatten) {
         // indexed array of array of flattened objects
         v.forEach((v1: IParameters[], i) => {
+          if (v1 === undefined) {
+            return
+          }
           v1.forEach((v2, i2) => {
+            if (v2 === undefined) {
+              return
+            }
             Object.entries(v2).forEach(([k3, v3]) => {
               tomledParameters[`${k}_${k3}_${i + 1}_${i2 + 1}`] = v3
             })
@@ -51,23 +63,39 @@ function parameters2toml (parameters: IParameters, tomlSchema: TomlObjectSchema)
       } else if (isItemsSectioned) {
         // indexed array of sectioned objects
         v.forEach((v1: IParameters, i) => {
+          if (v1 === undefined) {
+            return
+          }
           const d2 = parameters2toml(v1, nestedTomlSchema as TomlObjectSchema)
           tomledParameters[`${k}_${i + 1}`] = Section(d2)
         })
       } else {
         // indexed array of scalars
         v.forEach((d, i) => {
+          if (d === undefined) {
+            return
+          }
           tomledParameters[`${k}_${i + 1}`] = d
         })
       }
     } else if (isArray && isItemsSectioned) {
       // A value that is an array of objects will have each of its objects as a section
       tomledParameters[k] = v.map(d => {
+        if (d === undefined) {
+          return undefined
+        }
         const d2 = parameters2toml(d, nestedTomlSchema as TomlObjectSchema)
         return Section(d2)
-      })
+      }).filter(d => d !== undefined)
     } else if (isObject(v) && isSectioned) {
       tomledParameters[k] = Section(v as any)
+    } else if (isArray) {
+      tomledParameters[k] = v.map(d => {
+        if (Array.isArray(d)) {
+          return d.filter(d2 => d2 !== undefined)
+        }
+        return d
+      }).filter(d => d !== undefined)
     } else {
       tomledParameters[k] = v
     }

@@ -1,6 +1,7 @@
 import { expect, describe, it } from 'vitest'
+import dedent from 'ts-dedent'
 import { parseWorkflow, workflow2tomltext } from './toml'
-import { IParameters } from './types'
+import { IParameters, TomlScalarSchema } from './types'
 
 describe('workflow2tomltext()', () => {
   it('should write list of dicts as array of tables', () => {
@@ -783,5 +784,162 @@ key8 = [
       }
       expect(result).toEqual(expected)
     })
+  })
+})
+
+describe('given read/write array with undefined', () => {
+  const cases: Array<[string, any[], TomlScalarSchema, string]> = [
+    [
+      'scalar',
+      [undefined, 42],
+      {},
+      dedent`
+        [n1]
+
+        foo = [
+          42,
+        ]
+      `
+    ],
+    [
+      'scalar indexed',
+      [undefined, 42],
+      { indexed: true },
+      dedent`
+        [n1]
+
+        foo_2 = 42
+      `
+    ],
+    [
+      'object indexed flatten',
+      [undefined, { bar: 42 }],
+      { indexed: true, items: { flatten: true } },
+      dedent`
+        [n1]
+
+        foo_bar_2 = 42
+      `
+    ],
+    [
+      'object sectioned',
+      [undefined, { bar: 42 }],
+      { items: { sectioned: true } },
+      dedent`
+        [n1]
+
+        [[n1.foo]]
+
+        bar = 42
+      `
+    ],
+    [
+      'array of object',
+      [undefined, [{ bar: 42 }]],
+      {},
+      dedent`
+        [n1]
+
+        foo = [
+          [
+            { bar = 42 },
+          ],
+        ]
+      `
+    ],
+    [
+      'array of object indexed flatten',
+      [undefined, [{ bar: 42 }]],
+      {
+        indexed: true,
+        items: {
+          indexed: true,
+          items: {
+            flatten: true
+          }
+        }
+      },
+      dedent`
+        [n1]
+
+        foo_bar_2_1 = 42
+      `
+    ],
+    [
+      'array of object with nested undefined',
+      [undefined, [undefined, { bar: 42 }]],
+      {},
+      dedent`
+        [n1]
+
+        foo = [
+          [
+            { bar = 42 },
+          ],
+        ]
+      `
+    ],
+    [
+      'array of object with nested undefined indexed flatten',
+      [undefined, [undefined, { bar: 42 }]],
+      {
+        indexed: true,
+        items: {
+          indexed: true,
+          items: {
+            flatten: true
+          }
+        }
+      },
+      dedent`
+        [n1]
+
+        foo_bar_2_2 = 42
+      `
+    ],
+    [
+      'object indexed sectioned with scalar array',
+      [undefined, { bar: [undefined, 42] }],
+      {
+        indexed: true,
+        items: {
+          sectioned: true,
+          properties: {
+            bar: {
+              indexed: true
+            }
+          }
+        }
+      },
+      dedent`
+        [n1]
+
+        [n1.foo_2]
+
+        bar_2 = 42
+      `
+    ]
+  ]
+  describe('workflow2tomltext()', () => {
+    it.each(cases)('should write toml with 2 as index given %s',
+      (_msg, parameter, tomlSchema, expected) => {
+        const result = workflow2tomltext([{
+          id: 'n1',
+          parameters: { foo: parameter }
+        }], {}, { n1: { foo: tomlSchema } }, {})
+        const trimmed = result.replace(/\n$/, '').replace(/^\n/, '')
+        expect(trimmed).toEqual(expected)
+      }
+    )
+  })
+
+  describe('parseWorkflow()', () => {
+    it.each(cases)('should write undefined given %s',
+      (_msg, expected, tomlSchema, workflow) => {
+        const globalKeys = new Set<string>()
+        const result = parseWorkflow(workflow, globalKeys, {}, { n1: tomlSchema })
+        expect(result).toEqual(expected)
+      }
+    )
   })
 })

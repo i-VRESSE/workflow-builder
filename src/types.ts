@@ -3,7 +3,7 @@ import { UiSchema } from '@rjsf/core'
 
 export type ICatalogIndex = Array<[string, string]>
 
-interface TomlScalarSchema {
+export interface TomlScalarSchema {
   indexed?: boolean
   flatten?: boolean
   sectioned?: boolean
