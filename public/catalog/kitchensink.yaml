@@ -132,10 +132,35 @@ nodes:
         type: string
         default: 'x'
       prop4:
+        title: Array of booleans
         type: array
         items:
           type: boolean
           default: false
+      prop5:
+        type: array
+        title: Array of object with x string as defaults
+        items:
+          type: object
+          properties:
+            prop5a:
+              type: string
+              default: x
+            prop5b:
+              type: string
+              default: x
+      prop6:
+        type: array
+        title: Array of object with empty string as defaults
+        items:
+          type: object
+          properties:
+            prop6a:
+              type: string
+              default: ''
+            prop6b:
+              type: string
+              default: ''
 - schema:
     type: object
     additionalProperties: false

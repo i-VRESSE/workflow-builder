@@ -21,17 +21,22 @@ export function pruneDefaults (parameters: IParameters, schema: JSONSchema7, res
           // if default=[] and v=[] then skip it
         } else if ('items' in schemaOfK) {
           const schemaOfItem = schemaOfK.items as JSONSchema7
-          const prunedV = v.map(v2 => {
-            const schemaOfItemAsObject: JSONSchema7 = {
-              type: 'object',
-              properties: {
-                a: schemaOfItem
-              }
+          const schemaOfItemAsObject: JSONSchema7 = {
+            type: 'object',
+            properties: {
+              a: schemaOfItem
             }
-            const pruned = pruneDefaults({ a: v2 }, schemaOfItemAsObject).a
+          }
+          const prunedV = v.map(v2 => {
+            const pruned = pruneDefaults({ a: v2 }, schemaOfItemAsObject)
+            // If item is type=object then the injected a key can also be pruned
+            if (!('a' in pruned)) {
+              return reshapeArray ? undefined : {}
+            }
             // Keep original value when array item is completely default
-            // this will keep the array the same lenght and not move items
-            return pruned === undefined && !reshapeArray ? v2 : pruned
+            // this will keep the array the same length and not move items
+            // unless reshapeArray=true then skip item
+            return pruned.a === undefined && !reshapeArray ? v2 : pruned.a
           })
           if (reshapeArray) {
             const prunedV2 = prunedV.filter(d => d !== undefined)

@@ -373,20 +373,76 @@ describe('pruneDefaults()', () => {
       {
         prop1: [true, true, true]
       }
+    ],
+    [
+      'given array of objects with undefined prop',
+      {
+        prop1: [{
+          prop2: undefined
+        }]
+      },
+      p1({
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            prop2: {
+              type: 'string',
+              default: 'something'
+            }
+          },
+          additionalProperties: false
+        }
+      }),
+      {
+        prop1: [{}]
+      },
+      {}
+    ],
+    [
+      'given array of objects with undefined props',
+      {
+        prop1: [{
+          prop2: undefined,
+          prop3: undefined
+        }]
+      },
+      p1({
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            prop2: {
+              type: 'string',
+              default: 'something'
+            },
+            prop3: {
+              type: 'string',
+              default: 'something'
+            }
+
+          },
+          additionalProperties: false
+        }
+      }),
+      {
+        prop1: [{}]
+      },
+      {}
     ]
   ]
 
   describe('with reshapeArray=False', () => {
-    it.each(cases)('%s', (_description, parameters, schema, expected) => {
+    it.each([cases[23]])('%s', (_description, parameters, schema, expected) => {
       const result = pruneDefaults(parameters, schema)
-      expect(result).toEqual(expected)
+      expect(result).toStrictEqual(expected)
     })
   })
 
   describe('with reshapeArray=True', () => {
-    it.each(cases)('%s', (_description, parameters, schema, expectedWithoutReshape, expected) => {
+    it.each([cases[23]])('%s', (_description, parameters, schema, expectedWithoutReshape, expected) => {
       const result = pruneDefaults(parameters, schema, true)
-      expect(result).toEqual(expected ?? expectedWithoutReshape)
+      expect(result).toStrictEqual(expected === undefined ? expectedWithoutReshape : expected)
     })
   })
 })
