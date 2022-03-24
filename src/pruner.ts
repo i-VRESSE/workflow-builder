@@ -1,22 +1,10 @@
 import { JSONSchema7 } from 'json-schema'
 import { IParameters } from './types'
 
-function removeTrailing<T> (a: T[], c: T | undefined): T[] {
-  let trailIndex = a.length
-  for (let index = a.length; index >= 0; index--) {
-    if (a[index] === c) {
-      trailIndex = index
-    } else {
-      break
-    }
-  }
-  return a.slice(0, trailIndex)
-}
-
 /**
  * Any parameter whose value is same as the default defined in the schema will be pruned and not returned.
  */
-export function pruneDefaults (parameters: IParameters, schema: JSONSchema7): IParameters {
+export function pruneDefaults (parameters: IParameters, schema: JSONSchema7, reshapeArray = false): IParameters {
   const newParameters: IParameters = {}
   Object.entries(parameters).forEach(([k, v]) => {
     if (schema.properties !== undefined && k in schema.properties) {
@@ -40,11 +28,18 @@ export function pruneDefaults (parameters: IParameters, schema: JSONSchema7): IP
                 a: schemaOfItem
               }
             }
-            return pruneDefaults({ a: v2 }, schemaOfItemAsObject).a
+            const pruned = pruneDefaults({ a: v2 }, schemaOfItemAsObject).a
+            // Keep original value when array item is completely default
+            // this will keep the array the same lenght and not move items
+            return pruned === undefined && !reshapeArray ? v2 : pruned
           })
-          const prunedV2 = removeTrailing(prunedV, undefined)
-          if (prunedV2.length > 0) {
-            newParameters[k] = prunedV2
+          if (reshapeArray) {
+            const prunedV2 = prunedV.filter(d => d !== undefined)
+            if (prunedV2.length > 0) {
+              newParameters[k] = prunedV2
+            }
+          } else {
+            newParameters[k] = prunedV
           }
         } else {
           // TODO handle defaults in prefixItems, see https://json-schema.org/understanding-json-schema/reference/array.html#id7
