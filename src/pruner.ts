@@ -31,7 +31,16 @@ export function pruneDefaults (parameters: IParameters, schema: JSONSchema7, res
             const pruned = pruneDefaults({ a: v2 }, schemaOfItemAsObject)
             // If item is type=object then the injected a key can also be pruned
             if (!('a' in pruned)) {
-              return reshapeArray ? undefined : {}
+              if (reshapeArray) {
+                return undefined
+              }
+              if (schemaOfItem.type === 'object') {
+                return {}
+              } else if (schemaOfItem.type === 'array') {
+                return []
+              } else {
+                return v2
+              }
             }
             // Keep original value when array item is completely default
             // this will keep the array the same length and not move items

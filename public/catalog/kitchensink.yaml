@@ -161,6 +161,28 @@ nodes:
             prop6b:
               type: string
               default: ''
+      prop7:
+        type: array
+        title: Array of array of object with x string as defaults
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              prop5a:
+                type: string
+                default: x
+              prop5b:
+                type: string
+                default: x
+      prop8:
+        type: array
+        title: Array of array of scalar with x string as default
+        items:
+          type: array
+          items:
+            type: string
+            default: x
 - schema:
     type: object
     additionalProperties: false
