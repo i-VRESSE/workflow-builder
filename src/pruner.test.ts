@@ -2,7 +2,7 @@ import { expect, describe, it } from 'vitest'
 import { JSONSchema7 } from 'json-schema'
 import { pruneDefaults } from './pruner'
 
-function p1 (v: JSONSchema7): JSONSchema7 {
+function p1(v: JSONSchema7): JSONSchema7 {
   return {
     type: 'object',
     properties: {
@@ -421,6 +421,153 @@ describe('pruneDefaults()', () => {
               default: 'something'
             }
 
+          },
+          additionalProperties: false
+        }
+      }),
+      {
+        prop1: [{}]
+      },
+      {}
+    ],
+    [
+      'given array items is string and has default',
+      {
+        prop1: ['something']
+      },
+      p1({
+        type: 'array',
+        items: {
+          type: 'string',
+          default: 'something'
+        }
+      }),
+      { prop1: ['something'] },
+      {}
+    ],
+    [
+      'given array item is untyped and has default',
+      {
+        prop1: ['something']
+      },
+      p1({
+        type: 'array'
+      }),
+      { prop1: ['something'] }
+    ],
+    [
+      'given array items is string and has item equal to default and item which is non-default',
+      {
+        prop1: ['something', 'somethingelse']
+      },
+      p1({
+        type: 'array',
+        items: {
+          type: 'string',
+          default: 'something'
+        }
+      }),
+      {
+        prop1: ['something', 'somethingelse']
+      },
+      {
+        prop1: ['somethingelse']
+      }
+    ],
+    [
+      'given array items is object and has nested prop equal to default and another item with same prop with non-default value',
+      {
+        prop1: [{ prop2: 'something' }, { prop2: 'somethingelse' }]
+      },
+      p1({
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            prop2: {
+              type: 'string',
+              default: 'something'
+            }
+          },
+          additionalProperties: false
+        }
+      }),
+      {
+        prop1: [{}, { prop2: 'somethingelse' }]
+      },
+      {
+        prop1: [{ prop2: 'somethingelse' }]
+      }
+    ],
+    [
+      'given array items is object and has nested prop equal to default and other nested prop not equal to default',
+      {
+        prop1: [{ prop2: 'something', prop3: 42 }, { prop2: 'somethingelse', prop3: 0 }]
+      },
+      p1({
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            prop2: {
+              type: 'string',
+              default: 'something'
+            },
+            prop3: {
+              type: 'number',
+              default: 0
+            }
+          },
+          additionalProperties: false
+        }
+      }),
+      {
+        prop1: [{ prop3: 42 }, { prop2: 'somethingelse' }]
+      }
+    ],
+    [
+      'given array items is object and has nested prop equal to default and other nested prop also equal to default',
+      {
+        prop1: [{ prop2: 'something', prop3: 42 }, { prop2: 'somethingelse', prop3: 0 }]
+      },
+      p1({
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            prop2: {
+              type: 'string',
+              default: 'something'
+            },
+            prop3: {
+              type: 'number',
+              default: 42
+            }
+          },
+          additionalProperties: false
+        }
+      }),
+      {
+        prop1: [{}, { prop2: 'somethingelse', prop3: 0 }]
+      },
+      {
+        prop1: [{ prop2: 'somethingelse', prop3: 0 }]
+      }
+    ],
+    [
+      'given array items is object and has nested prop equal to default',
+      {
+        prop1: [{ prop2: 'something' }]
+      },
+      p1({
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            prop2: {
+              type: 'string',
+              default: 'something'
+            }
           },
           additionalProperties: false
         }
