@@ -161,7 +161,7 @@ def config2schema(config):
                     k3:v3 for k3,v3 in v2.items() if k3 not in {'group','explevel'}
                 } for k2,v2 in v.items() if k2 not in {'explevel', 'title', 'short', 'long', 'group'}
             }
-            schemas = config2schema(config2)
+            schemas = config2schema(collapse_expandable(config2))
             prop.update({
                 'type': 'array',
                 'items': schemas['schema'],
@@ -176,6 +176,8 @@ def config2schema(config):
                     'sectioned': True
                 }
             }
+            if schemas['tomlSchema']:
+                prop_toml['items']['properties'] = schemas['tomlSchema']
             # Rename as parameter is array and does not need extra index
             if k == 'mol1':
                 k = 'mol'
