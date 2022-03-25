@@ -2,7 +2,7 @@ import { expect, describe, it } from 'vitest'
 import { JSONSchema7 } from 'json-schema'
 import { pruneDefaults } from './pruner'
 
-function p1(v: JSONSchema7): JSONSchema7 {
+function p1 (v: JSONSchema7): JSONSchema7 {
   return {
     type: 'object',
     properties: {
