@@ -271,7 +271,7 @@ describe('pruneDefaults()', () => {
         }
       }),
       {
-        prop1: [{ prop2: 'something' }, { prop2: 'somethingelse' }]
+        prop1: [{}, { prop2: 'somethingelse' }]
       },
       {
         prop1: [{ prop2: 'somethingelse' }]
@@ -326,7 +326,7 @@ describe('pruneDefaults()', () => {
         }
       }),
       {
-        prop1: [{ prop2: 'something', prop3: 42 }, { prop2: 'somethingelse', prop3: 0 }]
+        prop1: [{}, { prop2: 'somethingelse', prop3: 0 }]
       },
       {
         prop1: [{ prop2: 'somethingelse', prop3: 0 }]
@@ -351,7 +351,7 @@ describe('pruneDefaults()', () => {
         }
       }),
       {
-        prop1: [{ prop2: 'something' }]
+        prop1: [{}]
       },
       {}
     ],
@@ -433,14 +433,14 @@ describe('pruneDefaults()', () => {
   ]
 
   describe('with reshapeArray=False', () => {
-    it.each([cases[23]])('%s', (_description, parameters, schema, expected) => {
+    it.each(cases)('%s', (_description, parameters, schema, expected) => {
       const result = pruneDefaults(parameters, schema)
       expect(result).toStrictEqual(expected)
     })
   })
 
   describe('with reshapeArray=True', () => {
-    it.each([cases[23]])('%s', (_description, parameters, schema, expectedWithoutReshape, expected) => {
+    it.each(cases)('%s', (_description, parameters, schema, expectedWithoutReshape, expected) => {
       const result = pruneDefaults(parameters, schema, true)
       expect(result).toStrictEqual(expected === undefined ? expectedWithoutReshape : expected)
     })
