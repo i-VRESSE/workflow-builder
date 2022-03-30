@@ -1,4 +1,6 @@
 import { atom, DefaultValue, selector, SetterOrUpdater, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import { JSONSchema7 } from 'json-schema'
+import { UiSchema } from '@rjsf/core'
 
 import { externalizeDataUrls, internalizeDataUrls } from './dataurls'
 import { saveArchive } from './archive'
@@ -9,6 +11,7 @@ import { fetchCatalogIndex, fetchCatalog } from './catalog'
 import { catalogIndexURL } from './constants'
 import { removeItemAtIndex, replaceItemAtIndex, moveItem, swapItem, removeAllItems } from './utils/array'
 import { groupParameters, unGroupParameters } from './grouper'
+import { pruneDefaults } from './pruner'
 
 const catalogIndexState = selector<ICatalogIndex>({
   key: 'catalogIndex',
@@ -95,27 +98,40 @@ const filesState = atom<IFiles>({
   default: {}
 })
 
+function formData2parameters (formData: IParameters, newFiles: IFiles, schema: JSONSchema7, uiSchema: UiSchema): IParameters {
+  const ungrouped = unGroupParameters(formData, uiSchema)
+  const externailized = externalizeDataUrls(ungrouped, newFiles)
+  const pruned = pruneDefaults(externailized, schema)
+  return pruned
+}
+
+function parameters2formData (parameters: IParameters, files: IFiles, uiSchema: UiSchema): IParameters {
+  const internalized = internalizeDataUrls(parameters, files)
+  const grouped = groupParameters(internalized, uiSchema)
+  return grouped
+}
+
 const globalFormDataState = selector<IParameters>({
   key: 'globalFormData',
   get: ({ get }) => {
     const parameters = get(globalParametersState)
     const files = get(filesState)
     const catalog = get(catalogState)
-    const formData = groupParameters(internalizeDataUrls(parameters, files), catalog.global.uiSchema)
+    const formData = parameters2formData(parameters, files, catalog.global.uiSchema)
     return formData
   },
-  set: ({ get, set }, inlinedParameters) => {
-    if (inlinedParameters === undefined) {
+  set: ({ get, set }, formData) => {
+    if (formData === undefined) {
       return
     }
     const files = get(filesState)
     const newFiles = { ...files }
     const catalog = get(catalogState)
     let parameters: IParameters
-    if (inlinedParameters instanceof DefaultValue) {
+    if (formData instanceof DefaultValue) {
       parameters = {}
     } else {
-      parameters = externalizeDataUrls(unGroupParameters(inlinedParameters, catalog.global.uiSchema), newFiles)
+      parameters = formData2parameters(formData, newFiles, catalog.global.schema, catalog.global.uiSchema)
     }
     const nodes = get(workflowNodesState)
     const newUsedFiles = dropUnusedFiles(parameters, nodes, newFiles)
@@ -176,11 +192,11 @@ const selectedNodeFormDataState = selector<IParameters | undefined>({
       return undefined
     }
     const files = get(filesState)
-    const formData = groupParameters(internalizeDataUrls(node.parameters, files), catalogNode.uiSchema)
+    const formData = parameters2formData(node.parameters, files, catalogNode.uiSchema)
     return formData
   },
-  set: ({ set, get }, inlinedParameters) => {
-    if (inlinedParameters === undefined) {
+  set: ({ set, get }, formData) => {
+    if (formData === undefined) {
       return
     }
     const catalogNode = get(selectedCatalogNodeState)
@@ -190,10 +206,10 @@ const selectedNodeFormDataState = selector<IParameters | undefined>({
     const files = get(filesState)
     const newFiles = { ...files }
     let parameters: IParameters
-    if (inlinedParameters instanceof DefaultValue) {
+    if (formData instanceof DefaultValue) {
       parameters = {}
     } else {
-      parameters = externalizeDataUrls(unGroupParameters(inlinedParameters, catalogNode.uiSchema), newFiles)
+      parameters = formData2parameters(formData, newFiles, catalogNode.schema, catalogNode.uiSchema)
     }
     const nodes = get(workflowNodesState)
     const selectedNodeIndex = get(selectedNodeIndexState)

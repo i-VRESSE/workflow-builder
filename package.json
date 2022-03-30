@@ -55,7 +55,7 @@
     "vitest": "^0.0.140"
   },
   "engines": {
-    "node": "~16"
+    "node": ">=16"
   },
   "ts-standard": {
     "ignore": [
