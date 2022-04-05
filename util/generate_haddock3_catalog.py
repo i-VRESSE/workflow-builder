@@ -234,10 +234,9 @@ def config2schema(config):
                 obj_schemas = config2schema(v['properties'])
                 if v['dim'] == 1:
                     prop['items'] = obj_schemas['schema']
+                    prop_ui = { 'ui:field': 'table'}
                     if obj_schemas['uiSchema']:
-                        prop_ui = {
-                            "items": obj_schemas['uiSchema']
-                        }
+                        prop_ui['items'] = obj_schemas['uiSchema']
                     prop_toml = {
                         'indexed': True,
                         'items': {
@@ -249,12 +248,9 @@ def config2schema(config):
                         'type': 'array',
                         'items': obj_schemas['schema']
                     }
+                    prop_ui = {'items': { 'ui:field': 'table'}}
                     if obj_schemas['uiSchema']:
-                        prop_ui = {
-                            "items": {
-                                'items': obj_schemas['uiSchema']
-                            }
-                        }
+                        prop_ui['items']['items'] = obj_schemas['uiSchema']
                     prop_toml = {
                         'indexed': True,
                         'items': {

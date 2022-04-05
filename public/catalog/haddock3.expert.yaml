@@ -1583,6 +1583,8 @@ nodes:
     nrair:
       ui:group: ab initio mode
     rair:
+      items:
+        ui:field: table
       ui:group: ab initio mode
     surfrest:
       ui:group: ab initio mode
@@ -1612,26 +1614,32 @@ nodes:
     numc2sym:
       ui:group: symmetry
     c2sym:
+      ui:field: table
       ui:group: symmetry
     numc3sym:
       ui:group: symmetry
     c3sym:
+      ui:field: table
       ui:group: symmetry
     numc4sym:
       ui:group: symmetry
     c4sym:
+      ui:field: table
       ui:group: symmetry
     numc5sym:
       ui:group: symmetry
     c5sym:
+      ui:field: table
       ui:group: symmetry
     numc6sym:
       ui:group: symmetry
     c6sym:
+      ui:field: table
       ui:group: symmetry
     nums3sym:
       ui:group: symmetry
     s3sym:
+      ui:field: table
       ui:group: symmetry
     ncs_on:
       ui:group: symmetry
@@ -1640,6 +1648,7 @@ nodes:
     numncs:
       ui:group: symmetry
     ncs:
+      ui:field: table
       ui:group: symmetry
     w_dist:
       ui:group: scoring
@@ -4399,26 +4408,32 @@ nodes:
     numc2sym:
       ui:group: symmetry
     c2sym:
+      ui:field: table
       ui:group: symmetry
     numc3sym:
       ui:group: symmetry
     c3sym:
+      ui:field: table
       ui:group: symmetry
     numc4sym:
       ui:group: symmetry
     c4sym:
+      ui:field: table
       ui:group: symmetry
     numc5sym:
       ui:group: symmetry
     c5sym:
+      ui:field: table
       ui:group: symmetry
     numc6sym:
       ui:group: symmetry
     c6sym:
+      ui:field: table
       ui:group: symmetry
     nums3sym:
       ui:group: symmetry
     s3sym:
+      ui:field: table
       ui:group: symmetry
     ncs_on:
       ui:group: symmetry
@@ -4427,6 +4442,7 @@ nodes:
     numncs:
       ui:group: symmetry
     ncs:
+      ui:field: table
       ui:group: symmetry
     w_air:
       ui:group: scoring
@@ -4473,6 +4489,8 @@ nodes:
     nseg1:
       ui:group: flexibility
     seg:
+      items:
+        ui:field: table
       ui:group: flexibility
     nseg2:
       ui:group: flexibility
@@ -4515,6 +4533,8 @@ nodes:
     nfle1:
       ui:group: flexibility
     fle:
+      items:
+        ui:field: table
       ui:group: flexibility
     nfle2:
       ui:group: flexibility
@@ -6358,26 +6378,32 @@ nodes:
     numc2sym:
       ui:group: symmetry
     c2sym:
+      ui:field: table
       ui:group: symmetry
     numc3sym:
       ui:group: symmetry
     c3sym:
+      ui:field: table
       ui:group: symmetry
     numc4sym:
       ui:group: symmetry
     c4sym:
+      ui:field: table
       ui:group: symmetry
     numc5sym:
       ui:group: symmetry
     c5sym:
+      ui:field: table
       ui:group: symmetry
     numc6sym:
       ui:group: symmetry
     c6sym:
+      ui:field: table
       ui:group: symmetry
     nums3sym:
       ui:group: symmetry
     s3sym:
+      ui:field: table
       ui:group: symmetry
     ncs_on:
       ui:group: symmetry
@@ -6386,6 +6412,7 @@ nodes:
     numncs:
       ui:group: symmetry
     ncs:
+      ui:field: table
       ui:group: symmetry
     w_air:
       ui:group: scoring
@@ -6430,6 +6457,8 @@ nodes:
     nseg1:
       ui:group: flexibility
     seg:
+      items:
+        ui:field: table
       ui:group: flexibility
     nseg2:
       ui:group: flexibility
@@ -6472,6 +6501,8 @@ nodes:
     nfle1:
       ui:group: flexibility
     fle:
+      items:
+        ui:field: table
       ui:group: flexibility
     nfle2:
       ui:group: flexibility
@@ -8231,26 +8262,32 @@ nodes:
     numc2sym:
       ui:group: symmetry
     c2sym:
+      ui:field: table
       ui:group: symmetry
     numc3sym:
       ui:group: symmetry
     c3sym:
+      ui:field: table
       ui:group: symmetry
     numc4sym:
       ui:group: symmetry
     c4sym:
+      ui:field: table
       ui:group: symmetry
     numc5sym:
       ui:group: symmetry
     c5sym:
+      ui:field: table
       ui:group: symmetry
     numc6sym:
       ui:group: symmetry
     c6sym:
+      ui:field: table
       ui:group: symmetry
     nums3sym:
       ui:group: symmetry
     s3sym:
+      ui:field: table
       ui:group: symmetry
     ncs_on:
       ui:group: symmetry
@@ -8259,6 +8296,7 @@ nodes:
     numncs:
       ui:group: symmetry
     ncs:
+      ui:field: table
       ui:group: symmetry
     w_air:
       ui:group: scoring
@@ -8299,6 +8337,8 @@ nodes:
     nseg1:
       ui:group: flexibility
     seg:
+      items:
+        ui:field: table
       ui:group: flexibility
     nseg2:
       ui:group: flexibility
@@ -8341,6 +8381,8 @@ nodes:
     nfle1:
       ui:group: flexibility
     fle:
+      items:
+        ui:field: table
       ui:group: flexibility
     nfle2:
       ui:group: flexibility
