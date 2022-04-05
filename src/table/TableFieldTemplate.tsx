@@ -42,11 +42,15 @@ export const TableFieldTemplate = (props: ArrayFieldTemplateProps): JSX.Element 
         <span dangerouslySetInnerHTML={{ __html: s.description }} />
       )
       if (s.type === 'object') {
+        const srequired = new Set(s.required)
         const propDescs = Object.entries(s.properties)
           .filter((d: any) => d[1].description)
           .map(([skey, sschema]: any) => (
             <li key={skey}>
-              <label className='control-label'>{sschema.title}</label>
+              <label className='control-label'>
+                {sschema.title}
+                {srequired.has(skey) && <span className='required'>*</span>}
+              </label>
               <p
                 dangerouslySetInnerHTML={{ __html: sschema.description }}
                 className='field-description'
@@ -69,7 +73,7 @@ export const TableFieldTemplate = (props: ArrayFieldTemplateProps): JSX.Element 
           title={s.description}
           style={{ width }}
         >
-          {s.title}
+          {title}
           <OverlayTrigger
             trigger='click'
             placement='bottom'
