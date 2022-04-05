@@ -15,6 +15,10 @@ function isObject (value: unknown): value is object {
   return value !== null && typeof value === 'object'
 }
 
+/**
+ * This table field template was copied from https://github.com/iomega/paired-data-form/blob/master/app/src/fields/TableFieldTemplate.tsx
+ * and adjusted.
+ */
 export const TableFieldTemplate = (props: ArrayFieldTemplateProps): JSX.Element => {
   const required = new Set((props.schema as any).items.required)
   const rowSchema = (props.schema as any).items.properties
