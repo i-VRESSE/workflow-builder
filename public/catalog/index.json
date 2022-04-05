@@ -1,5 +1,9 @@
 [
     [
+        "molaware",
+        "/catalog/molaware.yaml"
+    ],
+    [
         "haddock3easy",
         "/catalog/haddock3.easy.yaml"
     ],
