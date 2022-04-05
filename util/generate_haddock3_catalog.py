@@ -231,7 +231,7 @@ def config2schema(config):
             if 'maxitems' in v:
                 prop['maxItems'] = v['maxitems']
             if 'properties' in v:
-                obj_schemas = config2schema( v['properties'])
+                obj_schemas = config2schema(v['properties'])
                 if v['dim'] == 1:
                     prop['items'] = obj_schemas['schema']
                     if obj_schemas['uiSchema']:
@@ -295,7 +295,7 @@ def config2schema(config):
                         }
                     }
                 else:
-                    raise Exception('Unknown dim')
+                    raise Exception(f'Invalid value of dim in {v=}')
             elif k == 'molecules':
                 # TODO dont hardcode item type and ui for global.molecules, but use itemtype defined in haddock3
                 # Use default value to determine type of items in array/list
