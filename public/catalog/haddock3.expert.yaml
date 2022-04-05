@@ -1938,6 +1938,11 @@ nodes:
       indexed: true
       items:
         sectioned: true
+        properties:
+          hisd:
+            indexed: true
+          hise:
+            indexed: true
 - id: emscoring
   category: scoring
   label: HADDOCK3 scoring module.

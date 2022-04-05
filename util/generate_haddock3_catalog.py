@@ -62,6 +62,17 @@ def argparser_builder():
     return parser
 
 def collapse_expandable(config):
+    """
+    The haddock3 defaults.yaml files define complex shape inside the parameter name.
+    The workflow builder uses type:array, type:object from JSON schema to define complex data types.
+
+    The method converts the shape in parameter name into a shortened parameter name and a shape
+    1. arrays of scalars (X_1 -> X:[1]),
+    2. arrays of objects (X_Y_1 -> X:[{Y}]),
+    3. array of arrays of scalars (X_1_1 -> X:[[1]]) and
+    4. array of arrays of object (X_Y_1_1 -> X:[[{Y}]])
+
+    """
     array_of_scalar = r'(\w+)_1'
     array_of_object = r'(\w+)_(\w+)_1'
     array_of_array_of_scalar = r'(\w+)_1_1'
@@ -150,7 +161,7 @@ def config2schema(config):
                     k3:v3 for k3,v3 in v2.items() if k3 not in {'group','explevel'}
                 } for k2,v2 in v.items() if k2 not in {'explevel', 'title', 'short', 'long', 'group'}
             }
-            schemas = config2schema(config2)
+            schemas = config2schema(collapse_expandable(config2))
             prop.update({
                 'type': 'array',
                 'items': schemas['schema'],
@@ -165,6 +176,8 @@ def config2schema(config):
                     'sectioned': True
                 }
             }
+            if schemas['tomlSchema']:
+                prop_toml['items']['properties'] = schemas['tomlSchema']
             # Rename as parameter is array and does not need extra index
             if k == 'mol1':
                 k = 'mol'
@@ -218,7 +231,7 @@ def config2schema(config):
             if 'maxitems' in v:
                 prop['maxItems'] = v['maxitems']
             if 'properties' in v:
-                obj_schemas = config2schema( v['properties'])
+                obj_schemas = config2schema(v['properties'])
                 if v['dim'] == 1:
                     prop['items'] = obj_schemas['schema']
                     prop_ui = { 'ui:field': 'table'}
@@ -278,7 +291,7 @@ def config2schema(config):
                         }
                     }
                 else:
-                    raise Exception('Unknown dim')
+                    raise Exception(f'Invalid value of dim in {v=}')
             elif k == 'molecules':
                 # TODO dont hardcode item type and ui for global.molecules, but use itemtype defined in haddock3
                 # Use default value to determine type of items in array/list
