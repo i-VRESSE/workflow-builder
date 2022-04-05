@@ -12,6 +12,7 @@ import { catalogIndexURL } from './constants'
 import { removeItemAtIndex, replaceItemAtIndex, moveItem, swapItem, removeAllItems } from './utils/array'
 import { groupParameters, unGroupParameters } from './grouper'
 import { pruneDefaults } from './pruner'
+import { resolveMaxItemsFrom } from './resolveMaxItemsFrom'
 
 const catalogIndexState = selector<ICatalogIndex>({
   key: 'catalogIndex',
@@ -224,6 +225,22 @@ const selectedNodeFormDataState = selector<IParameters | undefined>({
 
 export function useSelectedNodeFormData (): [IParameters | undefined, SetterOrUpdater<IParameters | undefined>] {
   return useRecoilState(selectedNodeFormDataState)
+}
+
+const selectedNodeFormSchemaState = selector<JSONSchema7 | undefined>({
+  key: 'selectedNodeFormSchema',
+  get: ({ get }) => {
+    const catalogNode = get(selectedCatalogNodeState)
+    const globalParameters = get(globalParametersState)
+    if (catalogNode === undefined || catalogNode.formSchema === undefined || catalogNode === undefined) {
+      return undefined
+    }
+    return resolveMaxItemsFrom(catalogNode.formSchema, globalParameters)
+  }
+})
+
+export function useSelectedNodeFormSchema (): JSONSchema7 | undefined {
+  return useRecoilValue(selectedNodeFormSchemaState)
 }
 
 interface UseWorkflow {

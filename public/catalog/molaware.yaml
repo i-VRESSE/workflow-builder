@@ -44,4 +44,26 @@ nodes:
       items:
         ui:widget: radio
   tomlSchema: {}
+- id: node2
+  label: Node same as node1, but with ui:group
+  description: Description 1
+  category: cat1
+  schema:
+    type: object
+    properties:
+      prop1:
+        type: array
+        title: Which molecules are a shape?
+        items:
+          default: false
+          title: Is this molecule a shape?
+          type: boolean
+        maxItemsFrom: molecules
+  uiSchema:
+    prop1:
+      items:
+        ui:widget: radio
+      ui:group: 'Molecules'
+  tomlSchema: {}
+
 examples: {}
