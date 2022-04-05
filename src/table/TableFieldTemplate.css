@@ -1,0 +1,19 @@
+/* Make rows compact */
+.table-field .form-group {
+    margin-bottom: 0px;
+}
+
+/* Hide any label or description in cells as they are rendered in column headers */
+.table-cell-field > div > fieldset > legend,
+.table-cell-field > div > fieldset > div > .field-description,
+.table-cell-field > div > fieldset > .field-description,
+.table-cell-field > div > .control-label,
+.table-cell-field > div > .field-description,
+.table-cell-field > .form-group > .form-group > .form-label,
+.table-cell-field > .form-group > .form-group > div > hr,
+.table-cell-field > .form-group > div > h5,  /* title of object */
+.table-cell-field > .form-group .mb-3, /* description of object */
+.table-cell-field .form-text /* description of object property */
+{
+    display: none;
+}
