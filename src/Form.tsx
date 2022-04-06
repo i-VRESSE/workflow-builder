@@ -2,6 +2,7 @@ import { withTheme, utils, WidgetProps } from '@rjsf/core'
 import { Theme } from '@rjsf/bootstrap-4'
 import { CollapsibleField } from './CollapsibleField'
 import { TableField } from './table/TableField'
+import { moleculeFormats } from './molecule/formats'
 
 // TODO workaround for broken bootsrap-4 file widget, see https://github.com/rjsf-team/react-jsonschema-form/issues/2095
 const registry = utils.getDefaultRegistry()
@@ -26,6 +27,6 @@ if (Theme.fields !== undefined) {
 if (Theme.customFormats === undefined) {
   Theme.customFormats = {}
 }
-Theme.customFormats.moleculefilepaths = () => true
+Theme.customFormats = { ...Theme.customFormats, ...moleculeFormats }
 
 export const Form = withTheme(Theme)

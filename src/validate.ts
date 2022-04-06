@@ -3,11 +3,13 @@ import type { ErrorObject } from 'ajv'
 import addFormats from 'ajv-formats'
 import { JSONSchema7 } from 'json-schema'
 import type { ICatalogNode, IParameters, IWorkflowNode, IWorkflow, IWorkflowSchema, ICatalog } from './types'
-import { resolveMaxItemsFrom } from './resolveMaxItemsFrom'
+import { ajvKeyword, resolveMaxItemsFrom } from './resolveMaxItemsFrom'
+import { addMoleculeFormats } from './molecule/formats'
 
 const ajv = new Ajv()
 addFormats(ajv)
-ajv.addKeyword('maxItemsFrom')
+addMoleculeFormats(ajv)
+ajv.addKeyword(ajvKeyword)
 
 interface IvresseErrorObject extends ErrorObject<string, Record<string, any>, unknown> {
   workflowPath?: string
@@ -93,7 +95,7 @@ export function validateCatalog (catalog: ICatalog): Errors {
   const nodesErrors = catalog.nodes.map((n, nodeIndex) => {
     const nodeErrors = validateSchema(n.schema)
     nodeErrors.forEach(e => {
-      e.workflowPath = `node[${nodeIndex}]`
+      e.workflowPath = `nodes[${nodeIndex}]`
     })
     return nodeErrors
   })

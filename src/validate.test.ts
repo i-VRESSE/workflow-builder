@@ -381,4 +381,60 @@ describe('validateCatalog', () => {
       expect(errors.length).toBeGreaterThan(0)
     })
   })
+
+  describe('given node schema with maxItemsFrom keyword', () => {
+    it('should be OK', () => {
+      const propSchema: any = {
+        type: 'array',
+        title: 'Which molecules are a shape?',
+        items: {
+          default: false,
+          title: 'Is this molecule a shape?',
+          type: 'boolean'
+        },
+        maxItemsFrom: 'gprop'
+      }
+      const nodeSchema: JSONSchema7 = {
+        type: 'object',
+        properties: {
+          nprop: propSchema
+        }
+      }
+      const globalSchema: JSONSchema7 = {
+        type: 'object',
+        properties: {
+          gprop: {
+            type: 'array',
+            items: {
+              type: 'string'
+            }
+          }
+        },
+        additionalProperties: false
+      }
+      const catalog: ICatalog = {
+        title: 'Test catalog',
+        global: {
+          schema: globalSchema,
+          uiSchema: {}
+        },
+        nodes: [
+          {
+            id: 'mynode',
+            label: 'My node',
+            description: 'My node description',
+            category: 'My category',
+            schema: nodeSchema,
+            uiSchema: {}
+          }
+        ],
+        examples: {},
+        categories: []
+      }
+
+      const errors = validateCatalog(catalog)
+
+      expect(errors.length).toEqual(0)
+    })
+  })
 })
