@@ -113,6 +113,10 @@ The catalog is a YAML formatted file which tells the app what nodes are availabl
     * map with title as key and link as value
 5. title: Title of the catalog
 
+### schema
+
+See [docs/schema.md](docs/schema.md).
+
 #### uiSchema
 
 See [docs/uiSchema.md](docs/uiSchema.md).
