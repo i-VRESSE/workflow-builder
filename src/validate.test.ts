@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import { JSONSchema7 } from 'json-schema'
 import { validateCatalog, validateWorkflow } from './validate'
 import { ICatalog, IWorkflowSchema } from './types'
+import { JSONSchema7WithMaxItemsFrom } from './resolveMaxItemsFrom'
 
 describe('validateWorkflow()', () => {
   describe('given a workflow with only global parameters', () => {
@@ -137,7 +138,7 @@ describe('validateWorkflow()', () => {
             missingProperty: 'autohis'
           },
           schemaPath: '#/required',
-          workflowPath: 'node[0]'
+          workflowPath: 'nodes[0]'
         }
       ]
       expect(errors).toEqual(expected)
@@ -165,11 +166,112 @@ describe('validateWorkflow()', () => {
               node: 'myothernode'
             },
             schemaPath: '',
-            workflowPath: 'node[0]'
+            workflowPath: 'nodes[0]'
           }
         ]
         expect(errors).toEqual(expected)
       })
+    })
+  })
+
+  describe('given node with maxItemsFrom in schema', () => {
+    let schemas: IWorkflowSchema
+
+    beforeEach(() => {
+      const propSchema: JSONSchema7WithMaxItemsFrom = {
+        type: 'array',
+        title: 'Which molecules are a shape?',
+        items: {
+          default: false,
+          title: 'Is this molecule a shape?',
+          type: 'boolean'
+        },
+        maxItemsFrom: 'gprop'
+      }
+      const nodeSchema: JSONSchema7 = {
+        type: 'object',
+        properties: {
+          nprop: propSchema
+        }
+      }
+      const globalSchema: JSONSchema7 = {
+        type: 'object',
+        properties: {
+          gprop: {
+            type: 'array',
+            items: {
+              type: 'string'
+            }
+          }
+        },
+        additionalProperties: false
+      }
+      schemas = {
+        global: {
+          schema: globalSchema,
+          uiSchema: {}
+        },
+        nodes: [
+          {
+            id: 'mynode',
+            label: 'My node',
+            description: 'My node description',
+            category: 'My category',
+            schema: nodeSchema,
+            uiSchema: {}
+          }
+        ]
+      }
+    })
+
+    it('should return zero errors when same number of items is given as maxItemsFrom field', () => {
+      const workflow = {
+        global: {
+          gprop: ['a', 'b', 'c']
+        },
+        nodes: [
+          {
+            id: 'mynode',
+            parameters: {
+              nprop: [true, false, true]
+            }
+          }
+        ]
+      }
+      const errors = validateWorkflow(workflow, schemas)
+
+      expect(errors).toEqual([])
+    })
+
+    it('should complain when more number of items is given as maxItemsFrom field', () => {
+      const workflow = {
+        global: {
+          gprop: ['a']
+        },
+        nodes: [
+          {
+            id: 'mynode',
+            parameters: {
+              nprop: [true, false, true]
+            }
+          }
+        ]
+      }
+      const errors = validateWorkflow(workflow, schemas)
+
+      const expected = [
+        {
+          instancePath: '/nprop',
+          keyword: 'maxItems',
+          message: 'must NOT have more than 1 items',
+          params: {
+            limit: 1
+          },
+          schemaPath: '#/properties/nprop/maxItems',
+          workflowPath: 'nodes[0]'
+        }
+      ]
+      expect(errors).toEqual(expected)
     })
   })
 })

@@ -3,9 +3,11 @@ import type { ErrorObject } from 'ajv'
 import addFormats from 'ajv-formats'
 import { JSONSchema7 } from 'json-schema'
 import type { ICatalogNode, IParameters, IWorkflowNode, IWorkflow, IWorkflowSchema, ICatalog } from './types'
+import { resolveMaxItemsFrom } from './resolveMaxItemsFrom'
 
 const ajv = new Ajv()
 addFormats(ajv)
+ajv.addKeyword('maxItemsFrom')
 
 interface IvresseErrorObject extends ErrorObject<string, Record<string, any>, unknown> {
   workflowPath?: string
@@ -28,7 +30,7 @@ export function validateWorkflow (workflow: IWorkflow, schemas: IWorkflowSchema)
   globalErrors.forEach(e => {
     e.workflowPath = 'global'
   })
-  const nodeValidator = validateNode(schemas.nodes)
+  const nodeValidator = validateNodeFactory(schemas.nodes, workflow.global)
   const nodesErrors = workflow.nodes.map(nodeValidator)
 
   // TODO validate files,
@@ -37,16 +39,17 @@ export function validateWorkflow (workflow: IWorkflow, schemas: IWorkflowSchema)
   return [...globalErrors, ...nodesErrors.flat(1)]
 }
 
-function validateNode (catalogNodes: ICatalogNode[]): (value: IWorkflowNode, index: number, array: IWorkflowNode[]) => Errors {
+function validateNodeFactory (catalogNodes: ICatalogNode[], global: IParameters): (value: IWorkflowNode, index: number, array: IWorkflowNode[]) => Errors {
+  const id2schema = Object.fromEntries(catalogNodes.map(c => [c.id, resolveMaxItemsFrom(c.schema, global)]))
   return (node, nodeIndex) => {
-    const catalogNode = catalogNodes.find((n) => n.id === node.id)
-    if (catalogNode != null) {
+    const schema = id2schema[node.id]
+    if (schema != null) {
       const nodeErrors = validateParameters(
         node.parameters,
-        catalogNode.schema
+        schema
       )
       nodeErrors.forEach(e => {
-        e.workflowPath = `node[${nodeIndex}]`
+        e.workflowPath = `nodes[${nodeIndex}]`
       })
       return nodeErrors
     } else {
@@ -59,7 +62,7 @@ function validateNode (catalogNodes: ICatalogNode[]): (value: IWorkflowNode, ind
         instancePath: '',
         schemaPath: '',
         keyword: 'schema',
-        workflowPath: `node[${nodeIndex}]`
+        workflowPath: `nodes[${nodeIndex}]`
       }]
     }
   }
