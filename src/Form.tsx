@@ -23,4 +23,9 @@ if (Theme.fields !== undefined) {
   Theme.fields.table = TableField
 }
 
+if (Theme.customFormats === undefined) {
+  Theme.customFormats = {}
+}
+Theme.customFormats.moleculefilepaths = () => true
+
 export const Form = withTheme(Theme)
