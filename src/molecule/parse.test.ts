@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import dedent from 'ts-dedent'
-import { parsePDB, Pdb } from './parse'
+import { parsePDB, MoleculeInfo } from './parse'
 
 describe('parsePDB', () => {
-  const cases: Array<[string, string, Pdb]> = [
+  const cases: Array<[string, string, MoleculeInfo]> = [
     [
       'given empty file should return zero chains and zero residues',
       '',

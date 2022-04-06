@@ -1,9 +1,9 @@
-export interface Pdb {
+export interface MoleculeInfo {
   chains: string[]
   residueSequenceNumbers: number[]
 }
 
-export function parsePDB (content: string): Pdb {
+export function parsePDB (content: string): MoleculeInfo {
   // Code partially inspired by https://github.com/justinmc/parse-pdb/blob/master/index.js
   const pdbLines = content.split('\n')
   const chains = new Set<string>()
