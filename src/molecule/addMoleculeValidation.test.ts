@@ -51,41 +51,44 @@ describe('addMoleculeValidation()', () => {
       expect(actual).toEqual(schema)
     })
 
-    describe('format:chain', () => {
+    describe('in array of array of object with prop with format:chain', () => {
       it('should set enum to [A]', () => {
-        const itemsSchema: JSONSchema7 = {
-          type: 'string',
-          format: 'chain'
-        }
-        const propSchema: JSONSchema7WithMaxItemsFrom = {
+        const schema: JSONSchema7WithMaxItemsFrom = {
           type: 'array',
-          items: itemsSchema,
-          maxItemsFrom: 'molecules'
-        }
-        const schema: JSONSchema7 = {
-          type: 'object',
-          properties: {
-            prop1: propSchema
+          maxItemsFrom: 'molecules',
+          items: {
+            type: 'array',
+            items: {
+              type: 'object',
+              properties: {
+                prop1: {
+                  type: 'string',
+                  format: 'chain'
+                }
+              }
+            }
           }
         }
         const actual = addMoleculeValidation(schema, globalParameters, globalSchema, files)
-        const expectedItemsSchema: JSONSchema7 = {
-          type: 'string',
-          format: 'chain',
-          enum: ['A']
-        }
-        const expectedPropSchema: JSONSchema7WithMaxItemsFrom = {
+        console.log(actual)
+        const expected: JSONSchema7WithMaxItemsFrom = {
           type: 'array',
-          items: [expectedItemsSchema],
-          maxItemsFrom: 'molecules'
+          maxItemsFrom: 'molecules',
+          items: [{
+            type: 'array',
+            items: {
+              type: 'object',
+              properties: {
+                prop1: {
+                  type: 'string',
+                  format: 'chain',
+                  enum: ['A']
+                }
+              }
+            }
+          }]
         }
-        const expectedSchema: JSONSchema7 = {
-          type: 'object',
-          properties: {
-            prop1: expectedPropSchema
-          }
-        }
-        expect(actual).toEqual(expectedSchema)
+        expect(actual).toEqual(expected)
       })
     })
   })
