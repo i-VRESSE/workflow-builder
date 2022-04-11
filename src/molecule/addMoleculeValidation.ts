@@ -26,6 +26,7 @@ function parseMolecules (globalParameters: IParameters, globalSchema: JSONSchema
     return [[], undefined]
   }
   // find file of molecule path
+  // TODO check whether files are actually PDB files using uiSchema.molecules..items.ui:options.accept: .pdb
   const moleculeFiles = moleculeFilePaths.map(p => files[p])
   // parse file
   const moleculeInfos = moleculeFiles.map(f => {
@@ -65,6 +66,10 @@ function walkSchemaForMoleculeFormats (schema: JSONSchema7, moleculeInfos: Molec
                   if (typeof pv !== 'boolean' && !Array.isArray(pv) && 'format' in pv) {
                     if (pv.format === 'chain') {
                       const npv = { ...pv, enum: molinfo.chains }
+                      return [pk, npv]
+                    }
+                    if (pv.format === 'residue') {
+                      const npv = { ...pv, enum: molinfo.residueSequenceNumbers }
                       return [pk, npv]
                     }
                   }
