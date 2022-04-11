@@ -6,7 +6,7 @@ export interface JSONSchema7WithMaxItemsFrom extends JSONSchema7 {
   maxItemsFrom?: string
 }
 
-export function resolveMaxItemsFrom (formSchema: JSONSchema7WithMaxItemsFrom, globalParameters: IParameters): JSONSchema7 | undefined {
+export function resolveMaxItemsFrom (formSchema: JSONSchema7WithMaxItemsFrom, globalParameters: IParameters): JSONSchema7 {
   const newFormSchema = { ...formSchema }
   if (newFormSchema.properties === undefined) {
     return newFormSchema
