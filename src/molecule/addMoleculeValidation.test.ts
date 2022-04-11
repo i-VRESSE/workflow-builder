@@ -220,6 +220,59 @@ describe('addMoleculeValidation()', () => {
       })
     })
 
+    // Test for topoaa mol prop
+    describe('in array of object of array of scalar with format:residue', () => {
+      it('should set enum to [-3]', () => {
+        const propSchema: JSONSchema7WithMaxItemsFrom = {
+          type: 'array',
+          maxItemsFrom: 'molecules',
+          items: {
+            type: 'object',
+            properties: {
+              prop2: {
+                type: 'array',
+                items: {
+                  type: 'number',
+                  format: 'residue'
+                }
+              }
+            }
+          }
+        }
+        const schema: JSONSchema7 = {
+          type: 'object',
+          properties: {
+            prop1: propSchema
+          }
+        }
+        const actual = addMoleculeValidation(schema, globalParameters, globalSchema, files)
+        const expectedPropSchema: JSONSchema7WithMaxItemsFrom = {
+          type: 'array',
+          maxItemsFrom: 'molecules',
+          items: [{
+            type: 'object',
+            properties: {
+              prop2: {
+                type: 'array',
+                items: {
+                  type: 'number',
+                  format: 'residue',
+                  enum: [-3]
+                }
+              }
+            }
+          }]
+        }
+        const expected: JSONSchema7 = {
+          type: 'object',
+          properties: {
+            prop1: expectedPropSchema
+          }
+        }
+        expect(actual).toEqual(expected)
+      })
+    })
+
     describe('in grouped object of array of array of object with prop with format:residue', () => {
       it('should set enum to [-3]', () => {
         const propSchema: JSONSchema7WithMaxItemsFrom = {
