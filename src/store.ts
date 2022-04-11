@@ -13,6 +13,7 @@ import { removeItemAtIndex, replaceItemAtIndex, moveItem, swapItem, removeAllIte
 import { groupParameters, unGroupParameters } from './grouper'
 import { pruneDefaults } from './pruner'
 import { resolveMaxItemsFrom } from './resolveMaxItemsFrom'
+import { addMoleculeValidation } from './molecule/addMoleculeValidation'
 
 const catalogIndexState = selector<ICatalogIndex>({
   key: 'catalogIndex',
@@ -232,10 +233,15 @@ const selectedNodeFormSchemaState = selector<JSONSchema7 | undefined>({
   get: ({ get }) => {
     const catalogNode = get(selectedCatalogNodeState)
     const globalParameters = get(globalParametersState)
-    if (catalogNode === undefined || catalogNode.formSchema === undefined || catalogNode === undefined) {
+    const catalog = get(catalogState)
+    if (catalogNode === undefined || catalogNode.formSchema === undefined || catalogNode === undefined || catalog === undefined) {
       return undefined
     }
-    return resolveMaxItemsFrom(catalogNode.formSchema, globalParameters)
+    const schemaWithMaxItems = resolveMaxItemsFrom(catalogNode.formSchema, globalParameters)
+    const globalSchema = catalog.global.schema
+    const files = get(filesState)
+    const schemaWithMolInfo = addMoleculeValidation(schemaWithMaxItems, globalParameters, globalSchema, files)
+    return schemaWithMolInfo
   }
 })
 
