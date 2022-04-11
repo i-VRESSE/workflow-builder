@@ -82,10 +82,12 @@ describe('internalizeDataUrls()', () => {
 })
 
 describe('dataURL2content()', () => {
-  const body = 'Hello, world'
-  const body64 = Buffer.from(body).toString('base64')
-  const url ='data:text/plain;name=hello.txt;base64,' + body64
+  it('should decode base64 body', () => {
+    const body = 'Hello, world'
+    const body64 = Buffer.from(body).toString('base64')
+    const url = 'data:text/plain;name=hello.txt;base64,' + body64
 
-  const actual = dataURL2content(url)
-  expect(actual).toEqual(body)
+    const actual = dataURL2content(url)
+    expect(actual).toEqual(body)
+  })
 })
