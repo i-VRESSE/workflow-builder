@@ -46,7 +46,7 @@ function walkSchemaForMoleculeFormats (schema: JSONSchema7, moleculeInfos: Molec
     .map(([k, v]) => {
       const s = v as JSONSchema7WithMaxItemsFrom
       const isArrayWithItems = s.type === 'array' && 'items' in s
-      if (isArrayWithItems) {
+      if (isArrayWithItems && s.maxItemsFrom === moleculesPropName) {
         const s2 = s.items
         if (
           s2 !== undefined && typeof s2 !== 'boolean' && !Array.isArray(s2) &&
@@ -83,6 +83,41 @@ function walkSchemaForMoleculeFormats (schema: JSONSchema7, moleculeInfos: Molec
                 items
               }]
             }
+          }
+        } else if (
+          s2 !== undefined && typeof s2 !== 'boolean' && !Array.isArray(s2) &&
+          s2.type === 'object' && 'properties' in s2 && s2.properties !== undefined
+        ) {
+          const s3 = s2.properties
+          const hasPropWithArrayofScalarWithMoleculeFormat = Object.values(s3).some(p =>
+            typeof p !== 'boolean' && !Array.isArray(p) && p.type === 'array' &&
+            'items' in p && !Array.isArray(p.items) && p.items !== undefined && typeof p.items !== 'boolean' &&
+            'format' in p.items && p.items.format !== undefined && moleculeFormats.has(p.items.format)
+          )
+          if (hasPropWithArrayofScalarWithMoleculeFormat) {
+            // Found array>object>array>scalar[format=moleculeformat]
+            const items = moleculeInfos.map((molinfo) => {
+              const properties = Object.fromEntries(Object.entries(s3).map(([pk, pv]) => {
+                // TODO remove duplicate condition, if condition is same as condition on line 93-95,
+                // tried f(): boolean, but got pv.items type too broad error
+                if (typeof pv !== 'boolean' && !Array.isArray(pv) && pv.type === 'array' &&
+                'items' in pv && !Array.isArray(pv.items) && pv.items !== undefined && typeof pv.items !== 'boolean' &&
+                'format' in pv.items && pv.items.format !== undefined && moleculeFormats.has(pv.items.format)) {
+                  if (pv.items.format === 'chain') {
+                    return [pk, { ...pv, items: { ...pv.items, enum: molinfo.chains } }]
+                  }
+                  if (pv.items.format === 'residue') {
+                    return [pk, { ...pv, items: { ...pv.items, enum: molinfo.residueSequenceNumbers } }]
+                  }
+                }
+                return [pk, pv]
+              }))
+              return {
+                ...s2,
+                properties
+              }
+            })
+            return [k, { ...s, items }]
           }
         }
       } else if (s.type === 'object') {

@@ -235,6 +235,9 @@ describe('addMoleculeValidation()', () => {
                   type: 'number',
                   format: 'residue'
                 }
+              },
+              prop3: {
+                type: 'string'
               }
             }
           }
@@ -242,7 +245,10 @@ describe('addMoleculeValidation()', () => {
         const schema: JSONSchema7 = {
           type: 'object',
           properties: {
-            prop1: propSchema
+            prop1: propSchema,
+            prop4: {
+              type: 'boolean'
+            }
           }
         }
         const actual = addMoleculeValidation(schema, globalParameters, globalSchema, files)
@@ -259,6 +265,9 @@ describe('addMoleculeValidation()', () => {
                   format: 'residue',
                   enum: [-3]
                 }
+              },
+              prop3: {
+                type: 'string'
               }
             }
           }]
@@ -266,7 +275,10 @@ describe('addMoleculeValidation()', () => {
         const expected: JSONSchema7 = {
           type: 'object',
           properties: {
-            prop1: expectedPropSchema
+            prop1: expectedPropSchema,
+            prop4: {
+              type: 'boolean'
+            }
           }
         }
         expect(actual).toEqual(expected)

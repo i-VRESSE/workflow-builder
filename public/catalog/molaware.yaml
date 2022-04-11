@@ -107,4 +107,36 @@ nodes:
         indexed: true
         items:
           flatten: true
+- id: node4
+  label: Node with array of object with property which array of scalar. Scalar is a residue and rendered as multi select.
+  description: Description 1
+  category: cat1
+  schema:
+    type: object
+    properties:
+      prop1:
+        type: array
+        title: Specifications for molecules
+        items:
+          type: object
+          title: Specification for a molecule
+          properties:
+            hisd:
+              type: array
+              title: Which residues a HISD?
+              items:
+                title: HISD residue number
+                type: number
+                format: residue
+              uniqueItems: true
+        maxItemsFrom: molecules
+  uiSchema: {}
+  tomlSchema:
+    prop1:
+      indexed: true
+      items:
+        sectioned: true
+        properties:
+          hisd:
+            indexed: true
 examples: {}
