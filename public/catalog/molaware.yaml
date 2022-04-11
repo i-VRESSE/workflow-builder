@@ -65,5 +65,46 @@ nodes:
         ui:widget: radio
       ui:group: 'Molecules'
   tomlSchema: {}
-
+- id: node3
+  label: Node with segments (with chain and residue formats) for each molecule
+  description: Description 1
+  category: cat1
+  schema:
+    type: object
+    properties:
+      seg:
+        type: array
+        maxItemsFrom: molecules
+        title: Segments
+        items:
+          type: array
+          title: Segments of a molecule
+          items:
+            type: object
+            properties:
+              chain:
+                title: Chain
+                type: string
+                format: chain
+              sta:
+                title: Starting residue number
+                type: number
+                format: residue
+              end:
+                title: Ending residue number
+                type: number
+                format: residue
+            required: []
+            additionalProperties: false
+  uiSchema:
+    seg:
+      items:
+        ui:field: table
+  tomlSchema:
+    seg:
+      indexed: true
+      items:
+        indexed: true
+        items:
+          flatten: true
 examples: {}
