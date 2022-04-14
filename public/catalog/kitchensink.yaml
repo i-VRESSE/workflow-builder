@@ -38,6 +38,8 @@ global:
 categories:
 - name: grouptests
   description: Category 1
+- name: defaultstest
+  description: Some description
 - name: expandabletests
   description: Nodes with expandable parameters
 - name: tabletests
@@ -108,6 +110,81 @@ nodes:
   label: Node 3
   description: Description 3
   category: grouptests
+- title: Node to test pruning of defaultstest
+  id: defaultprune
+  label: Default prune?
+  category: defaultstest
+  uiSchema:
+    prop4:
+      items:
+        ui:widget: radio
+  schema:
+    type: object
+    additionalProperties: false
+    properties:
+      prop1:
+        title: String with no default
+        type: string
+      prop2:
+        title: String with default empty string
+        type: string
+        default: ''
+      prop3:
+        title: String with default x string
+        type: string
+        default: 'x'
+      prop4:
+        title: Array of booleans
+        type: array
+        items:
+          type: boolean
+          default: false
+      prop5:
+        type: array
+        title: Array of object with x string as defaults
+        items:
+          type: object
+          properties:
+            prop5a:
+              type: string
+              default: x
+            prop5b:
+              type: string
+              default: x
+      prop6:
+        type: array
+        title: Array of object with empty string as defaults
+        items:
+          type: object
+          properties:
+            prop6a:
+              type: string
+              default: ''
+            prop6b:
+              type: string
+              default: ''
+      prop7:
+        type: array
+        title: Array of array of object with x string as defaults
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              prop7a:
+                type: string
+                default: x
+              prop7b:
+                type: string
+                default: x
+      prop8:
+        type: array
+        title: Array of array of scalar with x string as default
+        items:
+          type: array
+          items:
+            type: string
+            default: x
 - schema:
     type: object
     additionalProperties: false
