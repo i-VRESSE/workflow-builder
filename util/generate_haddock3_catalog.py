@@ -138,6 +138,12 @@ def collapse_expandable(config):
 
     return new_config
 
+def residue_like(schema):
+    return 'residue number' in schema['title'].lower()
+
+def chain_like(key, schema):
+    return 'chain' in key or 'Segment ID' in schema['title']
+
 def config2schema(config):
     """Translate haddock3 config file of a module to JSON schema"""
     properties = {}
@@ -200,6 +206,8 @@ def config2schema(config):
             if 'default' in v and isnan(v['default']):
                 # TODO handle nan's more gracefully, instead of now just deleting it
                 del prop['default']
+            if residue_like(v):
+                prop['format'] = 'residue'
         elif v['type'] == 'file':
             prop['type'] = 'string'
             prop['format'] = 'uri-reference'
@@ -232,6 +240,8 @@ def config2schema(config):
                 prop['enum'] = v['choices']
             if v['default'] == '':
                 del prop['default']
+            if chain_like(k, v):
+                prop['format'] = 'chain'
         elif v['type'] == 'list':
             prop['type'] = "array"
             if 'minitems' in v:

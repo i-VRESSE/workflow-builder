@@ -347,6 +347,7 @@ nodes:
                 type: number
                 maximum: 9999
                 minimum: -9999
+                format: residue
               end:
                 title: Ending residue number
                 description: Ending residue number for segment from which to define
@@ -356,6 +357,7 @@ nodes:
                 type: number
                 maximum: 9999
                 minimum: -9999
+                format: residue
             required: []
             additionalProperties: false
       surfrest:
@@ -518,6 +520,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end1:
               title: Residue number of last residue
               description: Residue number of last residue in the first C2 symmetry
@@ -526,6 +529,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg1:
               title: Segment ID of first C2 segment
               description: Segment ID of first C2 segment
@@ -533,6 +537,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta2:
               title: Residue number of first residue
               description: Residue number of first residue in the second C2 symmetry
@@ -542,6 +547,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end2:
               title: Residue number of last residue
               description: Residue number of last residue in the second C2 symmetry
@@ -550,6 +556,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg2:
               title: Segment ID of second C2 segment
               description: Segment ID of second C2 segment
@@ -557,6 +564,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
           required: []
           additionalProperties: false
       numc3sym:
@@ -582,6 +590,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end1:
               title: Residue number of last residue
               description: Residue number of last residue in the first C3 symmetry
@@ -590,6 +599,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg1:
               title: Segment ID of first C3 segment
               description: Segment ID of first C3 segment
@@ -597,6 +607,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta2:
               title: Residue number of first residue
               description: Residue number of first residue in the second C3 symmetry
@@ -606,6 +617,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end2:
               title: Residue number of last residue
               description: Residue number of last residue in the second C3 symmetry
@@ -614,6 +626,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg2:
               title: Segment ID of second C3 segment
               description: Segment ID of second C3 segment
@@ -621,6 +634,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta3:
               title: Residue number of first residue
               description: Residue number of first residue in the third C3 symmetry
@@ -629,6 +643,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end3:
               title: Residue number of last residue
               description: Residue number of last residue in the third C3 symmetry
@@ -637,6 +652,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg3:
               title: Segment ID of third C3 segment
               description: Segment ID of third C3 segment
@@ -644,6 +660,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
           required: []
           additionalProperties: false
       numc4sym:
@@ -669,6 +686,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end1:
               title: Residue number of last residue
               description: Residue number of last residue in the first C4 symmetry
@@ -677,6 +695,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg1:
               title: Segment ID of first C4 segment
               description: Segment ID of first C4 segment
@@ -684,6 +703,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta2:
               title: Residue number of first residue
               description: Residue number of first residue in the second C4 symmetry
@@ -693,6 +713,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end2:
               title: Residue number of last residue
               description: Residue number of last residue in the second C4 symmetry
@@ -701,6 +722,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg2:
               title: Segment ID of second C4 segment
               description: Segment ID of second C4 segment
@@ -708,6 +730,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta3:
               title: Residue number of first residue
               description: Residue number of first residue in the third C4 symmetry
@@ -716,6 +739,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end3:
               title: Residue number of last residue
               description: Residue number of last residue in the third C4 symmetry
@@ -724,6 +748,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg3:
               title: Segment ID of third C4 segment
               description: Segment ID of third C4 segment
@@ -731,6 +756,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta4:
               title: Residue number of first residue
               description: Residue number of first residue in the fourth C4 symmetry
@@ -740,6 +766,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end4:
               title: Residue number of last residue
               description: Residue number of last residue in the fourth C4 symmetry
@@ -748,6 +775,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg4:
               title: Segment ID of fourth C4 segment
               description: Segment ID of fourth C4 segment
@@ -755,6 +783,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
           required: []
           additionalProperties: false
       numc5sym:
@@ -780,6 +809,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end1:
               title: Residue number of last residue
               description: Residue number of last residue in the first C5 symmetry
@@ -788,6 +818,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg1:
               title: Segment ID of first C5 segment
               description: Segment ID of first C5 segment
@@ -795,6 +826,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta2:
               title: Residue number of first residue
               description: Residue number of first residue in the second C5 symmetry
@@ -804,6 +836,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end2:
               title: Residue number of last residue
               description: Residue number of last residue in the second C5 symmetry
@@ -812,6 +845,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg2:
               title: Segment ID of second C5 segment
               description: Segment ID of second C5 segment
@@ -819,6 +853,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta3:
               title: Residue number of first residue
               description: Residue number of first residue in the third C5 symmetry
@@ -827,6 +862,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end3:
               title: Residue number of last residue
               description: Residue number of last residue in the third C5 symmetry
@@ -835,6 +871,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg3:
               title: Segment ID of third C5 segment
               description: Segment ID of third C5 segment
@@ -842,6 +879,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta4:
               title: Residue number of first residue
               description: Residue number of first residue in the fourth C5 symmetry
@@ -851,6 +889,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end4:
               title: Residue number of last residue
               description: Residue number of last residue in the fourth C5 symmetry
@@ -859,6 +898,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg4:
               title: Segment ID of fourth C5 segment
               description: Segment ID of fourth C5 segment
@@ -866,6 +906,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta5:
               title: Residue number of first residue
               description: Residue number of first residue in the fifth C5 symmetry
@@ -874,6 +915,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end5:
               title: Residue number of last residue
               description: Residue number of last residue in the fifth C5 symmetry
@@ -882,6 +924,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg5:
               title: Segment ID of fifth C5 segment
               description: Segment ID of fifth C5 segment
@@ -889,6 +932,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
           required: []
           additionalProperties: false
       numc6sym:
@@ -914,6 +958,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end1:
               title: Residue number of last residue
               description: Residue number of last residue in the first C6 symmetry
@@ -922,6 +967,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg1:
               title: Segment ID of first C6 segment
               description: Segment ID of first C6 segment
@@ -929,6 +975,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta2:
               title: Residue number of first residue
               description: Residue number of first residue in the second C6 symmetry
@@ -938,6 +985,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end2:
               title: Residue number of last residue
               description: Residue number of last residue in the second C6 symmetry
@@ -946,6 +994,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg2:
               title: Segment ID of second C6 segment
               description: Segment ID of second C6 segment
@@ -953,6 +1002,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta3:
               title: Residue number of first residue
               description: Residue number of first residue in the third C6 symmetry
@@ -961,6 +1011,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end3:
               title: Residue number of last residue
               description: Residue number of last residue in the third C6 symmetry
@@ -969,6 +1020,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg3:
               title: Segment ID of third C6 segment
               description: Segment ID of third C6 segment
@@ -976,6 +1028,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta4:
               title: Residue number of first residue
               description: Residue number of first residue in the fourth C6 symmetry
@@ -985,6 +1038,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end4:
               title: Residue number of last residue
               description: Residue number of last residue in the fourth C6 symmetry
@@ -993,6 +1047,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg4:
               title: Segment ID of fourth C6 segment
               description: Segment ID of fourth C6 segment
@@ -1000,6 +1055,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta5:
               title: Residue number of first residue
               description: Residue number of first residue in the fifth C6 symmetry
@@ -1008,6 +1064,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end5:
               title: Residue number of last residue
               description: Residue number of last residue in the fifth C6 symmetry
@@ -1016,6 +1073,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg5:
               title: Segment ID of fifth C6 segment
               description: Segment ID of fifth C6 segment
@@ -1023,6 +1081,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta6:
               title: Residue number of first residue
               description: Residue number of first residue in the sixth C6 symmetry
@@ -1031,6 +1090,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end6:
               title: Residue number of last residue
               description: Residue number of last residue in the sixth C6 symmetry
@@ -1039,6 +1099,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg6:
               title: Segment ID of sixth C6 segment
               description: Segment ID of sixth C6 segment
@@ -1046,6 +1107,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
           required: []
           additionalProperties: false
       nums3sym:
@@ -1071,6 +1133,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end1:
               title: Residue number of last residue
               description: Residue number of last residue in the first S3 symmetry
@@ -1079,6 +1142,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg1:
               title: Segment ID of first S3 segment
               description: Segment ID of first S3 segment
@@ -1086,6 +1150,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta2:
               title: Residue number of first residue
               description: Residue number of first residue in the second S3 symmetry
@@ -1095,6 +1160,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end2:
               title: Residue number of last residue
               description: Residue number of last residue in the second S3 symmetry
@@ -1103,6 +1169,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg2:
               title: Segment ID of second S3 segment
               description: Segment ID of second S3 segment
@@ -1110,6 +1177,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta3:
               title: Residue number of first residue
               description: Residue number of first residue in the third S3 symmetry
@@ -1118,6 +1186,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end3:
               title: Residue number of last residue
               description: Residue number of last residue in the third S3 symmetry
@@ -1126,6 +1195,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg3:
               title: Segment ID of third S3 segment
               description: Segment ID of third S3 segment
@@ -1133,6 +1203,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
           required: []
           additionalProperties: false
       ncs_on:
@@ -1175,6 +1246,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end1:
               title: Residue number of last residue
               description: Residue number of last residue in the first NCS segment
@@ -1182,6 +1254,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg1:
               title: Segment ID of first NCS segment
               description: Segment ID of first NCS segment
@@ -1189,6 +1262,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 100
+              format: chain
             sta2:
               title: Residue number of first residue
               description: Residue number of first residue in the second NCS segment
@@ -1196,6 +1270,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end2:
               title: Residue number of last residue
               description: Residue number of last residue in the second NCS segment
@@ -1203,6 +1278,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg2:
               title: Segment ID of second NCS segment
               description: Segment ID of second NCS segment
@@ -1210,6 +1286,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 100
+              format: chain
           required: []
           additionalProperties: false
       w_dist:
@@ -1553,6 +1630,7 @@ nodes:
         type: string
         minLength: 0
         maxLength: 100
+        format: chain
       receptor_active:
         type: string
         minLength: 0
@@ -1566,6 +1644,7 @@ nodes:
         type: string
         minLength: 0
         maxLength: 100
+        format: chain
       ligand_active:
         type: string
         minLength: 0
@@ -2190,6 +2269,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             cyclicpept:
               default: false
               title: Cyclic peptide
@@ -2220,6 +2300,7 @@ nodes:
                 type: number
                 maximum: 9999
                 minimum: -9999
+                format: residue
             nhise:
               default: 0
               title: Number of HISE residue
@@ -2241,6 +2322,7 @@ nodes:
                 type: number
                 maximum: 9999
                 minimum: -9999
+                format: residue
           required: []
           additionalProperties: false
     required: []
@@ -2438,6 +2520,7 @@ nodes:
         type: string
         minLength: 1
         maxLength: 1
+        format: chain
       ligand_chain:
         default: B
         title: Ligand ChainID
@@ -2448,6 +2531,7 @@ nodes:
         type: string
         minLength: 1
         maxLength: 1
+        format: chain
       sortby:
         default: score
         title: Sort the structures/clusters in the output file by this value
@@ -2762,6 +2846,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end1:
               title: Residue number of last residue
               description: Residue number of last residue in the first C2 symmetry
@@ -2770,6 +2855,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg1:
               title: Segment ID of first C2 segment
               description: Segment ID of first C2 segment
@@ -2777,6 +2863,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta2:
               title: Residue number of first residue
               description: Residue number of first residue in the second C2 symmetry
@@ -2786,6 +2873,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end2:
               title: Residue number of last residue
               description: Residue number of last residue in the second C2 symmetry
@@ -2794,6 +2882,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg2:
               title: Segment ID of second C2 segment
               description: Segment ID of second C2 segment
@@ -2801,6 +2890,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
           required: []
           additionalProperties: false
       numc3sym:
@@ -2826,6 +2916,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end1:
               title: Residue number of last residue
               description: Residue number of last residue in the first C3 symmetry
@@ -2834,6 +2925,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg1:
               title: Segment ID of first C3 segment
               description: Segment ID of first C3 segment
@@ -2841,6 +2933,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta2:
               title: Residue number of first residue
               description: Residue number of first residue in the second C3 symmetry
@@ -2850,6 +2943,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end2:
               title: Residue number of last residue
               description: Residue number of last residue in the second C3 symmetry
@@ -2858,6 +2952,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg2:
               title: Segment ID of second C3 segment
               description: Segment ID of second C3 segment
@@ -2865,6 +2960,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta3:
               title: Residue number of first residue
               description: Residue number of first residue in the third C3 symmetry
@@ -2873,6 +2969,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end3:
               title: Residue number of last residue
               description: Residue number of last residue in the third C3 symmetry
@@ -2881,6 +2978,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg3:
               title: Segment ID of third C3 segment
               description: Segment ID of third C3 segment
@@ -2888,6 +2986,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
           required: []
           additionalProperties: false
       numc4sym:
@@ -2913,6 +3012,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end1:
               title: Residue number of last residue
               description: Residue number of last residue in the first C4 symmetry
@@ -2921,6 +3021,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg1:
               title: Segment ID of first C4 segment
               description: Segment ID of first C4 segment
@@ -2928,6 +3029,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta2:
               title: Residue number of first residue
               description: Residue number of first residue in the second C4 symmetry
@@ -2937,6 +3039,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end2:
               title: Residue number of last residue
               description: Residue number of last residue in the second C4 symmetry
@@ -2945,6 +3048,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg2:
               title: Segment ID of second C4 segment
               description: Segment ID of second C4 segment
@@ -2952,6 +3056,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta3:
               title: Residue number of first residue
               description: Residue number of first residue in the third C4 symmetry
@@ -2960,6 +3065,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end3:
               title: Residue number of last residue
               description: Residue number of last residue in the third C4 symmetry
@@ -2968,6 +3074,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg3:
               title: Segment ID of third C4 segment
               description: Segment ID of third C4 segment
@@ -2975,6 +3082,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta4:
               title: Residue number of first residue
               description: Residue number of first residue in the fourth C4 symmetry
@@ -2984,6 +3092,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end4:
               title: Residue number of last residue
               description: Residue number of last residue in the fourth C4 symmetry
@@ -2992,6 +3101,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg4:
               title: Segment ID of fourth C4 segment
               description: Segment ID of fourth C4 segment
@@ -2999,6 +3109,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
           required: []
           additionalProperties: false
       numc5sym:
@@ -3024,6 +3135,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end1:
               title: Residue number of last residue
               description: Residue number of last residue in the first C5 symmetry
@@ -3032,6 +3144,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg1:
               title: Segment ID of first C5 segment
               description: Segment ID of first C5 segment
@@ -3039,6 +3152,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta2:
               title: Residue number of first residue
               description: Residue number of first residue in the second C5 symmetry
@@ -3048,6 +3162,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end2:
               title: Residue number of last residue
               description: Residue number of last residue in the second C5 symmetry
@@ -3056,6 +3171,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg2:
               title: Segment ID of second C5 segment
               description: Segment ID of second C5 segment
@@ -3063,6 +3179,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta3:
               title: Residue number of first residue
               description: Residue number of first residue in the third C5 symmetry
@@ -3071,6 +3188,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end3:
               title: Residue number of last residue
               description: Residue number of last residue in the third C5 symmetry
@@ -3079,6 +3197,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg3:
               title: Segment ID of third C5 segment
               description: Segment ID of third C5 segment
@@ -3086,6 +3205,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta4:
               title: Residue number of first residue
               description: Residue number of first residue in the fourth C5 symmetry
@@ -3095,6 +3215,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end4:
               title: Residue number of last residue
               description: Residue number of last residue in the fourth C5 symmetry
@@ -3103,6 +3224,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg4:
               title: Segment ID of fourth C5 segment
               description: Segment ID of fourth C5 segment
@@ -3110,6 +3232,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta5:
               title: Residue number of first residue
               description: Residue number of first residue in the fifth C5 symmetry
@@ -3118,6 +3241,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end5:
               title: Residue number of last residue
               description: Residue number of last residue in the fifth C5 symmetry
@@ -3126,6 +3250,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg5:
               title: Segment ID of fifth C5 segment
               description: Segment ID of fifth C5 segment
@@ -3133,6 +3258,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
           required: []
           additionalProperties: false
       numc6sym:
@@ -3158,6 +3284,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end1:
               title: Residue number of last residue
               description: Residue number of last residue in the first C6 symmetry
@@ -3166,6 +3293,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg1:
               title: Segment ID of first C6 segment
               description: Segment ID of first C6 segment
@@ -3173,6 +3301,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta2:
               title: Residue number of first residue
               description: Residue number of first residue in the second C6 symmetry
@@ -3182,6 +3311,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end2:
               title: Residue number of last residue
               description: Residue number of last residue in the second C6 symmetry
@@ -3190,6 +3320,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg2:
               title: Segment ID of second C6 segment
               description: Segment ID of second C6 segment
@@ -3197,6 +3328,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta3:
               title: Residue number of first residue
               description: Residue number of first residue in the third C6 symmetry
@@ -3205,6 +3337,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end3:
               title: Residue number of last residue
               description: Residue number of last residue in the third C6 symmetry
@@ -3213,6 +3346,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg3:
               title: Segment ID of third C6 segment
               description: Segment ID of third C6 segment
@@ -3220,6 +3354,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta4:
               title: Residue number of first residue
               description: Residue number of first residue in the fourth C6 symmetry
@@ -3229,6 +3364,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end4:
               title: Residue number of last residue
               description: Residue number of last residue in the fourth C6 symmetry
@@ -3237,6 +3373,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg4:
               title: Segment ID of fourth C6 segment
               description: Segment ID of fourth C6 segment
@@ -3244,6 +3381,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta5:
               title: Residue number of first residue
               description: Residue number of first residue in the fifth C6 symmetry
@@ -3252,6 +3390,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end5:
               title: Residue number of last residue
               description: Residue number of last residue in the fifth C6 symmetry
@@ -3260,6 +3399,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg5:
               title: Segment ID of fifth C6 segment
               description: Segment ID of fifth C6 segment
@@ -3267,6 +3407,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta6:
               title: Residue number of first residue
               description: Residue number of first residue in the sixth C6 symmetry
@@ -3275,6 +3416,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end6:
               title: Residue number of last residue
               description: Residue number of last residue in the sixth C6 symmetry
@@ -3283,6 +3425,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg6:
               title: Segment ID of sixth C6 segment
               description: Segment ID of sixth C6 segment
@@ -3290,6 +3433,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
           required: []
           additionalProperties: false
       nums3sym:
@@ -3315,6 +3459,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end1:
               title: Residue number of last residue
               description: Residue number of last residue in the first S3 symmetry
@@ -3323,6 +3468,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg1:
               title: Segment ID of first S3 segment
               description: Segment ID of first S3 segment
@@ -3330,6 +3476,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta2:
               title: Residue number of first residue
               description: Residue number of first residue in the second S3 symmetry
@@ -3339,6 +3486,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end2:
               title: Residue number of last residue
               description: Residue number of last residue in the second S3 symmetry
@@ -3347,6 +3495,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg2:
               title: Segment ID of second S3 segment
               description: Segment ID of second S3 segment
@@ -3354,6 +3503,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta3:
               title: Residue number of first residue
               description: Residue number of first residue in the third S3 symmetry
@@ -3362,6 +3512,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end3:
               title: Residue number of last residue
               description: Residue number of last residue in the third S3 symmetry
@@ -3370,6 +3521,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg3:
               title: Segment ID of third S3 segment
               description: Segment ID of third S3 segment
@@ -3377,6 +3529,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
           required: []
           additionalProperties: false
       ncs_on:
@@ -3419,6 +3572,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end1:
               title: Residue number of last residue
               description: Residue number of last residue in the first NCS segment
@@ -3426,6 +3580,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg1:
               title: Segment ID of first NCS segment
               description: Segment ID of first NCS segment
@@ -3433,6 +3588,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 100
+              format: chain
             sta2:
               title: Residue number of first residue
               description: Residue number of first residue in the second NCS segment
@@ -3440,6 +3596,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end2:
               title: Residue number of last residue
               description: Residue number of last residue in the second NCS segment
@@ -3447,6 +3604,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg2:
               title: Segment ID of second NCS segment
               description: Segment ID of second NCS segment
@@ -3454,6 +3612,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 100
+              format: chain
           required: []
           additionalProperties: false
       w_air:
@@ -3668,6 +3827,7 @@ nodes:
                 type: number
                 maximum: 9999
                 minimum: -9999
+                format: residue
               end:
                 title: Ending residue number
                 description: Residue number defining the end of the semi-flexible
@@ -3676,6 +3836,7 @@ nodes:
                 type: number
                 maximum: 9999
                 minimum: -9999
+                format: residue
             required: []
             additionalProperties: false
       nseg2:
@@ -3990,6 +4151,7 @@ nodes:
                 type: number
                 maximum: 9999
                 minimum: -9999
+                format: residue
               end:
                 title: End residue number
                 description: Residue number defining the end of the fully flexible
@@ -3998,6 +4160,7 @@ nodes:
                 type: number
                 maximum: 9999
                 minimum: -9999
+                format: residue
             required: []
             additionalProperties: false
       nfle2:
@@ -4948,6 +5111,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end1:
               title: Residue number of last residue
               description: Residue number of last residue in the first C2 symmetry
@@ -4956,6 +5120,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg1:
               title: Segment ID of first C2 segment
               description: Segment ID of first C2 segment
@@ -4963,6 +5128,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta2:
               title: Residue number of first residue
               description: Residue number of first residue in the second C2 symmetry
@@ -4972,6 +5138,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end2:
               title: Residue number of last residue
               description: Residue number of last residue in the second C2 symmetry
@@ -4980,6 +5147,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg2:
               title: Segment ID of second C2 segment
               description: Segment ID of second C2 segment
@@ -4987,6 +5155,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
           required: []
           additionalProperties: false
       numc3sym:
@@ -5012,6 +5181,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end1:
               title: Residue number of last residue
               description: Residue number of last residue in the first C3 symmetry
@@ -5020,6 +5190,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg1:
               title: Segment ID of first C3 segment
               description: Segment ID of first C3 segment
@@ -5027,6 +5198,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta2:
               title: Residue number of first residue
               description: Residue number of first residue in the second C3 symmetry
@@ -5036,6 +5208,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end2:
               title: Residue number of last residue
               description: Residue number of last residue in the second C3 symmetry
@@ -5044,6 +5217,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg2:
               title: Segment ID of second C3 segment
               description: Segment ID of second C3 segment
@@ -5051,6 +5225,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta3:
               title: Residue number of first residue
               description: Residue number of first residue in the third C3 symmetry
@@ -5059,6 +5234,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end3:
               title: Residue number of last residue
               description: Residue number of last residue in the third C3 symmetry
@@ -5067,6 +5243,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg3:
               title: Segment ID of third C3 segment
               description: Segment ID of third C3 segment
@@ -5074,6 +5251,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
           required: []
           additionalProperties: false
       numc4sym:
@@ -5099,6 +5277,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end1:
               title: Residue number of last residue
               description: Residue number of last residue in the first C4 symmetry
@@ -5107,6 +5286,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg1:
               title: Segment ID of first C4 segment
               description: Segment ID of first C4 segment
@@ -5114,6 +5294,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta2:
               title: Residue number of first residue
               description: Residue number of first residue in the second C4 symmetry
@@ -5123,6 +5304,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end2:
               title: Residue number of last residue
               description: Residue number of last residue in the second C4 symmetry
@@ -5131,6 +5313,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg2:
               title: Segment ID of second C4 segment
               description: Segment ID of second C4 segment
@@ -5138,6 +5321,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta3:
               title: Residue number of first residue
               description: Residue number of first residue in the third C4 symmetry
@@ -5146,6 +5330,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end3:
               title: Residue number of last residue
               description: Residue number of last residue in the third C4 symmetry
@@ -5154,6 +5339,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg3:
               title: Segment ID of third C4 segment
               description: Segment ID of third C4 segment
@@ -5161,6 +5347,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta4:
               title: Residue number of first residue
               description: Residue number of first residue in the fourth C4 symmetry
@@ -5170,6 +5357,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end4:
               title: Residue number of last residue
               description: Residue number of last residue in the fourth C4 symmetry
@@ -5178,6 +5366,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg4:
               title: Segment ID of fourth C4 segment
               description: Segment ID of fourth C4 segment
@@ -5185,6 +5374,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
           required: []
           additionalProperties: false
       numc5sym:
@@ -5210,6 +5400,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end1:
               title: Residue number of last residue
               description: Residue number of last residue in the first C5 symmetry
@@ -5218,6 +5409,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg1:
               title: Segment ID of first C5 segment
               description: Segment ID of first C5 segment
@@ -5225,6 +5417,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta2:
               title: Residue number of first residue
               description: Residue number of first residue in the second C5 symmetry
@@ -5234,6 +5427,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end2:
               title: Residue number of last residue
               description: Residue number of last residue in the second C5 symmetry
@@ -5242,6 +5436,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg2:
               title: Segment ID of second C5 segment
               description: Segment ID of second C5 segment
@@ -5249,6 +5444,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta3:
               title: Residue number of first residue
               description: Residue number of first residue in the third C5 symmetry
@@ -5257,6 +5453,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end3:
               title: Residue number of last residue
               description: Residue number of last residue in the third C5 symmetry
@@ -5265,6 +5462,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg3:
               title: Segment ID of third C5 segment
               description: Segment ID of third C5 segment
@@ -5272,6 +5470,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta4:
               title: Residue number of first residue
               description: Residue number of first residue in the fourth C5 symmetry
@@ -5281,6 +5480,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end4:
               title: Residue number of last residue
               description: Residue number of last residue in the fourth C5 symmetry
@@ -5289,6 +5489,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg4:
               title: Segment ID of fourth C5 segment
               description: Segment ID of fourth C5 segment
@@ -5296,6 +5497,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta5:
               title: Residue number of first residue
               description: Residue number of first residue in the fifth C5 symmetry
@@ -5304,6 +5506,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end5:
               title: Residue number of last residue
               description: Residue number of last residue in the fifth C5 symmetry
@@ -5312,6 +5515,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg5:
               title: Segment ID of fifth C5 segment
               description: Segment ID of fifth C5 segment
@@ -5319,6 +5523,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
           required: []
           additionalProperties: false
       numc6sym:
@@ -5344,6 +5549,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end1:
               title: Residue number of last residue
               description: Residue number of last residue in the first C6 symmetry
@@ -5352,6 +5558,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg1:
               title: Segment ID of first C6 segment
               description: Segment ID of first C6 segment
@@ -5359,6 +5566,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta2:
               title: Residue number of first residue
               description: Residue number of first residue in the second C6 symmetry
@@ -5368,6 +5576,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end2:
               title: Residue number of last residue
               description: Residue number of last residue in the second C6 symmetry
@@ -5376,6 +5585,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg2:
               title: Segment ID of second C6 segment
               description: Segment ID of second C6 segment
@@ -5383,6 +5593,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta3:
               title: Residue number of first residue
               description: Residue number of first residue in the third C6 symmetry
@@ -5391,6 +5602,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end3:
               title: Residue number of last residue
               description: Residue number of last residue in the third C6 symmetry
@@ -5399,6 +5611,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg3:
               title: Segment ID of third C6 segment
               description: Segment ID of third C6 segment
@@ -5406,6 +5619,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta4:
               title: Residue number of first residue
               description: Residue number of first residue in the fourth C6 symmetry
@@ -5415,6 +5629,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end4:
               title: Residue number of last residue
               description: Residue number of last residue in the fourth C6 symmetry
@@ -5423,6 +5638,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg4:
               title: Segment ID of fourth C6 segment
               description: Segment ID of fourth C6 segment
@@ -5430,6 +5646,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta5:
               title: Residue number of first residue
               description: Residue number of first residue in the fifth C6 symmetry
@@ -5438,6 +5655,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end5:
               title: Residue number of last residue
               description: Residue number of last residue in the fifth C6 symmetry
@@ -5446,6 +5664,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg5:
               title: Segment ID of fifth C6 segment
               description: Segment ID of fifth C6 segment
@@ -5453,6 +5672,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta6:
               title: Residue number of first residue
               description: Residue number of first residue in the sixth C6 symmetry
@@ -5461,6 +5681,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end6:
               title: Residue number of last residue
               description: Residue number of last residue in the sixth C6 symmetry
@@ -5469,6 +5690,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg6:
               title: Segment ID of sixth C6 segment
               description: Segment ID of sixth C6 segment
@@ -5476,6 +5698,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
           required: []
           additionalProperties: false
       nums3sym:
@@ -5501,6 +5724,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end1:
               title: Residue number of last residue
               description: Residue number of last residue in the first S3 symmetry
@@ -5509,6 +5733,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg1:
               title: Segment ID of first S3 segment
               description: Segment ID of first S3 segment
@@ -5516,6 +5741,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta2:
               title: Residue number of first residue
               description: Residue number of first residue in the second S3 symmetry
@@ -5525,6 +5751,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end2:
               title: Residue number of last residue
               description: Residue number of last residue in the second S3 symmetry
@@ -5533,6 +5760,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg2:
               title: Segment ID of second S3 segment
               description: Segment ID of second S3 segment
@@ -5540,6 +5768,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta3:
               title: Residue number of first residue
               description: Residue number of first residue in the third S3 symmetry
@@ -5548,6 +5777,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end3:
               title: Residue number of last residue
               description: Residue number of last residue in the third S3 symmetry
@@ -5556,6 +5786,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg3:
               title: Segment ID of third S3 segment
               description: Segment ID of third S3 segment
@@ -5563,6 +5794,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
           required: []
           additionalProperties: false
       ncs_on:
@@ -5605,6 +5837,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end1:
               title: Residue number of last residue
               description: Residue number of last residue in the first NCS segment
@@ -5612,6 +5845,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg1:
               title: Segment ID of first NCS segment
               description: Segment ID of first NCS segment
@@ -5619,6 +5853,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 100
+              format: chain
             sta2:
               title: Residue number of first residue
               description: Residue number of first residue in the second NCS segment
@@ -5626,6 +5861,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end2:
               title: Residue number of last residue
               description: Residue number of last residue in the second NCS segment
@@ -5633,6 +5869,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg2:
               title: Segment ID of second NCS segment
               description: Segment ID of second NCS segment
@@ -5640,6 +5877,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 100
+              format: chain
           required: []
           additionalProperties: false
       w_air:
@@ -6049,6 +6287,7 @@ nodes:
                 type: number
                 maximum: 9999
                 minimum: -9999
+                format: residue
               end:
                 title: Ending residue number
                 description: Residue number defining the end of the semi-flexible
@@ -6057,6 +6296,7 @@ nodes:
                 type: number
                 maximum: 9999
                 minimum: -9999
+                format: residue
             required: []
             additionalProperties: false
       nseg2:
@@ -6371,6 +6611,7 @@ nodes:
                 type: number
                 maximum: 9999
                 minimum: -9999
+                format: residue
               end:
                 title: End residue number
                 description: Residue number defining the end of the fully flexible
@@ -6379,6 +6620,7 @@ nodes:
                 type: number
                 maximum: 9999
                 minimum: -9999
+                format: residue
             required: []
             additionalProperties: false
       nfle2:
@@ -7166,6 +7408,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end1:
               title: Residue number of last residue
               description: Residue number of last residue in the first C2 symmetry
@@ -7174,6 +7417,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg1:
               title: Segment ID of first C2 segment
               description: Segment ID of first C2 segment
@@ -7181,6 +7425,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta2:
               title: Residue number of first residue
               description: Residue number of first residue in the second C2 symmetry
@@ -7190,6 +7435,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end2:
               title: Residue number of last residue
               description: Residue number of last residue in the second C2 symmetry
@@ -7198,6 +7444,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg2:
               title: Segment ID of second C2 segment
               description: Segment ID of second C2 segment
@@ -7205,6 +7452,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
           required: []
           additionalProperties: false
       numc3sym:
@@ -7230,6 +7478,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end1:
               title: Residue number of last residue
               description: Residue number of last residue in the first C3 symmetry
@@ -7238,6 +7487,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg1:
               title: Segment ID of first C3 segment
               description: Segment ID of first C3 segment
@@ -7245,6 +7495,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta2:
               title: Residue number of first residue
               description: Residue number of first residue in the second C3 symmetry
@@ -7254,6 +7505,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end2:
               title: Residue number of last residue
               description: Residue number of last residue in the second C3 symmetry
@@ -7262,6 +7514,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg2:
               title: Segment ID of second C3 segment
               description: Segment ID of second C3 segment
@@ -7269,6 +7522,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta3:
               title: Residue number of first residue
               description: Residue number of first residue in the third C3 symmetry
@@ -7277,6 +7531,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end3:
               title: Residue number of last residue
               description: Residue number of last residue in the third C3 symmetry
@@ -7285,6 +7540,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg3:
               title: Segment ID of third C3 segment
               description: Segment ID of third C3 segment
@@ -7292,6 +7548,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
           required: []
           additionalProperties: false
       numc4sym:
@@ -7317,6 +7574,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end1:
               title: Residue number of last residue
               description: Residue number of last residue in the first C4 symmetry
@@ -7325,6 +7583,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg1:
               title: Segment ID of first C4 segment
               description: Segment ID of first C4 segment
@@ -7332,6 +7591,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta2:
               title: Residue number of first residue
               description: Residue number of first residue in the second C4 symmetry
@@ -7341,6 +7601,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end2:
               title: Residue number of last residue
               description: Residue number of last residue in the second C4 symmetry
@@ -7349,6 +7610,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg2:
               title: Segment ID of second C4 segment
               description: Segment ID of second C4 segment
@@ -7356,6 +7618,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta3:
               title: Residue number of first residue
               description: Residue number of first residue in the third C4 symmetry
@@ -7364,6 +7627,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end3:
               title: Residue number of last residue
               description: Residue number of last residue in the third C4 symmetry
@@ -7372,6 +7636,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg3:
               title: Segment ID of third C4 segment
               description: Segment ID of third C4 segment
@@ -7379,6 +7644,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta4:
               title: Residue number of first residue
               description: Residue number of first residue in the fourth C4 symmetry
@@ -7388,6 +7654,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end4:
               title: Residue number of last residue
               description: Residue number of last residue in the fourth C4 symmetry
@@ -7396,6 +7663,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg4:
               title: Segment ID of fourth C4 segment
               description: Segment ID of fourth C4 segment
@@ -7403,6 +7671,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
           required: []
           additionalProperties: false
       numc5sym:
@@ -7428,6 +7697,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end1:
               title: Residue number of last residue
               description: Residue number of last residue in the first C5 symmetry
@@ -7436,6 +7706,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg1:
               title: Segment ID of first C5 segment
               description: Segment ID of first C5 segment
@@ -7443,6 +7714,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta2:
               title: Residue number of first residue
               description: Residue number of first residue in the second C5 symmetry
@@ -7452,6 +7724,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end2:
               title: Residue number of last residue
               description: Residue number of last residue in the second C5 symmetry
@@ -7460,6 +7733,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg2:
               title: Segment ID of second C5 segment
               description: Segment ID of second C5 segment
@@ -7467,6 +7741,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta3:
               title: Residue number of first residue
               description: Residue number of first residue in the third C5 symmetry
@@ -7475,6 +7750,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end3:
               title: Residue number of last residue
               description: Residue number of last residue in the third C5 symmetry
@@ -7483,6 +7759,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg3:
               title: Segment ID of third C5 segment
               description: Segment ID of third C5 segment
@@ -7490,6 +7767,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta4:
               title: Residue number of first residue
               description: Residue number of first residue in the fourth C5 symmetry
@@ -7499,6 +7777,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end4:
               title: Residue number of last residue
               description: Residue number of last residue in the fourth C5 symmetry
@@ -7507,6 +7786,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg4:
               title: Segment ID of fourth C5 segment
               description: Segment ID of fourth C5 segment
@@ -7514,6 +7794,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta5:
               title: Residue number of first residue
               description: Residue number of first residue in the fifth C5 symmetry
@@ -7522,6 +7803,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end5:
               title: Residue number of last residue
               description: Residue number of last residue in the fifth C5 symmetry
@@ -7530,6 +7812,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg5:
               title: Segment ID of fifth C5 segment
               description: Segment ID of fifth C5 segment
@@ -7537,6 +7820,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
           required: []
           additionalProperties: false
       numc6sym:
@@ -7562,6 +7846,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end1:
               title: Residue number of last residue
               description: Residue number of last residue in the first C6 symmetry
@@ -7570,6 +7855,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg1:
               title: Segment ID of first C6 segment
               description: Segment ID of first C6 segment
@@ -7577,6 +7863,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta2:
               title: Residue number of first residue
               description: Residue number of first residue in the second C6 symmetry
@@ -7586,6 +7873,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end2:
               title: Residue number of last residue
               description: Residue number of last residue in the second C6 symmetry
@@ -7594,6 +7882,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg2:
               title: Segment ID of second C6 segment
               description: Segment ID of second C6 segment
@@ -7601,6 +7890,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta3:
               title: Residue number of first residue
               description: Residue number of first residue in the third C6 symmetry
@@ -7609,6 +7899,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end3:
               title: Residue number of last residue
               description: Residue number of last residue in the third C6 symmetry
@@ -7617,6 +7908,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg3:
               title: Segment ID of third C6 segment
               description: Segment ID of third C6 segment
@@ -7624,6 +7916,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta4:
               title: Residue number of first residue
               description: Residue number of first residue in the fourth C6 symmetry
@@ -7633,6 +7926,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end4:
               title: Residue number of last residue
               description: Residue number of last residue in the fourth C6 symmetry
@@ -7641,6 +7935,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg4:
               title: Segment ID of fourth C6 segment
               description: Segment ID of fourth C6 segment
@@ -7648,6 +7943,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta5:
               title: Residue number of first residue
               description: Residue number of first residue in the fifth C6 symmetry
@@ -7656,6 +7952,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end5:
               title: Residue number of last residue
               description: Residue number of last residue in the fifth C6 symmetry
@@ -7664,6 +7961,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg5:
               title: Segment ID of fifth C6 segment
               description: Segment ID of fifth C6 segment
@@ -7671,6 +7969,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta6:
               title: Residue number of first residue
               description: Residue number of first residue in the sixth C6 symmetry
@@ -7679,6 +7978,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end6:
               title: Residue number of last residue
               description: Residue number of last residue in the sixth C6 symmetry
@@ -7687,6 +7987,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg6:
               title: Segment ID of sixth C6 segment
               description: Segment ID of sixth C6 segment
@@ -7694,6 +7995,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
           required: []
           additionalProperties: false
       nums3sym:
@@ -7719,6 +8021,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end1:
               title: Residue number of last residue
               description: Residue number of last residue in the first S3 symmetry
@@ -7727,6 +8030,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg1:
               title: Segment ID of first S3 segment
               description: Segment ID of first S3 segment
@@ -7734,6 +8038,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta2:
               title: Residue number of first residue
               description: Residue number of first residue in the second S3 symmetry
@@ -7743,6 +8048,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end2:
               title: Residue number of last residue
               description: Residue number of last residue in the second S3 symmetry
@@ -7751,6 +8057,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg2:
               title: Segment ID of second S3 segment
               description: Segment ID of second S3 segment
@@ -7758,6 +8065,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             sta3:
               title: Residue number of first residue
               description: Residue number of first residue in the third S3 symmetry
@@ -7766,6 +8074,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end3:
               title: Residue number of last residue
               description: Residue number of last residue in the third S3 symmetry
@@ -7774,6 +8083,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg3:
               title: Segment ID of third S3 segment
               description: Segment ID of third S3 segment
@@ -7781,6 +8091,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
           required: []
           additionalProperties: false
       ncs_on:
@@ -7823,6 +8134,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end1:
               title: Residue number of last residue
               description: Residue number of last residue in the first NCS segment
@@ -7830,6 +8142,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg1:
               title: Segment ID of first NCS segment
               description: Segment ID of first NCS segment
@@ -7837,6 +8150,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 100
+              format: chain
             sta2:
               title: Residue number of first residue
               description: Residue number of first residue in the second NCS segment
@@ -7844,6 +8158,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             end2:
               title: Residue number of last residue
               description: Residue number of last residue in the second NCS segment
@@ -7851,6 +8166,7 @@ nodes:
               type: number
               maximum: 9999
               minimum: -9999
+              format: residue
             seg2:
               title: Segment ID of second NCS segment
               description: Segment ID of second NCS segment
@@ -7858,6 +8174,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 100
+              format: chain
           required: []
           additionalProperties: false
       w_air:
@@ -8117,6 +8434,7 @@ nodes:
                 type: number
                 maximum: 9999
                 minimum: -9999
+                format: residue
               end:
                 title: Ending residue number
                 description: Residue number defining the end of the semi-flexible
@@ -8125,6 +8443,7 @@ nodes:
                 type: number
                 maximum: 9999
                 minimum: -9999
+                format: residue
             required: []
             additionalProperties: false
       nseg2:
@@ -8439,6 +8758,7 @@ nodes:
                 type: number
                 maximum: 9999
                 minimum: -9999
+                format: residue
               end:
                 title: End residue number
                 description: Residue number defining the end of the fully flexible
@@ -8447,6 +8767,7 @@ nodes:
                 type: number
                 maximum: 9999
                 minimum: -9999
+                format: residue
             required: []
             additionalProperties: false
       nfle2:

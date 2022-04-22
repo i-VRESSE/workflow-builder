@@ -269,6 +269,7 @@ nodes:
         type: string
         minLength: 0
         maxLength: 100
+        format: chain
       receptor_active:
         type: string
         minLength: 0
@@ -282,6 +283,7 @@ nodes:
         type: string
         minLength: 0
         maxLength: 100
+        format: chain
       ligand_active:
         type: string
         minLength: 0
@@ -443,6 +445,7 @@ nodes:
               type: string
               minLength: 0
               maxLength: 4
+              format: chain
             cyclicpept:
               default: false
               title: Cyclic peptide
@@ -473,6 +476,7 @@ nodes:
                 type: number
                 maximum: 9999
                 minimum: -9999
+                format: residue
             nhise:
               default: 0
               title: Number of HISE residue
@@ -494,6 +498,7 @@ nodes:
                 type: number
                 maximum: 9999
                 minimum: -9999
+                format: residue
           required: []
           additionalProperties: false
     required: []
@@ -677,6 +682,7 @@ nodes:
         type: string
         minLength: 1
         maxLength: 1
+        format: chain
       ligand_chain:
         default: B
         title: Ligand ChainID
@@ -687,6 +693,7 @@ nodes:
         type: string
         minLength: 1
         maxLength: 1
+        format: chain
       sortby:
         default: score
         title: Sort the structures/clusters in the output file by this value
