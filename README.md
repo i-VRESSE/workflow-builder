@@ -9,7 +9,7 @@ The main branch is published at https://wonderful-noether-53a9e8.netlify.app/
 
 ## Develop
 
-Requires [NodeJS](https://nodejs.org/) and [yarn]().
+Requires [NodeJS](https://nodejs.org/) and [yarn](https://yarnpkg.com/).
 
 ```shell
 # Install dependencies
