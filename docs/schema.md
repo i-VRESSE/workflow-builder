@@ -123,7 +123,7 @@ and a PDB file was uploaded to the global parameters
 
 ```json
 {
-  molecules: ["abcd.pdb"]
+  "molecules": ["abcd.pdb"]
 }
 ```
 

@@ -1,9 +1,5 @@
 [
     [
-        "molaware",
-        "/catalog/molaware.yaml"
-    ],
-    [
         "haddock3easy",
         "/catalog/haddock3.easy.yaml"
     ],
@@ -18,5 +14,9 @@
     [
         "kitchensink",
         "/catalog/kitchensink.yaml"
+    ],
+    [
+        "molaware",
+        "/catalog/molaware.yaml"
     ]
 ]
