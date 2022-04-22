@@ -171,10 +171,10 @@ nodes:
           items:
             type: object
             properties:
-              prop5a:
+              prop7a:
                 type: string
                 default: x
-              prop5b:
+              prop7b:
                 type: string
                 default: x
       prop8:
