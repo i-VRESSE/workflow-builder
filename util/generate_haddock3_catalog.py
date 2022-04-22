@@ -38,6 +38,7 @@ Translations from haddock3 -> i-VRESSE workflow builder:
     * explevel -> each explevel gets generated into own catalog
     * group -> ui:group in ui schema
     * expandable (*_1) -> arrays and objects + tomlschema
+    * mol_* or *_*_1_1 -> maxItemsFrom:molecules aka array should have same size as global molecules parameter
 
 TODO move script outside workflow-builder repo as this repo should be generic and not have any haddock specific scripts
 """
@@ -91,7 +92,12 @@ def collapse_expandable(config):
         elif match := re.match(array_of_array_of_object, k):
             p, n = match.groups()
             if p not in new_config:
-                new_config[p] = {'dim': 2, 'properties': {}, 'type': 'list'}
+                new_config[p] = {
+                    'dim': 2, 
+                    'properties': {}, 
+                    'type': 'list',
+                    'maxItemsFrom': 'molecules'
+                }
             new_config[p]['properties'][n] = v
             if 'group' in v:
                 # Move group from nested prop to outer array
@@ -122,6 +128,8 @@ def collapse_expandable(config):
                 'dim': 1,
                 'items': v
             }
+            if k.startswith('mol_'):
+                new_config[p]['maxItemsFrom'] = 'molecules'
             if 'group' in v:
                 new_config[p]['group'] = v['group']
                 del v['group']
@@ -230,6 +238,8 @@ def config2schema(config):
                 prop['minItems'] = v['minitems']
             if 'maxitems' in v:
                 prop['maxItems'] = v['maxitems']
+            elif 'maxItemsFrom' in v:
+                prop['maxItemsFrom'] = v['maxItemsFrom']
             if 'properties' in v:
                 obj_schemas = config2schema(v['properties'])
                 if v['dim'] == 1:
@@ -299,6 +309,7 @@ def config2schema(config):
                     "type": "string",
                     "format": "uri-reference"
                 }
+                prop['format'] = 'moleculepaths'
                 prop_ui = {
                     'items': {
                          'ui:widget': 'file',
