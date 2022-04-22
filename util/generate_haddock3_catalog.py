@@ -319,7 +319,7 @@ def config2schema(config):
                     "type": "string",
                     "format": "uri-reference"
                 }
-                prop['format'] = 'moleculepaths'
+                prop['format'] = 'moleculefilepaths'
                 prop_ui = {
                     'items': {
                          'ui:widget': 'file',

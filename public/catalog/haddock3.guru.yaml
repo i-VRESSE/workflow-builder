@@ -31,7 +31,7 @@ global:
         items:
           type: string
           format: uri-reference
-        format: moleculepaths
+        format: moleculefilepaths
       cns_exec:
         title: Path to the CNS executable
         description: If not provided, HADDOCK3 will use the cns path configured during
