@@ -39,6 +39,8 @@ Translations from haddock3 -> i-VRESSE workflow builder:
     * group -> ui:group in ui schema
     * expandable (*_1) -> arrays and objects + tomlschema
     * mol_* or *_*_1_1 -> maxItemsFrom:molecules aka array should have same size as global molecules parameter
+    * 'residue number' in title -> format:residue
+    * 'chain' or 'segment id' in title -> format:chain
 
 TODO move script outside workflow-builder repo as this repo should be generic and not have any haddock specific scripts
 """
@@ -93,8 +95,8 @@ def collapse_expandable(config):
             p, n = match.groups()
             if p not in new_config:
                 new_config[p] = {
-                    'dim': 2, 
-                    'properties': {}, 
+                    'dim': 2,
+                    'properties': {},
                     'type': 'list',
                     'maxItemsFrom': 'molecules'
                 }
