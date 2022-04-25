@@ -21,7 +21,8 @@ export async function loadWorkflowArchive (archiveURL: string, catalog: ICatalog
   )
   const errors = validateWorkflow({
     global,
-    nodes
+    nodes,
+    files
   }, {
     global: catalog.global,
     nodes: catalog.nodes
