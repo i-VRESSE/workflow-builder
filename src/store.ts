@@ -5,7 +5,7 @@ import { UiSchema } from '@rjsf/core'
 import { externalizeDataUrls, internalizeDataUrls } from './dataurls'
 import { saveArchive } from './archive'
 import { ICatalog, IWorkflowNode, IFiles, IParameters, ICatalogNode, ICatalogIndex } from './types'
-import { workflow2tomltext } from './toml'
+import { catalog2tomlSchemas, workflow2tomltext } from './toml'
 import { dropUnusedFiles, loadWorkflowArchive, emptyParams, clearFiles } from './workflow'
 import { fetchCatalogIndex, fetchCatalog } from './catalog'
 import { catalogIndexURL } from './constants'
@@ -310,7 +310,7 @@ export function useWorkflow (): UseWorkflow {
       setGlobal(r.global)
     },
     async save () {
-      await saveArchive(nodes, global, files)
+      await saveArchive(nodes, global, files, catalog2tomlSchemas(catalog))
     },
     moveNodeDown (nodeIndex: number) {
       if (nodeIndex + 1 < nodes.length) {
@@ -341,6 +341,5 @@ export function useFiles (): IFiles {
 export function useText (): string {
   const { nodes, global } = useWorkflow()
   const catalog = useCatalog()
-  const tomlSchema4nodes = Object.fromEntries(catalog.nodes.map(n => [n.id, n.tomlSchema !== undefined ? n.tomlSchema : {}]))
-  return workflow2tomltext(nodes, global, tomlSchema4nodes)
+  return workflow2tomltext(nodes, global, catalog2tomlSchemas(catalog))
 }

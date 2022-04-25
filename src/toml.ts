@@ -1,6 +1,17 @@
 import { Section, stringify, parse } from '@ltd/j-toml'
 import { isObject } from './utils/isObject'
-import { IWorkflowNode, IParameters, IWorkflow, TomlObjectSchema } from './types'
+import { IWorkflowNode, IParameters, IWorkflow, TomlObjectSchema, ICatalog } from './types'
+
+export interface TomlSchemas {
+  nodes: Record<string, TomlObjectSchema>
+  global: TomlObjectSchema
+}
+
+export function catalog2tomlSchemas (catalog: ICatalog): TomlSchemas {
+  const nodes = Object.fromEntries(catalog.nodes.map(n => [n.id, n.tomlSchema !== undefined ? n.tomlSchema : {}]))
+  const global = catalog.global.tomlSchema ?? {}
+  return { nodes, global }
+}
 
 function nodes2tomltable (nodes: IWorkflowNode[], tomlSchema4nodes: Record<string, TomlObjectSchema> = {}): Record<string, unknown> {
   const table: Record<string, unknown> = {}
@@ -78,12 +89,11 @@ function parameters2toml (parameters: IParameters, tomlSchema: TomlObjectSchema)
 export function workflow2tomltext (
   nodes: IWorkflowNode[],
   global: IParameters,
-  tomlSchema4nodes: Record<string, TomlObjectSchema> = {},
-  tomlSchema4global: TomlObjectSchema = {}
+  tomlSchemas: TomlSchemas
 ): string {
   const table = {
-    ...nodes2tomltable(nodes, tomlSchema4nodes),
-    ...parameters2toml(global, tomlSchema4global)
+    ...nodes2tomltable(nodes, tomlSchemas.nodes),
+    ...parameters2toml(global, tomlSchemas.global)
   }
   const text = stringify(table, {
     newline: '\n',

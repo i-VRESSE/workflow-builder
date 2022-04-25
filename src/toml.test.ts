@@ -1,5 +1,5 @@
 import { expect, describe, it } from 'vitest'
-import { parseWorkflow, workflow2tomltext } from './toml'
+import { parseWorkflow, TomlSchemas, workflow2tomltext } from './toml'
 import { IParameters } from './types'
 
 describe('workflow2tomltext()', () => {
@@ -15,17 +15,20 @@ describe('workflow2tomltext()', () => {
       }
     }]
 
-    const tomlSchema = {
-      somenode: {
-        foo: {
-          items: {
-            sectioned: true
+    const tomlSchemas = {
+      nodes: {
+        somenode: {
+          foo: {
+            items: {
+              sectioned: true
+            }
           }
         }
-      }
+      },
+      global: {}
     }
 
-    const result = workflow2tomltext(nodes, {}, tomlSchema)
+    const result = workflow2tomltext(nodes, {}, tomlSchemas)
     const expected = `
 [somenode]
 
@@ -55,8 +58,8 @@ bar = 'fizzz'
         }
       }
     ]
-
-    const result = workflow2tomltext(nodes, {})
+    const tomlSchemas: TomlSchemas = { nodes: {}, global: {} }
+    const result = workflow2tomltext(nodes, {}, tomlSchemas)
     const expected = `
 [somenode]
 
@@ -76,13 +79,15 @@ foo = 'fizz'
         foo: ['biz', 'fiz']
       }
     }]
-    const tomlSchema4nodes = {
-      somenode: {
-        foo: { indexed: true }
-      }
+    const tomlSchemas: TomlSchemas = {
+      nodes: {
+        somenode: {
+          foo: { indexed: true }
+        }
+      },
+      global: {}
     }
-    const tomlSchema4global = {}
-    const result = workflow2tomltext(nodes, {}, tomlSchema4nodes, tomlSchema4global)
+    const result = workflow2tomltext(nodes, {}, tomlSchemas)
     const expected = `
 [somenode]
 
@@ -105,13 +110,15 @@ foo_2 = 'fiz'
         }]
       }
     }]
-    const tomlSchema4nodes = {
-      somenode: {
-        name: { indexed: true, items: { flatten: true } }
-      }
+    const tomlSchemas: TomlSchemas = {
+      nodes: {
+        somenode: {
+          name: { indexed: true, items: { flatten: true } }
+        }
+      },
+      global: {}
     }
-    const tomlSchema4global = {}
-    const result = workflow2tomltext(nodes, {}, tomlSchema4nodes, tomlSchema4global)
+    const result = workflow2tomltext(nodes, {}, tomlSchemas)
     const expected = `
 [somenode]
 
@@ -147,13 +154,15 @@ name_something_else_2 = 44
         ]
       }
     }]
-    const tomlSchema4nodes = {
-      somenode: {
-        fle: { indexed: true, items: { indexed: true, items: { flatten: true } } }
-      }
+    const tomlSchemas: TomlSchemas = {
+      nodes: {
+        somenode: {
+          fle: { indexed: true, items: { indexed: true, items: { flatten: true } } }
+        }
+      },
+      global: {}
     }
-    const tomlSchema4global = {}
-    const result = workflow2tomltext(nodes, {}, tomlSchema4nodes, tomlSchema4global)
+    const result = workflow2tomltext(nodes, {}, tomlSchemas)
     const expected = `
 [somenode]
 
@@ -180,23 +189,25 @@ fle_end_2_1 = 66
         }]
       }
     }]
-    const tomlSchema4nodes = {
-      somenode: {
-        mol: {
-          indexed: true,
-          items: {
-            sectioned: true,
-            properties: {
-              hisd: {
-                indexed: true
+    const tomlSchemas: TomlSchemas = {
+      nodes: {
+        somenode: {
+          mol: {
+            indexed: true,
+            items: {
+              sectioned: true,
+              properties: {
+                hisd: {
+                  indexed: true
+                }
               }
             }
           }
         }
-      }
+      },
+      global: {}
     }
-    const tomlSchema4global = {}
-    const result = workflow2tomltext(nodes, {}, tomlSchema4nodes, tomlSchema4global)
+    const result = workflow2tomltext(nodes, {}, tomlSchemas)
     const expected = `
 [somenode]
 
@@ -226,8 +237,8 @@ hisd_2 = 512
       key7: [[1, 2], [3, 4]], // Array of array of scalar
       key8: [[{ a: 1 }, { a: 2 }], [{ a: 3 }, { a: 4 }]] // Array of array of object
     }
-    const tomlSchema = {}
-    const result = workflow2tomltext([], globalParameters, {}, tomlSchema)
+    const tomlSchemas: TomlSchemas = { nodes: {}, global: {} }
+    const result = workflow2tomltext([], globalParameters, tomlSchemas)
     const expected = `
 key1 = [
   1,
@@ -290,15 +301,18 @@ key8 = [
         }
       }
     ]
-    const tomlSchema = {
-      somenode: {
-        foo: {
-          sectioned: true
+    const tomlSchemas: TomlSchemas = {
+      nodes: {
+        somenode: {
+          foo: {
+            sectioned: true
+          }
         }
-      }
+      },
+      global: {}
     }
 
-    const result = workflow2tomltext(nodes, {}, tomlSchema)
+    const result = workflow2tomltext(nodes, {}, tomlSchemas)
     const expected = `
 [somenode]
 
