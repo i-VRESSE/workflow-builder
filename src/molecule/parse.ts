@@ -1,3 +1,5 @@
+import pdbtbx, { open_pdb } from 'pdbtbx-ts'
+
 export interface MoleculeInfo {
   chains: string[]
   residueSequenceNumbers: number[]
@@ -20,5 +22,15 @@ export function parsePDB (content: string): MoleculeInfo {
   return {
     chains: Array.from(chains),
     residueSequenceNumbers: Array.from(residueSequenceNumbers)
+  }
+}
+
+export async function parsePDB2 (content: string): Promise<MoleculeInfo> {
+  const mod = new URL('../../node_modules/pdbtbx-ts/pdbtbx_ts_bg.wasm', import.meta.url)
+  await pdbtbx(mod)
+  const info = open_pdb(content)
+  return {
+    chains: info.chains.split(','),
+    residueSequenceNumbers: [...info.residue_sequence_numbers]
   }
 }

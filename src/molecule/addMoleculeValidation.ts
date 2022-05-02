@@ -3,10 +3,10 @@ import { dataURL2content } from '../dataurls'
 import { JSONSchema7WithMaxItemsFrom } from '../resolveMaxItemsFrom'
 import { IFiles, IParameters } from '../types'
 import { moleculeFormats } from './formats'
-import { MoleculeInfo, parsePDB } from './parse'
+import { MoleculeInfo, parsePDB2 } from './parse'
 
 // TODO can be quite expensive to parse big molecules, should try to use memoization
-function parseMolecules (globalParameters: IParameters, globalSchema: JSONSchema7, files: IFiles): [MoleculeInfo[], string | undefined] {
+async function parseMolecules (globalParameters: IParameters, globalSchema: JSONSchema7, files: IFiles): Promise<[MoleculeInfo[], string | undefined]> {
   if (globalSchema.properties === undefined) {
     return [[], undefined]
   }
@@ -29,10 +29,10 @@ function parseMolecules (globalParameters: IParameters, globalSchema: JSONSchema
   // TODO check whether files are actually PDB files using uiSchema.molecules..items.ui:options.accept: .pdb
   const moleculeFiles = moleculeFilePaths.map(p => files[p])
   // parse file
-  const moleculeInfos = moleculeFiles.map(f => {
+  const moleculeInfos = await Promise.all(moleculeFiles.map(async f => {
     const body = dataURL2content(f)
-    return parsePDB(body)
-  })
+    return await parsePDB2(body)
+  }))
   return [moleculeInfos, moleculesPropName]
 }
 
@@ -130,8 +130,8 @@ function walkSchemaForMoleculeFormats (schema: JSONSchema7, moleculeInfos: Molec
   return newSchema
 }
 
-export function addMoleculeValidation (schema: JSONSchema7, globalParameters: IParameters, globalSchema: JSONSchema7, files: IFiles): JSONSchema7 {
-  const [moleculeInfos, moleculesPropName] = parseMolecules(globalParameters, globalSchema, files)
+export async function addMoleculeValidation (schema: JSONSchema7, globalParameters: IParameters, globalSchema: JSONSchema7, files: IFiles): Promise<JSONSchema7> {
+  const [moleculeInfos, moleculesPropName] = await parseMolecules(globalParameters, globalSchema, files)
   if (moleculesPropName !== undefined) {
     return walkSchemaForMoleculeFormats(schema, moleculeInfos, moleculesPropName)
   }
