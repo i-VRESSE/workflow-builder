@@ -26,6 +26,8 @@ export function parsePDB (content: string): MoleculeInfo {
 }
 
 export async function parsePDB2 (content: string): Promise<MoleculeInfo> {
+  // To make vite aware of wasm file, it needs to passed to pdbtbx-ts default method.
+  // TODO make prettier URL
   const mod = new URL('../../node_modules/pdbtbx-ts/pdbtbx_ts_bg.wasm', import.meta.url)
   await pdbtbx(mod)
   const info = open_pdb(content)
