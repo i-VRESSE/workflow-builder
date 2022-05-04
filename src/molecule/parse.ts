@@ -25,7 +25,7 @@ export function parsePDB (content: string): MoleculeInfo {
       chains.add(chainID)
       const resSeq = parseInt(l.substring(22, 26))
       residueSequenceNumbers.add(resSeq)
-    })    
+    })
   return {
     chains: Array.from(chains),
     residueSequenceNumbers: Array.from(residueSequenceNumbers)
