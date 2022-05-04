@@ -19,6 +19,15 @@ export function parsePDB (content: string): MoleculeInfo {
       const resSeq = parseInt(l.substring(22, 26))
       residueSequenceNumbers.add(resSeq)
     })
+  pdbLines
+    .filter(l => l.startsWith('HETATM'))
+    .forEach((l) => {
+      // Use HETATM record format v3.3, see http://www.wwpdb.org/documentation/file-format-content/format33/sect9.html#HETATM
+      const chainID = l.substring(21, 22).trim()
+      chains.add(chainID)
+      const resSeq = parseInt(l.substring(22, 26))
+      residueSequenceNumbers.add(resSeq)
+    })
   return {
     chains: Array.from(chains),
     residueSequenceNumbers: Array.from(residueSequenceNumbers)

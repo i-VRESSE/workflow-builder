@@ -49,6 +49,28 @@ describe('parsePDB', () => {
         chains: ['A', 'B'],
         residueSequenceNumbers: [-3, 75]
       }
+    ],
+    [
+      'given only hetatom shoulds return their chains and residues',
+      dedent`
+        HETATM    1  C1  G39 B 500     -30.374 -53.143   6.122  1.00 31.18      B    C
+        HETATM    2  O1A G39 B 500     -31.439 -52.533   5.850  1.00 30.30      B    O
+      `,
+      {
+        chains: ['B'],
+        residueSequenceNumbers: [500]
+      }
+    ],
+    [
+      'given atoms and hetatom should return their chains and residues',
+      dedent`
+        ATOM     32  N  AARG A  -3      11.281  86.699  94.383  0.50 35.88           N
+        HETATM    1  C1  G39 B 500     -30.374 -53.143   6.122  1.00 31.18      B    C
+      `,
+      {
+        chains: ['A', 'B'],
+        residueSequenceNumbers: [-3, 500]
+      }
     ]
   ]
   it.each(cases)('%s', (_description, input, expected) => {
