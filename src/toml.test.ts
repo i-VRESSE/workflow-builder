@@ -244,26 +244,31 @@ key1 = [
   1,
   2,
 ]
+
 key2 = [
   'a',
   'b',
 ]
+
 key3.a = 1
 key3.b = 2
 key4.a = [
   1,
   2,
 ]
+
 key5 = [
   { a = 1 },
   { a = 2 },
 ]
+
 key6 = [
   { a = [
     1,
     2,
   ] },
 ]
+
 key7 = [
   [
     1,
@@ -274,6 +279,7 @@ key7 = [
     4,
   ],
 ]
+
 key8 = [
   [
     { a = 1 },
@@ -284,6 +290,7 @@ key8 = [
     { a = 4 },
   ],
 ]
+
 `
     expect(result).toEqual(expected)
   })

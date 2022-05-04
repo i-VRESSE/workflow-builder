@@ -99,7 +99,7 @@ export function workflow2tomltext (
     newline: '\n',
     indent: 2,
     integer: Number.MAX_SAFE_INTEGER
-  })
+  }).replaceAll(/\n\]\n/g, '\n]\n\n') // haddock3 requires newline after array
   return text
 }
 
