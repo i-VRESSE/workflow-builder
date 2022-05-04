@@ -64,11 +64,11 @@ function walkSchemaForMoleculeFormats (schema: JSONSchema7, moleculeInfos: Molec
               const items = moleculeInfos.map((molinfo) => {
                 const properties = Object.fromEntries(Object.entries(s4).map(([pk, pv]) => {
                   if (typeof pv !== 'boolean' && !Array.isArray(pv) && 'format' in pv) {
-                    if (pv.format === 'chain') {
+                    if (pv.format === 'chain' && molinfo.chains.length > 0) {
                       const npv = { ...pv, enum: molinfo.chains }
                       return [pk, npv]
                     }
-                    if (pv.format === 'residue') {
+                    if (pv.format === 'residue' && molinfo.residueSequenceNumbers.length > 0) {
                       const npv = { ...pv, enum: molinfo.residueSequenceNumbers }
                       return [pk, npv]
                     }
