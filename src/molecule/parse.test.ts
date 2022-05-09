@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import dedent from 'ts-dedent'
-import { parsePDB, MoleculeInfo, parsePDB2 } from './parse'
+import { parsePDB, MoleculeInfo } from './parse'
 
 describe('parsePDB', () => {
   const cases: Array<[string, string, MoleculeInfo]> = [
@@ -73,22 +73,8 @@ describe('parsePDB', () => {
       }
     ]
   ]
-  it.each(cases)('%s', (_description, input, expected) => {
-    const actual = parsePDB(input)
-    expect(actual).toStrictEqual(expected)
-  })
-})
-
-describe('parsePDB2', () => {
-  it('given empty file should return zero chains and zero residues', async () => {
-    const input = ''
-
-    const actual = await parsePDB2(input)
-
-    const expected = {
-      chains: [],
-      residueSequenceNumbers: []
-    }
+  it.each(cases)('%s', async (_description, input, expected) => {
+    const actual = await parsePDB(input)
     expect(actual).toStrictEqual(expected)
   })
 })

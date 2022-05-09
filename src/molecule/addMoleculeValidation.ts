@@ -3,7 +3,7 @@ import { dataURL2content } from '../dataurls'
 import { JSONSchema7WithMaxItemsFrom } from '../resolveMaxItemsFrom'
 import { IFiles, IParameters } from '../types'
 import { moleculeFormats } from './formats'
-import { MoleculeInfo, parsePDB2 } from './parse'
+import { MoleculeInfo, parsePDB } from './parse'
 
 // TODO can be quite expensive to parse big molecules, should try to use memoization
 async function parseMolecules (globalParameters: IParameters, globalSchema: JSONSchema7, files: IFiles): Promise<[MoleculeInfo[], string | undefined]> {
@@ -31,7 +31,7 @@ async function parseMolecules (globalParameters: IParameters, globalSchema: JSON
   // parse file
   const moleculeInfos = await Promise.all(moleculeFiles.map(async f => {
     const body = dataURL2content(f)
-    return await parsePDB2(body)
+    return await parsePDB(body)
   }))
   return [moleculeInfos, moleculesPropName]
 }
