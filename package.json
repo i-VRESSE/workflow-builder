@@ -12,6 +12,7 @@
     "build-storybook": "build-storybook"
   },
   "dependencies": {
+    "@i-vresse/pdbtbx-ts": "0.1.1",
     "@ltd/j-toml": "^1.24.0",
     "@rjsf/bootstrap-4": "^3.2.1",
     "@rjsf/core": "^3.2.1",
@@ -21,7 +22,6 @@
     "bootstrap": "^4",
     "file-saver": "^2.0.5",
     "js-yaml": "^4.1.0",
-    "pdbtbx-ts": "../pdbtbx-ts/pkg",
     "react": "^17.0.0",
     "react-bootstrap": "^1",
     "react-bootstrap-icons": "^1.7.2",
