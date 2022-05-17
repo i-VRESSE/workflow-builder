@@ -74,7 +74,7 @@ The `maxItemsFrom` keyword only works when the property is of type array and the
 
 To restrict the residues sequence numbers or to restrict the possible chains. You can use the `residue` and `chain` formats.
 
-To compute the valid residues sequence numbers of a property the builder needs to to know which PDB file that belongs to that property. This is done by annotating the parent array property with `maxItemsFrom: <global parameter name which holds molecule paths>` and annotating that global parameter with `format: moleculefilepaths`.
+To compute the valid residues sequence numbers of a property the builder needs to know which PDB file that belongs to that property. This is done by annotating the parent array property with `maxItemsFrom: <global parameter name which holds molecule paths>` and annotating that global parameter with `format: moleculefilepaths`.
 
 For example a schema of a node
 
