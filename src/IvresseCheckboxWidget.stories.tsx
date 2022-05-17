@@ -3,6 +3,7 @@ import { action } from '@storybook/addon-actions'
 import { Form } from './Form'
 import { JSONSchema7 } from 'json-schema'
 import { IvresseCheckboxWidget } from './IvresseCheckboxWidget'
+import { IvresseDescriptionField } from './IvresseDescriptionField'
 
 
 const meta: ComponentMeta<typeof IvresseCheckboxWidget> = {
@@ -14,11 +15,13 @@ export default meta
 
 function render(schema: JSONSchema7): JSX.Element {
   const customWidgets = {CheckboxWidget: IvresseCheckboxWidget};
+  const customFields = {DescriptionField: IvresseDescriptionField};
   return (
     <Form
       schema={schema}
       onSubmit={action('onSubmit')}
       widgets={customWidgets}
+      fields={customFields}
     />
   )
 }
