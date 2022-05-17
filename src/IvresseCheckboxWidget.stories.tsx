@@ -2,28 +2,29 @@ import { ComponentMeta, ComponentStory } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
 import { Form } from './Form'
 import { JSONSchema7 } from 'json-schema'
-import { Widgets } from '@rjsf/bootstrap-4/'
+import { IvresseCheckboxWidget } from './IvresseCheckboxWidget'
 
 
-const meta: ComponentMeta<typeof Widgets.CheckboxWidget> = {
+const meta: ComponentMeta<typeof IvresseCheckboxWidget> = {
   title: 'Checkbox',
-  component: Widgets.CheckboxWidget
+  component: IvresseCheckboxWidget
 }
 
 export default meta
 
 function render(schema: JSONSchema7): JSX.Element {
-  debugger
+  const customWidgets = {CheckboxWidget: IvresseCheckboxWidget};
   return (
     <Form
       schema={schema}
       onSubmit={action('onSubmit')}
+      widgets={customWidgets}
     />
   )
 }
 
 
-export const CheckboxWidget: ComponentStory<typeof Form> = () => {
+export const CheckboxWidgetDescription: ComponentStory<typeof Form> = () => {
   const schema: JSONSchema7 = {
     "type": "object",
     "title": "Boolean field",
