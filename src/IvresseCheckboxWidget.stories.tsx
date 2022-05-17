@@ -5,7 +5,6 @@ import { JSONSchema7 } from 'json-schema'
 import { IvresseCheckboxWidget } from './IvresseCheckboxWidget'
 import { IvresseDescriptionField } from './IvresseDescriptionField'
 
-
 const meta: ComponentMeta<typeof IvresseCheckboxWidget> = {
   title: 'Checkbox',
   component: IvresseCheckboxWidget
@@ -13,9 +12,9 @@ const meta: ComponentMeta<typeof IvresseCheckboxWidget> = {
 
 export default meta
 
-function render(schema: JSONSchema7): JSX.Element {
-  const customWidgets = {CheckboxWidget: IvresseCheckboxWidget};
-  const customFields = {DescriptionField: IvresseDescriptionField};
+function render (schema: JSONSchema7): JSX.Element {
+  const customWidgets = { CheckboxWidget: IvresseCheckboxWidget }
+  const customFields = { DescriptionField: IvresseDescriptionField }
   return (
     <Form
       schema={schema}
@@ -26,16 +25,15 @@ function render(schema: JSONSchema7): JSX.Element {
   )
 }
 
-
 export const CheckboxWidgetDescription: ComponentStory<typeof Form> = () => {
   const schema: JSONSchema7 = {
-    "type": "object",
-    "title": "Boolean field",
-    "properties": {
-      "default": {
-        "type": "boolean",
-        "title": "checkbox (default)",
-        "description": "This is the checkbox-description"
+    type: 'object',
+    title: 'Boolean field',
+    properties: {
+      default: {
+        type: 'boolean',
+        title: 'checkbox (default)',
+        description: 'This is the checkbox-description'
       }
     },
     additionalProperties: false
@@ -43,5 +41,3 @@ export const CheckboxWidgetDescription: ComponentStory<typeof Form> = () => {
 
   return render(schema)
 }
-
-
