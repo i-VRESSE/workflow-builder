@@ -18,7 +18,7 @@ addFormats(ajv)
 addMoleculeFormats(ajv)
 ajv.addKeyword(ajvKeyword)
 
-interface IvresseErrorObject extends ErrorObject<string, Record<string, any>, unknown> {
+export interface IvresseErrorObject extends ErrorObject<string, Record<string, any>, unknown> {
   workflowPath?: string
 }
 

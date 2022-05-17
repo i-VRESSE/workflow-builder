@@ -1,6 +1,8 @@
 import { useRef } from 'react'
 import { toast } from 'react-toastify'
+import { ErrorReport } from './ErrorReport'
 import { useWorkflow } from './store'
+import { ValidationError } from './validate'
 
 export const WorkflowUploadButton = (): JSX.Element => {
   const uploadRef = useRef<HTMLInputElement>(null)
@@ -25,9 +27,26 @@ export const WorkflowUploadButton = (): JSX.Element => {
         success: 'Workflow loaded',
         error: {
           render ({ data }) {
-            console.error(data)
-            return 'Workflow archive failed to load. See DevTools (F12) console for errors.'
-          }
+            if (data instanceof ValidationError) {
+              return (
+                <div className='text-danger'>
+                  Workflow archive failed to load due to workflow validation errors:
+                  <ul>
+                    {data.errors.map((e, i) => <li key={i}><ErrorReport error={e} /></li>)}
+                  </ul>
+                  Check that selected catalog is the same as the catalog used to make the uploaded file.
+                </div>
+              )
+            }
+            if (data instanceof Error) {
+              return `Workflow archive failed to load. ${data as any as string}`
+            }
+            console.log(data)
+            return 'Workflow archive failed to load. ee DevTools (F12) console for errors.'
+          },
+          autoClose: false,
+          closeOnClick: false,
+          draggable: false
         }
       }
     )
