@@ -207,7 +207,7 @@ describe('resolveMaxItemsFrom()', () => {
             []
           ],
           maxItemsFrom: 'molecules',
-          maxItems: 3,
+          maxItems: 3
         }
         const expected: JSONSchema7 = {
           type: 'object',
