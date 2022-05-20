@@ -63,5 +63,8 @@
     "ignore": [
       "vite.config.ts"
     ]
+  },
+  "resolutions": {
+    "@types/react": "17.0.45"
   }
 }
