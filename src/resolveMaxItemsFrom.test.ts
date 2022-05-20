@@ -163,4 +163,60 @@ describe('resolveMaxItemsFrom()', () => {
       })
     })
   })
+
+  describe('given a formSchema with maxItemsFrom annotation and items is array', () => {
+    describe('given 3 molecules in global parameters', () => {
+      it('should return formSchema with maxItems:3', () => {
+        const propSchema: JSONSchema7WithMaxItemsFrom = {
+          type: 'array',
+          title: 'Which molecules have contacts?',
+          items: {
+            title: 'Contect residues of molecule',
+            type: 'array',
+            items: {
+              type: 'number'
+            }
+          },
+          maxItemsFrom: 'molecules'
+        }
+        const formSchema: JSONSchema7 = {
+          type: 'object',
+          properties: {
+            prop1: propSchema
+          }
+        }
+        const globalParameters: IParameters = {
+          molecules: ['1.pdb', '2.pdb', '3.pdb']
+        }
+
+        const actual = resolveMaxItemsFrom(formSchema, globalParameters)
+
+        const expectedProp: JSONSchema7WithMaxItemsFrom = {
+          type: 'array',
+          title: 'Which molecules have contacts?',
+          items: {
+            title: 'Contect residues of molecule',
+            type: 'array',
+            items: {
+              type: 'number'
+            }
+          },
+          default: [
+            [],
+            [],
+            []
+          ],
+          maxItemsFrom: 'molecules',
+          maxItems: 3,
+        }
+        const expected: JSONSchema7 = {
+          type: 'object',
+          properties: {
+            prop1: expectedProp
+          }
+        }
+        expect(actual).toStrictEqual(expected)
+      })
+    })
+  })
 })
