@@ -9,7 +9,8 @@
     "test": "vitest",
     "lint": "ts-standard",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "test:integration": "playwright test"
   },
   "dependencies": {
     "@ltd/j-toml": "^1.24.0",
@@ -32,6 +33,7 @@
     "recoil": "^0.5.2"
   },
   "devDependencies": {
+    "@playwright/test": "^1.22.1",
     "@storybook/addon-a11y": "^6.4.0",
     "@storybook/addon-docs": "^6.4.0",
     "@storybook/addon-essentials": "^6.4.19",
