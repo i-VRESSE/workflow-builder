@@ -19,13 +19,16 @@ export async function loadWorkflowArchive (archiveURL: string, catalog: ICatalog
   const { nodes, global } = parseWorkflow(
     tomlstring, globalKeys, tomlSchema4global, tomSchema4nodes
   )
-  const errors = validateWorkflow({
-    global,
-    nodes
-  }, {
-    global: catalog.global,
-    nodes: catalog.nodes
-  })
+  const errors = validateWorkflow(
+    {
+      global,
+      nodes
+    }, {
+      global: catalog.global,
+      nodes: catalog.nodes
+    },
+    files
+  )
   if (errors.length > 0) {
     console.error(errors)
     throw new ValidationError('Invalid workflow loaded', errors)

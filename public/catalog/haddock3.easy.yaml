@@ -31,6 +31,7 @@ global:
         items:
           type: string
           format: uri-reference
+        format: moleculefilepaths
       cns_exec:
         title: Path to the CNS executable
         description: If not provided, HADDOCK3 will use the cns path configured during
@@ -134,268 +135,6 @@ global:
       ui:group: execution
   tomlSchema: {}
 nodes:
-- id: clustfcc
-  category: analysis
-  label: HADDOCK3 FCC clustering module.
-  description: HADDOCK3 module for clustering with FCC.
-  schema:
-    type: object
-    properties:
-      executable:
-        type: string
-        format: uri-reference
-      contact_distance_cutoff:
-        default: 5.0
-        type: number
-        maximum: 9999
-        minimum: -9999
-      fraction_cutoff:
-        default: 0.6
-        type: number
-        maximum: 9999
-        minimum: -9999
-      threshold:
-        default: 4
-        type: number
-        maximum: 9999
-        minimum: -9999
-      strictness:
-        default: 0.75
-        type: number
-        maximum: 9999
-        minimum: -9999
-    required: []
-    additionalProperties: false
-  uiSchema:
-    executable:
-      ui:widget: file
-  tomlSchema: {}
-- id: seletop
-  category: analysis
-  label: HADDOCK3 module to select a top cluster/model.
-  description: HADDOCK3 module to select top cluster/model.
-  schema:
-    type: object
-    properties:
-      select:
-        default: 200
-        type: number
-        maximum: 9999
-        minimum: -9999
-    required: []
-    additionalProperties: false
-  uiSchema: {}
-  tomlSchema: {}
-- id: seletopclusts
-  category: analysis
-  label: HADDOCK3 module to select a top cluster/model.
-  description: Haddock Module for 'seletopclusts'.
-  schema:
-    type: object
-    properties:
-      top_cluster:
-        default: []
-        type: array
-        minItems: 0
-        maxItems: 100
-        items:
-          type: number
-      top_models:
-        type: number
-        maximum: 9999
-        minimum: -9999
-    required: []
-    additionalProperties: false
-  uiSchema: {}
-  tomlSchema: {}
-- id: caprieval
-  category: analysis
-  label: Calculate CAPRI metrics.
-  description: HADDOCK3 module to calculate the CAPRI metrics.
-  schema:
-    type: object
-    properties:
-      reference_fname:
-        title: Reference structure
-        description: Structure to be used when calculating the CAPRI metrics.
-        $comment: Reference tructure to be used when calculating the CAPRI metrics.
-          If none is defined then the lowest scoring model is selected by default.
-        type: string
-        format: uri-reference
-      irmsd:
-        default: true
-        title: Calculate I-RMSD
-        description: Performs Interface RMSD calculations.
-        $comment: Calculates the Interface Root Mean Square Deviation. This calculate
-          the RMSD of interface backbone atoms after fitting on the interface backbone
-          atoms. The interface is idenfied based on intermolecular contacts shorter
-          than the defined irmsd_cutoff.
-        type: boolean
-      fnat:
-        default: true
-        title: Calculate FNAT
-        description: Performs FNAT calculations.
-        $comment: Calculates the Fraction of Native Contacts. This evaluates how many
-          contacts observed in the reference are present in the model. The distance
-          cutoff used to define intermolecular contacts is defined by the fnat_cutoff
-          parameter.
-        type: boolean
-      lrmsd:
-        default: true
-        title: Calculate L-RMSD
-        description: Performs Ligand RMSD calculations.
-        $comment: Calculates the Ligand Root Mean Square Deviation. This calculation
-          is done by superimposing the receptors (defined by the receptor_chain parameter)
-          and then evaluating the RMSD on the ligands (defined by the ligand_chain
-          parameter). Superposition and RMSD calculations are done on backbone heavy
-          atoms.
-        type: boolean
-      ilrmsd:
-        default: true
-        title: Calculate I-L-RMSD
-        description: Performs Interface Ligand RMSD calculations.
-        $comment: Calculates the Interface Ligand Root Mean Square Deviation. This
-          calculation is done by superimposing the model and the target on the interface
-          backbone atoms of the receptor (defined by the receptor_chain parameter)
-          and calculating the RMSD on all heavy atoms of the ligand (defined by the
-          ligand_chain parameter).
-        type: boolean
-      dockq:
-        default: true
-        title: Calculate DockQ
-        description: Evaluate DockQ.
-        $comment: Evaluate DockQ. A single continuous quality measure for protein
-          docked models based on the CAPRI criteria, a combination of i-RMSD, l-RMSD
-          and FNAT value. For details check the DockQ publication `DOI:10.1371/journal.pone.0161879`
-        type: boolean
-      irmsd_cutoff:
-        default: 10.0
-        title: "Distance cutoff (\xC5) used to define interface residues."
-        description: "Distance cutoff (\xC5) used to define interface residues based\
-          \ on intermolecular contacts."
-        $comment: "Distance cutoff (\xC5) used to define interface residues based\
-          \ on intermolecular contacts."
-        type: number
-        maximum: 20.0
-        minimum: 3.0
-      fnat_cutoff:
-        default: 5.0
-        title: "Distance cutoff (\xC5) used to define interface contacts."
-        description: "Distance cutoff (\xC5) used to define interface contacts between\
-          \ two interacting molecules."
-        $comment: "Distance cutoff (\xC5) used to define interface contacts between\
-          \ two interacting molecules."
-        type: number
-        maximum: 20.0
-        minimum: 3.0
-      receptor_chain:
-        default: A
-        title: Receptor ChainID
-        description: Receptor ChainID to be considered for the RMSD calculations.
-        $comment: Receptor ChainID to be considered for the RMSD calculations. This
-          determines which chain will be treated as the receptor for the L-RMSD and
-          for I-L-RMSD.
-        type: string
-        minLength: 1
-        maxLength: 1
-      ligand_chain:
-        default: B
-        title: Ligand ChainID
-        description: Ligand ChainID to be considered for the RMSD calculations.
-        $comment: Ligand ChainID to be considered for the RMSD calculations. This
-          determines which chain will be treated as the ligand for the L-RMSD and
-          for I-L-RMSD.
-        type: string
-        minLength: 1
-        maxLength: 1
-      sortby:
-        default: score
-        title: Sort the structures/clusters in the output file by this value
-        description: Which value should be used to sort the output.
-        $comment: Which value should be used to sort the output, the output table
-          will be sorted accordingly.
-        type: string
-        minLength: 0
-        maxLength: 20
-        enum:
-        - score
-        - irmsd
-        - lrmsd
-        - ilrmsd
-        - fnat
-        - dockq
-      sort_ascending:
-        default: true
-        title: Sort in ascending order
-        description: Sort in ascending order.
-        $comment: Sort in ascending order.
-        type: boolean
-      alignment_method:
-        default: sequence
-        title: Alignment method used to match the numbering.
-        description: Which alignment method should be used to match the numbering.
-        $comment: Alignment method used to match the numbering. Sequence alignment
-          is haddock3-friendly but might not produce best results for structures that
-          are too different, for that use
-        type: string
-        minLength: 0
-        maxLength: 100
-        enum:
-        - structure
-        - sequence
-      lovoalign_exec:
-        title: Location (path) of the LovoAlign executable
-        description: Location (path) of the LovoAlign executable.
-        $comment: Location (path) of the LovoAlign executable.
-        type: string
-        minLength: 0
-        maxLength: 200
-      clt_threshold:
-        default: 4
-        title: Threshold (n) used for the average evaluation in the cluster-based
-          output
-        description: Threshold (n) used for the average evaluation in the cluster-based
-          output.
-        $comment: Threshold (n) used for the average evaluation in the cluster-based
-          output.
-        type: number
-        maximum: 1000
-        minimum: 1
-    required: []
-    additionalProperties: false
-  uiSchema:
-    reference_fname:
-      ui:widget: file
-      ui:group: analysis
-    irmsd:
-      ui:group: analysis
-    fnat:
-      ui:group: analysis
-    lrmsd:
-      ui:group: analysis
-    ilrmsd:
-      ui:group: analysis
-    dockq:
-      ui:group: analysis
-    irmsd_cutoff:
-      ui:group: analysis
-    fnat_cutoff:
-      ui:group: analysis
-    receptor_chain:
-      ui:group: analysis
-    ligand_chain:
-      ui:group: analysis
-    sortby:
-      ui:group: analysis
-    sort_ascending:
-      ui:group: analysis
-    alignment_method:
-      ui:group: analysis
-    lovoalign_exec:
-      ui:group: analysis
-    clt_threshold:
-      ui:group: analysis
-  tomlSchema: {}
 - id: gdock
   category: sampling
   label: HADDOCK3 gdock integration module.
@@ -421,6 +160,7 @@ nodes:
     properties:
       mol_shape:
         type: array
+        maxItemsFrom: molecules
         items:
           default: false
           title: Is the molecule a shape?
@@ -529,6 +269,7 @@ nodes:
         type: string
         minLength: 0
         maxLength: 100
+        format: chain
       receptor_active:
         type: string
         minLength: 0
@@ -542,6 +283,7 @@ nodes:
         type: string
         minLength: 0
         maxLength: 100
+        format: chain
       ligand_active:
         type: string
         minLength: 0
@@ -562,136 +304,6 @@ nodes:
     required: []
     additionalProperties: false
   uiSchema: {}
-  tomlSchema: {}
-- id: topoaa
-  category: topology
-  label: Create and manage CNS all-atom topology.
-  description: HADDOCK3 module to create CNS all-atom topologies.
-  schema:
-    type: object
-    properties:
-      delenph:
-        default: true
-        title: Keep or remove non-polar hydrogen atoms
-        description: If set to true, non-polar hydrogen atoms will be discarded to
-          save computing time
-        $comment: Since HADDOCK uses a united atom force field, the non-polar hydrogen
-          atoms can be in principle discarded. This saves computing time. However
-          this should not be done if you are defining distance restraints to specific
-          hydrogen atoms (e.g. when using NMR distance restraints).
-        type: boolean
-      limit:
-        default: true
-        type: boolean
-      mol:
-        title: Input molecule configuration
-        description: Specific molecule configuration
-        $comment: You can expand this parameter and associated sub-parameters to the
-          other input molecules. For example, if you input three molecules, you can
-          define mol1, mol2, and mol3 subparameters. Those not defined will be populated
-          with the defaults.
-        type: array
-        items:
-          type: object
-          properties:
-            prot_segid:
-              default: A
-              title: Segment ID
-              description: Segment ID assigned to this molecule
-              $comment: Segment ID assigned to this molecule in CNS. Used to distinguish
-                different molecules
-              type: string
-              minLength: 0
-              maxLength: 4
-            cyclicpept:
-              default: false
-              title: Cyclic peptide
-              description: Defines the molecule as a cyclic peptide
-              $comment: This option defines the molecule as a cyclic peptide and HADDOCK
-                will generate a peptide bond between the N- and C-ter provided those
-                are within 2A. This cutoff can be changed in the generate-topology.cns
-                script.
-              type: boolean
-            nhisd:
-              default: 0
-              title: Number of HISD residue
-              description: Defines the number of HISD residues (neutral HIS with the
-                proton on the ND atom) residues when autohis=false
-              $comment: Defines the number of HISD residues (neutral HIS with the
-                proton on the ND atom) residues. The corresponding residue numbers
-                must be defined in the following parameter (hisd_1, hisd_2, ...).
-                Add as many as needed. Note that HIS is interpreted as a charged Histidine)
-              type: number
-              maximum: 9999
-              minimum: 0
-            hisd:
-              type: array
-              items:
-                title: HISD residue number
-                description: Residue number of the Histidine to be defined as HISD
-                $comment: Residue number of the Histidine to be defined as HISD
-                type: number
-                maximum: 9999
-                minimum: -9999
-            nhise:
-              default: 0
-              title: Number of HISE residue
-              description: Defines the number of HISE residues (neutral HIS with the
-                proton on the NE atom) residues when autohis=false
-              $comment: Defines the number of HISE residues (neutral HIS with the
-                proton on the NE atom) residues. The corresponding residue numbers
-                must be defined in the following parameter (hise_1, hise_2, ...).
-                Add as many as needed. Note that HIS is interpreted as a charged Histidine)
-              type: number
-              maximum: 9999
-              minimum: 0
-            hise:
-              type: array
-              items:
-                title: HISE residue number
-                description: Residue number of the Histidine to be defined as HISE
-                $comment: Residue number of the Histidine to be defined as HISE
-                type: number
-                maximum: 9999
-                minimum: -9999
-          required: []
-          additionalProperties: false
-    required: []
-    additionalProperties: false
-  uiSchema:
-    delenph:
-      ui:group: molecule
-    mol:
-      ui:group: input molecules
-  tomlSchema:
-    mol:
-      indexed: true
-      items:
-        sectioned: true
-        properties:
-          hisd:
-            indexed: true
-          hise:
-            indexed: true
-- id: emscoring
-  category: scoring
-  label: HADDOCK3 scoring module.
-  description: HADDOCK3 module to perform energy minimization scoring.
-  schema:
-    type: object
-    properties:
-      elecflag:
-        default: true
-        title: Include electrostatics energy
-        description: Include electrostatics energy during the calculations.
-        $comment: Include electrostatics energy during the calculations. If set to
-          false electrostatics will not be considered.
-        type: boolean
-    required: []
-    additionalProperties: false
-  uiSchema:
-    elecflag:
-      ui:group: force field
   tomlSchema: {}
 - id: mdscoring
   category: scoring
@@ -773,6 +385,555 @@ nodes:
     elecflag:
       ui:group: force field
   tomlSchema: {}
+- id: emscoring
+  category: scoring
+  label: HADDOCK3 scoring module.
+  description: HADDOCK3 module to perform energy minimization scoring.
+  schema:
+    type: object
+    properties:
+      elecflag:
+        default: true
+        title: Include electrostatics energy
+        description: Include electrostatics energy during the calculations.
+        $comment: Include electrostatics energy during the calculations. If set to
+          false electrostatics will not be considered.
+        type: boolean
+    required: []
+    additionalProperties: false
+  uiSchema:
+    elecflag:
+      ui:group: force field
+  tomlSchema: {}
+- id: topoaa
+  category: topology
+  label: Create and manage CNS all-atom topology.
+  description: HADDOCK3 module to create CNS all-atom topologies.
+  schema:
+    type: object
+    properties:
+      delenph:
+        default: true
+        title: Keep or remove non-polar hydrogen atoms
+        description: If set to true, non-polar hydrogen atoms will be discarded to
+          save computing time
+        $comment: Since HADDOCK uses a united atom force field, the non-polar hydrogen
+          atoms can be in principle discarded. This saves computing time. However
+          this should not be done if you are defining distance restraints to specific
+          hydrogen atoms (e.g. when using NMR distance restraints).
+        type: boolean
+      limit:
+        default: true
+        type: boolean
+      mol:
+        title: Input molecule configuration
+        description: Specific molecule configuration
+        $comment: You can expand this parameter and associated sub-parameters to the
+          other input molecules. For example, if you input three molecules, you can
+          define mol1, mol2, and mol3 subparameters. Those not defined will be populated
+          with the defaults.
+        type: array
+        items:
+          type: object
+          properties:
+            prot_segid:
+              default: A
+              title: Segment ID
+              description: Segment ID assigned to this molecule
+              $comment: Segment ID assigned to this molecule in CNS. Used to distinguish
+                different molecules
+              type: string
+              minLength: 0
+              maxLength: 4
+              format: chain
+            cyclicpept:
+              default: false
+              title: Cyclic peptide
+              description: Defines the molecule as a cyclic peptide
+              $comment: This option defines the molecule as a cyclic peptide and HADDOCK
+                will generate a peptide bond between the N- and C-ter provided those
+                are within 2A. This cutoff can be changed in the generate-topology.cns
+                script.
+              type: boolean
+            nhisd:
+              default: 0
+              title: Number of HISD residue
+              description: Defines the number of HISD residues (neutral HIS with the
+                proton on the ND atom) residues when autohis=false
+              $comment: Defines the number of HISD residues (neutral HIS with the
+                proton on the ND atom) residues. The corresponding residue numbers
+                must be defined in the following parameter (hisd_1, hisd_2, ...).
+                Add as many as needed. Note that HIS is interpreted as a charged Histidine)
+              type: number
+              maximum: 9999
+              minimum: 0
+            hisd:
+              type: array
+              items:
+                title: HISD residue number
+                description: Residue number of the Histidine to be defined as HISD
+                $comment: Residue number of the Histidine to be defined as HISD
+                type: number
+                maximum: 9999
+                minimum: -9999
+                format: residue
+            nhise:
+              default: 0
+              title: Number of HISE residue
+              description: Defines the number of HISE residues (neutral HIS with the
+                proton on the NE atom) residues when autohis=false
+              $comment: Defines the number of HISE residues (neutral HIS with the
+                proton on the NE atom) residues. The corresponding residue numbers
+                must be defined in the following parameter (hise_1, hise_2, ...).
+                Add as many as needed. Note that HIS is interpreted as a charged Histidine)
+              type: number
+              maximum: 9999
+              minimum: 0
+            hise:
+              type: array
+              items:
+                title: HISE residue number
+                description: Residue number of the Histidine to be defined as HISE
+                $comment: Residue number of the Histidine to be defined as HISE
+                type: number
+                maximum: 9999
+                minimum: -9999
+                format: residue
+          required: []
+          additionalProperties: false
+    required: []
+    additionalProperties: false
+  uiSchema:
+    delenph:
+      ui:group: molecule
+    mol:
+      ui:group: input molecules
+  tomlSchema:
+    mol:
+      indexed: true
+      items:
+        sectioned: true
+        properties:
+          hisd:
+            indexed: true
+          hise:
+            indexed: true
+- id: clustfcc
+  category: analysis
+  label: HADDOCK3 FCC clustering module.
+  description: HADDOCK3 module for clustering with FCC.
+  schema:
+    type: object
+    properties:
+      executable:
+        type: string
+        format: uri-reference
+      contact_distance_cutoff:
+        default: 5.0
+        type: number
+        maximum: 9999
+        minimum: -9999
+      fraction_cutoff:
+        default: 0.6
+        type: number
+        maximum: 9999
+        minimum: -9999
+      threshold:
+        default: 4
+        type: number
+        maximum: 9999
+        minimum: -9999
+      strictness:
+        default: 0.75
+        type: number
+        maximum: 9999
+        minimum: -9999
+    required: []
+    additionalProperties: false
+  uiSchema:
+    executable:
+      ui:widget: file
+  tomlSchema: {}
+- id: seletopclusts
+  category: analysis
+  label: HADDOCK3 module to select a top cluster/model.
+  description: Haddock Module for 'seletopclusts'.
+  schema:
+    type: object
+    properties:
+      top_cluster:
+        default: []
+        type: array
+        minItems: 0
+        maxItems: 100
+        items:
+          type: number
+      top_models:
+        type: number
+        maximum: 9999
+        minimum: -9999
+    required: []
+    additionalProperties: false
+  uiSchema: {}
+  tomlSchema: {}
+- id: seletop
+  category: analysis
+  label: HADDOCK3 module to select a top cluster/model.
+  description: HADDOCK3 module to select top cluster/model.
+  schema:
+    type: object
+    properties:
+      select:
+        default: 200
+        type: number
+        maximum: 9999
+        minimum: -9999
+    required: []
+    additionalProperties: false
+  uiSchema: {}
+  tomlSchema: {}
+- id: caprieval
+  category: analysis
+  label: Calculate CAPRI metrics.
+  description: HADDOCK3 module to calculate the CAPRI metrics.
+  schema:
+    type: object
+    properties:
+      reference_fname:
+        title: Reference structure
+        description: Structure to be used when calculating the CAPRI metrics.
+        $comment: Reference tructure to be used when calculating the CAPRI metrics.
+          If none is defined then the lowest scoring model is selected by default.
+        type: string
+        format: uri-reference
+      irmsd:
+        default: true
+        title: Calculate I-RMSD
+        description: Performs Interface RMSD calculations.
+        $comment: Calculates the Interface Root Mean Square Deviation. This calculate
+          the RMSD of interface backbone atoms after fitting on the interface backbone
+          atoms. The interface is idenfied based on intermolecular contacts shorter
+          than the defined irmsd_cutoff.
+        type: boolean
+      fnat:
+        default: true
+        title: Calculate FNAT
+        description: Performs FNAT calculations.
+        $comment: Calculates the Fraction of Native Contacts. This evaluates how many
+          contacts observed in the reference are present in the model. The distance
+          cutoff used to define intermolecular contacts is defined by the fnat_cutoff
+          parameter.
+        type: boolean
+      lrmsd:
+        default: true
+        title: Calculate L-RMSD
+        description: Performs Ligand RMSD calculations.
+        $comment: Calculates the Ligand Root Mean Square Deviation. This calculation
+          is done by superimposing the receptors (defined by the receptor_chain parameter)
+          and then evaluating the RMSD on the ligands (defined by the ligand_chain
+          parameter). Superposition and RMSD calculations are done on backbone heavy
+          atoms.
+        type: boolean
+      ilrmsd:
+        default: true
+        title: Calculate I-L-RMSD
+        description: Performs Interface Ligand RMSD calculations.
+        $comment: Calculates the Interface Ligand Root Mean Square Deviation. This
+          calculation is done by superimposing the model and the target on the interface
+          backbone atoms of the receptor (defined by the receptor_chain parameter)
+          and calculating the RMSD on all heavy atoms of the ligand (defined by the
+          ligand_chain parameter).
+        type: boolean
+      dockq:
+        default: true
+        title: Calculate DockQ
+        description: Evaluate DockQ.
+        $comment: Evaluate DockQ. A single continuous quality measure for protein
+          docked models based on the CAPRI criteria, a combination of i-RMSD, l-RMSD
+          and FNAT value. For details check the DockQ publication `DOI:10.1371/journal.pone.0161879`
+        type: boolean
+      irmsd_cutoff:
+        default: 10.0
+        title: "Distance cutoff (\xC5) used to define interface residues."
+        description: "Distance cutoff (\xC5) used to define interface residues based\
+          \ on intermolecular contacts."
+        $comment: "Distance cutoff (\xC5) used to define interface residues based\
+          \ on intermolecular contacts."
+        type: number
+        maximum: 20.0
+        minimum: 3.0
+      fnat_cutoff:
+        default: 5.0
+        title: "Distance cutoff (\xC5) used to define interface contacts."
+        description: "Distance cutoff (\xC5) used to define interface contacts between\
+          \ two interacting molecules."
+        $comment: "Distance cutoff (\xC5) used to define interface contacts between\
+          \ two interacting molecules."
+        type: number
+        maximum: 20.0
+        minimum: 3.0
+      receptor_chain:
+        default: A
+        title: Receptor ChainID
+        description: Receptor ChainID to be considered for the RMSD calculations.
+        $comment: Receptor ChainID to be considered for the RMSD calculations. This
+          determines which chain will be treated as the receptor for the L-RMSD and
+          for I-L-RMSD.
+        type: string
+        minLength: 1
+        maxLength: 1
+        format: chain
+      ligand_chain:
+        default: B
+        title: Ligand ChainID
+        description: Ligand ChainID to be considered for the RMSD calculations.
+        $comment: Ligand ChainID to be considered for the RMSD calculations. This
+          determines which chain will be treated as the ligand for the L-RMSD and
+          for I-L-RMSD.
+        type: string
+        minLength: 1
+        maxLength: 1
+        format: chain
+      sortby:
+        default: score
+        title: Sort the structures/clusters in the output file by this value
+        description: Which value should be used to sort the output.
+        $comment: Which value should be used to sort the output, the output table
+          will be sorted accordingly.
+        type: string
+        minLength: 0
+        maxLength: 20
+        enum:
+        - score
+        - irmsd
+        - lrmsd
+        - ilrmsd
+        - fnat
+        - dockq
+      sort_ascending:
+        default: true
+        title: Sort in ascending order
+        description: Sort in ascending order.
+        $comment: Sort in ascending order.
+        type: boolean
+      alignment_method:
+        default: sequence
+        title: Alignment method used to match the numbering.
+        description: Which alignment method should be used to match the numbering.
+        $comment: Alignment method used to match the numbering. Sequence alignment
+          is haddock3-friendly but might not produce best results for structures that
+          are too different, for that use
+        type: string
+        minLength: 0
+        maxLength: 100
+        enum:
+        - structure
+        - sequence
+      lovoalign_exec:
+        title: Location (path) of the LovoAlign executable
+        description: Location (path) of the LovoAlign executable.
+        $comment: Location (path) of the LovoAlign executable.
+        type: string
+        minLength: 0
+        maxLength: 200
+      clt_threshold:
+        default: 4
+        title: Threshold (n) used for the average evaluation in the cluster-based
+          output
+        description: Threshold (n) used for the average evaluation in the cluster-based
+          output.
+        $comment: Threshold (n) used for the average evaluation in the cluster-based
+          output.
+        type: number
+        maximum: 1000
+        minimum: 1
+    required: []
+    additionalProperties: false
+  uiSchema:
+    reference_fname:
+      ui:widget: file
+      ui:group: analysis
+    irmsd:
+      ui:group: analysis
+    fnat:
+      ui:group: analysis
+    lrmsd:
+      ui:group: analysis
+    ilrmsd:
+      ui:group: analysis
+    dockq:
+      ui:group: analysis
+    irmsd_cutoff:
+      ui:group: analysis
+    fnat_cutoff:
+      ui:group: analysis
+    receptor_chain:
+      ui:group: analysis
+    ligand_chain:
+      ui:group: analysis
+    sortby:
+      ui:group: analysis
+    sort_ascending:
+      ui:group: analysis
+    alignment_method:
+      ui:group: analysis
+    lovoalign_exec:
+      ui:group: analysis
+    clt_threshold:
+      ui:group: analysis
+  tomlSchema: {}
+- id: emref
+  category: refinement
+  label: HADDOCK3 module for energy minimization refinement.
+  description: HADDOCK3 module energy minimization refinement.
+  schema:
+    type: object
+    properties:
+      mol_shape:
+        type: array
+        maxItemsFrom: molecules
+        items:
+          default: false
+          title: Is the molecule a shape?
+          description: Defines a molecule as a shape.
+          $comment: Defines a molecule as a shape, which is a collection of beads.
+          type: boolean
+      ambig_fname:
+        title: Ambiguous distance restraints filename
+        description: Filename of the ambiguous distance restraints file
+        $comment: Filename of the ambiguous distance restraints file. By default 50%
+          of those restraints will be randomly discared. This can be changed/turned
+          off and is controlled by the randremoval and npart parameters. Note that
+          this file can contain both ambiguous and unambiguous restraints.
+        type: string
+        format: uri-reference
+      unambig_fname:
+        title: Unambiguous restraints filename
+        description: Filename of the unambiguous distance restraints file
+        $comment: Filename of the unambiguous distance restraints file. All restraints
+          in that file will be used. Note that this file can contain both ambiguous
+          and unambiguous restraints.
+        type: string
+        format: uri-reference
+      hbond_fname:
+        title: H-bond restraints filename
+        description: Filename of the hydrogen bond distance restraints file
+        $comment: Filename of the hydrogen bond distance restraints file. Note that
+          this file can contain any type of distance restraints.
+        type: string
+        format: uri-reference
+      dihe_fname:
+        title: Dihedral angle restraints filename
+        description: Filename of the Dihedral angle restraints file
+        $comment: Filename of the Dihedral angle restraints file.
+        type: string
+        format: uri-reference
+      dihedrals_on:
+        default: false
+        title: Use dihedral angle restraints
+        description: Turns on dihedral angle restraints.
+        $comment: Turns on dihedral angle restraints. Those should be defined in the
+          dihe_fname file.
+        type: boolean
+      dihedrals_scale:
+        default: 200
+        title: Force constant for dihedral angle restraints
+        description: Force constant applied to the dihedral angle restraints read
+          from dihe_fname.
+        $comment: Force constant applied to the dihedral angle restraints read from
+          dihe_fname.
+        type: number
+        maximum: 9999
+        minimum: -9999
+      ssdihed:
+        default: none
+        title: Define automatically backbone dihedral angle restraints
+        description: If turned on, this option will automatically defined backbone
+          dihedral angle restraints for the selected regions.
+        $comment: This option allows to utomatically defined backbone dihedral angle
+          restraints for the selected regions. The restraints will be defined for
+          the phi and psi backbone dihedral angles of amino acids, with the target
+          value taken from the measured angle in the input structure, and the error
+          bound defined by the error_dih parameter. Those restraints can be applied
+          to the entire structure (all), the alpha/beta secondary structure elements
+          (alphabeta) or only to the alpha helical regions (alpha). Those are automatically
+          detected based on the measured dihedral angle combinations.
+        type: string
+        minLength: 0
+        maxLength: 100
+        enum:
+        - none
+        - all
+        - alpha
+        - alphabeta
+      error_dih:
+        default: 10
+        title: Force constant for backbone dihedral angle restraints
+        description: Force constant for backbone dihedral angle restraints (ssdihed
+          option)
+        $comment: Force constant for backbone dihedral angle restraints (ssdihed option)
+        type: number
+        maximum: 9999
+        minimum: -9999
+      dnarest_on:
+        default: false
+        title: Restrain the DNA conformation
+        description: Automatically creates restraints to maintain the conformation
+          of DNA/RNA
+        $comment: 'This option allows to restraint the conformation of nucleic acids
+          based on the values from the input structures. The following restraints
+          will be automatically defined: - single base planarity - sugar pucker -
+          phosphate backbone diherdral angle restraints - Watson-Crick base pairing'
+        type: boolean
+      elecflag:
+        default: true
+        title: Include electrostatics energy
+        description: Include electrostatics energy during the calculations.
+        $comment: Include electrostatics energy during the calculations. If set to
+          false electrostatics will not be considered.
+        type: boolean
+      sampling:
+        default: 200
+        title: Number of models to generate
+        description: Number of EM refined models to generate
+        $comment: Number of EM refined models to generate
+        type: number
+        maximum: 50000
+        minimum: 1
+    required: []
+    additionalProperties: false
+  uiSchema:
+    mol_shape:
+      ui:group: molecule
+    ambig_fname:
+      ui:widget: file
+      ui:group: distance restraints
+    unambig_fname:
+      ui:widget: file
+      ui:group: distance restraints
+    hbond_fname:
+      ui:widget: file
+      ui:group: distance restraints
+    dihe_fname:
+      ui:widget: file
+      ui:group: dihedral restraints
+    dihedrals_on:
+      ui:group: dihedral restraints
+    dihedrals_scale:
+      ui:group: dihedral restraints
+    ssdihed:
+      ui:group: dihedral restraints
+    error_dih:
+      ui:group: dihedral restraints
+    dnarest_on:
+      ui:group: other restraints
+    elecflag:
+      ui:group: force field
+    sampling:
+      ui:group: sampling
+  tomlSchema:
+    mol_shape:
+      indexed: true
 - id: flexref
   category: refinement
   label: HADDOCK3 module for flexible refinement.
@@ -782,6 +943,7 @@ nodes:
     properties:
       mol_shape:
         type: array
+        maxItemsFrom: molecules
         items:
           default: false
           title: Is the molecule a shape?
@@ -1001,6 +1163,7 @@ nodes:
     properties:
       mol_shape:
         type: array
+        maxItemsFrom: molecules
         items:
           default: false
           title: Is the molecule a shape?
@@ -1132,157 +1295,6 @@ nodes:
       ui:group: other restraints
     elecflag:
       ui:group: force field
-  tomlSchema:
-    mol_shape:
-      indexed: true
-- id: emref
-  category: refinement
-  label: HADDOCK3 module for energy minimization refinement.
-  description: HADDOCK3 module energy minimization refinement.
-  schema:
-    type: object
-    properties:
-      mol_shape:
-        type: array
-        items:
-          default: false
-          title: Is the molecule a shape?
-          description: Defines a molecule as a shape.
-          $comment: Defines a molecule as a shape, which is a collection of beads.
-          type: boolean
-      ambig_fname:
-        title: Ambiguous distance restraints filename
-        description: Filename of the ambiguous distance restraints file
-        $comment: Filename of the ambiguous distance restraints file. By default 50%
-          of those restraints will be randomly discared. This can be changed/turned
-          off and is controlled by the randremoval and npart parameters. Note that
-          this file can contain both ambiguous and unambiguous restraints.
-        type: string
-        format: uri-reference
-      unambig_fname:
-        title: Unambiguous restraints filename
-        description: Filename of the unambiguous distance restraints file
-        $comment: Filename of the unambiguous distance restraints file. All restraints
-          in that file will be used. Note that this file can contain both ambiguous
-          and unambiguous restraints.
-        type: string
-        format: uri-reference
-      hbond_fname:
-        title: H-bond restraints filename
-        description: Filename of the hydrogen bond distance restraints file
-        $comment: Filename of the hydrogen bond distance restraints file. Note that
-          this file can contain any type of distance restraints.
-        type: string
-        format: uri-reference
-      dihe_fname:
-        title: Dihedral angle restraints filename
-        description: Filename of the Dihedral angle restraints file
-        $comment: Filename of the Dihedral angle restraints file.
-        type: string
-        format: uri-reference
-      dihedrals_on:
-        default: false
-        title: Use dihedral angle restraints
-        description: Turns on dihedral angle restraints.
-        $comment: Turns on dihedral angle restraints. Those should be defined in the
-          dihe_fname file.
-        type: boolean
-      dihedrals_scale:
-        default: 200
-        title: Force constant for dihedral angle restraints
-        description: Force constant applied to the dihedral angle restraints read
-          from dihe_fname.
-        $comment: Force constant applied to the dihedral angle restraints read from
-          dihe_fname.
-        type: number
-        maximum: 9999
-        minimum: -9999
-      ssdihed:
-        default: none
-        title: Define automatically backbone dihedral angle restraints
-        description: If turned on, this option will automatically defined backbone
-          dihedral angle restraints for the selected regions.
-        $comment: This option allows to utomatically defined backbone dihedral angle
-          restraints for the selected regions. The restraints will be defined for
-          the phi and psi backbone dihedral angles of amino acids, with the target
-          value taken from the measured angle in the input structure, and the error
-          bound defined by the error_dih parameter. Those restraints can be applied
-          to the entire structure (all), the alpha/beta secondary structure elements
-          (alphabeta) or only to the alpha helical regions (alpha). Those are automatically
-          detected based on the measured dihedral angle combinations.
-        type: string
-        minLength: 0
-        maxLength: 100
-        enum:
-        - none
-        - all
-        - alpha
-        - alphabeta
-      error_dih:
-        default: 10
-        title: Force constant for backbone dihedral angle restraints
-        description: Force constant for backbone dihedral angle restraints (ssdihed
-          option)
-        $comment: Force constant for backbone dihedral angle restraints (ssdihed option)
-        type: number
-        maximum: 9999
-        minimum: -9999
-      dnarest_on:
-        default: false
-        title: Restrain the DNA conformation
-        description: Automatically creates restraints to maintain the conformation
-          of DNA/RNA
-        $comment: 'This option allows to restraint the conformation of nucleic acids
-          based on the values from the input structures. The following restraints
-          will be automatically defined: - single base planarity - sugar pucker -
-          phosphate backbone diherdral angle restraints - Watson-Crick base pairing'
-        type: boolean
-      elecflag:
-        default: true
-        title: Include electrostatics energy
-        description: Include electrostatics energy during the calculations.
-        $comment: Include electrostatics energy during the calculations. If set to
-          false electrostatics will not be considered.
-        type: boolean
-      sampling:
-        default: 200
-        title: Number of models to generate
-        description: Number of EM refined models to generate
-        $comment: Number of EM refined models to generate
-        type: number
-        maximum: 50000
-        minimum: 1
-    required: []
-    additionalProperties: false
-  uiSchema:
-    mol_shape:
-      ui:group: molecule
-    ambig_fname:
-      ui:widget: file
-      ui:group: distance restraints
-    unambig_fname:
-      ui:widget: file
-      ui:group: distance restraints
-    hbond_fname:
-      ui:widget: file
-      ui:group: distance restraints
-    dihe_fname:
-      ui:widget: file
-      ui:group: dihedral restraints
-    dihedrals_on:
-      ui:group: dihedral restraints
-    dihedrals_scale:
-      ui:group: dihedral restraints
-    ssdihed:
-      ui:group: dihedral restraints
-    error_dih:
-      ui:group: dihedral restraints
-    dnarest_on:
-      ui:group: other restraints
-    elecflag:
-      ui:group: force field
-    sampling:
-      ui:group: sampling
   tomlSchema:
     mol_shape:
       indexed: true

@@ -9,7 +9,7 @@ The main branch is published at https://wonderful-noether-53a9e8.netlify.app/
 
 ## Develop
 
-Requires [NodeJS](https://nodejs.org/) and [yarn](https://yarnpkg.com/).
+Requires [NodeJS](https://nodejs.org/) and [yarn](https://yarnpkg.com/) (tested with v3.2.1).
 
 ```shell
 # Install dependencies
@@ -20,7 +20,7 @@ yarn dev
 # Goto http://localhost:3000
 ```
 
-### Tests
+### Unit tests
 
 Tests (**/*.test.tsx?) written in [vitetest](https://vitest.dev/) (a test framework similar to [jest](https://jestjs.io/)) can be run with:
 
@@ -35,6 +35,32 @@ yarn  test run --coverage
 ```
 
 Creates `coverage/` directory with HTML and LCOV report.
+
+### Integration tests
+
+The integration tests (`integration-tests/**.spec.ts`) are written in [playwright](https://playwright.dev/).
+
+Before running test ensure browsers are installed with
+
+```shell
+npx playwright install
+```
+
+Tests can be run with
+
+```shell
+yarn test:integration
+```
+
+To run in a non-headless browser use
+
+```shell
+yarn test:integration --headed
+```
+
+The browser will pause when a test calls `await page.pause()`, so you can investigate current state.
+
+There is a VS code extension to run integration tests inside editor.
 
 ### Linting
 
@@ -112,6 +138,10 @@ The catalog is a YAML formatted file which tells the app what nodes are availabl
 4. examples: Title and link to example workflows
     * map with title as key and link as value
 5. title: Title of the catalog
+
+### schema
+
+See [docs/schema.md](docs/schema.md).
 
 #### uiSchema
 
