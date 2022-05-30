@@ -2,10 +2,21 @@ import Ajv from 'ajv'
 import type { ErrorObject } from 'ajv'
 import addFormats from 'ajv-formats'
 import { JSONSchema7 } from 'json-schema'
-import type { ICatalogNode, IParameters, IWorkflowNode, IWorkflow, IWorkflowSchema, ICatalog } from './types'
+import type { ICatalogNode, IParameters, IWorkflowNode, IWorkflow, IWorkflowSchema, ICatalog, IFiles } from './types'
+import { ajvKeyword, resolveMaxItemsFrom } from './resolveMaxItemsFrom'
+import { addMoleculeFormats } from './molecule/formats'
+import { addMoleculeValidation } from './molecule/addMoleculeValidation'
 
-const ajv = new Ajv()
+const ajv = new Ajv({
+  // In addMoleculeValidation() we replace items:{} with items:[{}, {}, ...]
+  // Ajv expects minItems:<length of array>, but the app can have minItems:0
+  // To silence `strict mode: "items" is 1-tuple, but minItems or maxItems/additionalItems are not specified or different at path` message
+  // the strictTuples check can be disable by uncommenting next line
+  // strictTuples: false
+})
 addFormats(ajv)
+addMoleculeFormats(ajv)
+ajv.addKeyword(ajvKeyword)
 
 interface IvresseErrorObject extends ErrorObject<string, Record<string, any>, unknown> {
   workflowPath?: string
@@ -20,7 +31,8 @@ export class ValidationError extends Error {
   }
 }
 
-export function validateWorkflow (workflow: IWorkflow, schemas: IWorkflowSchema): Errors {
+export function validateWorkflow (workflow: IWorkflow, schemas: IWorkflowSchema, files: IFiles = {}): Errors {
+  const globalSchema = schemas.global.schema
   const globalErrors = validateParameters(
     workflow.global,
     schemas.global.schema
@@ -28,7 +40,7 @@ export function validateWorkflow (workflow: IWorkflow, schemas: IWorkflowSchema)
   globalErrors.forEach(e => {
     e.workflowPath = 'global'
   })
-  const nodeValidator = validateNode(schemas.nodes)
+  const nodeValidator = validateNodeFactory(schemas.nodes, workflow.global, globalSchema, files)
   const nodesErrors = workflow.nodes.map(nodeValidator)
 
   // TODO validate files,
@@ -37,16 +49,28 @@ export function validateWorkflow (workflow: IWorkflow, schemas: IWorkflowSchema)
   return [...globalErrors, ...nodesErrors.flat(1)]
 }
 
-function validateNode (catalogNodes: ICatalogNode[]): (value: IWorkflowNode, index: number, array: IWorkflowNode[]) => Errors {
+function validateNodeFactory (
+  catalogNodes: ICatalogNode[],
+  globalParameters: IParameters,
+  globalSchema: JSONSchema7,
+  files: IFiles
+): (value: IWorkflowNode, index: number, array: IWorkflowNode[]) => Errors {
+  const id2schema = Object.fromEntries(catalogNodes.map(c => {
+    const schemaWithMaxItems = resolveMaxItemsFrom(c.schema, globalParameters)
+    const schemaWithMolInfo = addMoleculeValidation(
+      schemaWithMaxItems, globalParameters, globalSchema, files
+    )
+    return [c.id, schemaWithMolInfo]
+  }))
   return (node, nodeIndex) => {
-    const catalogNode = catalogNodes.find((n) => n.id === node.id)
-    if (catalogNode != null) {
+    const schema = id2schema[node.id]
+    if (schema != null) {
       const nodeErrors = validateParameters(
         node.parameters,
-        catalogNode.schema
+        schema
       )
       nodeErrors.forEach(e => {
-        e.workflowPath = `node[${nodeIndex}]`
+        e.workflowPath = `nodes[${nodeIndex}]`
       })
       return nodeErrors
     } else {
@@ -59,7 +83,7 @@ function validateNode (catalogNodes: ICatalogNode[]): (value: IWorkflowNode, ind
         instancePath: '',
         schemaPath: '',
         keyword: 'schema',
-        workflowPath: `node[${nodeIndex}]`
+        workflowPath: `nodes[${nodeIndex}]`
       }]
     }
   }
@@ -90,7 +114,7 @@ export function validateCatalog (catalog: ICatalog): Errors {
   const nodesErrors = catalog.nodes.map((n, nodeIndex) => {
     const nodeErrors = validateSchema(n.schema)
     nodeErrors.forEach(e => {
-      e.workflowPath = `node[${nodeIndex}]`
+      e.workflowPath = `nodes[${nodeIndex}]`
     })
     return nodeErrors
   })

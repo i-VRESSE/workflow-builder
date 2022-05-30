@@ -1,4 +1,4 @@
-import { useSetActiveSubmitButton, useSelectedCatalogNode, useSelectedNode, useSelectedNodeFormData } from './store'
+import { useSetActiveSubmitButton, useSelectedCatalogNode, useSelectedNode, useSelectedNodeFormData, useSelectedNodeFormSchema } from './store'
 import { Form } from './Form'
 
 export const NodeForm = (): JSX.Element => {
@@ -6,6 +6,7 @@ export const NodeForm = (): JSX.Element => {
   const [formData, setFormData] = useSelectedNodeFormData()
   const node = useSelectedNode()
   const catalogNode = useSelectedCatalogNode()
+  const schema = useSelectedNodeFormSchema() ?? {}
   const submitFormRefSetter = useSetActiveSubmitButton()
 
   if (node === undefined) {
@@ -23,7 +24,7 @@ export const NodeForm = (): JSX.Element => {
         {catalogNode.description}
       </div>
       <Form
-        schema={catalogNode.formSchema ?? {}}
+        schema={schema}
         uiSchema={uiSchema}
         formData={formData}
         onSubmit={({ formData }) => setFormData(formData)}

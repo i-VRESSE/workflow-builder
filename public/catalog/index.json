@@ -14,5 +14,9 @@
     [
         "kitchensink",
         "/catalog/kitchensink.yaml"
+    ],
+    [
+        "molaware",
+        "/catalog/molaware.yaml"
     ]
 ]
