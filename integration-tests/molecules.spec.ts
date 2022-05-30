@@ -29,9 +29,9 @@ test.describe('given 1 molecule and a flexref node with seg parameter defined', 
     // Click text=segStarting residue numberEnding residue number >> button >> nth=2
     await page.locator('text=segStarting residue numberEnding residue number >> button').nth(2).click()
     // Select 22
-    await page.locator('text=Starting residue number192021222324252627282930313233343536373839404142434445464 >> select').selectOption('22')
+    await page.locator('#root_flexibility_seg_0_0_sta').selectOption('22');
     // Select 32
-    await page.locator('text=Ending residue number19202122232425262728293031323334353637383940414243444546474 >> select').selectOption('32')
+    await page.locator('#root_flexibility_seg_0_0_end').selectOption('32')
     // Click text=Submit
     await page.locator('text=Submit').click()
   })
@@ -101,9 +101,9 @@ test.describe('given 2 molecules and a flexref node with seg parameter defined f
     // Click .array-item-add >> nth=0
     await page.locator('.array-item-add').first().click()
     // Select 21
-    await page.locator('text=Starting residue number192021222324252627282930313233343536373839404142434445464 >> select').selectOption('21')
+    await page.locator('#root_flexibility_seg_0_0_sta').selectOption('21');
     // Select 24
-    await page.locator('text=Ending residue number19202122232425262728293031323334353637383940414243444546474 >> select').selectOption('24')
+    await page.locator('#root_flexibility_seg_0_0_end').selectOption('24')
     // Click th:has-text("Starting residue number") >> nth=1
     await page.locator('th:has-text("Starting residue number")').nth(1).click()
     // Click .root_flexibility_seg_1 > .table-field > thead > tr > th:nth-child(3) > .array-item-add
