@@ -29,7 +29,7 @@ test.describe('given 1 molecule and a flexref node with seg parameter defined', 
     // Click text=segStarting residue numberEnding residue number >> button >> nth=2
     await page.locator('text=segStarting residue numberEnding residue number >> button').nth(2).click()
     // Select 22
-    await page.locator('#root_flexibility_seg_0_0_sta').selectOption('22');
+    await page.locator('#root_flexibility_seg_0_0_sta').selectOption('22')
     // Select 32
     await page.locator('#root_flexibility_seg_0_0_end').selectOption('32')
     // Click text=Submit
@@ -101,7 +101,7 @@ test.describe('given 2 molecules and a flexref node with seg parameter defined f
     // Click .array-item-add >> nth=0
     await page.locator('.array-item-add').first().click()
     // Select 21
-    await page.locator('#root_flexibility_seg_0_0_sta').selectOption('21');
+    await page.locator('#root_flexibility_seg_0_0_sta').selectOption('21')
     // Select 24
     await page.locator('#root_flexibility_seg_0_0_end').selectOption('24')
     // Click th:has-text("Starting residue number") >> nth=1
