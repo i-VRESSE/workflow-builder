@@ -4,6 +4,7 @@ dist
 dist-ssr
 *.local
 coverage
+.coverage
 util/__pycache__/
 .pnp.*
 .yarn/*
@@ -12,3 +13,5 @@ util/__pycache__/
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+playwright-report/
+.vscode/

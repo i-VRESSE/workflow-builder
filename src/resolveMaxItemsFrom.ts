@@ -21,6 +21,11 @@ export function resolveMaxItemsFrom (formSchema: JSONSchema7WithMaxItemsFrom, gl
           const parentLength = parentValue.length
           // Set child parameter schema to have same maxItems as global parent parameter value
           s = { ...s, maxItems: parentLength }
+          // Workaround for `['ab initio mode'].rair[0] should be array` validation error
+          // Without default for a single molecule the rair parameter is set to [null] while it should be [[]]
+          if ('items' in s && s.items !== undefined && !Array.isArray(s.items) && (s.items as JSONSchema7).type === 'array') {
+            s.default = parentValue.map(() => [])
+          }
         }
       }
       if (s.type === 'object') {

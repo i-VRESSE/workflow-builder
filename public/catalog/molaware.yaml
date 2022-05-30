@@ -130,7 +130,11 @@ nodes:
                 format: residue
               uniqueItems: true
         maxItemsFrom: molecules
-  uiSchema: {}
+  uiSchema:
+    prop1:
+      items:
+        hisd:
+          "ui:widget": "checkboxes"
   tomlSchema:
     prop1:
       indexed: true
