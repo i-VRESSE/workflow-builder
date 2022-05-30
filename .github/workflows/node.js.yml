@@ -19,6 +19,7 @@ jobs:
       with:
         node-version: 16.x
         cache: 'yarn'
+    - run: yarn set version 3.2.1  # should be same version as package.json:packageManager
     - run: yarn
     - run: yarn test
     - run: yarn lint
