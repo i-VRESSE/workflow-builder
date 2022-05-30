@@ -63,7 +63,8 @@
   },
   "ts-standard": {
     "ignore": [
-      "vite.config.ts"
+      "vite.config.ts",
+      "playwright.config.ts"
     ]
   },
   "resolutions": {
