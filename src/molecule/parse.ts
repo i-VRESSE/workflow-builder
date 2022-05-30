@@ -19,7 +19,9 @@ export async function parsePDB (content: string): Promise<MoleculeInfo> {
   }
   try {
     const info = open_pdb(content)
-    console.info(info.warnings)
+    if (info.warnings.length > 0) {
+      console.info('Parsing PDB warnings: ', info.warnings)
+    }
     return {
       chains: info.chains,
       residueSequenceNumbers: info.residue_sequence_numbers
