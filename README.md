@@ -41,6 +41,7 @@ Creates `coverage/` directory with HTML and LCOV report.
 The integration tests (`integration-tests/**.spec.ts`) are written in [playwright](https://playwright.dev/).
 
 Before running test ensure browsers are installed with
+
 ```shell
 npx playwright install
 ```
@@ -52,9 +53,11 @@ yarn test:integration
 ```
 
 To run in a non-headless browser use
-```
+
+```shell
 yarn test:integration --headed
 ```
+
 The browser will pause when a test calls `await page.pause()`, so you can investigate current state.
 
 There is a VS code extension to run integration tests inside editor.
