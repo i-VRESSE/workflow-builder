@@ -11,13 +11,14 @@ import {
 } from '@zip.js/zip.js'
 import { saveAs } from 'file-saver'
 import { IWorkflowNode, ICatalogNode, IFiles, IParameters } from './types'
-import { workflow2tomltext } from './toml'
+import { TomlSchemas, workflow2tomltext } from './toml'
 import { workflowArchiveFilename, workflowFilename } from './constants'
 
-async function createZip (
+export async function createZip (
   nodes: IWorkflowNode[],
   global: IParameters,
-  files: IFiles
+  files: IFiles,
+  tomlSchemas: TomlSchemas
 ): Promise<Blob> {
   const writer = new ZipWriter(new BlobWriter('application/zip'))
 
@@ -27,7 +28,7 @@ async function createZip (
       await writer.add(fn, new Data64URIReader(dataURL))
     )
   )
-  const text = workflow2tomltext(nodes, global)
+  const text = workflow2tomltext(nodes, global, tomlSchemas)
   await writer.add(workflowFilename, new TextReader(text))
 
   return await writer.close()
@@ -36,9 +37,10 @@ async function createZip (
 export async function saveArchive (
   nodes: IWorkflowNode[],
   global: IParameters,
-  files: IFiles
+  files: IFiles,
+  tomlSchemas: TomlSchemas
 ): Promise<void> {
-  const zip: Blob = await createZip(nodes, global, files)
+  const zip: Blob = await createZip(nodes, global, files, tomlSchemas)
   saveAs(zip, workflowArchiveFilename)
 }
 
