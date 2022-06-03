@@ -211,13 +211,13 @@ fle_end_2_1 = 66
     const expected = `
 [somenode]
 
-[somenode.mol_1]
+[somenode.mol1]
 
 cyclicpept = false
 hisd_1 = 13
 hisd_2 = 42
 
-[somenode.mol_2]
+[somenode.mol2]
 
 cyclicpept = true
 hisd_1 = 314
@@ -664,14 +664,14 @@ key8 = [
       expect(result.global).toEqual(expected)
     })
 
-    it('should expand to array of objects when indexed:true + sectioned:true + prop indexed', () => {
+    it.only('should expand to array of objects when indexed:true + sectioned:true + prop indexed', () => {
       const workflow = `
-  [mol_1]
+  [mol1]
 
   hisd_1 = 13
   hisd_2 = 42
 
-  [mol_2]
+  [mol2]
 
   hisd_1 = 314
   hisd_2 = 512
@@ -707,6 +707,7 @@ key8 = [
       }
       expect(result.global).toEqual(expected)
     })
+
     it('should expand to array of array of object whend global and 2x indexed:true + flatten:true', () => {
       const workflow = `
   fle_sta_1_1 = 11

@@ -63,7 +63,7 @@ function parameters2toml (parameters: IParameters, tomlSchema: TomlObjectSchema)
         // indexed array of sectioned objects
         v.forEach((v1: IParameters, i) => {
           const d2 = parameters2toml(v1, nestedTomlSchema as TomlObjectSchema)
-          tomledParameters[`${k}_${i + 1}`] = Section(d2)
+          tomledParameters[`${k}${i + 1}`] = Section(d2)
         })
       } else {
         // indexed array of scalars
@@ -115,6 +115,7 @@ function toml2parameters (tomledParameters: IParameters, tomlSchema: TomlObjectS
     const isArrayFlatten = tomlSchema[kFirstPart]?.items?.flatten === true
     const isArrayOfArrayFlatten = tomlSchema[kFirstPart]?.items?.items?.flatten === true
     const isMultiPartIndexed = kParts.length > 0 && isIndexed && lastPartIsIndex
+    const isArraySectioned = tomlSchema[k]?.items?.sectioned === true
     if (isIndexed && isObject(v)) {
       if (!(kFirstPart in parameters)) {
         parameters[kFirstPart] = []

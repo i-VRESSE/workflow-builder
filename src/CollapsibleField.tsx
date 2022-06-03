@@ -11,7 +11,7 @@ export const CollapsibleField = (props: FieldProps): JSX.Element => {
   const initialCollapsed = uiOptions !== undefined && 'collapsed' in uiOptions ? uiOptions.collapsed === true : true
   const [collapsed, setCollapsed] = useState(initialCollapsed)
   const title = extractTitle(props, uiOptions)
-  const expanderId = `expander4${props.name.replace(' ', '_')}`
+  const expanderId = props.id ?? `expander4${props.name.replaceAll(' ', '_')}` // TODO find rjsf func to get more stable id
 
   const CollapsedIcon = CaretDownSquare
   const ExpandedIcon = CaretUpSquare
