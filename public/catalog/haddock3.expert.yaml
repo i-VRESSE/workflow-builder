@@ -2188,6 +2188,7 @@ nodes:
                 format: residue
           required: []
           additionalProperties: false
+        maxItemsFrom: molecules
     required: []
     additionalProperties: false
   uiSchema:

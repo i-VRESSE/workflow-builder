@@ -181,6 +181,7 @@ def config2schema(config):
             prop.update({
                 'type': 'array',
                 'items': schemas['schema'],
+                'maxItemsFrom': 'molecules',
             })
 
             if schemas['uiSchema']:
