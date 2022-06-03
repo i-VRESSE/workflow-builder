@@ -47,7 +47,6 @@ export const CollapsibleField = (props: FieldProps): JSX.Element => {
         border: '1px solid #CFCFCF',
         boxShadow: '4px 4px 15px -5px #CFCFCF',
         padding: '10px',
-        marginLeft: '2px',
         borderRadius: '5px'
       }}
       >
