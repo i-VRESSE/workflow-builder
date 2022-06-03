@@ -43,14 +43,10 @@ export const CollapsibleField = (props: FieldProps): JSX.Element => {
         border: '0px'
       }}
       />
-      <div style={{
-        border: '1px solid #CFCFCF',
-        boxShadow: '4px 4px 15px -5px #CFCFCF',
-        padding: '10px',
-        borderRadius: '5px'
-      }}
-      >
-        <ObjectField {...oprops} />
+      <div className='card'>
+        <div className='card-body'>
+          <ObjectField {...oprops} />
+        </div>
       </div>
     </div>
   )
