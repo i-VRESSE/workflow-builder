@@ -147,28 +147,26 @@ test.describe('given 2 molecules and a flexref node with seg parameter defined f
   })
 })
 
-
 test.describe('Given expert catalog and example loaded', () => {
   test.beforeEach(async ({ page }) => {
     // Go to http://localhost:3000/
-    await page.goto('http://localhost:3000/');
+    await page.goto('http://localhost:3000/')
     // Select http://localhost:3000/catalog/haddock3.expert.yaml
-    await page.locator('select').selectOption('http://localhost:3000/catalog/haddock3.expert.yaml');
+    await page.locator('select').selectOption('http://localhost:3000/catalog/haddock3.expert.yaml')
     // Click text=docking-protein-ligand
-    await page.locator('text=docking-protein-ligand').click();
+    await page.locator('text=docking-protein-ligand').click()
   })
   test('The topoaa, input molecules should be expandable', async ({ page }) => {
     // Click ol button:has-text("topoaa")
-    await page.locator('ol button:has-text("topoaa")').click();
+    await page.locator('ol button:has-text("topoaa")').click()
 
     await page.pause() // wait before clicking on bad button
 
     // Click #expander4input_molecules svg
-    await page.locator('#expander4input_molecules svg').click();
+    await page.locator('#expander4input_molecules svg').click()
 
     const error = page.locator('text=Something went terribly wrong.')
     await expect(error).not.toBeVisible()
     // Run me with `yarn test:integration --headed -g 'topoaa'`
-  });
-
+  })
 })
