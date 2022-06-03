@@ -19,12 +19,16 @@ export const CollapsibleField = (props: FieldProps): JSX.Element => {
   if (collapsed) {
     return (
       <div className='my-1'>
-        <h5 onClick={() => setCollapsed(false)}>
-          <CollapsedIcon />
-          <span className='align-middle'>
+        <div className='card'>
+          <div className='card-body'>
+            <h5 onClick={() => setCollapsed(false)}>
+              <CollapsedIcon />
+              <span className='align-middle'>
             &nbsp;{title}
-          </span>
-        </h5>
+              </span>
+            </h5>
+          </div>
+        </div>
       </div>
     )
   }
@@ -33,18 +37,15 @@ export const CollapsibleField = (props: FieldProps): JSX.Element => {
   const oprops = dropTitle(props)
   return (
     <div className='my-1'>
-      <h5 onClick={() => setCollapsed(true)}>
-        <ExpandedIcon />
-        <span className='align-middle'>
-          &nbsp;{title}
-        </span>
-      </h5>
-      <hr style={{
-        border: '0px'
-      }}
-      />
       <div className='card'>
         <div className='card-body'>
+          <h5 onClick={() => setCollapsed(true)}>
+            <ExpandedIcon />
+            <span className='align-middle'>
+          &nbsp;{title}
+            </span>
+          </h5>
+          <hr className='border-0 bg-secondary' style={{ height: '2px' }} />
           <ObjectField {...oprops} />
         </div>
       </div>
