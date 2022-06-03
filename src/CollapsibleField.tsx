@@ -1,6 +1,6 @@
 import { FieldProps, utils } from '@rjsf/core'
 import { useState } from 'react'
-import { CaretDownSquare, CaretUpSquare, PiggyBank } from 'react-bootstrap-icons'
+import { CaretDownSquare, CaretUpSquare } from 'react-bootstrap-icons'
 
 export const CollapsibleField = (props: FieldProps): JSX.Element => {
   if (props.schema.type !== 'object') {
@@ -40,16 +40,19 @@ export const CollapsibleField = (props: FieldProps): JSX.Element => {
         </span>
       </h5>
       <hr style={{
-        'border': '0px'
-      }}/>
-        <div style={{
-          'border': '1px solid #CFCFCF',
-          'boxShadow': '4px 4px 15px -5px #CFCFCF',
-          'padding': '10px',
-          'marginLeft': '2px',
-          'borderRadius': '10px'}}>
-          <ObjectField {...oprops} />
-        </div>
+        border: '0px'
+      }}
+      />
+      <div style={{
+        border: '1px solid #CFCFCF',
+        boxShadow: '4px 4px 15px -5px #CFCFCF',
+        padding: '10px',
+        marginLeft: '2px',
+        borderRadius: '10px'
+      }}
+      >
+        <ObjectField {...oprops} />
+      </div>
     </div>
   )
 }
