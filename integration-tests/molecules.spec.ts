@@ -25,7 +25,7 @@ test.describe('given 1 molecule and a flexref node with seg parameter defined', 
     // Click button:has-text("flexref")
     await page.locator('button:has-text("flexref")').click()
     // Click #expander4flexibility svg
-    await page.locator('#expander4flexibility svg').click();
+    await page.locator('#expander4flexibility svg').click()
     // Click text=segStarting residue numberEnding residue number >> button >> nth=2
     await page.locator('text=segStarting residue numberEnding residue number >> button').nth(2).click()
     // Select 22
@@ -54,8 +54,8 @@ test.describe('given 1 molecule and a flexref node with seg parameter defined', 
     test('should give a seg table for the extra molecule', async ({ page }) => {
       // Click ol button:has-text("flexref")
       await page.locator('ol button:has-text("flexref")').click()
-        // Click #expander4flexibility svg
-      await page.locator('#expander4flexibility svg').click();
+      // Click #expander4flexibility svg
+      await page.locator('#expander4flexibility svg').click()
       // TODO Once fixed this assertion should be uncommented and pause() removed
       // const secondSeg = await page.locator('.root_flexibility_seg_1')
       // await expect(secondSeg).toBeVisible()
@@ -96,7 +96,7 @@ test.describe('given 2 molecules and a flexref node with seg parameter defined f
     // Click button:has-text("flexref")
     await page.locator('button:has-text("flexref")').click()
     // Click #expander4flexibility svg
-    await page.locator('#expander4flexibility svg').click();
+    await page.locator('#expander4flexibility svg').click()
     // Click .array-item-add >> nth=0
     await page.locator('.array-item-add').first().click()
     // Select 21
@@ -134,7 +134,7 @@ test.describe('given 2 molecules and a flexref node with seg parameter defined f
       // Click ol button:has-text("flexref")
       await page.locator('ol button:has-text("flexref")').click()
       // Click #expander4flexibility svg
-      await page.locator('#expander4flexibility svg').click();
+      await page.locator('#expander4flexibility svg').click()
 
       // Click text=Submit
       await page.locator('text=Submit').click()
