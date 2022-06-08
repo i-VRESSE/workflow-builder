@@ -19,7 +19,7 @@ export const NodeForm = (): JSX.Element => {
   return (
     <>
       <h4>{catalogNode.label} ({node.id})</h4>
-      <div>
+      <div style={{ marginBottom: '20px' }}>
         {catalogNode.description}
       </div>
       <Form
