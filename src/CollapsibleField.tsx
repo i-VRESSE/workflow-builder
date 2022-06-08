@@ -18,16 +18,14 @@ export const CollapsibleField = (props: FieldProps): JSX.Element => {
   // To render button + name use styling from https://github.com/rjsf-team/react-jsonschema-form/blob/master/packages/bootstrap-4/src/TitleField/TitleField.tsx
   if (collapsed) {
     return (
-      <div className='my-1'>
-        <div className='card'>
-          <div className='card-body'>
-            <h5 onClick={() => setCollapsed(false)}>
-              <CollapsedIcon />
-              <span className='align-middle'>
-            &nbsp;{title}
-              </span>
-            </h5>
-          </div>
+      <div className='card'>
+        <div className='card-header'>
+          <h5 className='panel-title' onClick={() => setCollapsed(false)}>
+            <CollapsedIcon />
+            <span className='align-middle mx-3'>
+              {title}
+            </span>
+          </h5>
         </div>
       </div>
     )
@@ -36,18 +34,17 @@ export const CollapsibleField = (props: FieldProps): JSX.Element => {
   // TitleField inside the ObjectField is not rendered when there is no title or name
   const oprops = dropTitle(props)
   return (
-    <div className='my-1'>
-      <div className='card'>
-        <div className='card-body'>
-          <h5 onClick={() => setCollapsed(true)}>
-            <ExpandedIcon />
-            <span className='align-middle'>
-          &nbsp;{title}
-            </span>
-          </h5>
-          <hr className='border-0 bg-secondary' style={{ height: '2px' }} />
-          <ObjectField {...oprops} />
-        </div>
+    <div className='card'>
+      <div className='card-header'>
+        <h5 onClick={() => setCollapsed(true)}>
+          <ExpandedIcon />
+          <span className='align-middle mx-3'>
+            {title}
+          </span>
+        </h5>
+      </div>
+      <div className='card-body'>
+        <ObjectField {...oprops} />
       </div>
     </div>
   )
