@@ -17,6 +17,7 @@ export const CollapsibleField = (props: FieldProps): JSX.Element => {
   const ExpandedIcon = CaretUpSquare
 
   // To render button + name use styling from https://github.com/rjsf-team/react-jsonschema-form/blob/master/packages/bootstrap-4/src/TitleField/TitleField.tsx
+  // Card styling from bootstrap 4.6 https://getbootstrap.com/docs/4.6/components/card/
   if (collapsed) {
     return (
       <div className='card'>
