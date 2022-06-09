@@ -25,3 +25,12 @@ export function internalizeDataUrls (data: IParameters, files: IFiles): IParamet
     (d: string) => files[d]
   )
 }
+
+export function dataURL2content (value: string): string {
+  const anchor = ';base64,'
+  const encoded = value.substring(value.indexOf(anchor) + anchor.length)
+  if (typeof atob === 'function') {
+    return atob(encoded)
+  }
+  return Buffer.from(encoded, 'base64').toString()
+}

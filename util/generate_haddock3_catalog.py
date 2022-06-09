@@ -38,6 +38,9 @@ Translations from haddock3 -> i-VRESSE workflow builder:
     * explevel -> each explevel gets generated into own catalog
     * group -> ui:group in ui schema
     * expandable (*_1) -> arrays and objects + tomlschema
+    * mol_* or *_*_1_1 -> maxItemsFrom:molecules aka array should have same size as global molecules parameter
+    * 'residue number' in title -> format:residue
+    * 'chain' or 'segment id' in title -> format:chain
 
 TODO move script outside workflow-builder repo as this repo should be generic and not have any haddock specific scripts
 """
@@ -91,7 +94,12 @@ def collapse_expandable(config):
         elif match := re.match(array_of_array_of_object, k):
             p, n = match.groups()
             if p not in new_config:
-                new_config[p] = {'dim': 2, 'properties': {}, 'type': 'list'}
+                new_config[p] = {
+                    'dim': 2,
+                    'properties': {},
+                    'type': 'list',
+                    'maxItemsFrom': 'molecules'
+                }
             new_config[p]['properties'][n] = v
             if 'group' in v:
                 # Move group from nested prop to outer array
@@ -122,6 +130,8 @@ def collapse_expandable(config):
                 'dim': 1,
                 'items': v
             }
+            if k.startswith('mol_'):
+                new_config[p]['maxItemsFrom'] = 'molecules'
             if 'group' in v:
                 new_config[p]['group'] = v['group']
                 del v['group']
@@ -129,6 +139,12 @@ def collapse_expandable(config):
             new_config[k] = v
 
     return new_config
+
+def residue_like(schema):
+    return 'residue number' in schema['title'].lower()
+
+def chain_like(key, schema):
+    return 'chain' in key or 'Segment ID' in schema['title']
 
 def config2schema(config):
     """Translate haddock3 config file of a module to JSON schema"""
@@ -192,6 +208,8 @@ def config2schema(config):
             if 'default' in v and isnan(v['default']):
                 # TODO handle nan's more gracefully, instead of now just deleting it
                 del prop['default']
+            if residue_like(v):
+                prop['format'] = 'residue'
         elif v['type'] == 'file':
             prop['type'] = 'string'
             prop['format'] = 'uri-reference'
@@ -224,12 +242,16 @@ def config2schema(config):
                 prop['enum'] = v['choices']
             if v['default'] == '':
                 del prop['default']
+            if chain_like(k, v):
+                prop['format'] = 'chain'
         elif v['type'] == 'list':
             prop['type'] = "array"
             if 'minitems' in v:
                 prop['minItems'] = v['minitems']
             if 'maxitems' in v:
                 prop['maxItems'] = v['maxitems']
+            elif 'maxItemsFrom' in v:
+                prop['maxItemsFrom'] = v['maxItemsFrom']
             if 'properties' in v:
                 obj_schemas = config2schema(v['properties'])
                 if v['dim'] == 1:
@@ -299,6 +321,7 @@ def config2schema(config):
                     "type": "string",
                     "format": "uri-reference"
                 }
+                prop['format'] = 'moleculefilepaths'
                 prop_ui = {
                     'items': {
                          'ui:widget': 'file',
@@ -403,6 +426,7 @@ def process_level(level_fn: Path, level: str):
 
     broken_modules = {
         'topocg', # Gives `AttributeError: module 'haddock.modules.topology.topocg' has no attribute 'HaddockModule'` error
+        'rmsdmatrix', # Has resdic_ parameter which this script can not handle yet
     }
     nodes = [process_module(module, category, level) for module, category in modules_category.items() if module not in broken_modules]
 

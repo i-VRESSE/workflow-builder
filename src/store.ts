@@ -5,13 +5,15 @@ import { UiSchema } from '@rjsf/core'
 import { externalizeDataUrls, internalizeDataUrls } from './dataurls'
 import { saveArchive } from './archive'
 import { ICatalog, IWorkflowNode, IFiles, IParameters, ICatalogNode, ICatalogIndex } from './types'
-import { workflow2tomltext } from './toml'
+import { catalog2tomlSchemas, workflow2tomltext } from './toml'
 import { dropUnusedFiles, loadWorkflowArchive, emptyParams, clearFiles } from './workflow'
 import { fetchCatalogIndex, fetchCatalog } from './catalog'
 import { catalogIndexURL } from './constants'
 import { removeItemAtIndex, replaceItemAtIndex, moveItem, swapItem, removeAllItems } from './utils/array'
 import { groupParameters, unGroupParameters } from './grouper'
 import { pruneDefaults } from './pruner'
+import { resolveMaxItemsFrom } from './resolveMaxItemsFrom'
+import { addMoleculeValidation } from './molecule/addMoleculeValidation'
 
 const catalogIndexState = selector<ICatalogIndex>({
   key: 'catalogIndex',
@@ -226,6 +228,27 @@ export function useSelectedNodeFormData (): [IParameters | undefined, SetterOrUp
   return useRecoilState(selectedNodeFormDataState)
 }
 
+const selectedNodeFormSchemaState = selector<JSONSchema7 | undefined>({
+  key: 'selectedNodeFormSchema',
+  get: ({ get }) => {
+    const catalogNode = get(selectedCatalogNodeState)
+    const globalParameters = get(globalParametersState)
+    const catalog = get(catalogState)
+    if (catalogNode === undefined || catalogNode.formSchema === undefined || catalogNode === undefined || catalog === undefined) {
+      return undefined
+    }
+    const schemaWithMaxItems = resolveMaxItemsFrom(catalogNode.formSchema, globalParameters)
+    const globalSchema = catalog.global.schema
+    const files = get(filesState)
+    const schemaWithMolInfo = addMoleculeValidation(schemaWithMaxItems, globalParameters, globalSchema, files)
+    return schemaWithMolInfo
+  }
+})
+
+export function useSelectedNodeFormSchema (): JSONSchema7 | undefined {
+  return useRecoilValue(selectedNodeFormSchemaState)
+}
+
 interface UseWorkflow {
   nodes: IWorkflowNode[]
   editingGlobal: boolean
@@ -310,7 +333,7 @@ export function useWorkflow (): UseWorkflow {
       setGlobal(r.global)
     },
     async save () {
-      await saveArchive(nodes, global, files)
+      await saveArchive(nodes, global, files, catalog2tomlSchemas(catalog))
     },
     moveNodeDown (nodeIndex: number) {
       if (nodeIndex + 1 < nodes.length) {
@@ -341,6 +364,5 @@ export function useFiles (): IFiles {
 export function useText (): string {
   const { nodes, global } = useWorkflow()
   const catalog = useCatalog()
-  const tomlSchema4nodes = Object.fromEntries(catalog.nodes.map(n => [n.id, n.tomlSchema !== undefined ? n.tomlSchema : {}]))
-  return workflow2tomltext(nodes, global, tomlSchema4nodes)
+  return workflow2tomltext(nodes, global, catalog2tomlSchemas(catalog))
 }

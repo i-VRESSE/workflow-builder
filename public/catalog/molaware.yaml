@@ -1,0 +1,146 @@
+---
+title: Test catalog
+global:
+  schema:
+    type: object
+    properties:
+      molecules:
+        title: Input Molecules
+        type: array
+        minItems: 1
+        maxItems: 20
+        format: moleculefilepaths
+        items:
+          type: string
+          format: uri-reference
+    required:
+      - molecules
+  uiSchema:
+    molecules:
+      items:
+        ui:widget: file
+  tomlSchema: {}
+categories:
+- name: cat1
+  description: Category 1
+nodes:
+- id: node1
+  label: Node with prop1 has same size as global molecules parameter
+  description: Description 1
+  category: cat1
+  schema:
+    type: object
+    properties:
+      prop1:
+        type: array
+        title: Which molecules are a shape?
+        items:
+          default: false
+          title: Is this molecule a shape?
+          type: boolean
+        maxItemsFrom: molecules
+  uiSchema:
+    prop1:
+      items:
+        ui:widget: radio
+  tomlSchema: {}
+- id: node2
+  label: Node same as node1, but with ui:group
+  description: Description 1
+  category: cat1
+  schema:
+    type: object
+    properties:
+      prop1:
+        type: array
+        title: Which molecules are a shape?
+        items:
+          default: false
+          title: Is this molecule a shape?
+          type: boolean
+        maxItemsFrom: molecules
+  uiSchema:
+    prop1:
+      items:
+        ui:widget: radio
+      ui:group: 'Molecules'
+  tomlSchema: {}
+- id: node3
+  label: Node with segments (with chain and residue formats) for each molecule
+  description: Description 1
+  category: cat1
+  schema:
+    type: object
+    properties:
+      seg:
+        type: array
+        maxItemsFrom: molecules
+        title: Segments
+        items:
+          type: array
+          title: Segments of a molecule
+          items:
+            type: object
+            properties:
+              chain:
+                title: Chain
+                type: string
+                format: chain
+              sta:
+                title: Starting residue number
+                type: number
+                format: residue
+              end:
+                title: Ending residue number
+                type: number
+                format: residue
+            required: []
+            additionalProperties: false
+  uiSchema:
+    seg:
+      items:
+        ui:field: table
+  tomlSchema:
+    seg:
+      indexed: true
+      items:
+        indexed: true
+        items:
+          flatten: true
+- id: node4
+  label: Node with array of object with property which array of scalar. Scalar is a residue and rendered as multi select.
+  description: Description 1
+  category: cat1
+  schema:
+    type: object
+    properties:
+      prop1:
+        type: array
+        title: Specifications for molecules
+        items:
+          type: object
+          title: Specification for a molecule
+          properties:
+            hisd:
+              type: array
+              title: Which residues a HISD?
+              items:
+                title: HISD residue number
+                type: number
+                format: residue
+              uniqueItems: true
+        maxItemsFrom: molecules
+  uiSchema:
+    prop1:
+      items:
+        hisd:
+          "ui:widget": "checkboxes"
+  tomlSchema:
+    prop1:
+      indexed: true
+      items:
+        sectioned: true
+        properties:
+          hisd:
+            indexed: true
+examples: {}

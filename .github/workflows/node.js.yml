@@ -23,3 +23,7 @@ jobs:
     - run: yarn test
     - run: yarn lint
     - run: yarn build
+    - name: Install Playwright
+      run: npx playwright install --with-deps
+    - name: Run integration tests
+      run: yarn test:integration

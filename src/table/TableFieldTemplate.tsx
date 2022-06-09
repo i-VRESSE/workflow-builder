@@ -1,5 +1,5 @@
 import { ArrayFieldTemplateProps } from '@rjsf/core'
-import { Button, Table, OverlayTrigger, Popover, Row, Container, Col } from 'react-bootstrap'
+import { Button, Table, OverlayTrigger, Popover } from 'react-bootstrap'
 import { Dash, Plus, QuestionCircle } from 'react-bootstrap-icons'
 
 import './TableFieldTemplate.css'
@@ -97,7 +97,19 @@ export const TableFieldTemplate = (props: ArrayFieldTemplateProps): JSX.Element 
       )
     }
   )
-  headers.push(<th key='actions-th' />)
+  headers.push(
+    <th key='actions-th'>
+      <Button
+        className='array-item-add'
+        title='Add'
+        style={btnStyle}
+        onClick={props.onAddClick}
+        disabled={props.disabled || props.readonly}
+      >
+        <Plus />
+      </Button>
+    </th>
+  )
   let rows: JSX.Element[] = []
   if ('items' in props) {
     rows = props.items.map((element: any) => {
@@ -107,7 +119,7 @@ export const TableFieldTemplate = (props: ArrayFieldTemplateProps): JSX.Element 
           <td>
             <Button
               type='danger'
-              className='array-item-remove'
+              className='array-item-remove btn-light'
               title='Remove'
               style={btnStyle}
               disabled={props.disabled || props.readonly}
@@ -130,21 +142,6 @@ export const TableFieldTemplate = (props: ArrayFieldTemplateProps): JSX.Element 
         </thead>
         <tbody>{rows}</tbody>
       </Table>
-      <Container className=''>
-        <Row className='mt-2'>
-          <Col xs={11} />
-          <Col xs={1}>
-            <Button
-              className='array-item-add'
-              title='Add'
-              onClick={props.onAddClick}
-              disabled={props.disabled || props.readonly}
-            >
-              <Plus />
-            </Button>
-          </Col>
-        </Row>
-      </Container>
     </fieldset>
   )
 }

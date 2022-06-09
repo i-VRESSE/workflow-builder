@@ -1,7 +1,8 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 import { JSONSchema7 } from 'json-schema'
 import { validateCatalog, validateWorkflow } from './validate'
-import { ICatalog, IWorkflowSchema } from './types'
+import { ICatalog, IFiles, IWorkflowSchema } from './types'
+import { JSONSchema7WithMaxItemsFrom } from './resolveMaxItemsFrom'
 
 describe('validateWorkflow()', () => {
   describe('given a workflow with only global parameters', () => {
@@ -137,7 +138,7 @@ describe('validateWorkflow()', () => {
             missingProperty: 'autohis'
           },
           schemaPath: '#/required',
-          workflowPath: 'node[0]'
+          workflowPath: 'nodes[0]'
         }
       ]
       expect(errors).toEqual(expected)
@@ -165,16 +166,235 @@ describe('validateWorkflow()', () => {
               node: 'myothernode'
             },
             schemaPath: '',
-            workflowPath: 'node[0]'
+            workflowPath: 'nodes[0]'
           }
         ]
         expect(errors).toEqual(expected)
       })
     })
   })
+
+  describe('given node with maxItemsFrom in schema', () => {
+    let schemas: IWorkflowSchema
+
+    beforeEach(() => {
+      const propSchema: JSONSchema7WithMaxItemsFrom = {
+        type: 'array',
+        title: 'Which molecules are a shape?',
+        items: {
+          default: false,
+          title: 'Is this molecule a shape?',
+          type: 'boolean'
+        },
+        maxItemsFrom: 'gprop'
+      }
+      const nodeSchema: JSONSchema7 = {
+        type: 'object',
+        properties: {
+          nprop: propSchema
+        }
+      }
+      const globalSchema: JSONSchema7 = {
+        type: 'object',
+        properties: {
+          gprop: {
+            type: 'array',
+            items: {
+              type: 'string'
+            }
+          }
+        },
+        additionalProperties: false
+      }
+      schemas = {
+        global: {
+          schema: globalSchema,
+          uiSchema: {}
+        },
+        nodes: [
+          {
+            id: 'mynode',
+            label: 'My node',
+            description: 'My node description',
+            category: 'My category',
+            schema: nodeSchema,
+            uiSchema: {}
+          }
+        ]
+      }
+    })
+
+    it('should return zero errors when same number of items is given as maxItemsFrom field', () => {
+      const workflow = {
+        global: {
+          gprop: ['a', 'b', 'c']
+        },
+        nodes: [
+          {
+            id: 'mynode',
+            parameters: {
+              nprop: [true, false, true]
+            }
+          }
+        ]
+      }
+      const errors = validateWorkflow(workflow, schemas)
+
+      expect(errors).toEqual([])
+    })
+
+    it('should complain when more number of items is given as maxItemsFrom field', () => {
+      const workflow = {
+        global: {
+          gprop: ['a']
+        },
+        nodes: [
+          {
+            id: 'mynode',
+            parameters: {
+              nprop: [true, false, true]
+            }
+          }
+        ]
+      }
+      const errors = validateWorkflow(workflow, schemas)
+
+      const expected = [
+        {
+          instancePath: '/nprop',
+          keyword: 'maxItems',
+          message: 'must NOT have more than 1 items',
+          params: {
+            limit: 1
+          },
+          schemaPath: '#/properties/nprop/maxItems',
+          workflowPath: 'nodes[0]'
+        }
+      ]
+      expect(errors).toEqual(expected)
+    })
+  })
+
+  describe('given parameter with format:chain', () => {
+    let schemas: IWorkflowSchema
+    let files: IFiles
+
+    beforeEach(() => {
+      const globalSchema: JSONSchema7 = {
+        type: 'object',
+        properties: {
+          molecules: {
+            type: 'array',
+            format: 'moleculefilepaths',
+            items: {
+              type: 'string'
+            }
+          }
+        }
+      }
+      const body = 'ATOM     32  N  AARG A  -3      11.281  86.699  94.383  0.50 35.88           N  '
+      const file = 'data:text/plain;name=a.pdb;base64,' + Buffer.from(body).toString('base64')
+      files = {
+        'a.pdb': file
+      }
+      const propSchema: JSONSchema7WithMaxItemsFrom = {
+        type: 'array',
+        maxItemsFrom: 'molecules',
+        items: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              chain: {
+                type: 'string',
+                format: 'chain'
+              }
+            }
+          }
+        }
+      }
+      const nodeSchema: JSONSchema7 = {
+        type: 'object',
+        properties: {
+          seg: propSchema
+        }
+      }
+
+      schemas = {
+        global: {
+          schema: globalSchema,
+          uiSchema: {}
+        },
+        nodes: [
+          {
+            id: 'mynode',
+            label: 'My node',
+            description: 'My node description',
+            category: 'My category',
+            schema: nodeSchema,
+            uiSchema: {}
+          }
+        ]
+      }
+    })
+
+    describe('with valid chain', () => {
+      it('should return zero errors', () => {
+        const workflow = {
+          global: {
+            molecules: ['a.pdb']
+          },
+          nodes: [
+            {
+              id: 'mynode',
+              parameters: {
+                seg: [[{ chain: 'A' }]]
+              }
+            }
+          ]
+        }
+        const errors = validateWorkflow(workflow, schemas, files)
+
+        expect(errors).toEqual([])
+      })
+    })
+
+    describe('with invalid chain', () => {
+      it('should return 1 error', () => {
+        const workflow = {
+          global: {
+            molecules: ['a.pdb']
+          },
+          nodes: [
+            {
+              id: 'mynode',
+              parameters: {
+                seg: [[{ chain: 'X' }]]
+              }
+            }
+          ]
+        }
+        const errors = validateWorkflow(workflow, schemas, files)
+
+        const expected = [{
+          instancePath: '/seg/0/0/chain',
+          keyword: 'enum',
+          message: 'must be equal to one of the allowed values',
+          params: {
+            allowedValues: [
+              'A'
+            ]
+          },
+          schemaPath: '#/properties/seg/items/0/items/properties/chain/enum',
+          workflowPath: 'nodes[0]'
+        }]
+        expect(errors).toEqual(expected)
+      })
+    })
+  })
 })
 
-describe('validateCatalog', () => {
+describe('validateCatalog()', () => {
   describe('given catalog with JSON schemas', () => {
     it('should return zero errors', () => {
       const catalog: ICatalog = {
@@ -277,6 +497,62 @@ describe('validateCatalog', () => {
       const errors = validateCatalog(catalog)
 
       expect(errors.length).toBeGreaterThan(0)
+    })
+  })
+
+  describe('given node schema with maxItemsFrom keyword', () => {
+    it('should be OK', () => {
+      const propSchema: any = {
+        type: 'array',
+        title: 'Which molecules are a shape?',
+        items: {
+          default: false,
+          title: 'Is this molecule a shape?',
+          type: 'boolean'
+        },
+        maxItemsFrom: 'gprop'
+      }
+      const nodeSchema: JSONSchema7 = {
+        type: 'object',
+        properties: {
+          nprop: propSchema
+        }
+      }
+      const globalSchema: JSONSchema7 = {
+        type: 'object',
+        properties: {
+          gprop: {
+            type: 'array',
+            items: {
+              type: 'string'
+            }
+          }
+        },
+        additionalProperties: false
+      }
+      const catalog: ICatalog = {
+        title: 'Test catalog',
+        global: {
+          schema: globalSchema,
+          uiSchema: {}
+        },
+        nodes: [
+          {
+            id: 'mynode',
+            label: 'My node',
+            description: 'My node description',
+            category: 'My category',
+            schema: nodeSchema,
+            uiSchema: {}
+          }
+        ],
+        examples: {},
+        categories: []
+      }
+
+      const errors = validateCatalog(catalog)
+
+      expect(errors.length).toEqual(0)
     })
   })
 })

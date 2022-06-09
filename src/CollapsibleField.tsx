@@ -11,6 +11,7 @@ export const CollapsibleField = (props: FieldProps): JSX.Element => {
   const initialCollapsed = uiOptions !== undefined && 'collapsed' in uiOptions ? uiOptions.collapsed === true : true
   const [collapsed, setCollapsed] = useState(initialCollapsed)
   const title = extractTitle(props, uiOptions)
+  const expanderId = `expander4${props.name.replace(' ', '_')}`
 
   const CollapsedIcon = CaretDownSquare
   const ExpandedIcon = CaretUpSquare
@@ -20,7 +21,7 @@ export const CollapsibleField = (props: FieldProps): JSX.Element => {
     return (
       <div className='card'>
         <div className='card-header'>
-          <h5 className='panel-title' onClick={() => setCollapsed(false)}>
+          <h5 className='panel-title' onClick={() => setCollapsed(false)} id={expanderId}>
             <CollapsedIcon />
             <span className='align-middle mx-3'>
               {title}
@@ -36,7 +37,7 @@ export const CollapsibleField = (props: FieldProps): JSX.Element => {
   return (
     <div className='card'>
       <div className='card-header'>
-        <h5 onClick={() => setCollapsed(true)}>
+        <h5 onClick={() => setCollapsed(true)} id={expanderId}>
           <ExpandedIcon />
           <span className='align-middle mx-3'>
             {title}

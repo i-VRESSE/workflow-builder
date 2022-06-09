@@ -10,6 +10,7 @@ export default defineConfig({
   test: {
     coverage: {
       reporter: ['text', 'html', 'lcovonly']
-    }
+    },
+    exclude: ['**/node_modules/**', '**/dist/**', '**/cypress/**', '**/.{idea,git,cache,output,temp}/**', '**/integration-tests/**']
   }
 })
