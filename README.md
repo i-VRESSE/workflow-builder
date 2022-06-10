@@ -7,6 +7,10 @@ Graphical interface to build a workflow file
 
 The main branch is published at https://wonderful-noether-53a9e8.netlify.app/
 
+The builder allows you to create a complex TOML formatted config file based on a set of JSON schemas.
+
+![Image](docs/demo.gif)
+
 ## Develop
 
 Requires [NodeJS](https://nodejs.org/) and [yarn](https://yarnpkg.com/) (tested with v3.2.1).
