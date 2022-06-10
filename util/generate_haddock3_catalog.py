@@ -181,7 +181,10 @@ def config2schema(config):
             prop.update({
                 'type': 'array',
                 'items': schemas['schema'],
+                'maxItemsFrom': 'molecules',
             })
+            # TODO rjsf gives error when description is present, so for now remove it
+            del prop['description']
 
             if schemas['uiSchema']:
                 prop_ui['items'] = schemas['uiSchema']
