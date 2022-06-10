@@ -161,6 +161,8 @@ function toml2parameters (tomledParameters: IParameters, tomlSchema: TomlObjectS
 }
 
 export function parseWorkflow (workflow: string, globalKeys: Set<string>, tomlSchema4global: TomlObjectSchema, tomSchema4nodes: Record<string, TomlObjectSchema>): IWorkflow {
+  dedupWorkflow(workflow)
+
   const table = parse(workflow, { bigint: false })
   const global: IParameters = {}
   const nodes: IWorkflowNode[] = []
@@ -183,4 +185,60 @@ export function parseWorkflow (workflow: string, globalKeys: Set<string>, tomlSc
     nodes,
     global: toml2parameters(global, tomlSchema4global)
   }
+}
+
+function uniqueHeader (line: string, memory: Map<string, number>): string {
+  // Can be
+  // [foo] -> remember foo +  ['foo.1']
+  // [foo.bar]-> remember foo +  ['foo.1'.bar]
+  // ['foo.1'] -> remember foo + leave as is
+  // ['foo.1'.bar] -> remember foo + leave as is
+  // ['foo.bar'] -> remember 'foo.bar' + leave as is
+  // [[foo]] -> leave as is
+  const header = line.slice(1, -1)
+  let nodeName = ''
+  let rest = ''
+  const isWord = header.match(/^(\w+)$/) // foo
+  const isQuotedDigit = header.match(/^'(\w+)\.(\d+)'$/) // 'foo.1'
+  const isSubHeader = header.match(/^(\w+)((?:\.\w+)+)$/) // foo.bar
+  const isQuotedSubHeader = header.match(/^'(\w+)\.(\d+)'((?:\.\w+)+)$/) // 'foo.1'.bar
+  if (isQuotedSubHeader !== null) {
+    nodeName = isQuotedSubHeader[1]
+    rest = isQuotedSubHeader[2]
+  } else if (isQuotedDigit !== null) {
+    nodeName = isQuotedDigit[1]
+    rest = isQuotedDigit[2]
+  } else if (isSubHeader !== null) {
+    nodeName = isSubHeader[1]
+    rest = isSubHeader[2]
+  } else if (isWord !== null) {
+    nodeName = isWord[1]
+  }
+  if (nodeName !== '') {
+    const index = memory.get(nodeName)
+    if (index !== undefined) {
+      memory.set(nodeName, index + 1)
+      return `['${nodeName}.${index}'${rest}]`
+    } else {
+      memory.set(nodeName, 1)
+      return line
+    }
+  } else {
+    return line
+  }
+}
+
+export function dedupWorkflow (inp: string): string {
+  const out: string[] = []
+  const isHeader = /^\['?\w+.*\]$/
+  const headers: Map<string, number> = new Map()
+  for (const line of inp.split(/(\r\n|\r|\n)/g)) {
+    if (isHeader.test(line)) {
+      const newLine = uniqueHeader(line, headers)
+      out.push(newLine)
+    } else {
+      out.push(line)
+    }
+  }
+  return out.join('\n')
 }

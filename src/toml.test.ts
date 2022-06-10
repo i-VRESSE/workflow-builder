@@ -1,5 +1,5 @@
 import { expect, describe, it } from 'vitest'
-import { parseWorkflow, TomlSchemas, workflow2tomltext } from './toml'
+import { dedupWorkflow, parseWorkflow, TomlSchemas, workflow2tomltext } from './toml'
 import { IParameters } from './types'
 
 describe('workflow2tomltext()', () => {
@@ -664,7 +664,7 @@ key8 = [
       expect(result.global).toEqual(expected)
     })
 
-    it.only('should expand to array of objects when indexed:true + sectioned:true + prop indexed', () => {
+    it('should expand to array of objects when indexed:true + sectioned:true + prop indexed', () => {
       const workflow = `
   [mol1]
 
@@ -805,5 +805,68 @@ key8 = [
       }
       expect(result).toEqual(expected)
     })
+  })
+})
+
+describe.only('dedupWorkflow()', () => {
+  it.each([
+    [
+      'no dups',
+      `\
+[somenode]
+foo = 42
+
+[somenode.nestedpar]
+bar = 5
+
+['somenode.1']
+
+['somenode.1'.nestedpar]
+bar = 8
+`,
+`
+[somenode]
+foo = 42
+
+[somenode.nestedpar]
+bar = 5
+
+['somenode.1']
+
+['somenode.1'.nestedpar]
+bar = 8
+`
+    ], [
+      'dups',
+      `\
+[somenode]
+foo = 1
+
+[somenode.nestedpar]
+bar = 2
+
+[somenode]
+foo = 3
+
+[somenode.nestedpar]
+bar = 4
+
+`, `\
+[somenode]
+foo = 1
+
+[somenode.nestedpar]
+bar = 2
+
+['somenode.1']
+foo = 3
+
+['somenode.1'.nestedpar]
+bar = 4
+`
+    ]
+  ])('given %s should replace repeated headers with headers including an index', (_desc, input, expected) => {
+    const actual = dedupWorkflow(input)
+    expect(actual).toEqual('')//expected)
   })
 })
