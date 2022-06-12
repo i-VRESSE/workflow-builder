@@ -824,7 +824,7 @@ bar = 5
 ['somenode.1'.nestedpar]
 bar = 8
 `,
-`
+`\
 [somenode]
 foo = 42
 
@@ -850,7 +850,6 @@ foo = 3
 
 [somenode.nestedpar]
 bar = 4
-
 `, `\
 [somenode]
 foo = 1
@@ -867,6 +866,6 @@ bar = 4
     ]
   ])('given %s should replace repeated headers with headers including an index', (_desc, input, expected) => {
     const actual = dedupWorkflow(input)
-    expect(actual).toEqual('')//expected)
+    expect(actual).toEqual(expected)
   })
 })
