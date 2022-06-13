@@ -708,6 +708,46 @@ key8 = [
       expect(result.global).toEqual(expected)
     })
 
+    it('should expand to array of objects when indexed:true + sectioned:true', () => {
+      const workflow = `
+      [nodex.mol1]
+      cyclicpept = true
+
+      [nodex.mol2]
+      cyclicpept = false
+      `
+      const tomlSchema4global = {}
+      const tomSchema4nodes = {
+        nodex: {
+          mol: {
+            indexed: true,
+            items: {
+              sectioned: true
+            }
+          }
+        }
+      }
+
+      const result = parseWorkflow(
+        workflow,
+        new Set(),
+        tomlSchema4global,
+        tomSchema4nodes
+      )
+
+      const expected = {
+        id: 'nodex',
+        parameters: {
+          mol: [{
+            cyclicpept: true
+          }, {
+            cyclicpept: false
+          }]
+        }
+      }
+      expect(result.nodes[0]).toEqual(expected)
+    })
+
     it('should expand to array of array of object whend global and 2x indexed:true + flatten:true', () => {
       const workflow = `
   fle_sta_1_1 = 11
@@ -808,7 +848,7 @@ key8 = [
   })
 })
 
-describe.only('dedupWorkflow()', () => {
+describe('dedupWorkflow()', () => {
   it.each([
     [
       'no dups',

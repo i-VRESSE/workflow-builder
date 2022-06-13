@@ -116,8 +116,22 @@ function toml2parameters (tomledParameters: IParameters, tomlSchema: TomlObjectS
     const isArrayFlatten = tomlSchema[kFirstPart]?.items?.flatten === true
     const isArrayOfArrayFlatten = tomlSchema[kFirstPart]?.items?.items?.flatten === true
     const isMultiPartIndexed = kParts.length > 0 && isIndexed && lastPartIsIndex
-    const isArraySectioned = tomlSchema[k]?.items?.sectioned === true
-    if (isIndexed && isObject(v)) {
+    const hasNumberedTrail = k.match(/^(.*)(\d+)$/)
+    if (
+      hasNumberedTrail !== null &&
+      tomlSchema[hasNumberedTrail[1]]?.items?.sectioned === true &&
+      hasNumberedTrail[1] in tomlSchema &&
+      tomlSchema[hasNumberedTrail[1]].indexed === true
+    ) {
+      const unNumberedK = hasNumberedTrail[1]
+      const kNumber = parseInt(hasNumberedTrail[2]) - 1
+      if (!(unNumberedK in parameters)) {
+        parameters[unNumberedK] = []
+      }
+      const tomlSchemaOfK = tomlSchema[unNumberedK]?.items?.properties ?? {}
+      const arrayOfK: IParameters = parameters[unNumberedK] as any
+      arrayOfK[kNumber] = toml2parameters(v as IParameters, tomlSchemaOfK)
+    } else if (isIndexed && isObject(v)) {
       if (!(kFirstPart in parameters)) {
         parameters[kFirstPart] = []
       }
@@ -167,11 +181,11 @@ export function parseWorkflow (workflow: string, globalKeys: Set<string>, tomlSc
   const table = parse(workflow, { bigint: false })
   const global: IParameters = {}
   const nodes: IWorkflowNode[] = []
-  const sectionwithindex = /\.\d+$/
+  const sectionwithindex = /\.?\d+$/
   Object.entries(table).forEach(([k, v]) => {
     const section = k.replace(sectionwithindex, '')
     const sectionParts = section.split('_') // TODO fragile as node name and first part of global key could overlap
-    if (globalKeys.has(section) || globalKeys.has(sectionParts[0])) {
+    if (globalKeys.has(k) || globalKeys.has(section) || globalKeys.has(sectionParts[0])) {
       global[k] = v
     } else {
       const tomlSchema4node = tomSchema4nodes[section] ?? {}
