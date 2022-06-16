@@ -13,7 +13,7 @@
     "test:integration": "playwright test"
   },
   "dependencies": {
-    "@i-vresse/pdbtbx-ts": "0.1.6",
+    "@i-vresse/pdbtbx-ts": "0.1.7",
     "@ltd/j-toml": "^1.24.0",
     "@rjsf/bootstrap-4": "^3.2.1",
     "@rjsf/core": "^3.2.1",
