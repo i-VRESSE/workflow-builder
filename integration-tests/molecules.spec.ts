@@ -1,4 +1,4 @@
-import { test } from '@playwright/test'
+import { expect, test } from '@playwright/test'
 import { readFile } from 'fs/promises'
 
 test.describe('given 1 molecule and a flexref node with seg parameter defined', () => {
@@ -24,8 +24,8 @@ test.describe('given 1 molecule and a flexref node with seg parameter defined', 
     await page.locator('text=Cancel').click()
     // Click button:has-text("flexref")
     await page.locator('button:has-text("flexref")').click()
-    // Click div:nth-child(27) > .col-12 > .form-group > .my-1 > h5 > svg > path >> nth=0
-    await page.locator('div:nth-child(27) > .col-12 > .form-group > .my-1 > h5 > svg > path').first().click()
+    // Click #expander4flexibility svg
+    await page.locator('#expander4flexibility svg').click()
     // Click text=segStarting residue numberEnding residue number >> button >> nth=2
     await page.locator('text=segStarting residue numberEnding residue number >> button').nth(2).click()
     // Select 22
@@ -54,9 +54,8 @@ test.describe('given 1 molecule and a flexref node with seg parameter defined', 
     test('should give a seg table for the extra molecule', async ({ page }) => {
       // Click ol button:has-text("flexref")
       await page.locator('ol button:has-text("flexref")').click()
-      // Click div:nth-child(27) > .col-12 > .form-group > .my-1 > h5 > svg
-      await page.locator('div:nth-child(27) > .col-12 > .form-group > .my-1 > h5 > svg').click()
-
+      // Click #expander4flexibility svg
+      await page.locator('#expander4flexibility svg').click()
       // TODO Once fixed this assertion should be uncommented and pause() removed
       // const secondSeg = await page.locator('.root_flexibility_seg_1')
       // await expect(secondSeg).toBeVisible()
@@ -96,8 +95,8 @@ test.describe('given 2 molecules and a flexref node with seg parameter defined f
     await page.locator('text=Cancel').click()
     // Click button:has-text("flexref")
     await page.locator('button:has-text("flexref")').click()
-    // Click div:nth-child(27) > .col-12 > .form-group > .my-1 > h5 > svg
-    await page.locator('div:nth-child(27) > .col-12 > .form-group > .my-1 > h5 > svg').click()
+    // Click #expander4flexibility svg
+    await page.locator('#expander4flexibility svg').click()
     // Click .array-item-add >> nth=0
     await page.locator('.array-item-add').first().click()
     // Select 21
@@ -134,8 +133,8 @@ test.describe('given 2 molecules and a flexref node with seg parameter defined f
     test('should not retain invalid second array value for seg parameter ', async ({ page }) => {
       // Click ol button:has-text("flexref")
       await page.locator('ol button:has-text("flexref")').click()
-      // Click div:nth-child(27) > .col-12 > .form-group > .my-1 > h5 > svg
-      await page.locator('div:nth-child(27) > .col-12 > .form-group > .my-1 > h5 > svg').click()
+      // Click #expander4flexibility svg
+      await page.locator('#expander4flexibility svg').click()
 
       // Click text=Submit
       await page.locator('text=Submit').click()
@@ -145,5 +144,29 @@ test.describe('given 2 molecules and a flexref node with seg parameter defined f
       // await expect(errorPanel).not.toBeVisible()
       await page.pause()
     })
+  })
+})
+
+test.describe('Given expert catalog and example loaded', () => {
+  test.beforeEach(async ({ page }) => {
+    // Go to http://localhost:3000/
+    await page.goto('http://localhost:3000/')
+    // Select http://localhost:3000/catalog/haddock3.expert.yaml
+    await page.locator('select').selectOption('http://localhost:3000/catalog/haddock3.expert.yaml')
+    // Click text=docking-protein-ligand
+    await page.locator('text=docking-protein-ligand').click()
+  })
+  test('The topoaa, input molecules should be expandable', async ({ page }) => {
+    // Click ol button:has-text("topoaa")
+    await page.locator('ol button:has-text("topoaa")').click()
+
+    await page.pause() // wait before clicking on bad button
+
+    // Click #expander4input_molecules svg
+    await page.locator('#expander4input_molecules svg').click()
+
+    const error = page.locator('text=Something went terribly wrong.')
+    await expect(error).not.toBeVisible()
+    // Run me with `yarn test:integration --headed -g 'topoaa'`
   })
 })

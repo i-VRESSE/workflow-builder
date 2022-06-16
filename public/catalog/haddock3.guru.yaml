@@ -149,7 +149,7 @@ global:
 nodes:
 - id: gdock
   category: sampling
-  label: HADDOCK3 gdock integration module.
+  label: gdock integration sampling module.
   description: HADDOCK3 gdock module.
   schema:
     type: object
@@ -165,7 +165,7 @@ nodes:
   tomlSchema: {}
 - id: rigidbody
   category: sampling
-  label: HADDOCK3 rigid-body docking module.
+  label: Rigid-body docking module.
   description: HADDOCK3 module for rigid body sampling.
   schema:
     type: object
@@ -1595,7 +1595,7 @@ nodes:
         flatten: true
 - id: lightdock
   category: sampling
-  label: Run Lightdock as a HADDOCK3 module.
+  label: LightDock integration sampling module.
   description: HADDOCK3 Lightdock module.
   schema:
     type: object
@@ -1668,7 +1668,7 @@ nodes:
   tomlSchema: {}
 - id: mdscoring
   category: scoring
-  label: HADDOCK3 scoring module.
+  label: MD scoring module.
   description: HADDOCK3 module to perform energy minimization scoring.
   schema:
     type: object
@@ -1995,7 +1995,7 @@ nodes:
   tomlSchema: {}
 - id: emscoring
   category: scoring
-  label: HADDOCK3 scoring module.
+  label: EM scoring module.
   description: HADDOCK3 module to perform energy minimization scoring.
   schema:
     type: object
@@ -2251,7 +2251,6 @@ nodes:
         minimum: 0
       mol:
         title: Input molecule configuration
-        description: Specific molecule configuration
         $comment: You can expand this parameter and associated sub-parameters to the
           other input molecules. For example, if you input three molecules, you can
           define mol1, mol2, and mol3 subparameters. Those not defined will be populated
@@ -2325,6 +2324,7 @@ nodes:
                 format: residue
           required: []
           additionalProperties: false
+        maxItemsFrom: molecules
     required: []
     additionalProperties: false
   uiSchema:
@@ -2358,7 +2358,7 @@ nodes:
             indexed: true
 - id: clustfcc
   category: analysis
-  label: HADDOCK3 FCC clustering module.
+  label: Cluster modules with FCC.
   description: HADDOCK3 module for clustering with FCC.
   schema:
     type: object
@@ -2394,7 +2394,7 @@ nodes:
   tomlSchema: {}
 - id: seletopclusts
   category: analysis
-  label: HADDOCK3 module to select a top cluster/model.
+  label: Select a top cluster module.
   description: Haddock Module for 'seletopclusts'.
   schema:
     type: object
@@ -2416,7 +2416,7 @@ nodes:
   tomlSchema: {}
 - id: seletop
   category: analysis
-  label: HADDOCK3 module to select a top cluster/model.
+  label: Select a top models.
   description: HADDOCK3 module to select top cluster/model.
   schema:
     type: object
@@ -2426,6 +2426,76 @@ nodes:
         type: number
         maximum: 9999
         minimum: -9999
+    required: []
+    additionalProperties: false
+  uiSchema: {}
+  tomlSchema: {}
+- id: clustrmsd
+  category: analysis
+  label: "\nRMSD clustering module.\n\nThis module takes in input the RMSD matrix\
+    \ calculated in the previous step and\nperforms a hierarchical clustering procedure\
+    \ on it, leveraging `scipy routines`_\nfor this purpose.\n\nEssentially, the procedure\
+    \ amounts at lumping the input models in a\nprogressively coarser hierarchy of\
+    \ clusters, called the dendrogram.\n\nFour parameters can be defined in this context:\n\
+    \n* `linkage`: governs the way clusters are merged together in the creation of\n\
+    \  the dendrogram\n* `criterion`: defines the prescription to cut the dendrogram\
+    \ and obtain the\n  desired clusters\n* `tolerance`:\n    * if `criterion` is\
+    \ ``maxclust``, this is the number of desired\n      clusters.\n    * if `criterion`\
+    \ is ``distance``, it must be the value of\n      distance that separates distinct\
+    \ clusters.\n      \n  If not specified, the default is calculated either as the\
+    \ total number of\n  models divided by four (`maxclust`) or as the average of\
+    \ the dendrogram height\n  (`distance`)\n* `threshold` : analogously to the `clustfcc`\
+    \ module, it is the minimum number\n  of models that should be present in a cluster\
+    \ to consider it\n\nThis module passes the path to the RMSD matrix is to the next\
+    \ step of the\nworkflow through the `rmsd_matrix.json` file, thus allowing to\
+    \ execute several\n`clustrmsd` modules (possibly with different parameters) on\
+    \ the same RMSD\nmatrix.\n\n.. _scipy routines: https://docs.scipy.org/doc/scipy/reference/cluster.hierarchy.html\n"
+  description: HADDOCK3 module for clustering with RMSD.
+  schema:
+    type: object
+    properties:
+      criterion:
+        default: maxclust
+        title: Criterion for fcluster
+        description: Criterion to be used to cut the dendrogram
+        $comment: if criterion is maxclust, the dendrogram is cut when a certain number
+          of clusters is formed. If criterion is distance, the dendrogram will be
+          cut based on the value of the cophenetic distance
+        type: string
+        minLength: 0
+        maxLength: 100
+        enum:
+        - distance
+        - maxclust
+      linkage:
+        default: average
+        title: Linkage type
+        description: How to lump together clusters in hierarchical clustering
+        $comment: check out the full description at https://docs.scipy.org/doc/scipy/reference/generated/scipy.cluster.hierarchy.linkage.html
+        type: string
+        minLength: 0
+        maxLength: 100
+        enum:
+        - average
+        - centroid
+        - complete
+        - median
+        - single
+        - ward
+        - weighted
+      threshold:
+        default: 4
+        title: Clustering population threshold
+        type: number
+        maximum: 9999
+        minimum: 1
+      tolerance:
+        title: Numeric value for clustering
+        description: if criterion is maxclust, the number of desired clusters. if
+          criterion is distance, the value of cophenetic distance
+        type: number
+        maximum: 9999
+        minimum: 1
     required: []
     additionalProperties: false
   uiSchema: {}
@@ -2622,7 +2692,7 @@ nodes:
   tomlSchema: {}
 - id: emref
   category: refinement
-  label: HADDOCK3 module for energy minimization refinement.
+  label: Energy minimization refinement with CNS.
   description: HADDOCK3 module energy minimization refinement.
   schema:
     type: object
@@ -4619,7 +4689,7 @@ nodes:
           flatten: true
 - id: flexref
   category: refinement
-  label: HADDOCK3 module for flexible refinement.
+  label: Flexible refinement with CNS.
   description: HADDOCK3 module for flexible refinement.
   schema:
     type: object
@@ -4986,86 +5056,6 @@ nodes:
           will be automatically defined: - single base planarity - sugar pucker -
           phosphate backbone diherdral angle restraints - Watson-Crick base pairing'
         type: boolean
-      mrswi_hot:
-        default: 0.5
-        type: number
-        maximum: 9999
-        minimum: -9999
-      mrswi_cool1:
-        default: 0.5
-        type: number
-        maximum: 9999
-        minimum: -9999
-      mrswi_cool2:
-        default: 0.5
-        type: number
-        maximum: 9999
-        minimum: -9999
-      mrswi_cool3:
-        default: 0.5
-        type: number
-        maximum: 9999
-        minimum: -9999
-      rswi_hot:
-        default: 0.5
-        type: number
-        maximum: 9999
-        minimum: -9999
-      rswi_cool1:
-        default: 0.5
-        type: number
-        maximum: 9999
-        minimum: -9999
-      rswi_cool2:
-        default: 0.5
-        type: number
-        maximum: 9999
-        minimum: -9999
-      rswi_cool3:
-        default: 0.5
-        type: number
-        maximum: 9999
-        minimum: -9999
-      masy_hot:
-        default: -1.0
-        type: number
-        maximum: 9999
-        minimum: -9999
-      masy_cool1:
-        default: -1.0
-        type: number
-        maximum: 9999
-        minimum: -9999
-      masy_cool2:
-        default: -0.1
-        type: number
-        maximum: 9999
-        minimum: -9999
-      masy_cool3:
-        default: -0.1
-        type: number
-        maximum: 9999
-        minimum: -9999
-      asy_hot:
-        default: 1.0
-        type: number
-        maximum: 9999
-        minimum: -9999
-      asy_cool1:
-        default: 1.0
-        type: number
-        maximum: 9999
-        minimum: -9999
-      asy_cool2:
-        default: 0.1
-        type: number
-        maximum: 9999
-        minimum: -9999
-      asy_cool3:
-        default: 0.1
-        type: number
-        maximum: 9999
-        minimum: -9999
       sym_on:
         default: false
         title: Symmetry restraints
@@ -7143,7 +7133,7 @@ nodes:
           flatten: true
 - id: mdref
   category: refinement
-  label: HADDOCK3 module for water refinement.
+  label: Water refinement with CNS.
   description: HADDOCK3 module for water refinement.
   schema:
     type: object
