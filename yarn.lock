@@ -1650,10 +1650,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@i-vresse/pdbtbx-ts@npm:0.1.4":
-  version: 0.1.4
-  resolution: "@i-vresse/pdbtbx-ts@npm:0.1.4"
-  checksum: bb1063958784f77e23a7b3b5b0e166099ca013b4b770d455395512c0abfe111537284d6c50dbc1d9b31a42b8e627f9c597d2b14101273f19cd9a70ebd756ec1f
+"@i-vresse/pdbtbx-ts@npm:0.1.5":
+  version: 0.1.5
+  resolution: "@i-vresse/pdbtbx-ts@npm:0.1.5"
+  checksum: c1e5e50369860b2143bdbe76c3e64b41133ed25a4296172c6b73b554b9e0ac436c12fa3544e48aeff3ef739e49b95204c324b8aa2ade5ab94c1dc600a007277f
   languageName: node
   linkType: hard
 
@@ -9837,7 +9837,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "ivresse-workflow-builder@workspace:."
   dependencies:
-    "@i-vresse/pdbtbx-ts": 0.1.4
+    "@i-vresse/pdbtbx-ts": 0.1.5
     "@ltd/j-toml": ^1.24.0
     "@playwright/test": ^1.22.1
     "@rjsf/bootstrap-4": ^3.2.1

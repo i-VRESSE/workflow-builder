@@ -1,4 +1,4 @@
-import pdbtbx, { open_pdb } from '@i-vresse/pdbtbx-ts'
+import { init, open_pdb } from '@i-vresse/pdbtbx-ts'
 
 export interface MoleculeInfo {
   chains: string[]
@@ -6,17 +6,8 @@ export interface MoleculeInfo {
 }
 
 export async function parsePDB (content: string): Promise<MoleculeInfo> {
-  if (process.env.NODE_ENV === 'test') {
-    // vitest is run in NodeJS so needs wasm file read from disk instead of fetch using url
-    const { readFile } = await import('fs/promises')
-    const wasmBuffer = await readFile('node_modules/@i-vresse/pdbtbx-ts/pdbtbx_ts_bg.wasm')
-    await pdbtbx(wasmBuffer)
-  } else {
-    // To make vite aware of wasm file, it needs to passed to pdbtbx-ts default method.
-    // TODO make prettier URL
-    const mod = new URL('../../node_modules/@i-vresse/pdbtbx-ts/pdbtbx_ts_bg.wasm', import.meta.url)
-    await pdbtbx(mod)
-  }
+  // TODO do init only once
+  await init()
   try {
     const info = open_pdb(content)
     if (info.warnings.length > 0) {
