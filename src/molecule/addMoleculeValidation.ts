@@ -46,6 +46,7 @@ function walkSchemaForMoleculeFormats (schema: JSONSchema7, moleculeInfos: Molec
     .map(([k, v]) => {
       const s = v as JSONSchema7WithMaxItemsFrom
       const isArrayWithItems = s.type === 'array' && 'items' in s
+      const isObjectWithUserNames = s.type === 'object' && s.additionalProperties && typeof s.additionalProperties === 'object' && !('properties' in s)
       if (isArrayWithItems && s.maxItemsFrom === moleculesPropName) {
         const s2 = s.items
         if (
@@ -120,6 +121,10 @@ function walkSchemaForMoleculeFormats (schema: JSONSchema7, moleculeInfos: Molec
             return [k, { ...s, items }]
           }
         }
+      } else if (isObjectWithUserNames && s.maxPropertiesFrom === moleculesPropName) {
+        // TODO implement
+        const newObjectSchema = v
+        return [k, newObjectSchema]
       } else if (s.type === 'object') {
         const newObjectSchema = walkSchemaForMoleculeFormats(s, moleculeInfos, moleculesPropName)
         return [k, newObjectSchema]

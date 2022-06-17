@@ -346,6 +346,46 @@ describe('addMoleculeValidation()', () => {
         expect(actual).toEqual(expected)
       })
     })
+
+    describe.only('object with maxPropertiesFrom and with prop names with format:chain', () => {
+      it('should return formSchema unchanged', () => {
+        const propSchema: JSONSchema7WithMaxItemsFrom = {
+          type: 'object',
+          additionalProperties: {
+            type: "string"
+          },
+          propertyNames: {
+            format: "chain"
+          },
+          maxPropertiesFrom: "molecules"
+        }
+        const schema: JSONSchema7 = {
+          type: 'object',
+          properties: {
+            prop1: propSchema
+          }
+        }
+        const globalParameters: IParameters = {}
+  
+        const actual = addMoleculeValidation(schema, globalParameters, globalSchema, files)
+        const expectedPropSchema: JSONSchema7WithMaxItemsFrom = {
+          type: 'object',
+          properties: {
+            'A': {
+              type: 'string'
+            }
+          }
+        }
+        const expected: JSONSchema7 = {
+          type: 'object',
+          properties: {
+            prop1: expectedPropSchema
+          }
+        }
+        expect(actual).toEqual(expected)
+      })
+  
+    })
   })
 
   describe('given 2 molecules with chain A and B respectivly', () => {
@@ -466,4 +506,6 @@ describe('addMoleculeValidation()', () => {
       })
     })
   })
+
+  
 })
