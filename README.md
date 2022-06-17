@@ -47,7 +47,7 @@ The integration tests (`integration-tests/**.spec.ts`) are written in [playwrigh
 Before running test ensure browsers are installed with
 
 ```shell
-npx playwright install
+npx playwright install chromium
 ```
 
 Tests can be run with
