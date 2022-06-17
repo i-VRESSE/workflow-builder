@@ -108,7 +108,7 @@ yarn storybook
 
 ### Workflow archive
 
-The workflow builder creates a zip file with a workflow configuration file called `workflow.cfg` in a [TOML format](https://toml.io).
+The workflow builder creates a zip file with a workflow configuration file called `workflow.cfg` in [TOML format](https://toml.io).
 The configuration file contains paths to input files which are included in the zip file.
 
 ## Workflow configuration file
@@ -118,7 +118,8 @@ The workflow configuration file consists out of 2 parts:
 1. Global parameters, which are available to engine and each node.
 2. Tables with parameters for each node the workflow should run.
 
-TOML does not allow for tables with same name. So any node that occurs multiple times should have a index appened to the table name.
+An uploaded workflow configuration file can contain tables with the same name (this is more lenient then the TOML format).
+A generated workflow configuration file with the same node twice will have a TOML string with `[somenode]` and `['somenode.2']` table respectively.
 
 ### Catalog
 
