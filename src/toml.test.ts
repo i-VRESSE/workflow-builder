@@ -877,8 +877,23 @@ bar = 5
 bar = 8
 `
     ], [
-      'dups',
+      'simple dups',
       `\
+[somenode]
+foo = 1
+
+[somenode]
+foo = 2
+`, `\
+[somenode]
+foo = 1
+
+['somenode.1']
+foo = 2
+`
+    ], [
+      'nested dups',
+  `\
 [somenode]
 foo = 1
 

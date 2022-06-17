@@ -176,9 +176,8 @@ function toml2parameters (tomledParameters: IParameters, tomlSchema: TomlObjectS
 }
 
 export function parseWorkflow (workflow: string, globalKeys: Set<string>, tomlSchema4global: TomlObjectSchema, tomSchema4nodes: Record<string, TomlObjectSchema>): IWorkflow {
-  dedupWorkflow(workflow)
-
-  const table = parse(workflow, { bigint: false })
+  const deduppedWorkflow = dedupWorkflow(workflow)
+  const table = parse(deduppedWorkflow, { bigint: false })
   const global: IParameters = {}
   const nodes: IWorkflowNode[] = []
   const sectionwithindex = /\.?\d+$/
