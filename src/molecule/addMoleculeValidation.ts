@@ -121,7 +121,7 @@ function walkSchemaForMoleculeFormats (schema: JSONSchema7, moleculeInfos: Molec
             return [k, { ...s, items }]
           }
         }
-      } else if (isObjectWithUserNames && s.maxPropertiesFrom === moleculesPropName) {
+      } else if (isObjectWithUserNames === true && s.maxPropertiesFrom === moleculesPropName) {
         // TODO implement
         const newObjectSchema = v
         return [k, newObjectSchema]

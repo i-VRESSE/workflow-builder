@@ -352,12 +352,12 @@ describe('addMoleculeValidation()', () => {
         const propSchema: JSONSchema7WithMaxItemsFrom = {
           type: 'object',
           additionalProperties: {
-            type: "string"
+            type: 'string'
           },
           propertyNames: {
-            format: "chain"
+            format: 'chain'
           },
-          maxPropertiesFrom: "molecules"
+          maxPropertiesFrom: 'molecules'
         }
         const schema: JSONSchema7 = {
           type: 'object',
@@ -366,12 +366,12 @@ describe('addMoleculeValidation()', () => {
           }
         }
         const globalParameters: IParameters = {}
-  
+
         const actual = addMoleculeValidation(schema, globalParameters, globalSchema, files)
         const expectedPropSchema: JSONSchema7WithMaxItemsFrom = {
           type: 'object',
           properties: {
-            'A': {
+            A: {
               type: 'string'
             }
           }
@@ -384,7 +384,6 @@ describe('addMoleculeValidation()', () => {
         }
         expect(actual).toEqual(expected)
       })
-  
     })
   })
 
@@ -506,6 +505,4 @@ describe('addMoleculeValidation()', () => {
       })
     })
   })
-
-  
 })
