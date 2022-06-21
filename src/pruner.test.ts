@@ -595,7 +595,33 @@ describe('pruneDefaults()', () => {
 
   describe('with object schema without properties', () => {
     it('should return schema unchanged', () => {
-      expect(1).toEqual(2)
+      const parameters = {
+        prop1: {
+          A: [1, 2, 3],
+          B: [4, 5, 6]
+        }
+      }
+      const schema = p1({
+        type: 'object',
+        additionalProperties: {
+          type: 'array',
+          items: {
+            type: 'number'
+          },
+          uniqueItems: true
+        },
+        propertyNames: {
+          pattern: '^[A-Z]$'
+        }
+      })
+      const result = pruneDefaults(parameters, schema, true)
+      const expected = {
+        prop1: {
+          A: [1, 2, 3],
+          B: [4, 5, 6]
+        }
+      }
+      expect(result).toStrictEqual(expected)
     })
   })
 })
