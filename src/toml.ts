@@ -156,6 +156,12 @@ function toml2parameters (tomledParameters: IParameters, tomlSchema: TomlObjectS
       }
       const k2 = kParts.join('_')
       arrayOfK[kSecond2LastIndex][kLastIndex][k2] = v
+    } else if (isIndexed && !lastPartIsIndex) {
+      if (!(kFirstPart in parameters)) {
+        parameters[kFirstPart] = {}
+      }
+      const arrayOfK: IParameters = parameters[kFirstPart] as any
+      arrayOfK[kLastPart] = v
     } else {
       parameters[k] = v
     }

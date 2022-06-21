@@ -1,3 +1,4 @@
+import dedent from 'ts-dedent'
 import { expect, describe, it } from 'vitest'
 import { parseWorkflow, TomlSchemas, workflow2tomltext } from './toml'
 import { IParameters } from './types'
@@ -330,7 +331,7 @@ bar.bla = 'hi'
     expect(result).toEqual(expected)
   })
 
-  it.only('should output <param>_<key> when given object and indexed=true', () => {
+  it('should output <param>_<key> when given object and indexed=true', () => {
     const nodes = [{
       id: 'somenode',
       parameters: {
@@ -594,13 +595,13 @@ key8 = [
       const tomlSchema4global = {
         foo: { indexed: true, items: { flatten: true } }
       }
-      const tomSchema4nodes = {}
+      const tomlSchema4nodes = {}
 
       const result = parseWorkflow(
         workflow,
         new Set(['foo']),
         tomlSchema4global,
-        tomSchema4nodes
+        tomlSchema4nodes
       )
 
       const expected = {
@@ -779,6 +780,30 @@ key8 = [
             }
           ]
         ]
+      }
+      expect(result.global).toEqual(expected)
+    })
+
+    it('should read "foo_bar=val" as {foo: {bar: "val"}} when indexed:true', () => {
+      const workflow = dedent`
+          foo_bar = "val"
+          `
+      const tomlSchema4global = {
+        foo: { indexed: true }
+      }
+      const tomlSchema4nodes = {}
+
+      const result = parseWorkflow(
+        workflow,
+        new Set(['foo']),
+        tomlSchema4global,
+        tomlSchema4nodes
+      )
+
+      const expected = {
+        foo: {
+          bar: 'val'
+        }
       }
       expect(result.global).toEqual(expected)
     })
