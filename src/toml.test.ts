@@ -335,18 +335,18 @@ bar.bla = 'hi'
     const nodes = [{
       id: 'somenode',
       parameters: {
-          "param": {
-            "A": 11,
-            "B": 22,
-            "C": 33
-          }
+        param: {
+          A: 11,
+          B: 22,
+          C: 33
+        }
       }
     }]
     const tomlSchemas = {
       nodes: {
         somenode: {
           param: {
-            indexed: true 
+            indexed: true
           }
         }
       },
