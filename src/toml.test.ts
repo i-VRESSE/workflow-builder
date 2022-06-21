@@ -329,6 +329,38 @@ bar.bla = 'hi'
 `
     expect(result).toEqual(expected)
   })
+
+  it.only('should output <param>_<key> when given object and indexed=true', () => {
+    const nodes = [{
+      id: 'somenode',
+      parameters: {
+          "param": {
+            "A": 11,
+            "B": 22,
+            "C": 33
+          }
+      }
+    }]
+    const tomlSchemas = {
+      nodes: {
+        somenode: {
+          param: {
+            indexed: true 
+          }
+        }
+      },
+      global: {}
+    }
+    const result = workflow2tomltext(nodes, {}, tomlSchemas)
+    const expected = `
+[somenode]
+
+param_A = 11
+param_B = 22
+param_C = 33
+`
+    expect(result).toEqual(expected)
+  })
 })
 
 describe('parseWorkflow()', () => {

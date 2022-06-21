@@ -79,6 +79,10 @@ function parameters2toml (parameters: IParameters, tomlSchema: TomlObjectSchema)
       })
     } else if (isObject(v) && isSectioned) {
       tomledParameters[k] = Section(v as any)
+    } else if (isObject(v) && isIndexed) {
+      Object.entries(v).map(([k2, v2]) => {
+        tomledParameters[`${k}_${k2}`] = v2
+      })
     } else {
       tomledParameters[k] = v
     }
