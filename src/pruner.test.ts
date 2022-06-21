@@ -592,4 +592,10 @@ describe('pruneDefaults()', () => {
       expect(result).toStrictEqual(expected === undefined ? expectedWithoutReshape : expected)
     })
   })
+
+  describe('with object schema without properties', () => {
+    it('should return schema unchanged', () => {
+      expect(1).toEqual(2)
+    })
+  })
 })

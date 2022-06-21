@@ -14,8 +14,8 @@
   },
   "dependencies": {
     "@ltd/j-toml": "^1.24.0",
-    "@rjsf/bootstrap-4": "^3.2.1",
-    "@rjsf/core": "^3.2.1",
+    "@rjsf/bootstrap-4": "^4.2.0",
+    "@rjsf/core": "^4.2.0",
     "@zip.js/zip.js": "^2.3.23",
     "ajv": "^8.9.0",
     "ajv-formats": "^2.1.1",
