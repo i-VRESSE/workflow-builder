@@ -76,7 +76,7 @@ test.describe('given 1 molecule and a topoaa node with segment id defined', () =
         await page.waitForSelector('button:has-text("e2a-hpr_1GGR.pdb")')
       })
 
-      test('should have "[topoaa.mol1]" heade', async ({ page }) => {
+      test('should have "[topoaa.mol1]" header', async ({ page }) => {
         await expectHighlightedCodeToContain(page, '[topoaa.mol1]')
       })
     })
