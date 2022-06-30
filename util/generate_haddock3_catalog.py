@@ -201,7 +201,7 @@ def config2schema(config):
             if k == 'mol1':
                 k = 'mol'
         elif v['type'] == 'list' and k.endswith('_'):
-            # if parameter name ends with K then schema is object with key as chain and value as list of residues
+            # if parameter name ends with _ then schema is object with chain as key and list of residues as value
 
             vprop = {
                 "type": "number",
