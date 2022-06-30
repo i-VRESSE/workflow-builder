@@ -1,4 +1,4 @@
-import { PrismAsyncLight as SyntaxHighlighter } from 'react-syntax-highlighter'
+import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter'
 import toml from 'react-syntax-highlighter/dist/esm/languages/prism/toml'
 import style from 'react-syntax-highlighter/dist/esm/styles/prism/vs'
 
