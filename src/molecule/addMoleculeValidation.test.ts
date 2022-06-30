@@ -347,7 +347,7 @@ describe('addMoleculeValidation()', () => {
       })
     })
 
-    // TODO finish test when fixing molecule awareness of https://github.com/i-VRESSE/workflow-builder/issues/77
+    // TODO finish test when fixing molecule awareness of https://github.com/i-VRESSE/workflow-builder/issues/77 and https://github.com/i-VRESSE/workflow-builder/issues/88
     describe.skip('object with maxPropertiesFrom and with prop names with format:chain', () => {
       it('should return formSchema unchanged', () => {
         const propSchema: JSONSchema7WithMaxItemsFrom = {
