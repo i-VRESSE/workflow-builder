@@ -80,6 +80,10 @@ function parameters2toml (parameters: IParameters, tomlSchema: TomlObjectSchema)
       })
     } else if (isObject(v) && isSectioned) {
       tomledParameters[k] = Section(v as any)
+    } else if (isObject(v) && isIndexed) {
+      Object.entries(v).forEach(([k2, v2]) => {
+        tomledParameters[`${k}_${k2}`] = v2
+      })
     } else {
       tomledParameters[k] = v
     }
@@ -168,6 +172,12 @@ function toml2parameters (tomledParameters: IParameters, tomlSchema: TomlObjectS
       }
       const k2 = kParts.join('_')
       arrayOfK[kSecond2LastIndex][kLastIndex][k2] = v
+    } else if (isIndexed && !lastPartIsIndex) {
+      if (!(kFirstPart in parameters)) {
+        parameters[kFirstPart] = {}
+      }
+      const arrayOfK: IParameters = parameters[kFirstPart] as any
+      arrayOfK[kLastPart] = v
     } else {
       parameters[k] = v
     }

@@ -63,6 +63,8 @@ export function pruneDefaults (parameters: IParameters, schema: JSONSchema7, res
       } else {
         newParameters[k] = v
       }
+    } else {
+      newParameters[k] = v
     }
   })
   return newParameters

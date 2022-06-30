@@ -1,5 +1,6 @@
 ---
 title: Test catalog
+examples: {}
 global:
   schema:
     title: Test builtin custom fields
@@ -44,6 +45,8 @@ categories:
   description: Nodes with expandable parameters
 - name: tabletests
   description: Nodes with tables
+- name: resdictests
+  description: Nodes with custom object keys
 nodes:
 - schema:
     title: Test to render group11 collapsed
@@ -320,4 +323,28 @@ nodes:
   label: Node 5
   description: Description 5
   category: tabletests
-examples: {}
+- schema:
+    title: Test to render resdic
+    type: object
+    properties:
+      resdic:
+        type: object
+        additionalProperties:
+          type: array
+          items:
+            type: number
+            format: residue
+          uniqueItems: true
+        propertyNames:
+          pattern: "^[A-Z]$"
+          format: chain
+        maxPropertiesFrom: molecules
+    additionalProperties: false
+  uiSchema: {}
+  tomlSchema:
+    resdic:
+      indexed: true
+  id: node6
+  label: Node 6
+  description: Description 6
+  category: resdictests

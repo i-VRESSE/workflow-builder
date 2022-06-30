@@ -102,8 +102,8 @@ const filesState = atom<IFiles>({
 
 function formData2parameters (formData: IParameters, newFiles: IFiles, schema: JSONSchema7, uiSchema: UiSchema): IParameters {
   const ungrouped = unGroupParameters(formData, uiSchema)
-  const externailized = externalizeDataUrls(ungrouped, newFiles)
-  const pruned = pruneDefaults(externailized, schema)
+  const externalized = externalizeDataUrls(ungrouped, newFiles)
+  const pruned = pruneDefaults(externalized, schema)
   return pruned
 }
 

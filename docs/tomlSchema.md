@@ -345,3 +345,42 @@ In memory parameters for node called `somenode`.
   }
 }
 ```
+
+## Object with user-specified names
+
+In toml
+
+```toml
+param_A = 11
+param_B = 22
+param_C = 33
+```
+
+In catalog
+
+```yaml
+schema:
+  type: object
+  properties:
+    param:
+      type: object
+      additionalProperties:
+        type: number
+      propertyNames:
+        pattern: "^[A-Z]$"
+tomlSchema:
+  param:
+    indexed: true 
+```
+
+In memory
+
+```json
+{
+  "param": {
+    "A": 11,
+    "B": 22,
+    "C": 33
+  }
+}
+```

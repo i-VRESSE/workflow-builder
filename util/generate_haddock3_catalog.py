@@ -200,6 +200,35 @@ def config2schema(config):
             # Rename as parameter is array and does not need extra index
             if k == 'mol1':
                 k = 'mol'
+        elif v['type'] == 'list' and k.endswith('_'):
+            # if parameter name ends with _ then schema is object with chain as key and list of residues as value
+
+            vprop = {
+                "type": "number",
+                "format": "residue"
+            }
+            if 'minitems' in v:
+                vprop['minItems'] = v['minitems']
+            if 'maxitems' in v:
+                vprop['maxItems'] = v['maxitems']
+            prop.update({
+                "type": "object",
+                "additionalProperties": {
+                    "type": "array",
+                    "items": vprop,
+                    "uniqueItems": True,
+                    "default": []
+                },
+                "propertyNames": {
+                    "pattern": "^[A-Z]$",
+                    "format": "chain"
+                },
+                "maxPropertiesFrom": "molecules",
+                "default": {}
+            })
+            prop_toml = {'indexed': True}
+            k = k[:-1]
+            pass
         elif v['type'] == 'boolean':
             prop['type'] = "boolean"
         elif v['type'] in {'float', 'integer'}:
@@ -381,11 +410,15 @@ def process_module(module_name, category, level):
 
     config4level = filter_on_level(config, level)
     schemas = config2schema(config4level)
+    label =  module.__doc__
+    if len(label) > 200:
+        # src/haddock/modules/analysis/rmsdmatrix/__init__.py has long docstring, so take only first line. 
+        label =  label.splitlines()[1] 
     # TODO add $schema and $id to schema
     return {
         "id": module_name,
         "category": category,
-        "label": module.__doc__,
+        "label": label,
         "description": cls.__doc__,
         "schema": schemas['schema'],
         "uiSchema": schemas['uiSchema'],
@@ -429,7 +462,6 @@ def process_level(level_fn: Path, level: str):
 
     broken_modules = {
         'topocg', # Gives `AttributeError: module 'haddock.modules.topology.topocg' has no attribute 'HaddockModule'` error
-        'rmsdmatrix', # Has resdic_ parameter which this script can not handle yet
     }
     nodes = [process_module(module, category, level) for module, category in modules_category.items() if module not in broken_modules]
 

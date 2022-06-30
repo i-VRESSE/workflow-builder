@@ -2047,22 +2047,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rjsf/bootstrap-4@npm:^3.2.1":
-  version: 3.2.1
-  resolution: "@rjsf/bootstrap-4@npm:3.2.1"
+"@rjsf/bootstrap-4@npm:^4.2.0":
+  version: 4.2.0
+  resolution: "@rjsf/bootstrap-4@npm:4.2.0"
   dependencies:
     react-icons: ^3.10.0
   peerDependencies:
-    "@rjsf/core": ^3.0.0
+    "@rjsf/core": ^4.0.0
     react: ">=16"
     react-bootstrap: ^1.0.1
-  checksum: efdfe05fe9525dc93e042c91450d911b82bf1b77dcbcd76444aa452b5ec2b94ee56dc7c9b911287bceea82f935e91633c2e719e0145bfafd24e5ddb86455bfd8
+  checksum: 2d501fef3c4f5708f23d10d0660d9bbc9b9971f9aaf587b8f5b0413aa7e9bef027b91a97ff1554db1b2857192e800fdc5fedb9cc6d2eeba0e705f40cddee3c13
   languageName: node
   linkType: hard
 
-"@rjsf/core@npm:^3.2.1":
-  version: 3.2.1
-  resolution: "@rjsf/core@npm:3.2.1"
+"@rjsf/core@npm:^4.2.0":
+  version: 4.2.0
+  resolution: "@rjsf/core@npm:4.2.0"
   dependencies:
     "@types/json-schema": ^7.0.7
     ajv: ^6.7.0
@@ -2074,8 +2074,8 @@ __metadata:
     prop-types: ^15.7.2
     react-is: ^16.9.0
   peerDependencies:
-    react: ">=16"
-  checksum: 2142d4a31229ea242b79aca4ed93e2fe89e75f15ce93111457c3017d3ab295cae8f53e4dd870c619afa571959d00f46b3c19085c6a336f522c891fc07ecc46f1
+    react: ">=16 || >=17"
+  checksum: b1b602a2460a0069579fd56113a2c67b007f099d4b5dc4033dff5e6277d9621c7111edb97a33d89705f2c69cfc6c1ea697f2b9c3adeb868535ac4e5d44dd269c
   languageName: node
   linkType: hard
 
@@ -3666,14 +3666,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:17.0.45":
-  version: 17.0.45
-  resolution: "@types/react@npm:17.0.45"
+"@types/react@npm:17.0.47":
+  version: 17.0.47
+  resolution: "@types/react@npm:17.0.47"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: 3cc13a02824c13f6fa4807a83abd065ac1d9943359e76bd995cc7cd2b4148c1176ebd54a30a9f4eb8a0f141ff359d712876f256c4fee707e4290607ef8410b3e
+  checksum: 2e7fe0eb630cb77da03b6da308c58728c01b38e878118e9ff5cd8045181c8d4f32dc936e328f46a62cadb56e1fe4c5a911b5113584f93a99e1f35df7f059246b
   languageName: node
   linkType: hard
 
@@ -9853,8 +9853,8 @@ __metadata:
     "@i-vresse/pdbtbx-ts": 0.1.7
     "@ltd/j-toml": ^1.24.0
     "@playwright/test": ^1.22.1
-    "@rjsf/bootstrap-4": ^3.2.1
-    "@rjsf/core": ^3.2.1
+    "@rjsf/bootstrap-4": ^4.2.0
+    "@rjsf/core": ^4.2.0
     "@storybook/addon-a11y": ^6.4.0
     "@storybook/addon-docs": ^6.4.0
     "@storybook/addon-essentials": ^6.4.19
