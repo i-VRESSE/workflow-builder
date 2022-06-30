@@ -19,7 +19,7 @@ export async function loadWorkflowArchive (archiveURL: string, catalog: ICatalog
   const { nodes, global } = parseWorkflow(
     tomlstring, globalKeys, tomlSchema4global, tomSchema4nodes
   )
-  const errors = validateWorkflow(
+  const errors = await validateWorkflow(
     {
       global,
       nodes
