@@ -337,7 +337,6 @@ nodes:
           uniqueItems: true
         propertyNames:
           pattern: "^[A-Z]$"
-          default: A
           format: chain
         maxPropertiesFrom: molecules
     additionalProperties: false
