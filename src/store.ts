@@ -230,7 +230,7 @@ export function useSelectedNodeFormData (): [IParameters | undefined, SetterOrUp
 
 const selectedNodeFormSchemaState = selector<JSONSchema7 | undefined>({
   key: 'selectedNodeFormSchema',
-  get: ({ get }) => {
+  get: async ({ get }) => {
     const catalogNode = get(selectedCatalogNodeState)
     const globalParameters = get(globalParametersState)
     const catalog = get(catalogState)
@@ -240,7 +240,7 @@ const selectedNodeFormSchemaState = selector<JSONSchema7 | undefined>({
     const schemaWithMaxItems = resolveMaxItemsFrom(catalogNode.formSchema, globalParameters)
     const globalSchema = catalog.global.schema
     const files = get(filesState)
-    const schemaWithMolInfo = addMoleculeValidation(schemaWithMaxItems, globalParameters, globalSchema, files)
+    const schemaWithMolInfo = await addMoleculeValidation(schemaWithMaxItems, globalParameters, globalSchema, files)
     return schemaWithMolInfo
   }
 })

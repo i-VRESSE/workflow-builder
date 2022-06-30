@@ -28,24 +28,24 @@ describe('validateWorkflow()', () => {
       }
     })
 
-    it('should return no errors when parameters are valid against global schema', () => {
+    it('should return no errors when parameters are valid against global schema', async () => {
       const workflow = {
         global: {
           run_dir: 'run1'
         },
         nodes: []
       }
-      const errors = validateWorkflow(workflow, schemas)
+      const errors = await validateWorkflow(workflow, schemas)
 
       expect(errors).toEqual([])
     })
 
-    it('should return run_dir required error when empty global parameters is given', () => {
+    it('should return run_dir required error when empty global parameters is given', async () => {
       const workflow = {
         global: {},
         nodes: []
       }
-      const errors = validateWorkflow(workflow, schemas)
+      const errors = await validateWorkflow(workflow, schemas)
 
       const expected = [
         {
@@ -100,7 +100,7 @@ describe('validateWorkflow()', () => {
       }
     })
 
-    it('should return no errors when parameters are valid against node schema', () => {
+    it('should return no errors when parameters are valid against node schema', async () => {
       const workflow = {
         global: {},
         nodes: [
@@ -112,12 +112,12 @@ describe('validateWorkflow()', () => {
           }
         ]
       }
-      const errors = validateWorkflow(workflow, schemas)
+      const errors = await validateWorkflow(workflow, schemas)
 
       expect(errors).toEqual([])
     })
 
-    it('should return autohis required error when empty node parameters is given', () => {
+    it('should return autohis required error when empty node parameters is given', async () => {
       const workflow = {
         global: {},
         nodes: [
@@ -127,7 +127,7 @@ describe('validateWorkflow()', () => {
           }
         ]
       }
-      const errors = validateWorkflow(workflow, schemas)
+      const errors = await validateWorkflow(workflow, schemas)
 
       const expected = [
         {
@@ -145,7 +145,7 @@ describe('validateWorkflow()', () => {
     })
 
     describe('given node without absent node', () => {
-      it('should give a node schema not found error', () => {
+      it('should give a node schema not found error', async () => {
         const workflow = {
           global: {},
           nodes: [
@@ -155,7 +155,7 @@ describe('validateWorkflow()', () => {
             }
           ]
         }
-        const errors = validateWorkflow(workflow, schemas)
+        const errors = await validateWorkflow(workflow, schemas)
 
         const expected = [
           {
@@ -224,7 +224,7 @@ describe('validateWorkflow()', () => {
       }
     })
 
-    it('should return zero errors when same number of items is given as maxItemsFrom field', () => {
+    it('should return zero errors when same number of items is given as maxItemsFrom field', async () => {
       const workflow = {
         global: {
           gprop: ['a', 'b', 'c']
@@ -238,12 +238,12 @@ describe('validateWorkflow()', () => {
           }
         ]
       }
-      const errors = validateWorkflow(workflow, schemas)
+      const errors = await validateWorkflow(workflow, schemas)
 
       expect(errors).toEqual([])
     })
 
-    it('should complain when more number of items is given as maxItemsFrom field', () => {
+    it('should complain when more number of items is given as maxItemsFrom field', async () => {
       const workflow = {
         global: {
           gprop: ['a']
@@ -257,7 +257,7 @@ describe('validateWorkflow()', () => {
           }
         ]
       }
-      const errors = validateWorkflow(workflow, schemas)
+      const errors = await validateWorkflow(workflow, schemas)
 
       const expected = [
         {
@@ -339,7 +339,7 @@ describe('validateWorkflow()', () => {
     })
 
     describe('with valid chain', () => {
-      it('should return zero errors', () => {
+      it('should return zero errors', async () => {
         const workflow = {
           global: {
             molecules: ['a.pdb']
@@ -353,14 +353,14 @@ describe('validateWorkflow()', () => {
             }
           ]
         }
-        const errors = validateWorkflow(workflow, schemas, files)
+        const errors = await validateWorkflow(workflow, schemas, files)
 
         expect(errors).toEqual([])
       })
     })
 
     describe('with invalid chain', () => {
-      it('should return 1 error', () => {
+      it('should return 1 error', async () => {
         const workflow = {
           global: {
             molecules: ['a.pdb']
@@ -374,7 +374,7 @@ describe('validateWorkflow()', () => {
             }
           ]
         }
-        const errors = validateWorkflow(workflow, schemas, files)
+        const errors = await validateWorkflow(workflow, schemas, files)
 
         const expected = [{
           instancePath: '/seg/0/0/chain',

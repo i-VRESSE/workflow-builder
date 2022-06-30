@@ -42,7 +42,7 @@ describe('addMoleculeValidation()', () => {
         {}
       ]
     ]
-    it.each(unchangedCases)('given %s should return unchanged schema', (_description, globalSchema, globalParameters, files) => {
+    it.each(unchangedCases)('given %s should return unchanged schema', async (_description, globalSchema, globalParameters, files) => {
       const propSchema: JSONSchema7WithMaxItemsFrom = {
         type: 'array',
         maxItemsFrom: 'molecules',
@@ -65,7 +65,7 @@ describe('addMoleculeValidation()', () => {
           prop1: propSchema
         }
       }
-      const actual = addMoleculeValidation(schema, globalParameters, globalSchema, files)
+      const actual = await addMoleculeValidation(schema, globalParameters, globalSchema, files)
       expect(actual).toEqual(schema)
     })
   })
@@ -98,7 +98,7 @@ describe('addMoleculeValidation()', () => {
       }
     })
 
-    it('should return schema unchanged', () => {
+    it('should return schema unchanged', async () => {
       const itemsSchema: JSONSchema7 = {
         type: 'string'
       }
@@ -112,12 +112,12 @@ describe('addMoleculeValidation()', () => {
           prop1: propSchema
         }
       }
-      const actual = addMoleculeValidation(schema, globalParameters, globalSchema, files)
+      const actual = await addMoleculeValidation(schema, globalParameters, globalSchema, files)
       expect(actual).toEqual(schema)
     })
 
     describe('in array of array of object with prop with format:chain', () => {
-      it('should set enum to [A]', () => {
+      it('should set enum to [A]', async () => {
         const propSchema: JSONSchema7WithMaxItemsFrom = {
           type: 'array',
           maxItemsFrom: 'molecules',
@@ -140,7 +140,7 @@ describe('addMoleculeValidation()', () => {
             prop1: propSchema
           }
         }
-        const actual = addMoleculeValidation(schema, globalParameters, globalSchema, files)
+        const actual = await addMoleculeValidation(schema, globalParameters, globalSchema, files)
         const expectedPropSchema: JSONSchema7WithMaxItemsFrom = {
           type: 'array',
           maxItemsFrom: 'molecules',
@@ -169,7 +169,7 @@ describe('addMoleculeValidation()', () => {
     })
 
     describe('in array of array of object with prop with format:residue', () => {
-      it('should set enum to [-3]', () => {
+      it('should set enum to [-3]', async () => {
         const propSchema: JSONSchema7WithMaxItemsFrom = {
           type: 'array',
           maxItemsFrom: 'molecules',
@@ -192,7 +192,7 @@ describe('addMoleculeValidation()', () => {
             prop1: propSchema
           }
         }
-        const actual = addMoleculeValidation(schema, globalParameters, globalSchema, files)
+        const actual = await addMoleculeValidation(schema, globalParameters, globalSchema, files)
         const expectedPropSchema: JSONSchema7WithMaxItemsFrom = {
           type: 'array',
           maxItemsFrom: 'molecules',
@@ -222,7 +222,7 @@ describe('addMoleculeValidation()', () => {
 
     // Test for topoaa mol prop
     describe('in array of object of array of scalar with format:residue', () => {
-      it('should set enum to [-3]', () => {
+      it('should set enum to [-3]', async () => {
         const propSchema: JSONSchema7WithMaxItemsFrom = {
           type: 'array',
           maxItemsFrom: 'molecules',
@@ -251,7 +251,7 @@ describe('addMoleculeValidation()', () => {
             }
           }
         }
-        const actual = addMoleculeValidation(schema, globalParameters, globalSchema, files)
+        const actual = await addMoleculeValidation(schema, globalParameters, globalSchema, files)
         const expectedPropSchema: JSONSchema7WithMaxItemsFrom = {
           type: 'array',
           maxItemsFrom: 'molecules',
@@ -286,7 +286,7 @@ describe('addMoleculeValidation()', () => {
     })
 
     describe('in grouped object of array of array of object with prop with format:residue', () => {
-      it('should set enum to [-3]', () => {
+      it('should set enum to [-3]', async () => {
         const propSchema: JSONSchema7WithMaxItemsFrom = {
           type: 'array',
           maxItemsFrom: 'molecules',
@@ -314,7 +314,7 @@ describe('addMoleculeValidation()', () => {
             }
           }
         }
-        const actual = addMoleculeValidation(schema, globalParameters, globalSchema, files)
+        const actual = await addMoleculeValidation(schema, globalParameters, globalSchema, files)
         const expectedPropSchema: JSONSchema7WithMaxItemsFrom = {
           type: 'array',
           maxItemsFrom: 'molecules',
@@ -420,7 +420,7 @@ describe('addMoleculeValidation()', () => {
     })
 
     describe('given array of array of object with props with format:chain, format:residue and no format', () => {
-      it('should make items an array and set enums', () => {
+      it('should make items an array and set enums', async () => {
         const propSchema: JSONSchema7WithMaxItemsFrom = {
           type: 'array',
           maxItemsFrom: 'molecules',
@@ -450,7 +450,7 @@ describe('addMoleculeValidation()', () => {
             prop1: propSchema
           }
         }
-        const actual = addMoleculeValidation(schema, globalParameters, globalSchema, files)
+        const actual = await addMoleculeValidation(schema, globalParameters, globalSchema, files)
         const expectedPropSchema: JSONSchema7WithMaxItemsFrom = {
           type: 'array',
           maxItemsFrom: 'molecules',
