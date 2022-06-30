@@ -31,7 +31,7 @@ export class ValidationError extends Error {
   }
 }
 
-export function validateWorkflow (workflow: IWorkflow, schemas: IWorkflowSchema, files: IFiles = {}): Errors {
+export async function validateWorkflow (workflow: IWorkflow, schemas: IWorkflowSchema, files: IFiles = {}): Promise<Errors> {
   const globalSchema = schemas.global.schema
   const globalErrors = validateParameters(
     workflow.global,
@@ -40,7 +40,7 @@ export function validateWorkflow (workflow: IWorkflow, schemas: IWorkflowSchema,
   globalErrors.forEach(e => {
     e.workflowPath = 'global'
   })
-  const nodeValidator = validateNodeFactory(schemas.nodes, workflow.global, globalSchema, files)
+  const nodeValidator = await validateNodeFactory(schemas.nodes, workflow.global, globalSchema, files)
   const nodesErrors = workflow.nodes.map(nodeValidator)
 
   // TODO validate files,
@@ -49,19 +49,19 @@ export function validateWorkflow (workflow: IWorkflow, schemas: IWorkflowSchema,
   return [...globalErrors, ...nodesErrors.flat(1)]
 }
 
-function validateNodeFactory (
+async function validateNodeFactory (
   catalogNodes: ICatalogNode[],
   globalParameters: IParameters,
   globalSchema: JSONSchema7,
   files: IFiles
-): (value: IWorkflowNode, index: number, array: IWorkflowNode[]) => Errors {
-  const id2schema = Object.fromEntries(catalogNodes.map(c => {
+): Promise<(value: IWorkflowNode, index: number, array: IWorkflowNode[]) => Errors> {
+  const id2schema = Object.fromEntries(await Promise.all(catalogNodes.map(async c => {
     const schemaWithMaxItems = resolveMaxItemsFrom(c.schema, globalParameters)
-    const schemaWithMolInfo = addMoleculeValidation(
+    const schemaWithMolInfo = await addMoleculeValidation(
       schemaWithMaxItems, globalParameters, globalSchema, files
     )
     return [c.id, schemaWithMolInfo]
-  }))
+  })))
   return (node, nodeIndex) => {
     const schema = id2schema[node.id]
     if (schema != null) {

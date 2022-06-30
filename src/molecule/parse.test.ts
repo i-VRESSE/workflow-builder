@@ -73,8 +73,8 @@ describe('parsePDB', () => {
       }
     ]
   ]
-  it.each(cases)('%s', (_description, input, expected) => {
-    const actual = parsePDB(input)
+  it.each(cases)('%s', async (_description, input, expected) => {
+    const actual = await parsePDB(input)
     expect(actual).toStrictEqual(expected)
   })
 })
