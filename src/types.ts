@@ -53,6 +53,7 @@ export type IParameters = Record<string, unknown>
 export interface IWorkflowNode {
   id: string
   parameters: IParameters
+  code: string
 }
 
 export type IFiles = Record<string, string>

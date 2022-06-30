@@ -14,6 +14,7 @@ import { groupParameters, unGroupParameters } from './grouper'
 import { pruneDefaults } from './pruner'
 import { resolveMaxItemsFrom } from './resolveMaxItemsFrom'
 import { addMoleculeValidation } from './molecule/addMoleculeValidation'
+import { nanoid } from 'nanoid'
 
 const catalogIndexState = selector<ICatalogIndex>({
   key: 'catalogIndex',
@@ -285,7 +286,7 @@ export function useWorkflow (): UseWorkflow {
     },
     addNodeToWorkflowAt (nodeId: string, targetIndex: number) {
       setNodes((oldNodes) => {
-        const newNodes = [...oldNodes, { id: nodeId, parameters: {} }]
+        const newNodes = [...oldNodes, { id: nodeId, parameters: {}, code: nanoid() }]
         return moveItem(newNodes, newNodes.length - 1, targetIndex)
       })
       if (selectedNodeIndex === -1 && !editingGlobal) {
@@ -293,7 +294,7 @@ export function useWorkflow (): UseWorkflow {
       }
     },
     addNodeToWorkflow (nodeId: string) {
-      setNodes((oldNodes) => [...oldNodes, { id: nodeId, parameters: {} }])
+      setNodes((oldNodes) => [...oldNodes, { id: nodeId, parameters: {}, code: nanoid() }])
       if (selectedNodeIndex === -1 && !editingGlobal) {
         setSelectedNodeIndex(nodes.length)
       }
@@ -365,4 +366,8 @@ export function useText (): string {
   const { nodes, global } = useWorkflow()
   const catalog = useCatalog()
   return workflow2tomltext(nodes, global, catalog2tomlSchemas(catalog))
+}
+
+export function useWorkflowNodes () {
+  return useRecoilState(workflowNodesState)
 }

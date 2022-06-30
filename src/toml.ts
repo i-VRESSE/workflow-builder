@@ -2,6 +2,7 @@ import { Section, stringify, parse } from '@ltd/j-toml'
 import { isObject } from './utils/isObject'
 import { IWorkflowNode, IParameters, IWorkflow, TomlObjectSchema, ICatalog } from './types'
 import { mergeHeader, splitHeader } from './dsv'
+import { nanoid } from 'nanoid'
 
 export interface TomlSchemas {
   nodes: Record<string, TomlObjectSchema>
@@ -199,8 +200,9 @@ export function parseWorkflow (workflow: string, globalKeys: Set<string>, tomlSc
     } else {
       const tomlSchema4node = tomSchema4nodes[section] ?? {}
       nodes.push({
-        id: section,
-        parameters: toml2parameters(v as IParameters, tomlSchema4node)
+        id: section, // aka node type
+        parameters: toml2parameters(v as IParameters, tomlSchema4node),
+        code: nanoid()
       })
     }
   })
