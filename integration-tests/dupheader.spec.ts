@@ -30,7 +30,7 @@ test.describe('given an uploaded archive with a workflow.cfg file with a duplica
     await page.waitForSelector('button:has-text("some.pdb")')
   })
 
-  test('should have "[topoaa.mol1]" header', async ({ page }) => {
+  test('should have both headers and added index number', async ({ page }) => {
     const highlightedCode = await page.locator('#highlightedcode pre')
     const lines = await highlightedCode.allTextContents()
     const content = lines.join('\n')
