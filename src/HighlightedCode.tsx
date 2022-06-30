@@ -9,7 +9,9 @@ interface IProps {
 }
 
 export const HighlightedCode = ({ code }: IProps): JSX.Element => (
-  <SyntaxHighlighter language='toml' style={style}>
-    {code}
-  </SyntaxHighlighter>
+  <div id='highlightedcode'>
+    <SyntaxHighlighter language='toml' style={style}>
+      {code}
+    </SyntaxHighlighter>
+  </div>
 )

@@ -24,6 +24,6 @@ jobs:
     - run: yarn lint
     - run: yarn build
     - name: Install Playwright
-      run: npx playwright install --with-deps
+      run: npx playwright install --with-deps chromium
     - name: Run integration tests
       run: yarn test:integration
