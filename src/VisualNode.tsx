@@ -14,7 +14,7 @@ export const VisualNode = ({ id, index, code }: IProp): JSX.Element => {
   // TODO to power hover use css :hover instead of slower JS
   const selectedNodeIndex = useSelectNodeIndex()
   const { selectNode, deleteNode } = useWorkflow()
-  const draggingWorkflowNodeCode = useDraggingWorkflowNodeState()[0];
+  const draggingWorkflowNodeCode = useDraggingWorkflowNodeState()[0]
 
   const {
     attributes,

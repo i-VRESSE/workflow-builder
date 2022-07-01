@@ -45,7 +45,7 @@ export const DnDWrapper = ({
         addNodeToWorkflowAt(activeId, over.id.toString())
       }
     } else if (over !== null && activeId !== over.id) {
-      moveNode(activeId, over.id.toString())      
+      moveNode(activeId, over.id.toString())
     }
     setDraggingCatalogNode(null)
     setDraggingWorkflowNode(null)
