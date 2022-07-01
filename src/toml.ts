@@ -1,6 +1,7 @@
 import { Section, stringify, parse } from '@ltd/j-toml'
 import { isObject } from './utils/isObject'
 import { IWorkflowNode, IParameters, IWorkflow, TomlObjectSchema, ICatalog } from './types'
+import { mergeHeader, splitHeader } from './dsv'
 
 export interface TomlSchemas {
   nodes: Record<string, TomlObjectSchema>
@@ -63,7 +64,7 @@ function parameters2toml (parameters: IParameters, tomlSchema: TomlObjectSchema)
         // indexed array of sectioned objects
         v.forEach((v1: IParameters, i) => {
           const d2 = parameters2toml(v1, nestedTomlSchema as TomlObjectSchema)
-          tomledParameters[`${k}_${i + 1}`] = Section(d2)
+          tomledParameters[`${k}${i + 1}`] = Section(d2)
         })
       } else {
         // indexed array of scalars
@@ -79,6 +80,10 @@ function parameters2toml (parameters: IParameters, tomlSchema: TomlObjectSchema)
       })
     } else if (isObject(v) && isSectioned) {
       tomledParameters[k] = Section(v as any)
+    } else if (isObject(v) && isIndexed) {
+      Object.entries(v).forEach(([k2, v2]) => {
+        tomledParameters[`${k}_${k2}`] = v2
+      })
     } else {
       tomledParameters[k] = v
     }
@@ -115,7 +120,22 @@ function toml2parameters (tomledParameters: IParameters, tomlSchema: TomlObjectS
     const isArrayFlatten = tomlSchema[kFirstPart]?.items?.flatten === true
     const isArrayOfArrayFlatten = tomlSchema[kFirstPart]?.items?.items?.flatten === true
     const isMultiPartIndexed = kParts.length > 0 && isIndexed && lastPartIsIndex
-    if (isIndexed && isObject(v)) {
+    const hasNumberedTrail = k.match(/^(.*)(\d+)$/)
+    if (
+      hasNumberedTrail !== null &&
+      tomlSchema[hasNumberedTrail[1]]?.items?.sectioned === true &&
+      hasNumberedTrail[1] in tomlSchema &&
+      tomlSchema[hasNumberedTrail[1]].indexed === true
+    ) {
+      const unNumberedK = hasNumberedTrail[1]
+      const kNumber = parseInt(hasNumberedTrail[2]) - 1
+      if (!(unNumberedK in parameters)) {
+        parameters[unNumberedK] = []
+      }
+      const tomlSchemaOfK = tomlSchema[unNumberedK]?.items?.properties ?? {}
+      const arrayOfK: IParameters = parameters[unNumberedK] as any
+      arrayOfK[kNumber] = toml2parameters(v as IParameters, tomlSchemaOfK)
+    } else if (isIndexed && isObject(v)) {
       if (!(kFirstPart in parameters)) {
         parameters[kFirstPart] = []
       }
@@ -152,6 +172,12 @@ function toml2parameters (tomledParameters: IParameters, tomlSchema: TomlObjectS
       }
       const k2 = kParts.join('_')
       arrayOfK[kSecond2LastIndex][kLastIndex][k2] = v
+    } else if (isIndexed && !lastPartIsIndex) {
+      if (!(kFirstPart in parameters)) {
+        parameters[kFirstPart] = {}
+      }
+      const arrayOfK: IParameters = parameters[kFirstPart] as any
+      arrayOfK[kLastPart] = v
     } else {
       parameters[k] = v
     }
@@ -160,14 +186,15 @@ function toml2parameters (tomledParameters: IParameters, tomlSchema: TomlObjectS
 }
 
 export function parseWorkflow (workflow: string, globalKeys: Set<string>, tomlSchema4global: TomlObjectSchema, tomSchema4nodes: Record<string, TomlObjectSchema>): IWorkflow {
-  const table = parse(workflow, { bigint: false })
+  const deduppedWorkflow = dedupWorkflow(workflow)
+  const table = parse(deduppedWorkflow, { bigint: false })
   const global: IParameters = {}
   const nodes: IWorkflowNode[] = []
-  const sectionwithindex = /\.\d+$/
+  const sectionwithindex = /\.?\d+$/
   Object.entries(table).forEach(([k, v]) => {
     const section = k.replace(sectionwithindex, '')
     const sectionParts = section.split('_') // TODO fragile as node name and first part of global key could overlap
-    if (globalKeys.has(section) || globalKeys.has(sectionParts[0])) {
+    if (globalKeys.has(k) || globalKeys.has(section) || globalKeys.has(sectionParts[0])) {
       global[k] = v
     } else {
       const tomlSchema4node = tomSchema4nodes[section] ?? {}
@@ -182,4 +209,57 @@ export function parseWorkflow (workflow: string, globalKeys: Set<string>, tomlSc
     nodes,
     global: toml2parameters(global, tomlSchema4global)
   }
+}
+
+/**
+ * Adds index to every repeated header
+ */
+function uniqueHeader (line: string, memory: Map<string, number>): string {
+  const isHeader = /^\['?\w+.*\]$/
+  if (!isHeader.test(line)) {
+    return line
+  }
+  const header = line.slice(1, -1)
+  let [nodeName, ...rest] = splitHeader(header)
+  const hasDigit = nodeName.match(/^(\w+)\.\d+$/)
+  if (hasDigit !== null) {
+    nodeName = hasDigit[1]
+  }
+  if (nodeName !== '') {
+    const canonicalHeader = [nodeName, ...rest].join('.')
+    const index = memory.get(canonicalHeader)
+    if (index !== undefined) {
+      memory.set(canonicalHeader, index + 1)
+      const newHeader = mergeHeader([`${nodeName}.${index}`, ...rest])
+      return `[${newHeader}]`
+    } else {
+      memory.set(canonicalHeader, 1)
+      return line
+    }
+  } else {
+    return line
+  }
+}
+
+/**
+ * Replaces
+ * ```toml
+ * [somenode]
+ * [somenode]
+ * ```
+ * with
+ * ```toml
+ * [somenode]
+ * ['somenode.1']
+ * ```
+ */
+export function dedupWorkflow (inp: string): string {
+  const headers: Map<string, number> = new Map()
+  return inp
+    .replaceAll('\r\n', '\n')
+    .replace('\r', '\n')
+    .split('\n').map(
+      (line) => uniqueHeader(line, headers)
+    )
+    .join('\n')
 }

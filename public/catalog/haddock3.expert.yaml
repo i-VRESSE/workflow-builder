@@ -109,6 +109,24 @@ global:
         type: number
         maximum: 9999
         minimum: 1
+      clean:
+        default: false
+        title: Clean the module output files.
+        description: Clean the module if run succeeds by compressing or removing output
+          files.
+        $comment: When running haddock through the command-line, the 'clean' parameter
+          will instruct the workflow to clean the output files of the module if the
+          whole run succeeds. In this process, PDB and PSF files are compressed to
+          gzip, with the extension `.gz`. While files with extension `.seed`, `.inp`,
+          and `.out` files are archived, and the original files deleted. The time
+          to perform a cleaning operation depends on the number of files in the folders
+          and the size of the files. However, it should not represent a limit step
+          in the workflow. For example, a rigidbody sampling 10,000 structures takes
+          about 4 minutes in our servers. This operation uses as many cores as allowed
+          by the user in the 'ncores' parameter. SSD disks will perform faster by
+          definition. See also the 'haddock3-clean' and 'haddock3-unpack' command-line
+          clients.
+        type: boolean
     required:
     - run_dir
     additionalProperties: false
@@ -133,6 +151,8 @@ global:
       ui:group: execution
     concat:
       ui:group: execution
+    clean:
+      ui:group: clean
   tomlSchema: {}
 nodes:
 - id: gdock
@@ -2289,26 +2309,52 @@ nodes:
     additionalProperties: false
   uiSchema: {}
   tomlSchema: {}
+- id: rmsdmatrix
+  category: analysis
+  label: RMSD matrix module.
+  description: HADDOCK3 module for clustering with RMSD.
+  schema:
+    type: object
+    properties:
+      max_models:
+        default: 10000
+        title: Maximum number of models to calculate RMSD matrix
+        description: If the number of models exceeds max_models the execution is blocked
+        $comment: If the number of models exceeds the few thousands, the calculation
+          of the RMSD matrix is computationally demanding, especially in terms of
+          CPU and disk space.
+        type: number
+        maximum: 20000
+        minimum: 1
+      resdic:
+        default: {}
+        title: List of residues
+        description: The residue numbers that should be used in the alignment and
+          in the RMSD calculation.
+        $comment: resdic_* is an expandable parameter. You can provide resdic_A, resdic_B,
+          resdic_C, etc, where the last capital letter is the chain identifier.
+        type: object
+        additionalProperties:
+          type: array
+          items:
+            type: number
+            format: residue
+            minItems: 0
+            maxItems: 100
+          uniqueItems: true
+        propertyNames:
+          pattern: ^[A-Z]$
+          format: chain
+        maxPropertiesFrom: molecules
+    required: []
+    additionalProperties: false
+  uiSchema: {}
+  tomlSchema:
+    resdic:
+      indexed: true
 - id: clustrmsd
   category: analysis
-  label: "\nRMSD clustering module.\n\nThis module takes in input the RMSD matrix\
-    \ calculated in the previous step and\nperforms a hierarchical clustering procedure\
-    \ on it, leveraging `scipy routines`_\nfor this purpose.\n\nEssentially, the procedure\
-    \ amounts at lumping the input models in a\nprogressively coarser hierarchy of\
-    \ clusters, called the dendrogram.\n\nFour parameters can be defined in this context:\n\
-    \n* `linkage`: governs the way clusters are merged together in the creation of\n\
-    \  the dendrogram\n* `criterion`: defines the prescription to cut the dendrogram\
-    \ and obtain the\n  desired clusters\n* `tolerance`:\n    * if `criterion` is\
-    \ ``maxclust``, this is the number of desired\n      clusters.\n    * if `criterion`\
-    \ is ``distance``, it must be the value of\n      distance that separates distinct\
-    \ clusters.\n      \n  If not specified, the default is calculated either as the\
-    \ total number of\n  models divided by four (`maxclust`) or as the average of\
-    \ the dendrogram height\n  (`distance`)\n* `threshold` : analogously to the `clustfcc`\
-    \ module, it is the minimum number\n  of models that should be present in a cluster\
-    \ to consider it\n\nThis module passes the path to the RMSD matrix is to the next\
-    \ step of the\nworkflow through the `rmsd_matrix.json` file, thus allowing to\
-    \ execute several\n`clustrmsd` modules (possibly with different parameters) on\
-    \ the same RMSD\nmatrix.\n\n.. _scipy routines: https://docs.scipy.org/doc/scipy/reference/cluster.hierarchy.html\n"
+  label: RMSD clustering module.
   description: HADDOCK3 module for clustering with RMSD.
   schema:
     type: object

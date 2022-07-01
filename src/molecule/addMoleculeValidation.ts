@@ -6,7 +6,7 @@ import { moleculeFormats } from './formats'
 import { MoleculeInfo, parsePDB } from './parse'
 
 // TODO can be quite expensive to parse big molecules, should try to use memoization
-function parseMolecules (globalParameters: IParameters, globalSchema: JSONSchema7, files: IFiles): [MoleculeInfo[], string | undefined] {
+async function parseMolecules (globalParameters: IParameters, globalSchema: JSONSchema7, files: IFiles): Promise<[MoleculeInfo[], string | undefined]> {
   if (globalSchema.properties === undefined) {
     return [[], undefined]
   }
@@ -29,10 +29,10 @@ function parseMolecules (globalParameters: IParameters, globalSchema: JSONSchema
   // TODO check whether files are actually PDB files using uiSchema.molecules..items.ui:options.accept: .pdb
   const moleculeFiles = moleculeFilePaths.map(p => files[p])
   // parse file
-  const moleculeInfos = moleculeFiles.map(f => {
+  const moleculeInfos = await Promise.all(moleculeFiles.map(async f => {
     const body = dataURL2content(f)
-    return parsePDB(body)
-  })
+    return await parsePDB(body)
+  }))
   return [moleculeInfos, moleculesPropName]
 }
 
@@ -46,6 +46,7 @@ function walkSchemaForMoleculeFormats (schema: JSONSchema7, moleculeInfos: Molec
     .map(([k, v]) => {
       const s = v as JSONSchema7WithMaxItemsFrom
       const isArrayWithItems = s.type === 'array' && 'items' in s
+      const isObjectWithUserNames = s.type === 'object' && s.additionalProperties && typeof s.additionalProperties === 'object' && !('properties' in s)
       if (isArrayWithItems && s.maxItemsFrom === moleculesPropName) {
         const s2 = s.items
         if (
@@ -64,11 +65,11 @@ function walkSchemaForMoleculeFormats (schema: JSONSchema7, moleculeInfos: Molec
               const items = moleculeInfos.map((molinfo) => {
                 const properties = Object.fromEntries(Object.entries(s4).map(([pk, pv]) => {
                   if (typeof pv !== 'boolean' && !Array.isArray(pv) && 'format' in pv) {
-                    if (pv.format === 'chain') {
+                    if (pv.format === 'chain' && molinfo.chains.length > 0) {
                       const npv = { ...pv, enum: molinfo.chains }
                       return [pk, npv]
                     }
-                    if (pv.format === 'residue') {
+                    if (pv.format === 'residue' && molinfo.residueSequenceNumbers.length > 0) {
                       const npv = { ...pv, enum: molinfo.residueSequenceNumbers }
                       return [pk, npv]
                     }
@@ -120,6 +121,10 @@ function walkSchemaForMoleculeFormats (schema: JSONSchema7, moleculeInfos: Molec
             return [k, { ...s, items }]
           }
         }
+      } else if (isObjectWithUserNames === true && s.maxPropertiesFrom === moleculesPropName) {
+        // TODO implement
+        const newObjectSchema = v
+        return [k, newObjectSchema]
       } else if (s.type === 'object') {
         const newObjectSchema = walkSchemaForMoleculeFormats(s, moleculeInfos, moleculesPropName)
         return [k, newObjectSchema]
@@ -130,8 +135,8 @@ function walkSchemaForMoleculeFormats (schema: JSONSchema7, moleculeInfos: Molec
   return newSchema
 }
 
-export function addMoleculeValidation (schema: JSONSchema7, globalParameters: IParameters, globalSchema: JSONSchema7, files: IFiles): JSONSchema7 {
-  const [moleculeInfos, moleculesPropName] = parseMolecules(globalParameters, globalSchema, files)
+export async function addMoleculeValidation (schema: JSONSchema7, globalParameters: IParameters, globalSchema: JSONSchema7, files: IFiles): Promise<JSONSchema7> {
+  const [moleculeInfos, moleculesPropName] = await parseMolecules(globalParameters, globalSchema, files)
   if (moleculesPropName !== undefined) {
     return walkSchemaForMoleculeFormats(schema, moleculeInfos, moleculesPropName)
   }

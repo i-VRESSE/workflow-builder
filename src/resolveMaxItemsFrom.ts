@@ -4,6 +4,7 @@ import { IParameters } from './types'
 
 export interface JSONSchema7WithMaxItemsFrom extends JSONSchema7 {
   maxItemsFrom?: string
+  maxPropertiesFrom?: string
 }
 
 export function resolveMaxItemsFrom (formSchema: JSONSchema7WithMaxItemsFrom, globalParameters: IParameters): JSONSchema7 {

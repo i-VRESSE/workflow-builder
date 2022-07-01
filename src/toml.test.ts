@@ -1,5 +1,6 @@
+import dedent from 'ts-dedent'
 import { expect, describe, it } from 'vitest'
-import { parseWorkflow, TomlSchemas, workflow2tomltext } from './toml'
+import { dedupWorkflow, parseWorkflow, TomlSchemas, workflow2tomltext } from './toml'
 import { IParameters } from './types'
 
 describe('workflow2tomltext()', () => {
@@ -211,13 +212,13 @@ fle_end_2_1 = 66
     const expected = `
 [somenode]
 
-[somenode.mol_1]
+[somenode.mol1]
 
 cyclicpept = false
 hisd_1 = 13
 hisd_2 = 42
 
-[somenode.mol_2]
+[somenode.mol2]
 
 cyclicpept = true
 hisd_1 = 314
@@ -326,6 +327,38 @@ key8 = [
 [somenode.foo]
 
 bar.bla = 'hi'
+`
+    expect(result).toEqual(expected)
+  })
+
+  it('should output <param>_<key> when given object and indexed=true', () => {
+    const nodes = [{
+      id: 'somenode',
+      parameters: {
+        param: {
+          A: 11,
+          B: 22,
+          C: 33
+        }
+      }
+    }]
+    const tomlSchemas = {
+      nodes: {
+        somenode: {
+          param: {
+            indexed: true
+          }
+        }
+      },
+      global: {}
+    }
+    const result = workflow2tomltext(nodes, {}, tomlSchemas)
+    const expected = `
+[somenode]
+
+param_A = 11
+param_B = 22
+param_C = 33
 `
     expect(result).toEqual(expected)
   })
@@ -562,13 +595,13 @@ key8 = [
       const tomlSchema4global = {
         foo: { indexed: true, items: { flatten: true } }
       }
-      const tomSchema4nodes = {}
+      const tomlSchema4nodes = {}
 
       const result = parseWorkflow(
         workflow,
         new Set(['foo']),
         tomlSchema4global,
-        tomSchema4nodes
+        tomlSchema4nodes
       )
 
       const expected = {
@@ -666,12 +699,12 @@ key8 = [
 
     it('should expand to array of objects when indexed:true + sectioned:true + prop indexed', () => {
       const workflow = `
-  [mol_1]
+  [mol1]
 
   hisd_1 = 13
   hisd_2 = 42
 
-  [mol_2]
+  [mol2]
 
   hisd_1 = 314
   hisd_2 = 512
@@ -707,6 +740,47 @@ key8 = [
       }
       expect(result.global).toEqual(expected)
     })
+
+    it('should expand to array of objects when indexed:true + sectioned:true', () => {
+      const workflow = `
+      [nodex.mol1]
+      cyclicpept = true
+
+      [nodex.mol2]
+      cyclicpept = false
+      `
+      const tomlSchema4global = {}
+      const tomSchema4nodes = {
+        nodex: {
+          mol: {
+            indexed: true,
+            items: {
+              sectioned: true
+            }
+          }
+        }
+      }
+
+      const result = parseWorkflow(
+        workflow,
+        new Set(),
+        tomlSchema4global,
+        tomSchema4nodes
+      )
+
+      const expected = {
+        id: 'nodex',
+        parameters: {
+          mol: [{
+            cyclicpept: true
+          }, {
+            cyclicpept: false
+          }]
+        }
+      }
+      expect(result.nodes[0]).toEqual(expected)
+    })
+
     it('should expand to array of array of object whend global and 2x indexed:true + flatten:true', () => {
       const workflow = `
   fle_sta_1_1 = 11
@@ -747,6 +821,30 @@ key8 = [
             }
           ]
         ]
+      }
+      expect(result.global).toEqual(expected)
+    })
+
+    it('should read "foo_bar=val" as {foo: {bar: "val"}} when indexed:true', () => {
+      const workflow = dedent`
+          foo_bar = "val"
+          `
+      const tomlSchema4global = {
+        foo: { indexed: true }
+      }
+      const tomlSchema4nodes = {}
+
+      const result = parseWorkflow(
+        workflow,
+        new Set(['foo']),
+        tomlSchema4global,
+        tomlSchema4nodes
+      )
+
+      const expected = {
+        foo: {
+          bar: 'val'
+        }
       }
       expect(result.global).toEqual(expected)
     })
@@ -804,5 +902,82 @@ key8 = [
       }
       expect(result).toEqual(expected)
     })
+  })
+})
+
+describe('dedupWorkflow()', () => {
+  it.each([
+    [
+      'no dups',
+      `\
+[somenode]
+foo = 42
+
+[somenode.nestedpar]
+bar = 5
+
+['somenode.1']
+
+['somenode.1'.nestedpar]
+bar = 8
+`,
+`\
+[somenode]
+foo = 42
+
+[somenode.nestedpar]
+bar = 5
+
+['somenode.1']
+
+['somenode.1'.nestedpar]
+bar = 8
+`
+    ], [
+      'simple dups',
+      `\
+[somenode]
+foo = 1
+
+[somenode]
+foo = 2
+`, `\
+[somenode]
+foo = 1
+
+['somenode.1']
+foo = 2
+`
+    ], [
+      'nested dups',
+  `\
+[somenode]
+foo = 1
+
+[somenode.nestedpar]
+bar = 2
+
+[somenode]
+foo = 3
+
+[somenode.nestedpar]
+bar = 4
+`, `\
+[somenode]
+foo = 1
+
+[somenode.nestedpar]
+bar = 2
+
+['somenode.1']
+foo = 3
+
+['somenode.1'.nestedpar]
+bar = 4
+`
+    ]
+  ])('given %s should replace repeated headers with headers including an index', (_desc, input, expected) => {
+    const actual = dedupWorkflow(input)
+    expect(actual).toEqual(expected)
   })
 })
