@@ -41,7 +41,7 @@ export const CatalogPanel = (): JSX.Element => {
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                   <span>{activeCatalogNode}</span>
-                  <div className='btn btn-light btn-sm' title='Move' style={{cursor: 'grab'}}>
+                  <div className='btn btn-light btn-sm' title='Move' style={{ cursor: 'grab' }}>
                     <GripVertical />
                   </div>
                 </div>
