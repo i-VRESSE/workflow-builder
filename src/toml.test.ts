@@ -13,7 +13,8 @@ describe('workflow2tomltext()', () => {
         }, {
           bar: 'fizzz'
         }]
-      }
+      },
+      code: 'somenode1'
     }]
 
     const tomlSchemas = {
@@ -50,13 +51,15 @@ bar = 'fizzz'
         id: 'somenode',
         parameters: {
           foo: 'bar'
-        }
+        },
+        code: 'somenode1'
       },
       {
         id: 'somenode',
         parameters: {
           foo: 'fizz'
-        }
+        },
+        code: 'somenode2'
       }
     ]
     const tomlSchemas: TomlSchemas = { nodes: {}, global: {} }
@@ -78,7 +81,8 @@ foo = 'fizz'
       id: 'somenode',
       parameters: {
         foo: ['biz', 'fiz']
-      }
+      },
+      code: 'somenode1'
     }]
     const tomlSchemas: TomlSchemas = {
       nodes: {
@@ -109,7 +113,8 @@ foo_2 = 'fiz'
           something: 33,
           something_else: 44
         }]
-      }
+      },
+      code: 'somenode1'
     }]
     const tomlSchemas: TomlSchemas = {
       nodes: {
@@ -153,7 +158,8 @@ name_something_else_2 = 44
             }
           ]
         ]
-      }
+      },
+      code: 'somenode1'
     }]
     const tomlSchemas: TomlSchemas = {
       nodes: {
@@ -188,7 +194,8 @@ fle_end_2_1 = 66
           cyclicpept: true,
           hisd: [314, 512]
         }]
-      }
+      },
+      code: 'somenode1'
     }]
     const tomlSchemas: TomlSchemas = {
       nodes: {
@@ -306,7 +313,8 @@ key8 = [
               bla: 'hi'
             }
           }
-        }
+        },
+        code: 'somenode1'
       }
     ]
     const tomlSchemas: TomlSchemas = {
@@ -340,7 +348,8 @@ bar.bla = 'hi'
           B: 22,
           C: 33
         }
-      }
+      },
+      code: 'somenode1'
     }]
     const tomlSchemas = {
       nodes: {
@@ -384,7 +393,8 @@ foo = 'bar'
           id: 'somenode',
           parameters: {
             foo: 'bar'
-          }
+          },
+          code: expect.stringMatching(/\w+/)
         }
       ]
     }
@@ -409,13 +419,15 @@ foo = 'fizz'
           id: 'somenode',
           parameters: {
             foo: 'bar'
-          }
+          },
+          code: expect.stringMatching(/\w+/)
         },
         {
           id: 'somenode',
           parameters: {
             foo: 'fizz'
-          }
+          },
+          code: expect.stringMatching(/\w+/)
         }
       ]
     }
@@ -537,7 +549,8 @@ key8 = [
           key6: [{ a: [1, 2] }], // Array with oboject with array of scalar
           key7: [[1, 2], [3, 4]], // Array of array of scalar
           key8: [[{ a: 1 }, { a: 2 }], [{ a: 3 }, { a: 4 }]] // Array of array of object
-        }
+        },
+        code: expect.stringMatching(/\w+/)
       }]
     }
     const result = parseWorkflow(workflow, new Set(Object.keys(expected.global)), {}, {})
@@ -776,7 +789,8 @@ key8 = [
           }, {
             cyclicpept: false
           }]
-        }
+        },
+        code: expect.stringMatching(/\w+/)
       }
       expect(result.nodes[0]).toEqual(expected)
     })
@@ -865,7 +879,8 @@ key8 = [
             foo: [{
               bar: 'fizz'
             }]
-          }
+          },
+          code: expect.stringMatching(/\w+/)
         }]
       }
       expect(result).toEqual(expected)
@@ -897,7 +912,8 @@ key8 = [
           id: 'somenode',
           parameters: {
             foo: ['biz', 'fiz']
-          }
+          },
+          code: expect.stringMatching(/\w+/)
         }]
       }
       expect(result).toEqual(expected)
