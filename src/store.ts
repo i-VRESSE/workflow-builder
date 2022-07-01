@@ -60,7 +60,7 @@ const draggingCatalogNodeState = atom<string | number | null>({
   default: null
 })
 
-export function useDraggingCatalogNodeState() {
+export function useDraggingCatalogNodeState (): [string | number | null, SetterOrUpdater<string | number | null>] {
   return useRecoilState(draggingCatalogNodeState)
 }
 
@@ -377,6 +377,6 @@ export function useText (): string {
   return workflow2tomltext(nodes, global, catalog2tomlSchemas(catalog))
 }
 
-export function useWorkflowNodes () {
+export function useWorkflowNodes (): [IWorkflowNode[], SetterOrUpdater<IWorkflowNode[]>] {
   return useRecoilState(workflowNodesState)
 }

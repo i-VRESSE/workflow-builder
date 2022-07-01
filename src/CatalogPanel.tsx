@@ -1,16 +1,15 @@
-import { DragOverlay } from "@dnd-kit/core";
-import React from "react";
-import { GripVertical } from "react-bootstrap-icons";
-import { CatalogCategory } from "./CatalogCategory";
-import { CatalogPicker } from "./CatalogPicker";
-import { nodeWidth } from "./constants";
-import { Example } from "./Example";
-import { useCatalog, useDraggingCatalogNodeState } from "./store";
+import { DragOverlay } from '@dnd-kit/core'
+import React from 'react'
+import { GripVertical } from 'react-bootstrap-icons'
+import { CatalogCategory } from './CatalogCategory'
+import { CatalogPicker } from './CatalogPicker'
+import { nodeWidth } from './constants'
+import { Example } from './Example'
+import { useCatalog, useDraggingCatalogNodeState } from './store'
 
 export const CatalogPanel = (): JSX.Element => {
-  const catalog = useCatalog();
-  const [activeCatalogNode, _setAtiveCatalogNode] =
-    useDraggingCatalogNodeState();
+  const catalog = useCatalog()
+  const activeCatalogNode = useDraggingCatalogNodeState()[0]
 
   return (
     <fieldset>
@@ -20,7 +19,7 @@ export const CatalogPanel = (): JSX.Element => {
       </div>
       <React.Suspense fallback={<span>Loading catalog...</span>}>
         <h4>Nodes</h4>
-        <ul style={{ lineHeight: "2.5em" }}>
+        <ul style={{ lineHeight: '2.5em' }}>
           {catalog?.categories.map((category) => (
             <CatalogCategory key={category.name} {...category} />
           ))}
@@ -33,22 +32,24 @@ export const CatalogPanel = (): JSX.Element => {
           ))}
         </ul>
         <DragOverlay dropAnimation={null}>
-          {activeCatalogNode ? (
-            <button
-              style={{ width: `${nodeWidth}rem` }}
-              title={`${activeCatalogNode}`}
-              className="btn btn-light btn-sm"
-            >
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <span>{activeCatalogNode}</span>
-                <div className="btn btn-light btn-sm" title="Move">
-                  <GripVertical />
+          {activeCatalogNode !== null
+            ? (
+              <button
+                style={{ width: `${nodeWidth}rem` }}
+                title={`${activeCatalogNode}`}
+                className='btn btn-light btn-sm'
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <span>{activeCatalogNode}</span>
+                  <div className='btn btn-light btn-sm' title='Move'>
+                    <GripVertical />
+                  </div>
                 </div>
-              </div>
-            </button>
-          ) : null}
+              </button>
+              )
+            : null}
         </DragOverlay>
       </React.Suspense>
     </fieldset>
-  );
-};
+  )
+}

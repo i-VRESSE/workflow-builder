@@ -7,7 +7,7 @@ export const VisualPanel = (): JSX.Element => {
 
   const nodeList = (
     <div style={{ lineHeight: '2.5em' }}>
-      {nodes.map((node, i) => <VisualNode key={node.code} index={i} id={node.id} code={node.code}/>)}
+      {nodes.map((node, i) => <VisualNode key={node.code} index={i} id={node.id} code={node.code} />)}
     </div>
   )
   const appendZoneStyle = {
@@ -27,7 +27,7 @@ export const VisualPanel = (): JSX.Element => {
   return (
     <div style={{ height: '100%' }}>
       <SortableContext items={nodes.map(n => n.code)} strategy={verticalListSortingStrategy}>
-      {nodeList}
+        {nodeList}
       </SortableContext>
       {nodes.length === 0 ? appendZone : <></>}
     </div>

@@ -1,7 +1,6 @@
-import { useState } from 'react'
 import { useSelectNodeIndex, useWorkflow } from './store'
 import { GripVertical, X } from 'react-bootstrap-icons'
-import {CSS} from '@dnd-kit/utilities';
+import { CSS } from '@dnd-kit/utilities'
 import { nodeWidth } from './constants'
 import { useSortable } from '@dnd-kit/sortable'
 
@@ -22,14 +21,13 @@ export const VisualNode = ({ id, index, code }: IProp): JSX.Element => {
     setNodeRef,
     setActivatorNodeRef,
     transform,
-    transition,
-  } = useSortable({id: code});
-
+    transition
+  } = useSortable({ id: code })
 
   const style = {
     transform: CSS.Transform.toString(transform),
-    transition,
-  };
+    transition
+  }
   const selectedStyle = selectedNodeIndex === index ? { fontWeight: 'bold' } : {}
 
   // TODO after clicking node the active styling is not removed unless you activate another element
@@ -41,16 +39,16 @@ export const VisualNode = ({ id, index, code }: IProp): JSX.Element => {
         <button
           className='btn btn-light btn-sm btn-block'
           title='Click to configure'
-          style={{width: `${nodeWidth}rem`, display: 'flex', justifyContent: 'space-between' , ...selectedStyle}}
+          style={{ width: `${nodeWidth}rem`, display: 'flex', justifyContent: 'space-between', ...selectedStyle }}
           onClick={() => {
             selectNode(index)
           }}
         >
           {index + 1}. {id}
         </button>
-        <button ref={setActivatorNodeRef} {...listeners} className='btn btn-light btn-sm' title="Move">
+        <button ref={setActivatorNodeRef} {...listeners} className='btn btn-light btn-sm' title='Move'>
           <GripVertical />
-          </button>
+        </button>
         <button
           title='Delete'
           className='btn btn-light btn-sm'
