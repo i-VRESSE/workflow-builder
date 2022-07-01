@@ -21,7 +21,7 @@ test.describe('given 1 molecule and a flexref node with seg parameter defined', 
     // Click text=Submit
     await page.locator('text=Submit').click()
     // Click text=Cancel
-    await page.locator('text=Cancel').click()
+    await page.locator('button:has-text("Cancel")').click()
     // Click button:has-text("flexref")
     await page.locator('button:has-text("flexref")').click()
     // Click #expander4flexibility svg
@@ -92,7 +92,7 @@ test.describe('given 2 molecules and a flexref node with seg parameter defined f
     // Click text=Submit
     await page.locator('text=Submit').click()
     // Click text=Cancel
-    await page.locator('text=Cancel').click()
+    await page.locator('button:has-text("Cancel")').click()
     // Click button:has-text("flexref")
     await page.locator('button:has-text("flexref")').click()
     // Click #expander4flexibility svg
@@ -114,7 +114,7 @@ test.describe('given 2 molecules and a flexref node with seg parameter defined f
     // Click text=Submit
     await page.locator('text=Submit').click()
     // Click text=Cancel
-    await page.locator('text=Cancel').click()
+    await page.locator('button:has-text("Cancel")').click()
   })
 
   test.describe('removing a molecule', () => {
@@ -127,7 +127,7 @@ test.describe('given 2 molecules and a flexref node with seg parameter defined f
       // Click text=Submit
       await page.locator('text=Submit').click()
       // Click text=Cancel
-      await page.locator('text=Cancel').click()
+      await page.locator('button:has-text("Cancel")').click()
     })
 
     test('should not retain invalid second array value for seg parameter ', async ({ page }) => {
