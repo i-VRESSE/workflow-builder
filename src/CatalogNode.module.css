@@ -1,0 +1,17 @@
+.node {
+    width: 12rem;
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .grip {
+    visibility: hidden;
+    cursor: grab !important;
+  }
+  
+  .node:hover .grip {
+    visibility: visible;
+  }
+  
