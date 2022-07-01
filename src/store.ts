@@ -1,6 +1,7 @@
 import { atom, DefaultValue, selector, SetterOrUpdater, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { JSONSchema7 } from 'json-schema'
 import { UiSchema } from '@rjsf/core'
+import { nanoid } from 'nanoid'
 
 import { externalizeDataUrls, internalizeDataUrls } from './dataurls'
 import { saveArchive } from './archive'
@@ -9,12 +10,11 @@ import { catalog2tomlSchemas, workflow2tomltext } from './toml'
 import { dropUnusedFiles, loadWorkflowArchive, emptyParams, clearFiles } from './workflow'
 import { fetchCatalogIndex, fetchCatalog } from './catalog'
 import { catalogIndexURL } from './constants'
-import { removeItemAtIndex, replaceItemAtIndex, moveItem, swapItem, removeAllItems } from './utils/array'
+import { removeItemAtIndex, replaceItemAtIndex, moveItem, removeAllItems } from './utils/array'
 import { groupParameters, unGroupParameters } from './grouper'
 import { pruneDefaults } from './pruner'
 import { resolveMaxItemsFrom } from './resolveMaxItemsFrom'
 import { addMoleculeValidation } from './molecule/addMoleculeValidation'
-import { nanoid } from 'nanoid'
 
 const catalogIndexState = selector<ICatalogIndex>({
   key: 'catalogIndex',
@@ -265,16 +265,14 @@ interface UseWorkflow {
   global: IParameters
   toggleGlobalEdit: () => void
   addNodeToWorkflow: (nodeId: string) => void
-  addNodeToWorkflowAt: (nodeId: string, targetIndex: number) => void
+  addNodeToWorkflowAt: (nodeId: string, targetCode: string) => void
   loadWorkflowArchive: (archiveURL: string) => Promise<void>
   save: () => Promise<void>
   clear: () => void
   deleteNode: (nodeIndex: number) => void
   selectNode: (nodeIndex: number) => void
   clearNodeSelection: () => void
-  moveNodeDown: (nodeIndex: number) => void
-  moveNodeUp: (nodeIndex: number) => void
-  moveNode: (sourceIndex: number, targetIndex: number) => void
+  moveNode: (sourceCode: string, targetCode: string) => void
 }
 
 export function useWorkflow (): UseWorkflow {
@@ -293,7 +291,8 @@ export function useWorkflow (): UseWorkflow {
       setEditingGlobal(!editingGlobal)
       setSelectedNodeIndex(-1)
     },
-    addNodeToWorkflowAt (nodeId: string, targetIndex: number) {
+    addNodeToWorkflowAt (nodeId: string, targetCode: string) {
+      const targetIndex = nodes.findIndex((n) => n.code === targetCode)
       setNodes((oldNodes) => {
         const newNodes = [...oldNodes, { id: nodeId, parameters: {}, code: nanoid() }]
         return moveItem(newNodes, newNodes.length - 1, targetIndex)
@@ -345,24 +344,13 @@ export function useWorkflow (): UseWorkflow {
     async save () {
       await saveArchive(nodes, global, files, catalog2tomlSchemas(catalog))
     },
-    moveNodeDown (nodeIndex: number) {
-      if (nodeIndex + 1 < nodes.length) {
-        const newNodes = swapItem(nodes, nodeIndex, 1)
-        setSelectedNodeIndex(-1)
-        setNodes(newNodes)
-      }
-    },
-    moveNodeUp (nodeIndex: number) {
-      if (nodeIndex > 0) {
-        const newNodes = swapItem(nodes, nodeIndex, -1)
-        setSelectedNodeIndex(-1)
-        setNodes(newNodes)
-      }
-    },
-    moveNode (sourceIndex: number, targetIndex: number) {
-      const newNodes = moveItem(nodes, sourceIndex, targetIndex)
+    moveNode (sourceCode: string, targetCode: string) {
       setSelectedNodeIndex(-1)
-      setNodes(newNodes)
+      setNodes((oldNodes) => {
+        const oldIndex = oldNodes.findIndex((n) => n.code === sourceCode)
+        const newIndex = oldNodes.findIndex((n) => n.code === targetCode)
+        return moveItem(oldNodes, oldIndex, newIndex)
+      })
     }
   }
 }
@@ -375,8 +363,4 @@ export function useText (): string {
   const { nodes, global } = useWorkflow()
   const catalog = useCatalog()
   return workflow2tomltext(nodes, global, catalog2tomlSchemas(catalog))
-}
-
-export function useWorkflowNodes (): [IWorkflowNode[], SetterOrUpdater<IWorkflowNode[]>] {
-  return useRecoilState(workflowNodesState)
 }

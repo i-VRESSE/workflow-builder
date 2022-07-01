@@ -2,15 +2,13 @@ import React from 'react'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { Active, DndContext, DragEndEvent, DragStartEvent } from '@dnd-kit/core'
-import { arrayMove } from '@dnd-kit/sortable'
-import { useDraggingCatalogNodeState, useWorkflow, useWorkflowNodes } from './store'
+import { useDraggingCatalogNodeState, useWorkflow } from './store'
 
 export const DnDWrapper = ({
   children
 }: React.PropsWithChildren<{}>): JSX.Element => {
-  const { addNodeToWorkflow, addNodeToWorkflowAt } = useWorkflow()
-  const [nodes, setNodes] = useWorkflowNodes()
-  const setaAtiveCatalogNode = useDraggingCatalogNodeState()[1]
+  const { addNodeToWorkflow, addNodeToWorkflowAt, moveNode } = useWorkflow()
+  const setDraggingCatalogNode = useDraggingCatalogNodeState()[1]
 
   return (
     <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart} autoScroll={false}>
@@ -30,28 +28,22 @@ export const DnDWrapper = ({
   }
   function handleDragStart (event: DragStartEvent): void {
     if (isCatalogNode(event.active)) {
-      setaAtiveCatalogNode(event.active.id)
+      setDraggingCatalogNode(event.active.id)
     }
   }
 
   function handleDragEnd (event: DragEndEvent): void {
     const { active, over } = event
+    const activeId = active.id.toString()
     if (isCatalogNode(active)) {
       if (over === null) {
-        addNodeToWorkflow(`${active.id}`)
+        addNodeToWorkflow(activeId)
       } else {
-        const targetIndex = nodes.findIndex((n) => n.code === over.id)
-        addNodeToWorkflowAt(`${active.id}`, targetIndex)
+        addNodeToWorkflowAt(activeId, over.id.toString())
       }
-      setaAtiveCatalogNode(null)
-    } else if (over !== null && active.id !== over.id) {
-      setNodes((items) => {
-        const oldIndex = items.findIndex((n) => n.code === active.id)
-        const newIndex = items.findIndex((n) => n.code === over.id)
-
-        return arrayMove(items, oldIndex, newIndex)
-      })
-      // TODO setSelectedNodeIndex
+      setDraggingCatalogNode(null)
+    } else if (over !== null && activeId !== over.id) {
+      moveNode(activeId, over.id.toString())
     }
   }
 }
