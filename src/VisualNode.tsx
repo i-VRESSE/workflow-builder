@@ -57,7 +57,10 @@ export const VisualNode = ({ id, index, code }: IProp): JSX.Element => {
         <div
           title="Delete"
           className={"btn btn-light btn-sm " + classes.delete}
-          onClick={() => deleteNode(index)}
+          onClick={(event) => {
+            deleteNode(index)
+            event.stopPropagation()
+          }}
         >
           <X />
         </div>
