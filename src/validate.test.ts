@@ -108,7 +108,8 @@ describe('validateWorkflow()', () => {
             id: 'mynode',
             parameters: {
               autohis: true
-            }
+            },
+            code: 'mynode1'
           }
         ]
       }
@@ -123,7 +124,8 @@ describe('validateWorkflow()', () => {
         nodes: [
           {
             id: 'mynode',
-            parameters: {}
+            parameters: {},
+            code: 'mynode1'
           }
         ]
       }
@@ -151,7 +153,8 @@ describe('validateWorkflow()', () => {
           nodes: [
             {
               id: 'myothernode',
-              parameters: {}
+              parameters: {},
+              code: 'myothernode1'
             }
           ]
         }
@@ -234,7 +237,8 @@ describe('validateWorkflow()', () => {
             id: 'mynode',
             parameters: {
               nprop: [true, false, true]
-            }
+            },
+            code: 'mynode1'
           }
         ]
       }
@@ -253,7 +257,8 @@ describe('validateWorkflow()', () => {
             id: 'mynode',
             parameters: {
               nprop: [true, false, true]
-            }
+            },
+            code: 'mynode1'
           }
         ]
       }
@@ -349,7 +354,8 @@ describe('validateWorkflow()', () => {
               id: 'mynode',
               parameters: {
                 seg: [[{ chain: 'A' }]]
-              }
+              },
+              code: 'mynode1'
             }
           ]
         }
@@ -370,7 +376,8 @@ describe('validateWorkflow()', () => {
               id: 'mynode',
               parameters: {
                 seg: [[{ chain: 'X' }]]
-              }
+              },
+              code: 'mynode1'
             }
           ]
         }
