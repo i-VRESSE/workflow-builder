@@ -1,19 +1,19 @@
 import React from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { ErrorBoundary } from "./ErrorBoundary";
-import { DndContext, DragEndEvent } from "@dnd-kit/core";
+import { DndContext, DragEndEvent, DragStartEvent } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
-import { useWorkflow, useWorkflowNodes } from "./store";
+import { useDraggingCatalogNodeState, useSelectNodeIndex, useWorkflow, useWorkflowNodes } from "./store";
 
 export const DnDWrapper = ({
   children,
 }: React.PropsWithChildren<{}>): JSX.Element => {
-  const { addNodeToWorkflow } = useWorkflow();
+  const { addNodeToWorkflow, addNodeToWorkflowAt } = useWorkflow();
   const [nodes, setNodes] = useWorkflowNodes();
+  const [_activeCatalogNode, setaAtiveCatalogNode] = useDraggingCatalogNodeState()
 
   return (
-    <DndContext onDragEnd={handleDragEnd}>
+    <DndContext onDragEnd={handleDragEnd}  onDragStart={handleDragStart} autoScroll={false}>
       <ToastContainer
         position="top-center"
         autoClose={1000}
@@ -24,10 +24,22 @@ export const DnDWrapper = ({
     </DndContext>
   );
 
+  function handleDragStart(event: DragStartEvent) {
+    if (event.active.data.current?.catalog) {
+      setaAtiveCatalogNode(event.active.id)
+    }
+  }
+
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
-    if (over === null) {
-      addNodeToWorkflow(`${active.id}`);
+    if (active.data.current?.catalog) {
+      if (over === null) {
+        addNodeToWorkflow(`${active.id}`);
+      } else {
+        const targetIndex = nodes.findIndex((n) => n.code === over!.id)
+        addNodeToWorkflowAt(`${active.id}`, targetIndex)
+      }
+      setaAtiveCatalogNode(null)
     } else if (active.id !== over!.id) {
       setNodes((items) => {
         const oldIndex = items.findIndex((n) => n.code === active.id);
@@ -35,6 +47,7 @@ export const DnDWrapper = ({
 
         return arrayMove(items, oldIndex, newIndex);
       });
+      // TODO setSelectedNodeIndex 
     }
   }
 };

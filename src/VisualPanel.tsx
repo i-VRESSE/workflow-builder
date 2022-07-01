@@ -3,7 +3,6 @@ import { useWorkflow } from './store'
 import { VisualNode } from './VisualNode'
 
 export const VisualPanel = (): JSX.Element => {
-  const { addNodeToWorkflow } = useWorkflow()
   const { nodes } = useWorkflow()
 
   const nodeList = (

@@ -55,6 +55,15 @@ export function useCatalog (): ICatalog {
   return useRecoilValue<ICatalog>(catalogState)
 }
 
+const draggingCatalogNodeState = atom<string | number | null>({
+  key: 'draggingCatalogNode',
+  default: null
+})
+
+export function useDraggingCatalogNodeState() {
+  return useRecoilState(draggingCatalogNodeState)
+}
+
 const globalParametersState = atom<IParameters>({
   key: 'global',
   default: {}

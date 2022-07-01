@@ -13,10 +13,8 @@ interface IProp {
 
 export const VisualNode = ({ id, index, code }: IProp): JSX.Element => {
   // TODO to power hover use css :hover instead of slower JS
-  const [hover, setHover] = useState(false)
-
   const selectedNodeIndex = useSelectNodeIndex()
-  const { selectNode, moveNode, addNodeToWorkflowAt, deleteNode } = useWorkflow()
+  const { selectNode, deleteNode } = useWorkflow()
 
   const {
     attributes,
@@ -39,11 +37,7 @@ export const VisualNode = ({ id, index, code }: IProp): JSX.Element => {
     <div ref={setNodeRef} style={style} {...attributes}>
       <div
         className='btn-group'
-        // onMouseEnter={() => setHover(true)}
-        // onMouseLeave={() => setHover(false)}
-        // style={{ ...style, width: `${nodeWidth}rem`, justifyContent: 'space-between' }}
       >
-
         <button
           className='btn btn-light btn-sm btn-block'
           title='Click to configure'

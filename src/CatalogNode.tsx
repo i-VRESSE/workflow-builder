@@ -6,9 +6,7 @@ import { useState } from 'react'
 import { useDraggable } from '@dnd-kit/core'
 
 export const CatalogNode = ({ id, label }: ICatalogNode): JSX.Element => {
-  const [hover, setHover] = useState(false)
-
-  const {attributes, listeners, setNodeRef, transform, setActivatorNodeRef} = useDraggable({id});
+  const {attributes, listeners, setNodeRef, transform, setActivatorNodeRef} = useDraggable({id, data: {catalog: true}});
   const style = transform ? {
     transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
   } : undefined;
@@ -16,14 +14,12 @@ export const CatalogNode = ({ id, label }: ICatalogNode): JSX.Element => {
   const { addNodeToWorkflow } = useWorkflow()
 
   return (
-    <li ref={setNodeRef} style={style} {...attributes}>
+    <li >
       <button
-        style={{ width: `${nodeWidth}rem` }}
+        ref={setNodeRef} style={{...style, width: `${nodeWidth}rem`}} {...attributes}
         title={label}
         className='btn btn-light btn-sm'
         onClick={() => addNodeToWorkflow(id)}
-        onMouseEnter={() => setHover(true)}
-        onMouseLeave={() => setHover(false)}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <span>
