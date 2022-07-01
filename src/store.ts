@@ -79,6 +79,15 @@ const workflowNodesState = atom<IWorkflowNode[]>({
   default: []
 })
 
+const draggingWorkflowNodeState = atom<string | number | null>({
+  key: 'draggingWorkflowNode',
+  default: null
+})
+
+export function useDraggingWorkflowNodeState (): [string | number | null, SetterOrUpdater<string | number | null>] {
+  return useRecoilState(draggingWorkflowNodeState)
+}
+
 const selectedNodeIndexState = atom<number>({
   key: 'selectedNodeIndex',
   default: -1

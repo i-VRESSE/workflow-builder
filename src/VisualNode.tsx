@@ -1,4 +1,4 @@
-import { useSelectNodeIndex, useWorkflow } from './store'
+import { useDraggingWorkflowNodeState, useSelectNodeIndex, useWorkflow } from './store'
 import { GripVertical, X } from 'react-bootstrap-icons'
 import { CSS } from '@dnd-kit/utilities'
 import { useSortable } from '@dnd-kit/sortable'
@@ -14,6 +14,7 @@ export const VisualNode = ({ id, index, code }: IProp): JSX.Element => {
   // TODO to power hover use css :hover instead of slower JS
   const selectedNodeIndex = useSelectNodeIndex()
   const { selectNode, deleteNode } = useWorkflow()
+  const draggingWorkflowNodeCode = useDraggingWorkflowNodeState()[0];
 
   const {
     attributes,
@@ -26,7 +27,8 @@ export const VisualNode = ({ id, index, code }: IProp): JSX.Element => {
 
   const style = {
     transform: CSS.Transform.toString(transform),
-    transition
+    transition,
+    opacity: draggingWorkflowNodeCode === code ? 0.3 : undefined
   }
   const selectedStyle =
     selectedNodeIndex === index ? { fontWeight: 'bold' } : {}
@@ -45,7 +47,7 @@ export const VisualNode = ({ id, index, code }: IProp): JSX.Element => {
         <span>
           {index + 1}. {id}
         </span>
-        <div>
+        <div className='btn-group'>
           <div
             ref={setActivatorNodeRef}
             {...listeners}

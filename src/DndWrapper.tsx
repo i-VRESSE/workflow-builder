@@ -2,13 +2,14 @@ import React from 'react'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { Active, DndContext, DragEndEvent, DragStartEvent } from '@dnd-kit/core'
-import { useDraggingCatalogNodeState, useWorkflow } from './store'
+import { useDraggingCatalogNodeState, useDraggingWorkflowNodeState, useWorkflow } from './store'
 
 export const DnDWrapper = ({
   children
 }: React.PropsWithChildren<{}>): JSX.Element => {
   const { addNodeToWorkflow, addNodeToWorkflowAt, moveNode } = useWorkflow()
   const setDraggingCatalogNode = useDraggingCatalogNodeState()[1]
+  const setDraggingWorkflowNode = useDraggingWorkflowNodeState()[1]
 
   return (
     <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart} autoScroll={false}>
@@ -29,6 +30,8 @@ export const DnDWrapper = ({
   function handleDragStart (event: DragStartEvent): void {
     if (isCatalogNode(event.active)) {
       setDraggingCatalogNode(event.active.id)
+    } else {
+      setDraggingWorkflowNode(event.active.id)
     }
   }
 
@@ -41,9 +44,10 @@ export const DnDWrapper = ({
       } else {
         addNodeToWorkflowAt(activeId, over.id.toString())
       }
-      setDraggingCatalogNode(null)
     } else if (over !== null && activeId !== over.id) {
-      moveNode(activeId, over.id.toString())
+      moveNode(activeId, over.id.toString())      
     }
+    setDraggingCatalogNode(null)
+    setDraggingWorkflowNode(null)
   }
 }
