@@ -51,9 +51,9 @@ test.describe('given 1 molecule and a flexref node with seg parameter defined', 
       await page.locator('text=Submit').click()
     })
 
-    test('should give a seg table for the extra molecule', async ({ page }) => {
+    test.fixme('should give a seg table for the extra molecule', async ({ page }) => {
       // Click ol button:has-text("flexref")
-      await page.locator('ol button:has-text("flexref")').click()
+      await page.locator('button:has-text("1. flexref")').click()
       // Click #expander4flexibility svg
       await page.locator('#expander4flexibility svg').click()
       // TODO Once fixed this assertion should be uncommented and pause() removed
@@ -130,9 +130,9 @@ test.describe('given 2 molecules and a flexref node with seg parameter defined f
       await page.locator('button:has-text("Cancel")').click()
     })
 
-    test('should not retain invalid second array value for seg parameter ', async ({ page }) => {
+    test.fixme('should not retain invalid second array value for seg parameter ', async ({ page }) => {
       // Click ol button:has-text("flexref")
-      await page.locator('ol button:has-text("flexref")').click()
+      await page.locator('button:has-text("1. flexref")').click()
       // Click #expander4flexibility svg
       await page.locator('#expander4flexibility svg').click()
 
@@ -157,16 +157,12 @@ test.describe('Given expert catalog and example loaded', () => {
     await page.locator('text=docking-protein-ligand').click()
   })
   test('The topoaa, input molecules should be expandable', async ({ page }) => {
-    // Click ol button:has-text("topoaa")
-    await page.locator('ol button:has-text("topoaa")').click()
-
-    await page.pause() // wait before clicking on bad button
+    await page.locator('button:has-text("1. topoaa")').click()
 
     // Click #expander4input_molecules svg
     await page.locator('#expander4input_molecules svg').click()
 
     const error = page.locator('text=Something went terribly wrong.')
     await expect(error).not.toBeVisible()
-    // Run me with `yarn test:integration --headed -g 'topoaa'`
   })
 })
