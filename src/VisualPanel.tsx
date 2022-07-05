@@ -46,10 +46,14 @@ export const VisualPanel = (): JSX.Element => {
       from catalog to here.
     </div>
   )
+  const sortableItems = nodes.map((n) => n.code)
+  if (draggingCatalogNode !== null) {
+    sortableItems.push(draggingCatalogNode.toString())
+  }
   return (
     <div style={{ height: '100%' }}>
       <SortableContext
-        items={nodes.map((n) => n.code)}
+        items={sortableItems}
         strategy={verticalListSortingStrategy}
       >
         {nodeList}
