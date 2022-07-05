@@ -3,6 +3,7 @@ import {
   SortableContext,
   verticalListSortingStrategy
 } from '@dnd-kit/sortable'
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 import { GripVertical, X } from 'react-bootstrap-icons'
 import { nodeWidth } from './constants'
 import {
@@ -28,15 +29,16 @@ export const VisualPanel = (): JSX.Element => {
     </div>
   )
   const appendZoneStyle = {
-    marginLeft: '4px',
-    marginRight: '4px',
-    padding: '4px',
+    marginLeft: 4,
+    marginRight: 4,
+    padding: 4,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     borderStyle: 'dashed',
-    width: `${nodeWidth}rem`,
-    minHeight: '300px'
+    borderWidth: 1,
+    width: `${nodeWidth + 2}rem`,
+    minHeight: 300
   }
   const appendZone = (
     <div style={{ ...appendZoneStyle, textAlign: 'center' }}>
@@ -74,6 +76,8 @@ export const VisualPanel = (): JSX.Element => {
             </button>
             )
           : null}
+          </DragOverlay>
+          <DragOverlay modifiers={[restrictToVerticalAxis]}>
         {draggingWorkflowNode !== undefined
           ? (
             <button
