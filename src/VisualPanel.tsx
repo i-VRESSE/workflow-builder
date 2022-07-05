@@ -80,8 +80,8 @@ export const VisualPanel = (): JSX.Element => {
             </button>
             )
           : null}
-          </DragOverlay>
-          <DragOverlay modifiers={[restrictToVerticalAxis]}>
+      </DragOverlay>
+      <DragOverlay modifiers={[restrictToVerticalAxis]}>
         {draggingWorkflowNode !== undefined
           ? (
             <button

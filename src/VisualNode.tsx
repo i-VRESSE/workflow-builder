@@ -4,7 +4,6 @@ import { useSortable } from '@dnd-kit/sortable'
 import { useDraggingWorkflowNodeState, useSelectNodeIndex, useWorkflow } from './store'
 import classes from './VisualNode.module.css'
 
-
 interface IProp {
   id: string
   index: number
@@ -22,7 +21,7 @@ export const VisualNode = ({ id, index, code }: IProp): JSX.Element => {
     setNodeRef,
     setActivatorNodeRef,
     transform,
-    transition,
+    transition
   } = useSortable({ id: code })
 
   const style = {
@@ -33,7 +32,7 @@ export const VisualNode = ({ id, index, code }: IProp): JSX.Element => {
 
   const selectedStyle =
     selectedNodeIndex === index ? { fontWeight: 'bold' } : {}
-  
+
   // TODO after clicking node the active styling is not removed unless you activate another element
   return (
     <div ref={setNodeRef} style={style} {...attributes}>
