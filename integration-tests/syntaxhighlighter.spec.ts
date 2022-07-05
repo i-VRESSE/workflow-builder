@@ -13,6 +13,6 @@ test('Verify that [object Object] bug does not show up (issue #74)', async ({ pa
   // verify that the [object Object] text does not show up
   // see https://github.com/i-VRESSE/workflow-builder/issues/74
   const highlightedCode = await page.locator('#highlightedcode pre');
-  await expect(highlightedCode).toContainText('[object Object]')
+  await expect(highlightedCode).not.toContainText('[object Object]')
 
 })
