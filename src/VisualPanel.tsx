@@ -24,7 +24,7 @@ export const VisualPanel = (): JSX.Element => {
   const nodeList = (
     <div style={{ lineHeight: '2.5em' }}>
       {nodes.map((node, i) => (
-        <VisualNode key={node.code} index={i} id={node.id} code={node.code} />
+        <VisualNode key={node.code} index={i} id={node.type} code={node.code} />
       ))}
     </div>
   )
@@ -89,7 +89,7 @@ export const VisualPanel = (): JSX.Element => {
               className='btn btn-light btn-sm'
             >
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span>{draggingWorkflowNode.id}</span>
+                <span>{draggingWorkflowNode.type}</span>
                 <div className='btn-group'>
                   <div className='btn btn-light btn-sm'>
                     <GripVertical />

@@ -6,7 +6,7 @@ import { IParameters } from './types'
 describe('workflow2tomltext()', () => {
   it('should write list of dicts as array of tables', () => {
     const nodes = [{
-      id: 'somenode',
+      type: 'somenode',
       parameters: {
         foo: [{
           bar: 'fiz'
@@ -48,14 +48,14 @@ bar = 'fizzz'
   it('should index repeated nodes', () => {
     const nodes = [
       {
-        id: 'somenode',
+        type: 'somenode',
         parameters: {
           foo: 'bar'
         },
         code: 'somenode1'
       },
       {
-        id: 'somenode',
+        type: 'somenode',
         parameters: {
           foo: 'fizz'
         },
@@ -78,7 +78,7 @@ foo = 'fizz'
 
   it('should flatten array of string when indexed=true', () => {
     const nodes = [{
-      id: 'somenode',
+      type: 'somenode',
       parameters: {
         foo: ['biz', 'fiz']
       },
@@ -104,7 +104,7 @@ foo_2 = 'fiz'
 
   it('should flatten array of object when indexed=true items.flatten=true', () => {
     const nodes = [{
-      id: 'somenode',
+      type: 'somenode',
       parameters: {
         name: [{
           something: 11,
@@ -138,7 +138,7 @@ name_something_else_2 = 44
 
   it('should flatten array of array of objects when indexed=true items.indexed=true items.items.flatten=true', () => {
     const nodes = [{
-      id: 'somenode',
+      type: 'somenode',
       parameters: {
         fle: [
           [
@@ -185,7 +185,7 @@ fle_end_2_1 = 66
 
   it('should output section table when sectioned:true', () => {
     const nodes = [{
-      id: 'somenode',
+      type: 'somenode',
       parameters: {
         mol: [{
           cyclicpept: false,
@@ -306,7 +306,7 @@ key8 = [
   it('should write object of object as section when sectioned:true', () => {
     const nodes = [
       {
-        id: 'somenode',
+        type: 'somenode',
         parameters: {
           foo: {
             bar: {
@@ -341,7 +341,7 @@ bar.bla = 'hi'
 
   it('should output <param>_<key> when given object and indexed=true', () => {
     const nodes = [{
-      id: 'somenode',
+      type: 'somenode',
       parameters: {
         param: {
           A: 11,
@@ -390,7 +390,7 @@ foo = 'bar'
       },
       nodes: [
         {
-          id: 'somenode',
+          type: 'somenode',
           parameters: {
             foo: 'bar'
           },
@@ -416,14 +416,14 @@ foo = 'fizz'
       global: {},
       nodes: [
         {
-          id: 'somenode',
+          type: 'somenode',
           parameters: {
             foo: 'bar'
           },
           code: expect.stringMatching(/\w+/)
         },
         {
-          id: 'somenode',
+          type: 'somenode',
           parameters: {
             foo: 'fizz'
           },
@@ -539,7 +539,7 @@ key8 = [
         key8: [[{ a: 1 }, { a: 2 }], [{ a: 3 }, { a: 4 }]] // Array of array of object
       },
       nodes: [{
-        id: 'somenode',
+        type: 'somenode',
         parameters: {
           key1: [1, 2], // Array of scalar
           key2: ['a', 'b'], // Array of scalar
@@ -782,7 +782,7 @@ key8 = [
       )
 
       const expected = {
-        id: 'nodex',
+        type: 'nodex',
         parameters: {
           mol: [{
             cyclicpept: true
@@ -874,7 +874,7 @@ key8 = [
       const expected = {
         global: {},
         nodes: [{
-          id: 'somenode',
+          type: 'somenode',
           parameters: {
             foo: [{
               bar: 'fizz'
@@ -909,7 +909,7 @@ key8 = [
       const expected = {
         global: {},
         nodes: [{
-          id: 'somenode',
+          type: 'somenode',
           parameters: {
             foo: ['biz', 'fiz']
           },

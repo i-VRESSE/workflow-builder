@@ -189,7 +189,7 @@ const selectedCatalogNodeState = selector<ICatalogNode | undefined>({
       return undefined
     }
     const catalog = get(catalogState)
-    const catalogNode = catalog.nodes.find((n) => n.id === node.id)
+    const catalogNode = catalog.nodes.find((n) => n.id === node.type)
     if (catalogNode === undefined) {
       return undefined
     }
@@ -300,18 +300,18 @@ export function useWorkflow (): UseWorkflow {
       setEditingGlobal(!editingGlobal)
       setSelectedNodeIndex(-1)
     },
-    addNodeToWorkflowAt (nodeId: string, targetCode: string) {
+    addNodeToWorkflowAt (nodeType: string, targetCode: string) {
       const targetIndex = nodes.findIndex((n) => n.code === targetCode)
       setNodes((oldNodes) => {
-        const newNodes = [...oldNodes, { id: nodeId, parameters: {}, code: nanoid() }]
+        const newNodes = [...oldNodes, { type: nodeType, parameters: {}, code: nanoid() }]
         return moveItem(newNodes, newNodes.length - 1, targetIndex)
       })
       if (selectedNodeIndex === -1 && !editingGlobal) {
         setSelectedNodeIndex(targetIndex)
       }
     },
-    addNodeToWorkflow (nodeId: string) {
-      setNodes((oldNodes) => [...oldNodes, { id: nodeId, parameters: {}, code: nanoid() }])
+    addNodeToWorkflow (nodeType: string) {
+      setNodes((oldNodes) => [...oldNodes, { type: nodeType, parameters: {}, code: nanoid() }])
       if (selectedNodeIndex === -1 && !editingGlobal) {
         setSelectedNodeIndex(nodes.length)
       }

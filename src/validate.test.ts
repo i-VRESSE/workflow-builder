@@ -105,7 +105,7 @@ describe('validateWorkflow()', () => {
         global: {},
         nodes: [
           {
-            id: 'mynode',
+            type: 'mynode',
             parameters: {
               autohis: true
             },
@@ -123,7 +123,7 @@ describe('validateWorkflow()', () => {
         global: {},
         nodes: [
           {
-            id: 'mynode',
+            type: 'mynode',
             parameters: {},
             code: 'mynode1'
           }
@@ -152,7 +152,7 @@ describe('validateWorkflow()', () => {
           global: {},
           nodes: [
             {
-              id: 'myothernode',
+              type: 'myothernode',
               parameters: {},
               code: 'myothernode1'
             }
@@ -234,7 +234,7 @@ describe('validateWorkflow()', () => {
         },
         nodes: [
           {
-            id: 'mynode',
+            type: 'mynode',
             parameters: {
               nprop: [true, false, true]
             },
@@ -254,7 +254,7 @@ describe('validateWorkflow()', () => {
         },
         nodes: [
           {
-            id: 'mynode',
+            type: 'mynode',
             parameters: {
               nprop: [true, false, true]
             },
@@ -351,7 +351,7 @@ describe('validateWorkflow()', () => {
           },
           nodes: [
             {
-              id: 'mynode',
+              type: 'mynode',
               parameters: {
                 seg: [[{ chain: 'A' }]]
               },
@@ -373,7 +373,7 @@ describe('validateWorkflow()', () => {
           },
           nodes: [
             {
-              id: 'mynode',
+              type: 'mynode',
               parameters: {
                 seg: [[{ chain: 'X' }]]
               },
