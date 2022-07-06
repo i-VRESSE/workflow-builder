@@ -22,7 +22,7 @@ export const VisualPanel = (): JSX.Element => {
     (n) => n.id === draggingWorkflowNodeCode
   )
 
-  const appendZoneStyle = {
+  const appendZoneStyle: CSSProperties = {
     padding: 10,
     textAlign: 'center'
   }
