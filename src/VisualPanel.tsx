@@ -24,7 +24,7 @@ export const VisualPanel = (): JSX.Element => {
   const nodeList = (
     <div style={{ lineHeight: '2.5em' }}>
       {nodes.map((node, i) => (
-        <VisualNode key={node.id} index={i} id={node.type} code={node.id} />
+        <VisualNode key={node.id} index={i} type={node.type} type={node.id} />
       ))}
     </div>
   )
