@@ -29,24 +29,25 @@ yarn dev
 Tests (**/*.test.tsx?) written in [vitetest](https://vitest.dev/) (a test framework similar to [jest](https://jestjs.io/)) can be run with:
 
 ```shell
-yarn test run
+yarn test -- run
 ```
 
 To run tests with code coverage use
 
 ```shell
-yarn  test run --coverage
+yarn  test -- run --coverage
 ```
 
-Creates `coverage/` directory with HTML and LCOV report.
+Creates `**/coverage/` directory with HTML and LCOV report.
 
 ### Integration tests
 
-The integration tests (`integration-tests/**.spec.ts`) are written in [playwright](https://playwright.dev/).
+The integration tests (`**/integration-tests/**.spec.ts`) are written in [playwright](https://playwright.dev/).
 
 Before running test ensure browsers are installed with
 
 ```shell
+cd apps/haddock3-download
 npx playwright install chromium
 ```
 
@@ -75,13 +76,13 @@ yarn lint
 To autofix lint errors use
 
 ```shell
-yarn lint --fix
+yarn lint -- --fix
 ```
 
 To generate JSON report use
 
 ```shell
-yarn lint --report json > eslint.report.json
+yarn lint -- --report json > eslint.report.json
 ```
 
 ### Build
@@ -101,6 +102,8 @@ Components can be developed/tested/documented using [storybook](https://storyboo
 Storybook can be started with
 
 ```shell
+cd apps/haddock3-download
+# or cd packages/form
 yarn storybook
 ```
 

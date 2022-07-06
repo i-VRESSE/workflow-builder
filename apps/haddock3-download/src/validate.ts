@@ -7,7 +7,6 @@ import type { ICatalogNode, IParameters, IWorkflowNode, IWorkflow, IWorkflowSche
 import { ajvKeyword, resolveMaxItemsFrom } from './resolveMaxItemsFrom'
 import { addMoleculeValidation } from './molecule/addMoleculeValidation'
 
-
 const ajv = new Ajv({
   // In addMoleculeValidation() we replace items:{} with items:[{}, {}, ...]
   // Ajv expects minItems:<length of array>, but the app can have minItems:0

@@ -9,10 +9,11 @@
     "scripts": {
         "build": "turbo run build",
         "dev": "turbo run dev --parallel",
+        "test": "turbo run test --parallel",
         "lint": "turbo run lint"
     },
     "devDependencies": {
-        "turbo": "^1.2.16"
+        "turbo": "1.2.16"
     },
     "engines": {
         "npm": ">=8.0.0",

@@ -7,6 +7,13 @@
     "lint": {
       "outputs": []
     },
+    "test": {
+      "outputs": [
+        "coverage/**"
+      ],
+      "dependsOn": [],
+      "cache": false
+    },
     "dev": {
       "cache": false
     }
