@@ -202,7 +202,7 @@ export function parseWorkflow (workflow: string, globalKeys: Set<string>, tomlSc
       nodes.push({
         type: section, // aka node type
         parameters: toml2parameters(v as IParameters, tomlSchema4node),
-        code: nanoid()
+        id: nanoid()
       })
     }
   })

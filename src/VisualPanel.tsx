@@ -18,13 +18,13 @@ export const VisualPanel = (): JSX.Element => {
   const draggingCatalogNode = useDraggingCatalogNodeState()[0]
   const draggingWorkflowNodeCode = useDraggingWorkflowNodeState()[0]
   const draggingWorkflowNode = nodes.find(
-    (n) => n.code === draggingWorkflowNodeCode
+    (n) => n.id === draggingWorkflowNodeCode
   )
 
   const nodeList = (
     <div style={{ lineHeight: '2.5em' }}>
       {nodes.map((node, i) => (
-        <VisualNode key={node.code} index={i} id={node.type} code={node.code} />
+        <VisualNode key={node.id} index={i} id={node.type} code={node.id} />
       ))}
     </div>
   )
@@ -46,7 +46,7 @@ export const VisualPanel = (): JSX.Element => {
       from catalog to here.
     </div>
   )
-  const sortableItems = nodes.map((n) => n.code)
+  const sortableItems = nodes.map((n) => n.id)
   if (draggingCatalogNode !== null) {
     sortableItems.push(draggingCatalogNode.toString())
   }

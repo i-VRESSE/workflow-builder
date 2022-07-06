@@ -300,10 +300,10 @@ export function useWorkflow (): UseWorkflow {
       setEditingGlobal(!editingGlobal)
       setSelectedNodeIndex(-1)
     },
-    addNodeToWorkflowAt (nodeType: string, targetCode: string) {
-      const targetIndex = nodes.findIndex((n) => n.code === targetCode)
+    addNodeToWorkflowAt (nodeType: string, targetId: string) {
+      const targetIndex = nodes.findIndex((n) => n.id === targetId)
       setNodes((oldNodes) => {
-        const newNodes = [...oldNodes, { type: nodeType, parameters: {}, code: nanoid() }]
+        const newNodes = [...oldNodes, { type: nodeType, parameters: {}, id: nanoid() }]
         return moveItem(newNodes, newNodes.length - 1, targetIndex)
       })
       if (selectedNodeIndex === -1 && !editingGlobal) {
@@ -311,7 +311,7 @@ export function useWorkflow (): UseWorkflow {
       }
     },
     addNodeToWorkflow (nodeType: string) {
-      setNodes((oldNodes) => [...oldNodes, { type: nodeType, parameters: {}, code: nanoid() }])
+      setNodes((oldNodes) => [...oldNodes, { type: nodeType, parameters: {}, id: nanoid() }])
       if (selectedNodeIndex === -1 && !editingGlobal) {
         setSelectedNodeIndex(nodes.length)
       }
@@ -356,8 +356,8 @@ export function useWorkflow (): UseWorkflow {
     moveNode (sourceCode: string, targetCode: string) {
       setSelectedNodeIndex(-1)
       setNodes((oldNodes) => {
-        const oldIndex = oldNodes.findIndex((n) => n.code === sourceCode)
-        const newIndex = oldNodes.findIndex((n) => n.code === targetCode)
+        const oldIndex = oldNodes.findIndex((n) => n.id === sourceCode)
+        const newIndex = oldNodes.findIndex((n) => n.id === targetCode)
         return moveItem(oldNodes, oldIndex, newIndex)
       })
     }
