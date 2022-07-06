@@ -17,9 +17,8 @@
     "@dnd-kit/modifiers": "^6.0.0",
     "@dnd-kit/sortable": "^7.0.1",
     "@i-vresse/pdbtbx-ts": "0.1.7",
+    "@i-vresse/wb-form": "workspace:^",
     "@ltd/j-toml": "^1.24.0",
-    "@rjsf/bootstrap-4": "^4.2.0",
-    "@rjsf/core": "^4.2.0",
     "@zip.js/zip.js": "^2.3.23",
     "ajv": "^8.9.0",
     "ajv-formats": "^2.1.1",
@@ -78,8 +77,5 @@
       "playwright.config.ts"
     ]
   },
-  "packageManager": "yarn@3.2.1",
-  "resolutions": {
-    "@types/react": "17.0.47"
-  }
+  "packageManager": "yarn@3.2.1"
 }

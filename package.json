@@ -3,21 +3,23 @@
     "version": "0.0.0",
     "private": true,
     "workspaces": [
-      "apps/*",
-      "packages/*"
+        "apps/*",
+        "packages/*"
     ],
     "scripts": {
-      "build": "turbo run build",
-      "dev": "turbo run dev --parallel",
-      "lint": "turbo run lint"
+        "build": "turbo run build",
+        "dev": "turbo run dev --parallel",
+        "lint": "turbo run lint"
     },
     "devDependencies": {
-      "turbo": "^1.2.16"
+        "turbo": "^1.2.16"
     },
     "engines": {
-      "npm": ">=8.0.0",
-      "node": ">=16.0.0"
+        "npm": ">=8.0.0",
+        "node": ">=16.0.0"
     },
-    "dependencies": {},
     "packageManager": "yarn@3.2.1",
-  }
+    "resolutions": {
+        "@types/react": "17.0.47"
+    }
+}

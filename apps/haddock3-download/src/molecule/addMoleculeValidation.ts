@@ -1,8 +1,8 @@
 import { JSONSchema7 } from 'json-schema'
+import { moleculeFormats } from '@i-vresse/wb-form'
 import { dataURL2content } from '../dataurls'
 import { JSONSchema7WithMaxItemsFrom } from '../resolveMaxItemsFrom'
 import { IFiles, IParameters } from '../types'
-import { moleculeFormats } from './formats'
 import { MoleculeInfo, parsePDB } from './parse'
 
 // TODO can be quite expensive to parse big molecules, should try to use memoization

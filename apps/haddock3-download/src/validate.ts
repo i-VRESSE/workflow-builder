@@ -2,10 +2,11 @@ import Ajv from 'ajv'
 import type { ErrorObject } from 'ajv'
 import addFormats from 'ajv-formats'
 import { JSONSchema7 } from 'json-schema'
+import { addMoleculeFormats } from '@i-vresse/wb-form'
 import type { ICatalogNode, IParameters, IWorkflowNode, IWorkflow, IWorkflowSchema, ICatalog, IFiles } from './types'
 import { ajvKeyword, resolveMaxItemsFrom } from './resolveMaxItemsFrom'
-import { addMoleculeFormats } from './molecule/formats'
 import { addMoleculeValidation } from './molecule/addMoleculeValidation'
+
 
 const ajv = new Ajv({
   // In addMoleculeValidation() we replace items:{} with items:[{}, {}, ...]

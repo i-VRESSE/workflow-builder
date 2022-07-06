@@ -1,5 +1,5 @@
+import { Form } from '@i-vresse/wb-form'
 import { useSetActiveSubmitButton, useCatalog, useGlobalFormData } from './store'
-import { Form } from './Form'
 
 export const GlobalForm = (): JSX.Element => {
   const { global: globalSchemas } = useCatalog()
