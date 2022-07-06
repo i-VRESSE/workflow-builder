@@ -67,10 +67,3 @@ export interface IWorkflowSchema {
   global: IGlobal
   nodes: ICatalogNode[]
 }
-
-// TODO remove as not used
-export interface DragItem {
-  index: number
-  id: string
-  type: string
-}
