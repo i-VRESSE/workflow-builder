@@ -1,4 +1,4 @@
-import { DragOverlay } from '@dnd-kit/core'
+import { DragOverlay, useDroppable } from '@dnd-kit/core'
 import {
   SortableContext,
   verticalListSortingStrategy
@@ -12,6 +12,7 @@ import {
   useWorkflow
 } from './store'
 import { VisualNode } from './VisualNode'
+import { CSSProperties } from 'react'
 
 export const VisualPanel = (): JSX.Element => {
   const { nodes } = useWorkflow()
@@ -21,44 +22,47 @@ export const VisualPanel = (): JSX.Element => {
     (n) => n.id === draggingWorkflowNodeCode
   )
 
-  const nodeList = (
-    <div style={{ lineHeight: '2.5em' }}>
-      {nodes.map((node, i) => (
-        <VisualNode key={node.id} index={i} type={node.type} type={node.id} />
-      ))}
-    </div>
-  )
   const appendZoneStyle = {
-    marginLeft: 4,
-    marginRight: 4,
-    padding: 4,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderStyle: 'dashed',
-    borderWidth: 1,
-    width: `${nodeWidth + 2}rem`,
-    minHeight: 300
+    padding: 10,
+    textAlign: 'center'
   }
   const appendZone = (
-    <div style={{ ...appendZoneStyle, textAlign: 'center' }}>
+    <div style={appendZoneStyle}>
       Append node to workflow by clicking node in catalog or by dragging node
       from catalog to here.
     </div>
   )
+
+  let listStyle: CSSProperties = { lineHeight: '2.5em', height: '100%' }
+  if (draggingWorkflowNodeCode !== null || draggingCatalogNode !== null || nodes.length === 0) {
+    listStyle = {
+      ...listStyle,
+      borderStyle: 'dashed',
+      borderWidth: 1
+    }
+  }
+  const nodeList = (
+    <div style={listStyle}>
+      {nodes.map((node, i) => (
+        <VisualNode key={node.id} index={i} type={node.type} id={node.id} />
+      ))}
+      {nodes.length === 0 ? appendZone : <></>}
+    </div>
+  )
+
   const sortableItems = nodes.map((n) => n.id)
   if (draggingCatalogNode !== null) {
     sortableItems.push(draggingCatalogNode.toString())
   }
+  const { setNodeRef } = useDroppable({ id: 'catalog-dropzone' })
   return (
-    <div style={{ height: '100%' }}>
+    <div ref={setNodeRef} style={{ height: '100%' }}>
       <SortableContext
         items={sortableItems}
         strategy={verticalListSortingStrategy}
       >
         {nodeList}
       </SortableContext>
-      {nodes.length === 0 ? appendZone : <></>}
       <DragOverlay dropAnimation={null}>
         {draggingCatalogNode !== null
           ? (
