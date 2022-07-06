@@ -18,7 +18,7 @@ test.describe('given 1 molecule and a topoaa node with segment id defined', () =
     // Click text=Submit
     await page.locator('text=Submit').click()
     // Click text=Cancel
-    await page.locator('text=Cancel').click()
+    await page.locator('button:has-text("Cancel")').click()
     // Click button:has-text("topoaa")
     await page.locator('button:has-text("topoaa")').click()
     // Click #expander4molecule svg

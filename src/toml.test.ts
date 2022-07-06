@@ -6,14 +6,15 @@ import { IParameters } from './types'
 describe('workflow2tomltext()', () => {
   it('should write list of dicts as array of tables', () => {
     const nodes = [{
-      id: 'somenode',
+      type: 'somenode',
       parameters: {
         foo: [{
           bar: 'fiz'
         }, {
           bar: 'fizzz'
         }]
-      }
+      },
+      id: 'somenode1'
     }]
 
     const tomlSchemas = {
@@ -47,16 +48,18 @@ bar = 'fizzz'
   it('should index repeated nodes', () => {
     const nodes = [
       {
-        id: 'somenode',
+        type: 'somenode',
         parameters: {
           foo: 'bar'
-        }
+        },
+        id: 'somenode1'
       },
       {
-        id: 'somenode',
+        type: 'somenode',
         parameters: {
           foo: 'fizz'
-        }
+        },
+        id: 'somenode2'
       }
     ]
     const tomlSchemas: TomlSchemas = { nodes: {}, global: {} }
@@ -75,10 +78,11 @@ foo = 'fizz'
 
   it('should flatten array of string when indexed=true', () => {
     const nodes = [{
-      id: 'somenode',
+      type: 'somenode',
       parameters: {
         foo: ['biz', 'fiz']
-      }
+      },
+      id: 'somenode1'
     }]
     const tomlSchemas: TomlSchemas = {
       nodes: {
@@ -100,7 +104,7 @@ foo_2 = 'fiz'
 
   it('should flatten array of object when indexed=true items.flatten=true', () => {
     const nodes = [{
-      id: 'somenode',
+      type: 'somenode',
       parameters: {
         name: [{
           something: 11,
@@ -109,7 +113,8 @@ foo_2 = 'fiz'
           something: 33,
           something_else: 44
         }]
-      }
+      },
+      id: 'somenode1'
     }]
     const tomlSchemas: TomlSchemas = {
       nodes: {
@@ -133,7 +138,7 @@ name_something_else_2 = 44
 
   it('should flatten array of array of objects when indexed=true items.indexed=true items.items.flatten=true', () => {
     const nodes = [{
-      id: 'somenode',
+      type: 'somenode',
       parameters: {
         fle: [
           [
@@ -153,7 +158,8 @@ name_something_else_2 = 44
             }
           ]
         ]
-      }
+      },
+      id: 'somenode1'
     }]
     const tomlSchemas: TomlSchemas = {
       nodes: {
@@ -179,7 +185,7 @@ fle_end_2_1 = 66
 
   it('should output section table when sectioned:true', () => {
     const nodes = [{
-      id: 'somenode',
+      type: 'somenode',
       parameters: {
         mol: [{
           cyclicpept: false,
@@ -188,7 +194,8 @@ fle_end_2_1 = 66
           cyclicpept: true,
           hisd: [314, 512]
         }]
-      }
+      },
+      id: 'somenode1'
     }]
     const tomlSchemas: TomlSchemas = {
       nodes: {
@@ -299,14 +306,15 @@ key8 = [
   it('should write object of object as section when sectioned:true', () => {
     const nodes = [
       {
-        id: 'somenode',
+        type: 'somenode',
         parameters: {
           foo: {
             bar: {
               bla: 'hi'
             }
           }
-        }
+        },
+        id: 'somenode1'
       }
     ]
     const tomlSchemas: TomlSchemas = {
@@ -333,14 +341,15 @@ bar.bla = 'hi'
 
   it('should output <param>_<key> when given object and indexed=true', () => {
     const nodes = [{
-      id: 'somenode',
+      type: 'somenode',
       parameters: {
         param: {
           A: 11,
           B: 22,
           C: 33
         }
-      }
+      },
+      id: 'somenode1'
     }]
     const tomlSchemas = {
       nodes: {
@@ -381,10 +390,11 @@ foo = 'bar'
       },
       nodes: [
         {
-          id: 'somenode',
+          type: 'somenode',
           parameters: {
             foo: 'bar'
-          }
+          },
+          id: expect.stringMatching(/\w+/)
         }
       ]
     }
@@ -406,16 +416,18 @@ foo = 'fizz'
       global: {},
       nodes: [
         {
-          id: 'somenode',
+          type: 'somenode',
           parameters: {
             foo: 'bar'
-          }
+          },
+          id: expect.stringMatching(/\w+/)
         },
         {
-          id: 'somenode',
+          type: 'somenode',
           parameters: {
             foo: 'fizz'
-          }
+          },
+          id: expect.stringMatching(/\w+/)
         }
       ]
     }
@@ -527,7 +539,7 @@ key8 = [
         key8: [[{ a: 1 }, { a: 2 }], [{ a: 3 }, { a: 4 }]] // Array of array of object
       },
       nodes: [{
-        id: 'somenode',
+        type: 'somenode',
         parameters: {
           key1: [1, 2], // Array of scalar
           key2: ['a', 'b'], // Array of scalar
@@ -537,7 +549,8 @@ key8 = [
           key6: [{ a: [1, 2] }], // Array with oboject with array of scalar
           key7: [[1, 2], [3, 4]], // Array of array of scalar
           key8: [[{ a: 1 }, { a: 2 }], [{ a: 3 }, { a: 4 }]] // Array of array of object
-        }
+        },
+        id: expect.stringMatching(/\w+/)
       }]
     }
     const result = parseWorkflow(workflow, new Set(Object.keys(expected.global)), {}, {})
@@ -769,14 +782,15 @@ key8 = [
       )
 
       const expected = {
-        id: 'nodex',
+        type: 'nodex',
         parameters: {
           mol: [{
             cyclicpept: true
           }, {
             cyclicpept: false
           }]
-        }
+        },
+        id: expect.stringMatching(/\w+/)
       }
       expect(result.nodes[0]).toEqual(expected)
     })
@@ -860,12 +874,13 @@ key8 = [
       const expected = {
         global: {},
         nodes: [{
-          id: 'somenode',
+          type: 'somenode',
           parameters: {
             foo: [{
               bar: 'fizz'
             }]
-          }
+          },
+          id: expect.stringMatching(/\w+/)
         }]
       }
       expect(result).toEqual(expected)
@@ -894,10 +909,11 @@ key8 = [
       const expected = {
         global: {},
         nodes: [{
-          id: 'somenode',
+          type: 'somenode',
           parameters: {
             foo: ['biz', 'fiz']
-          }
+          },
+          id: expect.stringMatching(/\w+/)
         }]
       }
       expect(result).toEqual(expected)

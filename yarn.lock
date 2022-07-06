@@ -1604,6 +1604,67 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@dnd-kit/accessibility@npm:^3.0.0":
+  version: 3.0.1
+  resolution: "@dnd-kit/accessibility@npm:3.0.1"
+  dependencies:
+    tslib: ^2.0.0
+  peerDependencies:
+    react: ">=16.8.0"
+  checksum: 0afc2c0fce9a1c107453620ca0da1778f182d340e74ffbc6e369ef0ac8943cafb929d3a6c0891d9b915aa23b2b92137ff4fad958f43118466586d8129a3359d5
+  languageName: node
+  linkType: hard
+
+"@dnd-kit/core@npm:^6.0.5":
+  version: 6.0.5
+  resolution: "@dnd-kit/core@npm:6.0.5"
+  dependencies:
+    "@dnd-kit/accessibility": ^3.0.0
+    "@dnd-kit/utilities": ^3.2.0
+    tslib: ^2.0.0
+  peerDependencies:
+    react: ">=16.8.0"
+    react-dom: ">=16.8.0"
+  checksum: 09061e741bea9d2ba3987d01bb760c354fe29ca27996e74da3774e68c4783cf09ad21087703b5ffb036d3c2f86d16bea3c9f24466c2f266c8698f1e76c29d386
+  languageName: node
+  linkType: hard
+
+"@dnd-kit/modifiers@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "@dnd-kit/modifiers@npm:6.0.0"
+  dependencies:
+    "@dnd-kit/utilities": ^3.2.0
+    tslib: ^2.0.0
+  peerDependencies:
+    "@dnd-kit/core": ^6.0.0
+  checksum: 82c2640627aa9d04641fce2a48e8a374d2c6be6f96d75a110eaf69c043cce84685914e58453d54254b9bfc6041668ee3c34f8c4294b1ce367435900b210336e6
+  languageName: node
+  linkType: hard
+
+"@dnd-kit/sortable@npm:^7.0.1":
+  version: 7.0.1
+  resolution: "@dnd-kit/sortable@npm:7.0.1"
+  dependencies:
+    "@dnd-kit/utilities": ^3.2.0
+    tslib: ^2.0.0
+  peerDependencies:
+    "@dnd-kit/core": ^6.0.4
+    react: ">=16.8.0"
+  checksum: b8b5ae504d57d6afb847c3ac8a865a3623c5915f4f0dd767017a17e6d1d36e144b74f6f90a17c07d5f8ddc83395a2db8bb90c420f017aee15bd88538b6f3f226
+  languageName: node
+  linkType: hard
+
+"@dnd-kit/utilities@npm:^3.2.0":
+  version: 3.2.0
+  resolution: "@dnd-kit/utilities@npm:3.2.0"
+  dependencies:
+    tslib: ^2.0.0
+  peerDependencies:
+    react: ">=16.8.0"
+  checksum: 575e554992c5ff26622854b889b6288580f308e1125620a4aae55d0a113d47f05fdb7c6e2023ce51c58d5a206091fc1deac868222dd5f9c35c80c3e2f99db9af
+  languageName: node
+  linkType: hard
+
 "@eslint/eslintrc@npm:^0.4.3":
   version: 0.4.3
   resolution: "@eslint/eslintrc@npm:0.4.3"
@@ -2017,13 +2078,6 @@ __metadata:
   version: 2.0.0
   resolution: "@react-dnd/invariant@npm:2.0.0"
   checksum: ef1e989920d70b15c80dccb01af9b598081d76993311aa22d2e9a3ec41d10a88540eeec4b4de7a8b2a2ea52dfc3495ab45e39192c2d27795a9258bd6b79d000e
-  languageName: node
-  linkType: hard
-
-"@react-dnd/shallowequal@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "@react-dnd/shallowequal@npm:2.0.0"
-  checksum: b5bbdc795d65945bb7ba2322bed5cf8d4c6fe91dced98c3b10e3d16822c438f558751135ff296f8d1aa1eaa9d0037dacab2b522ca5eb812175123b9996966dcb
   languageName: node
   linkType: hard
 
@@ -8881,7 +8935,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hoist-non-react-statics@npm:^3.3.0, hoist-non-react-statics@npm:^3.3.2":
+"hoist-non-react-statics@npm:^3.3.0":
   version: 3.3.2
   resolution: "hoist-non-react-statics@npm:3.3.2"
   dependencies:
@@ -9850,6 +9904,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "ivresse-workflow-builder@workspace:."
   dependencies:
+    "@dnd-kit/core": ^6.0.5
+    "@dnd-kit/modifiers": ^6.0.0
+    "@dnd-kit/sortable": ^7.0.1
     "@i-vresse/pdbtbx-ts": 0.1.7
     "@ltd/j-toml": ^1.24.0
     "@playwright/test": ^1.22.1
@@ -9883,11 +9940,11 @@ __metadata:
     c8: ^7.11.0
     file-saver: ^2.0.5
     js-yaml: ^4.1.0
+    nanoid: ^4.0.0
     papaparse: ^5.3.2
     react: ^17.0.0
     react-bootstrap: ^1
     react-bootstrap-icons: ^1.7.2
-    react-dnd: ^14.0.5
     react-dnd-html5-backend: ^14.1.0
     react-dom: ^17.0.0
     react-syntax-highlighter: ^15.4.5
@@ -11052,6 +11109,15 @@ __metadata:
   bin:
     nanoid: bin/nanoid.cjs
   checksum: 2fddd6dee994b7676f008d3ffa4ab16035a754f4bb586c61df5a22cf8c8c94017aadd360368f47d653829e0569a92b129979152ff97af23a558331e47e37cd9c
+  languageName: node
+  linkType: hard
+
+"nanoid@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "nanoid@npm:4.0.0"
+  bin:
+    nanoid: bin/nanoid.js
+  checksum: 7d5946df5c6d383694195b781ae7b5067c149d164ec71e910d6b06676309c3459b68af570b944fb5ecd5065d19df464f05700d141d70bb712ff8ca06642fd8df
   languageName: node
   linkType: hard
 
@@ -12595,31 +12661,6 @@ __metadata:
   dependencies:
     dnd-core: 14.0.1
   checksum: 6aa8d62c6b2288893b3f216d476d2f84495b40d33578ba9e3a5051dc093a71dc59700e6927ed7ac596ff8d7aa3b3f29404f7d173f844bd6144ed633403dd8e96
-  languageName: node
-  linkType: hard
-
-"react-dnd@npm:^14.0.5":
-  version: 14.0.5
-  resolution: "react-dnd@npm:14.0.5"
-  dependencies:
-    "@react-dnd/invariant": ^2.0.0
-    "@react-dnd/shallowequal": ^2.0.0
-    dnd-core: 14.0.1
-    fast-deep-equal: ^3.1.3
-    hoist-non-react-statics: ^3.3.2
-  peerDependencies:
-    "@types/hoist-non-react-statics": ">= 3.3.1"
-    "@types/node": ">= 12"
-    "@types/react": ">= 16"
-    react: ">= 16.14"
-  peerDependenciesMeta:
-    "@types/hoist-non-react-statics":
-      optional: true
-    "@types/node":
-      optional: true
-    "@types/react":
-      optional: true
-  checksum: 464e231de8c2b79546049a1600b67b1df0b7f762f23c688d3e9aeddbf334b1e64931ef91d0129df3c8be255f0af76e89426729dbcbefe4bdc09b0f665d2da368
   languageName: node
   linkType: hard
 

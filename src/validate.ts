@@ -63,7 +63,7 @@ async function validateNodeFactory (
     return [c.id, schemaWithMolInfo]
   })))
   return (node, nodeIndex) => {
-    const schema = id2schema[node.id]
+    const schema = id2schema[node.type]
     if (schema != null) {
       const nodeErrors = validateParameters(
         node.parameters,
@@ -78,7 +78,7 @@ async function validateNodeFactory (
       return [{
         message: 'must have node name belonging to known nodes',
         params: {
-          node: node.id
+          node: node.type
         },
         instancePath: '',
         schemaPath: '',

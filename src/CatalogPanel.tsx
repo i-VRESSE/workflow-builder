@@ -6,7 +6,6 @@ import { useCatalog } from './store'
 
 export const CatalogPanel = (): JSX.Element => {
   const catalog = useCatalog()
-
   return (
     <fieldset>
       <legend>Catalog</legend>
@@ -16,12 +15,16 @@ export const CatalogPanel = (): JSX.Element => {
       <React.Suspense fallback={<span>Loading catalog...</span>}>
         <h4>Nodes</h4>
         <ul style={{ lineHeight: '2.5em' }}>
-          {catalog?.categories.map((category) => <CatalogCategory key={category.name} {...category} />)}
+          {catalog?.categories.map((category) => (
+            <CatalogCategory key={category.name} {...category} />
+          ))}
         </ul>
         <h4>Examples</h4>
         Workflow examples that can be loaded as a starting point.
         <ul>
-          {Object.entries(catalog?.examples).map(([name, workflow]) => <Example key={name} name={name} workflow={workflow} />)}
+          {Object.entries(catalog?.examples).map(([name, workflow]) => (
+            <Example key={name} name={name} workflow={workflow} />
+          ))}
         </ul>
       </React.Suspense>
     </fieldset>
