@@ -40,6 +40,8 @@ export const DnDWrapper = ({
     const activeId = active.id.toString()
     if (isCatalogNode(active)) {
       if (over === null) {
+        // Do nothing
+      } else if (over.id === 'catalog-dropzone') {
         addNodeToWorkflow(activeId)
       } else {
         addNodeToWorkflowAt(activeId, over.id.toString())

@@ -5,12 +5,12 @@ import { useDraggingWorkflowNodeState, useSelectNodeIndex, useWorkflow } from '.
 import classes from './VisualNode.module.css'
 
 interface IProp {
-  id: string
+  type: string
   index: number
-  code: string
+  id: string
 }
 
-export const VisualNode = ({ id, index, code }: IProp): JSX.Element => {
+export const VisualNode = ({ type, index, id }: IProp): JSX.Element => {
   const selectedNodeIndex = useSelectNodeIndex()
   const { selectNode, deleteNode } = useWorkflow()
   const draggingWorkflowNodeCode = useDraggingWorkflowNodeState()[0]
@@ -22,12 +22,12 @@ export const VisualNode = ({ id, index, code }: IProp): JSX.Element => {
     setActivatorNodeRef,
     transform,
     transition
-  } = useSortable({ id: code })
+  } = useSortable({ id })
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
-    opacity: draggingWorkflowNodeCode === code ? 0.3 : undefined
+    opacity: draggingWorkflowNodeCode === id ? 0.3 : undefined
   }
 
   const selectedStyle =
@@ -45,7 +45,7 @@ export const VisualNode = ({ id, index, code }: IProp): JSX.Element => {
         }}
       >
         <span>
-          {index + 1}. {id}
+          {index + 1}. {type}
         </span>
         <div className='btn-group'>
           <div
