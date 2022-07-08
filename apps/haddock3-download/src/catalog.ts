@@ -3,6 +3,8 @@ import { groupCatalog } from './grouper'
 import { ICatalog, ICatalogIndex, IGlobal } from './types'
 import { validateCatalog, ValidationError } from './validate'
 
+export const defaultCatalogIndexURL = new URL('/catalog/index.json', import.meta.url).href
+
 export async function fetchCatalog (catalogUrl: string): Promise<ICatalog> {
   const response = await fetch(catalogUrl)
   if (!response.ok) {

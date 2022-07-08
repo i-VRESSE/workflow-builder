@@ -4,7 +4,7 @@ import React from 'react'
 
 import { WidgetProps } from '@rjsf/core'
 // was import Form from 'react-bootstrap/Form', but vitest in app complained about `... not supported resolving ES modules imported ...`
-import Form from 'react-bootstrap/cjs/Form.js' 
+import Form from 'react-bootstrap/cjs/Form.js'
 
 export const IvresseCheckboxWidget = (props: WidgetProps): JSX.Element => {
   const {

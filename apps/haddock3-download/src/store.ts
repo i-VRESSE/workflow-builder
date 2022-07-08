@@ -5,54 +5,35 @@ import { nanoid } from 'nanoid'
 
 import { externalizeDataUrls, internalizeDataUrls } from './dataurls'
 import { saveArchive } from './archive'
-import { ICatalog, IWorkflowNode, IFiles, IParameters, ICatalogNode, ICatalogIndex } from './types'
+import { ICatalog, IWorkflowNode, IFiles, IParameters, ICatalogNode } from './types'
 import { catalog2tomlSchemas, workflow2tomltext } from './toml'
 import { dropUnusedFiles, loadWorkflowArchive, emptyParams, clearFiles } from './workflow'
-import { fetchCatalogIndex, fetchCatalog } from './catalog'
-import { catalogIndexURL } from './constants'
 import { removeItemAtIndex, replaceItemAtIndex, moveItem, removeAllItems } from './utils/array'
 import { groupParameters, unGroupParameters } from './grouper'
 import { pruneDefaults } from './pruner'
 import { resolveMaxItemsFrom } from './resolveMaxItemsFrom'
 import { addMoleculeValidation } from './molecule/addMoleculeValidation'
 
-const catalogIndexState = selector<ICatalogIndex>({
-  key: 'catalogIndex',
-  get: async () => {
-    return await fetchCatalogIndex(catalogIndexURL)
-  }
-})
-
-export function useCatalogIndex (): ICatalogIndex {
-  return useRecoilValue(catalogIndexState)
-}
-
-const defaultCatalogURLState = selector<string>({
-  key: 'defaultCatalogURL',
-  get: ({ get }) => {
-    return get(catalogIndexState)[0][1]
-  }
-})
-
-const catalogURLState = atom<string>({
-  key: 'catalogURL',
-  default: defaultCatalogURLState
-})
-
-export function useCatalogURL (): [string, SetterOrUpdater<string>] {
-  return useRecoilState(catalogURLState)
-}
-
-const catalogState = selector<ICatalog>({
+const catalogState = atom<ICatalog>({
   key: 'catalog',
-  get: async ({ get }) => {
-    const catalogUrl = get(catalogURLState)
-    return await fetchCatalog(catalogUrl)
+  default: {
+    title: '',
+    categories: [],
+    global: {
+      schema: {},
+      uiSchema: {}
+    },
+    nodes: [],
+    examples: {}
   }
 })
 
 export function useCatalog (): ICatalog {
   return useRecoilValue<ICatalog>(catalogState)
+}
+
+export function useSetCatalog (): SetterOrUpdater<ICatalog> {
+  return useSetRecoilState<ICatalog>(catalogState)
 }
 
 const draggingCatalogNodeState = atom<string | number | null>({
