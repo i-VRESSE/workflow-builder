@@ -105,10 +105,11 @@ describe('validateWorkflow()', () => {
         global: {},
         nodes: [
           {
-            id: 'mynode',
+            type: 'mynode',
             parameters: {
               autohis: true
-            }
+            },
+            id: 'mynode1'
           }
         ]
       }
@@ -122,8 +123,9 @@ describe('validateWorkflow()', () => {
         global: {},
         nodes: [
           {
-            id: 'mynode',
-            parameters: {}
+            type: 'mynode',
+            parameters: {},
+            id: 'mynode1'
           }
         ]
       }
@@ -150,8 +152,9 @@ describe('validateWorkflow()', () => {
           global: {},
           nodes: [
             {
-              id: 'myothernode',
-              parameters: {}
+              type: 'myothernode',
+              parameters: {},
+              id: 'myothernode1'
             }
           ]
         }
@@ -231,10 +234,11 @@ describe('validateWorkflow()', () => {
         },
         nodes: [
           {
-            id: 'mynode',
+            type: 'mynode',
             parameters: {
               nprop: [true, false, true]
-            }
+            },
+            id: 'mynode1'
           }
         ]
       }
@@ -250,10 +254,11 @@ describe('validateWorkflow()', () => {
         },
         nodes: [
           {
-            id: 'mynode',
+            type: 'mynode',
             parameters: {
               nprop: [true, false, true]
-            }
+            },
+            id: 'mynode1'
           }
         ]
       }
@@ -346,10 +351,11 @@ describe('validateWorkflow()', () => {
           },
           nodes: [
             {
-              id: 'mynode',
+              type: 'mynode',
               parameters: {
                 seg: [[{ chain: 'A' }]]
-              }
+              },
+              id: 'mynode1'
             }
           ]
         }
@@ -367,10 +373,11 @@ describe('validateWorkflow()', () => {
           },
           nodes: [
             {
-              id: 'mynode',
+              type: 'mynode',
               parameters: {
                 seg: [[{ chain: 'X' }]]
-              }
+              },
+              id: 'mynode1'
             }
           ]
         }

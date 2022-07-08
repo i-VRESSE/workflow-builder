@@ -1,98 +1,73 @@
-import { useRef, useState } from 'react'
-import { useDrag, useDrop, DropTargetMonitor } from 'react-dnd'
-import { useSelectNodeIndex, useWorkflow } from './store'
 import { GripVertical, X } from 'react-bootstrap-icons'
-import { DragItem } from './types'
-import { nodeWidth } from './constants'
+import { CSS } from '@dnd-kit/utilities'
+import { useSortable } from '@dnd-kit/sortable'
+import { useDraggingWorkflowNodeState, useSelectNodeIndex, useWorkflow } from './store'
+import classes from './VisualNode.module.css'
 
 interface IProp {
-  id: string
+  type: string
   index: number
+  id: string
 }
 
-export const VisualNode = ({ id, index }: IProp): JSX.Element => {
-  // TODO to power hover use css :hover instead of slower JS
-  const [hover, setHover] = useState(false)
-
+export const VisualNode = ({ type, index, id }: IProp): JSX.Element => {
   const selectedNodeIndex = useSelectNodeIndex()
-  const { selectNode, moveNode, addNodeToWorkflowAt, deleteNode } = useWorkflow()
+  const { selectNode, deleteNode } = useWorkflow()
+  const draggingWorkflowNodeCode = useDraggingWorkflowNodeState()[0]
 
-  const ref = useRef<HTMLLIElement>(null)
-  const drag = useDrag(() => ({
-    type: 'node',
-    item: { id, index }
-  }))[1]
-  const [{ isOver, canDrop }, drop] = useDrop({
-    accept: ['catalognode', 'node'],
-    drop (item: DragItem, monitor: DropTargetMonitor) {
-      if (ref.current === null) {
-        return
-      }
-      const dropIndex = index
-      if (monitor.getItemType() === 'catalognode') {
-        // Add catalog node at drop location
-        addNodeToWorkflowAt(item.id, dropIndex)
-        return
-      }
-      const dragIndex = item.index
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    setActivatorNodeRef,
+    transform,
+    transition
+  } = useSortable({ id })
 
-      // Don't replace items with themselves
-      if (dragIndex === dropIndex) {
-        return
-      }
-
-      moveNode(dragIndex, dropIndex)
-    },
-    collect: (monitor) => {
-      return {
-        canDrop: monitor.canDrop(),
-        isOver: monitor.isOver()
-      }
-    }
-  })
-
-  const selectedStyle = selectedNodeIndex === index ? { fontWeight: 'bold' } : {}
-  let style: React.CSSProperties = {}
-  if (isOver) {
-    style = { border: '1px solid gray' }
-  } else if (canDrop) {
-    style = { border: '1px dashed gray' }
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: draggingWorkflowNodeCode === id ? 0.3 : undefined
   }
 
+  const selectedStyle =
+    selectedNodeIndex === index ? { fontWeight: 'bold' } : {}
+
   // TODO after clicking node the active styling is not removed unless you activate another element
-  drag(drop(ref))
   return (
-    <li ref={ref} style={selectedStyle}>
-      <div
-        className='btn-group'
-        onMouseEnter={() => setHover(true)}
-        onMouseLeave={() => setHover(false)}
-        style={{ ...style, width: `${nodeWidth}rem`, justifyContent: 'space-between' }}
+    <div ref={setNodeRef} style={style} {...attributes}>
+      <button
+        className={'btn btn-light btn-sm btn-block ' + classes.node}
+        title='Click to configure'
+        style={selectedStyle}
+        onClick={() => {
+          selectNode(index)
+        }}
       >
-        <button
-          className='btn btn-light btn-sm btn-block'
-          title='Click to configure or drag to reorder'
-          onClick={() => {
-            selectNode(index)
-          }}
-        >
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <span style={selectedStyle}>
-              {id}
-            </span>
-            <span>
-              {hover && <GripVertical />}
-            </span>
+        <span>
+          {index + 1}. {type}
+        </span>
+        <div className='btn-group'>
+          <div
+            ref={setActivatorNodeRef}
+            {...listeners}
+            className={'btn btn-light btn-sm ' + classes.grip}
+            title='Move'
+          >
+            <GripVertical />
           </div>
-        </button>
-        <button
-          title='Delete'
-          className='btn btn-light btn-sm'
-          onClick={() => deleteNode(index)}
-        >
-          {hover && <X />}
-        </button>
-      </div>
-    </li>
+          <div
+            title='Delete'
+            className={'btn btn-light btn-sm ' + classes.delete}
+            onClick={(event) => {
+              deleteNode(index)
+              event.stopPropagation()
+            }}
+          >
+            <X />
+          </div>
+        </div>
+      </button>
+    </div>
   )
 }

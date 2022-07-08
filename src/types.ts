@@ -51,8 +51,9 @@ export interface ICatalog {
 export type IParameters = Record<string, unknown>
 
 export interface IWorkflowNode {
-  id: string
+  type: string
   parameters: IParameters
+  id: string
 }
 
 export type IFiles = Record<string, string>
@@ -65,10 +66,4 @@ export interface IWorkflow {
 export interface IWorkflowSchema {
   global: IGlobal
   nodes: ICatalogNode[]
-}
-
-export interface DragItem {
-  index: number
-  id: string
-  type: string
 }

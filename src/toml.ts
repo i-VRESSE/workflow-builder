@@ -2,6 +2,7 @@ import { Section, stringify, parse } from '@ltd/j-toml'
 import { isObject } from './utils/isObject'
 import { IWorkflowNode, IParameters, IWorkflow, TomlObjectSchema, ICatalog } from './types'
 import { mergeHeader, splitHeader } from './dsv'
+import { nanoid } from 'nanoid'
 
 export interface TomlSchemas {
   nodes: Record<string, TomlObjectSchema>
@@ -18,13 +19,13 @@ function nodes2tomltable (nodes: IWorkflowNode[], tomlSchema4nodes: Record<strin
   const table: Record<string, unknown> = {}
   const track: Record<string, number> = {}
   for (const node of nodes) {
-    if (!(node.id in track)) {
-      track[node.id] = 0
+    if (!(node.type in track)) {
+      track[node.type] = 0
     }
-    track[node.id]++
-    const tomlSchemaOfNode = node.id in tomlSchema4nodes ? tomlSchema4nodes[node.id] : {}
+    track[node.type]++
+    const tomlSchemaOfNode = node.type in tomlSchema4nodes ? tomlSchema4nodes[node.type] : {}
     const section =
-      track[node.id] > 1 ? `${node.id}.${track[node.id]}` : node.id
+      track[node.type] > 1 ? `${node.type}.${track[node.type]}` : node.type
     const nodeParameters: Record<string, unknown> = parameters2toml(node.parameters, tomlSchemaOfNode)
     table[section] = Section(nodeParameters as any)
   }
@@ -199,8 +200,9 @@ export function parseWorkflow (workflow: string, globalKeys: Set<string>, tomlSc
     } else {
       const tomlSchema4node = tomSchema4nodes[section] ?? {}
       nodes.push({
-        id: section,
-        parameters: toml2parameters(v as IParameters, tomlSchema4node)
+        type: section, // aka node type
+        parameters: toml2parameters(v as IParameters, tomlSchema4node),
+        id: nanoid()
       })
     }
   })

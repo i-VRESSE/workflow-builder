@@ -19,7 +19,7 @@ export const NodeForm = (): JSX.Element => {
   const uiSchema = catalogNode.formUiSchema
   return (
     <>
-      <h4>{catalogNode.label} ({node.id})</h4>
+      <h4>{catalogNode.label} ({node.type})</h4>
       <div style={{ marginBottom: '20px' }}>
         {catalogNode.description}
       </div>
