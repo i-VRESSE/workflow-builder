@@ -1,3 +1,4 @@
+import React from 'react'
 import { Form } from '@i-vresse/wb-form'
 import { useSetActiveSubmitButton, useCatalog, useGlobalFormData } from './store'
 

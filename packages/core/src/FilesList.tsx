@@ -1,3 +1,4 @@
+import React from 'react'
 import { saveAs } from 'file-saver'
 import { useFiles } from './store'
 

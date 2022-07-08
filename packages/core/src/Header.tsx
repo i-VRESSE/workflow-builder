@@ -1,3 +1,4 @@
+import React from 'react'
 import { useCatalog } from './store'
 
 export const Header = (): JSX.Element => {

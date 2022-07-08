@@ -1,3 +1,4 @@
+import React from 'react'
 import { useWorkflow } from './store'
 
 export const WorkflowClear = (): JSX.Element => {

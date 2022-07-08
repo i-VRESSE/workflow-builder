@@ -1,3 +1,4 @@
+import React from 'react'
 import { useCatalog } from './store'
 import { ICategory } from './types'
 import { CatalogNode } from './CatalogNode'

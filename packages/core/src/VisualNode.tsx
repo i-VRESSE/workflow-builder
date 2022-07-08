@@ -1,3 +1,4 @@
+import React from 'react'
 import { GripVertical, X } from 'react-bootstrap-icons'
 import { CSS } from '@dnd-kit/utilities'
 import { useSortable } from '@dnd-kit/sortable'

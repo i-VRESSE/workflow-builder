@@ -1,3 +1,4 @@
+import React from 'react'
 import { FilesList } from './FilesList'
 import { HighlightedCode } from './HighlightedCode'
 

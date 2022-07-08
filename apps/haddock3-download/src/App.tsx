@@ -2,15 +2,15 @@ import type { PropsWithChildren } from 'react'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
-import { CatalogPanel } from './CatalogPanel'
-import { NodePanel } from './NodePanel'
-import { WorkflowPanel } from './WorkflowPanel'
-import { Header } from './Header'
+import { CatalogPanel } from '@i-vresse/wb-core/dist/CatalogPanel'
+import { NodePanel } from '@i-vresse/wb-core/dist/NodePanel'
+import { WorkflowPanel } from '@i-vresse/wb-core/dist/WorkflowPanel'
+import { Header } from '@i-vresse/wb-core/dist/Header'
 
-import { WorkflowDownloadButton } from './WorkflowDownloadButton'
-import { WorkflowClear } from './WorkflowClear'
-import { FormActions } from './FormActions'
-import { Wrapper } from './Wrapper'
+import { WorkflowDownloadButton } from '@i-vresse/wb-core/dist/WorkflowDownloadButton'
+import { WorkflowClear } from '@i-vresse/wb-core/dist/WorkflowClear'
+import { FormActions } from '@i-vresse/wb-core/dist/FormActions'
+import { Wrapper } from '@i-vresse/wb-core/dist/Wrapper'
 
 function GridArea ({ area, className, children }: PropsWithChildren<{area: string, className?: string}>): JSX.Element {
   return (

@@ -1,3 +1,5 @@
+import React from 'react'
+import { CSSProperties } from 'react'
 import { DragOverlay, useDroppable } from '@dnd-kit/core'
 import {
   SortableContext,
@@ -12,7 +14,6 @@ import {
   useWorkflow
 } from './store'
 import { VisualNode } from './VisualNode'
-import { CSSProperties } from 'react'
 
 export const VisualPanel = (): JSX.Element => {
   const { nodes } = useWorkflow()

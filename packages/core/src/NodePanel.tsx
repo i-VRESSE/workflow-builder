@@ -1,3 +1,4 @@
+import React from 'react'
 import { GlobalForm } from './GlobalForm'
 import { NodeForm } from './NodeForm'
 import { useSelectNodeIndex, useWorkflow } from './store'

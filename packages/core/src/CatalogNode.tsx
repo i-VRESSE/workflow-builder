@@ -1,3 +1,4 @@
+import React from 'react'
 import { GripVertical } from 'react-bootstrap-icons'
 import { useDraggable } from '@dnd-kit/core'
 

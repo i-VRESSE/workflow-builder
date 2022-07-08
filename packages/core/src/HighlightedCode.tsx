@@ -1,10 +1,11 @@
+import React from 'react'
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter'
 import toml from 'react-syntax-highlighter/dist/esm/languages/prism/toml'
 import style from 'react-syntax-highlighter/dist/esm/styles/prism/vs'
 
 SyntaxHighlighter.registerLanguage('toml', toml)
 
-interface IProps {
+export interface IProps {
   code: string
 }
 

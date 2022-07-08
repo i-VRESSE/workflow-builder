@@ -1,3 +1,4 @@
+import React from 'react'
 import { useEffect, useState } from 'react'
 import { defaultCatalogIndexURL, fetchCatalog, fetchCatalogIndex } from './catalog'
 import { useCatalog, useSetCatalog } from './store'
