@@ -1,13 +1,34 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { GripVertical } from 'react-bootstrap-icons'
 import { useDraggable } from '@dnd-kit/core'
 
 import { nodeWidth } from './constants'
 import { useWorkflow } from './store'
 import { ICatalogNode } from './types'
-import classes from './CatalogNode.module.css'
+
+// TODO replace inlining styles and hover using onmouseenter/leave
+// with CSS module or a CSS-in-JS solution
+// tried CSS module with postcss but could get postcss-modules to work
+const styles = {
+  node: {
+    width: '12rem',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 4
+  },
+  grip: {
+    visibility: "hidden",
+    cursor: 'grab'
+  },
+  gripHover: {
+    visibility: "visible",
+    cursor: 'grab'
+  }
+}
 
 export const CatalogNode = ({ id, label }: ICatalogNode): JSX.Element => {
+  const [hover, setHover] = useState(false)
   const { attributes, listeners, setNodeRef, transform, setActivatorNodeRef } =
     useDraggable({ id, data: { catalog: true } })
   const style =
@@ -23,19 +44,21 @@ export const CatalogNode = ({ id, label }: ICatalogNode): JSX.Element => {
     <li>
       <button
         ref={setNodeRef}
-        style={{ ...style, width: `${nodeWidth}rem` }}
+        style={{ ...styles.node, ...style, width: `${nodeWidth}rem` }}
         {...attributes}
         title={label}
-        className={'btn btn-light btn-sm ' + classes.node}
+        className={'btn btn-light btn-sm'}
         onClick={() => addNodeToWorkflow(id)}
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
       >
         <span>{id}</span>
         <div
           ref={setActivatorNodeRef}
           {...listeners}
-          className={'btn btn-light btn-sm ' + classes.grip}
+          className={'btn btn-light btn-sm'}
           title='Move'
-          style={{ cursor: 'grab' }}
+          style={hover ? styles.gripHover as any : styles.grip}
         >
           <GripVertical />
         </div>
