@@ -1,5 +1,4 @@
-import React from 'react'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { defaultCatalogIndexURL, fetchCatalog, fetchCatalogIndex } from './catalog'
 import { useCatalog, useSetCatalog } from './store'
 import { ICatalogIndex } from './types'
@@ -23,7 +22,9 @@ export const CatalogPicker = ({ catalogIndexURL = defaultCatalogIndexURL }: Prop
     }).catch(e => { throw e })
   }, [catalogIndexURL])
   useEffect(() => {
-    fetchCatalog(catalogURL).then(setCatalog).catch(e => { throw e })
+    if (catalogURL !== '') {
+      fetchCatalog(catalogURL).then(setCatalog).catch(e => { throw e })
+    }
   }, [catalogURL])
 
   // TODO clear? workflow when switching catalogs

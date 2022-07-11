@@ -1,5 +1,4 @@
-import React from 'react'
-import { CSSProperties } from 'react'
+import React, { CSSProperties } from 'react'
 import { DragOverlay, useDroppable } from '@dnd-kit/core'
 import {
   SortableContext,

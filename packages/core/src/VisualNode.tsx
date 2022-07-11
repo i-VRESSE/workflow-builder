@@ -1,8 +1,11 @@
-import React, { useState } from 'react'
+/** @jsx jsx */
+import { jsx, css } from '@emotion/react'
 import { GripVertical, X } from 'react-bootstrap-icons'
 import { CSS } from '@dnd-kit/utilities'
 import { useSortable } from '@dnd-kit/sortable'
+
 import { useDraggingWorkflowNodeState, useSelectNodeIndex, useWorkflow } from './store'
+import { nodeWidth } from './constants'
 
 interface IProp {
   type: string
@@ -10,33 +13,28 @@ interface IProp {
   id: string
 }
 
-const styles = {
-  node: {
-    width: '12rem',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 4
-  },
-  grip: {
-    visibility: "hidden",
+const buttonStyle = css({
+  width: `${nodeWidth + 2}rem`,
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  marginBottom: 4,
+  '& .grip': {
+    visibility: 'hidden',
     cursor: 'grab'
   },
-  gripHover: {
-    visibility: "visible",
-    cursor: 'grab'
+  '&:hover .grip': {
+    visibility: 'visible'
   },
-  delete: {
-    visibility: "hidden"
+  '& .delete': {
+    visibility: 'hidden'
   },
-  deleteHover: {
-    visibility: "visible",
+  '&:hover .delete': {
+    visibility: 'visible'
   }
-}
-
+})
 
 export const VisualNode = ({ type, index, id }: IProp): JSX.Element => {
-  const [hover, setHover] = useState(false)
   const selectedNodeIndex = useSelectNodeIndex()
   const { selectNode, deleteNode } = useWorkflow()
   const draggingWorkflowNodeCode = useDraggingWorkflowNodeState()[0]
@@ -63,14 +61,13 @@ export const VisualNode = ({ type, index, id }: IProp): JSX.Element => {
   return (
     <div ref={setNodeRef} style={style} {...attributes}>
       <button
-        className={'btn btn-light btn-sm btn-block ivresses-wb-workflow-node'}
+        className='btn btn-light btn-sm btn-block'
         title='Click to configure'
-        style={{...styles.node, ...selectedStyle}}
+        css={buttonStyle}
+        style={selectedStyle}
         onClick={() => {
           selectNode(index)
         }}
-        onMouseEnter={() => setHover(true)}
-        onMouseLeave={() => setHover(false)}
       >
         <span>
           {index + 1}. {type}
@@ -79,20 +76,18 @@ export const VisualNode = ({ type, index, id }: IProp): JSX.Element => {
           <div
             ref={setActivatorNodeRef}
             {...listeners}
-            className={'btn btn-light btn-sm ivresses-wb-workflow-grip'}
+            className='btn btn-light btn-sm grip'
             title='Move'
-            style={hover ? styles.gripHover as any : styles.grip}
           >
             <GripVertical />
           </div>
           <div
             title='Delete'
-            className={'btn btn-light btn-sm ivresses-wb-workflow-delete'}
+            className='btn btn-light btn-sm delete'
             onClick={(event) => {
               deleteNode(index)
               event.stopPropagation()
             }}
-            style={hover ? styles.gripHover as any : styles.grip}
           >
             <X />
           </div>

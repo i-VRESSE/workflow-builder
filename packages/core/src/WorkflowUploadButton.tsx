@@ -1,5 +1,4 @@
-import React from 'react'
-import { useRef } from 'react'
+import React, { useRef } from 'react'
 import { toast } from 'react-toastify'
 import { useWorkflow } from './store'
 
