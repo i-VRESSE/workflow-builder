@@ -28,6 +28,11 @@ const catalogState = atom<ICatalog>({
   }
 })
 
+/**
+ * Get currently loaded catalog
+ *
+ * @returns catalog value
+ */
 export function useCatalog (): ICatalog {
   return useRecoilValue<ICatalog>(catalogState)
 }

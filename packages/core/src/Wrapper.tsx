@@ -3,6 +3,11 @@ import { RecoilRoot } from 'recoil'
 import { DnDWrapper } from './DndWrapper'
 import { ErrorBoundary } from './ErrorBoundary'
 
+/**
+ * Wrapper around app which initializes recoil and dndkit
+ * 
+ * @param children
+ */
 export const Wrapper = ({ children }: React.PropsWithChildren<{}>): JSX.Element => {
   return (
     <RecoilRoot>

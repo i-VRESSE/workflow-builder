@@ -1,4 +1,3 @@
-// TODO export AppFrame
 export { Wrapper } from './Wrapper'
 export { GridArea } from './GridArea'
 export { CatalogPanel } from './CatalogPanel'
