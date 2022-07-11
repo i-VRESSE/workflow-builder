@@ -1,12 +1,11 @@
-import React, { useState } from 'react'
+import React, { PropsWithChildren, useState } from 'react'
 import { TextPanel } from './TextPanel'
 import { VisualPanel } from './VisualPanel'
-import { WorkflowUploadButton } from './WorkflowUploadButton'
 import { useWorkflow } from './store'
 
 type ITab = 'text' | 'visual'
 
-export const WorkflowPanel = (): JSX.Element => {
+export const WorkflowPanel = ({ children }: PropsWithChildren<{}>): JSX.Element => {
   const [tab, setTab] = useState<ITab>('visual')
   const { toggleGlobalEdit } = useWorkflow()
 
@@ -20,7 +19,7 @@ export const WorkflowPanel = (): JSX.Element => {
       <div style={{ display: 'flex', flexFlow: 'column', height: '100%', gap: '5px', paddingBottom: '5px' }}>
         <div className='btn-toolbar'>
           <button className='btn btn-light' onClick={toggleGlobalEdit}>Global parameters</button>
-          <WorkflowUploadButton />
+          {children}
         </div>
         <ul className='nav nav-tabs'>
           <li className='nav-item'>

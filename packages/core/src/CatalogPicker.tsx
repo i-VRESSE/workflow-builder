@@ -29,11 +29,11 @@ export const CatalogPicker = ({ catalogIndexURL = defaultCatalogIndexURL }: Prop
 
   // TODO clear? workflow when switching catalogs
   return (
-    <>
+    <div>
       {catalogIndex.length === 0 && <span>Loading catalog index...</span>}
       <select title='Select another catalog' className='form-control' style={{ width: 'auto' }} value={catalogURL} onChange={(e) => setCatalogURL(e.target.value)}>
         {catalogIndex.map(([k, v]) => <option key={v} value={v}>{k}</option>)}
       </select>
-    </>
+    </div>
   )
 }

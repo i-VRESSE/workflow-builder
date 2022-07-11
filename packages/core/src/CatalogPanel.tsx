@@ -1,31 +1,32 @@
-import React from 'react'
+import React, { PropsWithChildren } from 'react'
 import { CatalogCategory } from './CatalogCategory'
-import { CatalogPicker } from './CatalogPicker'
 import { Example } from './Example'
 import { useCatalog } from './store'
 
-export const CatalogPanel = (): JSX.Element => {
+export const CatalogPanel = ({ children }: PropsWithChildren<{}>): JSX.Element => {
   const catalog = useCatalog()
   return (
     <fieldset>
       <legend>Catalog</legend>
-      <div>
-        <CatalogPicker />
-      </div>
       <React.Suspense fallback={<span>Loading catalog...</span>}>
+        {children}
         <h4>Nodes</h4>
         <ul style={{ lineHeight: '2.5em' }}>
-          {catalog?.categories.map((category) => (
+          {catalog.categories.map((category) => (
             <CatalogCategory key={category.name} {...category} />
           ))}
         </ul>
-        <h4>Examples</h4>
-        Workflow examples that can be loaded as a starting point.
-        <ul>
-          {Object.entries(catalog?.examples).map(([name, workflow]) => (
-            <Example key={name} name={name} workflow={workflow} />
-          ))}
-        </ul>
+        {Object.entries(catalog.examples).length > 0 && (
+          <div>
+            <h4>Examples</h4>
+            Workflow examples that can be loaded as a starting point.
+            <ul>
+              {Object.entries(catalog.examples).map(([name, workflow]) => (
+                <Example key={name} name={name} workflow={workflow} />
+              ))}
+            </ul>
+          </div>
+        )}
       </React.Suspense>
     </fieldset>
   )

@@ -8,9 +8,11 @@ import { WorkflowPanel } from '@i-vresse/wb-core/dist/WorkflowPanel'
 import { Header } from '@i-vresse/wb-core/dist/Header'
 
 import { WorkflowDownloadButton } from '@i-vresse/wb-core/dist/WorkflowDownloadButton'
+import { WorkflowUploadButton } from '@i-vresse/wb-core/dist/WorkflowUploadButton'
 import { WorkflowClear } from '@i-vresse/wb-core/dist/WorkflowClear'
 import { FormActions } from '@i-vresse/wb-core/dist/FormActions'
 import { Wrapper } from '@i-vresse/wb-core/dist/Wrapper'
+import { CatalogPicker } from '@i-vresse/wb-core/dist/CatalogPicker'
 
 function GridArea ({ area, className, children }: PropsWithChildren<{area: string, className?: string}>): JSX.Element {
   return (
@@ -28,10 +30,14 @@ function App (): JSX.Element {
           <Header />
         </GridArea>
         <GridArea area='catalog'>
-          <CatalogPanel />
+          <CatalogPanel>
+            <CatalogPicker />
+          </CatalogPanel>
         </GridArea>
         <GridArea area='workflow'>
-          <WorkflowPanel />
+          <WorkflowPanel>
+            <WorkflowUploadButton />
+          </WorkflowPanel>
         </GridArea>
         <GridArea area='node'>
           <NodePanel />
