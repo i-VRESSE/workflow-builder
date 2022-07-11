@@ -12,7 +12,8 @@
     "build": "tsup",
     "lint": "ts-standard",
     "storybook": "start-storybook -p 6007",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "dependencies": {
     "@rjsf/bootstrap-4": "^4.2.0",

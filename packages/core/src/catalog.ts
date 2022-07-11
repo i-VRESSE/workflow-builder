@@ -10,9 +10,14 @@ export async function fetchCatalog (catalogUrl: string): Promise<ICatalog> {
   if (!response.ok) {
     throw new Error('Error retrieving catalog')
   }
-  const body = await response.text()
-  const unGroupedCatalog = load(body)
+  const yamlText = await response.text()
+  const body = load(yamlText)
 
+  // TODO move prepare to store.useSetCatalog
+  return prepareCatalog(body)
+}
+
+export function prepareCatalog (unGroupedCatalog: unknown): ICatalog {
   if (!isCatalog(unGroupedCatalog)) {
     throw new Error('Retrieved catalog is malformed')
   }

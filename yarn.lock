@@ -1931,6 +1931,23 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@i-vresse/haddock3-config-builder-submit@workspace:apps/haddock3-submit":
+  version: 0.0.0-use.local
+  resolution: "@i-vresse/haddock3-config-builder-submit@workspace:apps/haddock3-submit"
+  dependencies:
+    "@i-vresse/wb-core": "workspace:^"
+    "@types/node": 16
+    "@types/react": ^17.0.0
+    "@types/react-dom": ^17.0.0
+    bootstrap: ^4
+    react: ^17.0.0
+    react-dom: ^17.0.0
+    ts-standard: ^11.0.0
+    typescript: ^4.7.4
+    vite: ^2.6.4
+  languageName: unknown
+  linkType: soft
+
 "@i-vresse/pdbtbx-ts@npm:0.1.7":
   version: 0.1.7
   resolution: "@i-vresse/pdbtbx-ts@npm:0.1.7"
@@ -2015,6 +2032,23 @@ __metadata:
   peerDependencies:
     react: ^17.0.0 || ^18.0.0
     react-dom: ^17.0.0 || ^18.0.0
+  languageName: unknown
+  linkType: soft
+
+"@i-vresse/wb-kitchensink-app@workspace:apps/kitchensink":
+  version: 0.0.0-use.local
+  resolution: "@i-vresse/wb-kitchensink-app@workspace:apps/kitchensink"
+  dependencies:
+    "@i-vresse/wb-core": "workspace:^"
+    "@types/node": 16
+    "@types/react": ^17.0.0
+    "@types/react-dom": ^17.0.0
+    bootstrap: ^4
+    react: ^17.0.0
+    react-dom: ^17.0.0
+    ts-standard: ^11.0.0
+    typescript: ^4.7.4
+    vite: ^2.6.4
   languageName: unknown
   linkType: soft
 

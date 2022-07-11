@@ -10,13 +10,5 @@
     [
         "haddock3guru",
         "/catalog/haddock3.guru.yaml"
-    ],
-    [
-        "kitchensink",
-        "/catalog/kitchensink.yaml"
-    ],
-    [
-        "molaware",
-        "/catalog/molaware.yaml"
     ]
 ]

@@ -19,10 +19,13 @@ Requires [NodeJS](https://nodejs.org/) and [yarn](https://yarnpkg.com/) (tested 
 # Install dependencies
 yarn
 
-# Run dev server
+# Run dev servers
 yarn dev
-# Goto http://localhost:3000
 ```
+
+* Goto http://localhost:3000 for [haddock3-download app](apps/haddock3-download)
+* Goto http://localhost:3001 for [haddock3-submit app](apps/haddock3-submit)
+* Goto http://localhost:3002 for [kitchensink app](apps/kitchensink)
 
 ### Unit tests
 

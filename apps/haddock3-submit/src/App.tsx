@@ -1,18 +1,17 @@
+import 'bootstrap/dist/css/bootstrap.min.css'
 import {
   CatalogPanel,
-  CatalogPicker,
   FormActions,
   GridArea,
   Header,
   NodePanel,
+  CatalogPicker,
   WorkflowClear,
-  WorkflowDownloadButton,
-  WorkflowPanel,
-  WorkflowUploadButton,
-  Wrapper
+  Wrapper,
+  WorkflowPanel
 } from '@i-vresse/wb-core'
-import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
+import { WorkflowSubmitButton } from './WorkflowSubmitButton'
 
 function App (): JSX.Element {
   return (
@@ -27,15 +26,13 @@ function App (): JSX.Element {
           </CatalogPanel>
         </GridArea>
         <GridArea area='workflow'>
-          <WorkflowPanel>
-            <WorkflowUploadButton />
-          </WorkflowPanel>
+          <WorkflowPanel />
         </GridArea>
         <GridArea area='node'>
           <NodePanel />
         </GridArea>
         <GridArea className='action-row' area='workflow-actions'>
-          <WorkflowDownloadButton />
+          <WorkflowSubmitButton />
           <WorkflowClear />
         </GridArea>
         <GridArea className='action-row' area='node-actions'>

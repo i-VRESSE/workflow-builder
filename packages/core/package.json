@@ -13,7 +13,8 @@
     "lint": "ts-standard",
     "test": "vitest",
     "storybook": "start-storybook -p 6007",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "devDependencies": {
     "@babel/core": "^7.18.6",
