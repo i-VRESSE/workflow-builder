@@ -5,7 +5,7 @@ import { ErrorBoundary } from './ErrorBoundary'
 
 /**
  * Wrapper around app which initializes recoil and dndkit
- * 
+ *
  * @param children
  */
 export const Wrapper = ({ children }: React.PropsWithChildren<{}>): JSX.Element => {

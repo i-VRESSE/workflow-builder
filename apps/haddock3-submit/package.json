@@ -13,6 +13,7 @@
     "@i-vresse/wb-core": "workspace:^",
     "bootstrap": "^4",
     "react": "^17.0.0",
+    "react-bootstrap": "^1",
     "react-dom": "^17.0.0"
   },
   "devDependencies": {

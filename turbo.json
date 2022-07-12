@@ -11,7 +11,7 @@
       "outputs": [
         "coverage/**"
       ],
-      "dependsOn": [],
+      "dependsOn": ["^build"],
       "cache": false
     },
     "dev": {

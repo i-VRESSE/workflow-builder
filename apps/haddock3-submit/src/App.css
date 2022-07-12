@@ -15,6 +15,7 @@
     overflow: auto;
 }
 
-.action-row {
-    padding: 0.25rem
+.page > .action-row {
+    padding: 0.25rem;
+    overflow: unset;
 }
