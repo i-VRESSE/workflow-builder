@@ -23,7 +23,7 @@ module.exports = {
       "chrome87",
       "safari14",
     ];
-    // addon-interactions uses jest which needs global, which is only available in nodejs, but now needed in browser.
+    // addon-interactions uses jest which needs global, which is only available in nodejs, but now needed in brow
     config.define = {
       global: "window",
     };

@@ -115,10 +115,11 @@ Components can be developed/tested/documented using [storybook](https://storyboo
 Storybook can be started with
 
 ```shell
-cd packages/core
-# or cd packages/form
 yarn storybook
 ```
+
+* Goto http://localhost:6008 for storybook of core package
+* Goto http://localhost:6007 for storybook of form package
 
 ## Format
 

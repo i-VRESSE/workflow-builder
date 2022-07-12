@@ -8,10 +8,11 @@
     ],
     "scripts": {
         "build": "turbo run build",
-        "dev": "turbo run devv --no-cache --parallel --continue",
+        "dev": "turbo run dev --no-cache --parallel --continue",
         "test": "turbo run test --parallel",
         "lint": "turbo run lint",
-        "clean": "turbo run clean && rm -rf node_modules"
+        "clean": "turbo run clean && rm -rf node_modules",
+        "storybook": "turbo run storybook --parallel --no-cache"
     },
     "devDependencies": {
         "turbo": "1.2.16"

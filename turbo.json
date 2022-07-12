@@ -19,6 +19,10 @@
     },
     "clean": {
       "cache": false
+    },
+    "storybook": {
+      "dependsOn": ["^build"],
+      "cache": false
     }
   }
 }
