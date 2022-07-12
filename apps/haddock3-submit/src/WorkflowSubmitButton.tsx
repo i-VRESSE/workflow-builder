@@ -9,9 +9,9 @@ export const WorkflowSubmitButton = (): JSX.Element => {
 
   return (
     <SplitButton
-      id="submit"
-      variant="primary"
-      title="Submit"
+      id='submit'
+      variant='primary'
+      title='Submit'
       onClick={submitworkflow}
     >
       <Dropdown.Item onClick={save}>Download</Dropdown.Item>
