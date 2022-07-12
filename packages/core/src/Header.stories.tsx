@@ -1,18 +1,19 @@
-import React from 'react';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import React from 'react'
+import { ComponentMeta, ComponentStory } from '@storybook/react'
 
-import { Header } from './Header';
-import { useSetCatalog } from './store';
-import { Wrapper } from './Wrapper';
+import { Header } from './Header'
+import { useSetCatalog } from './store'
+import { Wrapper } from './Wrapper'
 
-export default {
+const meta: ComponentMeta<typeof Header> = {
   component: Header,
   decorators: [(Story) => (
     <Wrapper>
-      <Story/>
+      <Story />
     </Wrapper>
   )]
-} as ComponentMeta<typeof Header>;
+}
+export default meta
 
 export const Default: ComponentStory<typeof Header> = () => {
   const setCatalog = useSetCatalog()
@@ -26,5 +27,5 @@ export const Default: ComponentStory<typeof Header> = () => {
     nodes: [],
     examples: {}
   })
-  return <Header/>
+  return <Header />
 }

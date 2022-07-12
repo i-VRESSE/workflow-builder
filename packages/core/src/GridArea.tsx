@@ -4,10 +4,10 @@ interface Props {
   /**
    * Name of area the children should be in
    */
-  area: string,
+  area: string
   /**
    * Optional class names
-   */ 
+   */
   className?: string
   /**
    * Optional style of grid area

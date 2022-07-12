@@ -5,7 +5,7 @@ import { useCatalog } from './store'
 
 /**
  * Panel where nodes and examples of catalog are listed.
- * 
+ *
  * Catalog is retrieved from store.
  */
 export const CatalogPanel = ({ children }: PropsWithChildren<{}>): JSX.Element => {
