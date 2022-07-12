@@ -6,6 +6,9 @@ import style from 'react-syntax-highlighter/dist/esm/styles/prism/vs'
 SyntaxHighlighter.registerLanguage('toml', toml)
 
 export interface IProps {
+  /**
+   * The piece of code in TOML format
+   */
   code: string
 }
 

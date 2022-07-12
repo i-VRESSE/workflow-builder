@@ -115,7 +115,7 @@ Components can be developed/tested/documented using [storybook](https://storyboo
 Storybook can be started with
 
 ```shell
-cd apps/haddock3-download
+cd packages/core
 # or cd packages/form
 yarn storybook
 ```
