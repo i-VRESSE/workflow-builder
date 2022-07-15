@@ -1,3 +1,4 @@
+/** @jsxRuntime classic */ // storybook builder can not use default jsxRuntime so overwritting it here.
 /** @jsx jsx */
 import { jsx, css } from '@emotion/react'
 import { GripVertical, X } from 'react-bootstrap-icons'

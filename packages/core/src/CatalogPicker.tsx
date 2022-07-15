@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { defaultCatalogIndexURL, fetchCatalog, fetchCatalogIndex } from './catalog'
+import { CatalogPickerComponent } from './CatalogPicker.component'
 import { useCatalog, useSetCatalog } from './store'
 import { ICatalogIndex } from './types'
 
@@ -28,12 +29,5 @@ export const CatalogPicker = ({ catalogIndexURL = defaultCatalogIndexURL }: Prop
   }, [catalogURL])
 
   // TODO clear? workflow when switching catalogs
-  return (
-    <div>
-      {catalogIndex.length === 0 && <span>Loading catalog index...</span>}
-      <select title='Select another catalog' className='form-control' style={{ width: 'auto' }} value={catalogURL} onChange={(e) => setCatalogURL(e.target.value)}>
-        {catalogIndex.map(([k, v]) => <option key={v} value={v}>{k}</option>)}
-      </select>
-    </div>
-  )
+  return <CatalogPickerComponent index={catalogIndex} selected={catalogURL} onSelect={setCatalogURL}/>
 }
