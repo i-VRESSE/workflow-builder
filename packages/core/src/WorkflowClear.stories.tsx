@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
-import { ComponentMeta, ComponentStory } from "@storybook/react";
-import { WorkflowClear } from "./WorkflowClear";
-import { Wrapper } from "./Wrapper";
-import { useGlobalFormData, useSetCatalog } from "./store";
-import { prepareCatalog } from "./catalog";
-import "bootstrap/dist/css/bootstrap.min.css";
+import React, { useEffect } from 'react'
+import { ComponentMeta, ComponentStory } from '@storybook/react'
+import { WorkflowClear } from './WorkflowClear'
+import { Wrapper } from './Wrapper'
+import { useGlobalFormData, useSetCatalog } from './store'
+import { prepareCatalog } from './catalog'
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 const meta: ComponentMeta<typeof WorkflowClear> = {
   component: WorkflowClear,
@@ -13,37 +13,37 @@ const meta: ComponentMeta<typeof WorkflowClear> = {
       <Wrapper>
         <Story />
       </Wrapper>
-    ),
-  ],
-};
-export default meta;
+    )
+  ]
+}
+export default meta
 
 export const FilledWorkflowWithString: ComponentStory<
   typeof WorkflowClear
 > = () => {
-  const setCatalog = useSetCatalog();
-  const setGlobalFormData = useGlobalFormData()[1];
+  const setCatalog = useSetCatalog()
+  const setGlobalFormData = useGlobalFormData()[1]
   useEffect(() => {
     const catalog = prepareCatalog({
-      title: "Some title",
+      title: 'Some title',
       categories: [],
       global: {
         schema: {
-          type: "object",
+          type: 'object',
           properties: {
             parameter1: {
-              type: "string",
-            },
+              type: 'string'
+            }
           },
-          additionalProperties: false,
+          additionalProperties: false
         },
-        uiSchema: {},
+        uiSchema: {}
       },
       nodes: [],
-      examples: {},
-    });
-    setCatalog(catalog);
-    setGlobalFormData({ parameter1: "some value" });
-  }, []);
-  return <WorkflowClear />;
-};
+      examples: {}
+    })
+    setCatalog(catalog)
+    setGlobalFormData({ parameter1: 'some value' })
+  }, [])
+  return <WorkflowClear />
+}

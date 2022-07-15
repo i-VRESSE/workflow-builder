@@ -29,5 +29,5 @@ export const CatalogPicker = ({ catalogIndexURL = defaultCatalogIndexURL }: Prop
   }, [catalogURL])
 
   // TODO clear? workflow when switching catalogs
-  return <CatalogPickerComponent index={catalogIndex} selected={catalogURL} onSelect={setCatalogURL}/>
+  return <CatalogPickerComponent index={catalogIndex} selected={catalogURL} onSelect={setCatalogURL} />
 }
