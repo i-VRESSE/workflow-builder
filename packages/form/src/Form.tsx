@@ -33,4 +33,10 @@ if (Theme.customFormats === undefined) {
 }
 Theme.customFormats = { ...Theme.customFormats, ...moleculeFormatValidators }
 
+/**
+ * Extended version of Form comoponent from https://github.com/rjsf-team/react-jsonschema-form
+ * 
+ * Fixes file upload and checkobox.
+ * Adds several fields and widgets.
+ */
 export const Form = withTheme(Theme)
