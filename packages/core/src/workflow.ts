@@ -5,7 +5,7 @@ import { ICatalog, IFiles, IParameters, IWorkflow, IWorkflowNode } from './types
 import { walk } from './utils/searchreplace'
 import { validateWorkflow, ValidationError } from './validate'
 
-interface ILoadedworkflow extends IWorkflow {
+export interface ILoadedworkflow extends IWorkflow {
   files: IFiles
 }
 

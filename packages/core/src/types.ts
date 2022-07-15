@@ -51,11 +51,21 @@ export interface ICatalog {
 export type IParameters = Record<string, unknown>
 
 export interface IWorkflowNode {
+  /**
+   * Derived from {@link ICatalogNode.id | ICatalogNode.id}.
+   */
   type: string
   parameters: IParameters
+  /**
+   * Unique identifier
+   */
   id: string
 }
 
+/**
+ * Map of files where key is the filename and value is a data url.
+ * The data url looks like `data:text/markdown;name=README.md;base64,Rm9.....`
+ */
 export type IFiles = Record<string, string>
 
 export interface IWorkflow {

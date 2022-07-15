@@ -1,19 +1,53 @@
+/**
+ * The rendered form using the `GlobalForm` or `NodeForm` components
+ * can have their parameters grouped.
+ * Grouping can be done in the `uiSchema` property.
+ *
+ * There are 2 ways of grouping
+ * 1. `"ui:field": "collapsible"`, rendered form and form data is grouped
+ * 2. `"ui:group": "<group name>"`, rendered form is grouped, but form data is flat.
+ *
+ * The uiSchema configuration is documented at /docs/uiSchema.md .
+ *
+ * To methods below allow for the rendered form to be grouped and the form data to be flat.
+ *
+ * @packageDocumentation
+ */
 import { UiSchema } from '@rjsf/core'
 import { ICatalog, IParameters } from './types'
 import { JSONSchema7 } from 'json-schema'
 import { isObject } from './utils/isObject'
 
-export function groupSchema (schema: JSONSchema7, uiSchema: UiSchema): JSONSchema7 {
+/**
+ * Create new JSON schema where properties marked with same `ui:group` are grouped together into an object.
+ *
+ * @param schema
+ * @param uiSchema
+ * @returns
+ */
+export function groupSchema (
+  schema: JSONSchema7,
+  uiSchema: UiSchema
+): JSONSchema7 {
   const newSchema = JSON.parse(JSON.stringify(schema))
 
   // Handle overlap between groups and direct prop names.
-  const definedGroups = new Set(Object.values(uiSchema).filter(v => 'ui:group' in v).map(v => v['ui:group']))
+  const definedGroups = new Set(
+    Object.values(uiSchema)
+      .filter((v) => 'ui:group' in v)
+      .map((v) => v['ui:group'])
+  )
   const directProps = schema.properties ?? {}
-  const directPropNamesWithSameNameAsGroup = new Set(Object.keys(directProps).filter(k => definedGroups.has(k)))
+  const directPropNamesWithSameNameAsGroup = new Set(
+    Object.keys(directProps).filter((k) => definedGroups.has(k))
+  )
   for (const k of directPropNamesWithSameNameAsGroup) {
-    const propHasGroup = k in uiSchema && 'ui:group' in uiSchema[k] && 'ui:group' in uiSchema[k]
+    const propHasGroup =
+      k in uiSchema && 'ui:group' in uiSchema[k] && 'ui:group' in uiSchema[k]
     if (!(propHasGroup && uiSchema[k]['ui:group'] === k)) {
-      throw new Error(`Can not have group and un-grouped parameter with same name ${k}`)
+      throw new Error(
+        `Can not have group and un-grouped parameter with same name ${k}`
+      )
     }
     // Prop has same name as its group so nest it
     const v = newSchema.properties[k]
@@ -56,7 +90,10 @@ export function groupUiSchema (uiSchema: UiSchema): UiSchema {
       const { 'ui:group': group, ...newUiProp } = v
       if (!(group in newUiSchema)) {
         if (group in uiSchema) {
-          newUiSchema[group] = { 'ui:field': 'collapsible', ...uiSchema[group] }
+          newUiSchema[group] = {
+            'ui:field': 'collapsible',
+            ...uiSchema[group]
+          }
         } else {
           newUiSchema[group] = { 'ui:field': 'collapsible' }
         }
@@ -73,7 +110,10 @@ export function groupUiSchema (uiSchema: UiSchema): UiSchema {
   return newUiSchema
 }
 
-export function groupParameters (parameters: IParameters, uiSchema: UiSchema): IParameters {
+export function groupParameters (
+  parameters: IParameters,
+  uiSchema: UiSchema
+): IParameters {
   const newParameters: IParameters = {}
 
   Object.entries(parameters).forEach(([k, v]) => {
@@ -91,7 +131,10 @@ export function groupParameters (parameters: IParameters, uiSchema: UiSchema): I
   return newParameters
 }
 
-export function unGroupParameters (parameters: IParameters, uiSchema: UiSchema): IParameters {
+export function unGroupParameters (
+  parameters: IParameters,
+  uiSchema: UiSchema
+): IParameters {
   // TODO order return by first ungrouped params and then all previously grouped params
   const newParameters: IParameters = {}
   Object.entries(parameters).forEach(([k, v]) => {
@@ -121,7 +164,7 @@ export function groupCatalog (catalog: ICatalog): ICatalog {
     formUiSchema: groupUiSchema(catalog.global.uiSchema),
     formSchema: groupSchema(catalog.global.schema, catalog.global.uiSchema)
   }
-  const nodes = catalog.nodes.map(n => {
+  const nodes = catalog.nodes.map((n) => {
     return {
       ...n,
       formUiSchema: groupUiSchema(n.uiSchema),

@@ -1,6 +1,9 @@
 import { IFiles, IParameters } from './types'
 import { walk } from './utils/searchreplace'
 
+/**
+ * Checks whether value starts with a `data:` scheme
+ */
 export function isDataURL (value: string): boolean {
   return value.startsWith('data:')
 }

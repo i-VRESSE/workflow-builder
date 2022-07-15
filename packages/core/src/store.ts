@@ -1,14 +1,38 @@
-import { atom, DefaultValue, selector, SetterOrUpdater, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import {
+  atom,
+  DefaultValue,
+  selector,
+  SetterOrUpdater,
+  useRecoilState,
+  useRecoilValue,
+  useSetRecoilState
+} from 'recoil'
 import { JSONSchema7 } from 'json-schema'
 import { UiSchema } from '@rjsf/core'
 import { nanoid } from 'nanoid'
 
 import { externalizeDataUrls, internalizeDataUrls } from './dataurls'
 import { saveArchive } from './archive'
-import { ICatalog, IWorkflowNode, IFiles, IParameters, ICatalogNode } from './types'
+import {
+  ICatalog,
+  IWorkflowNode,
+  IFiles,
+  IParameters,
+  ICatalogNode
+} from './types'
 import { catalog2tomlSchemas, workflow2tomltext } from './toml'
-import { dropUnusedFiles, loadWorkflowArchive, emptyParams, clearFiles } from './workflow'
-import { removeItemAtIndex, replaceItemAtIndex, moveItem, removeAllItems } from './utils/array'
+import {
+  dropUnusedFiles,
+  loadWorkflowArchive,
+  emptyParams,
+  clearFiles
+} from './workflow'
+import {
+  removeItemAtIndex,
+  replaceItemAtIndex,
+  moveItem,
+  removeAllItems
+} from './utils/array'
 import { groupParameters, unGroupParameters } from './grouper'
 import { pruneDefaults } from './pruner'
 import { resolveMaxItemsFrom } from './resolveMaxItemsFrom'
@@ -29,7 +53,18 @@ const catalogState = atom<ICatalog>({
 })
 
 /**
- * Get currently loaded catalog
+ * Hook to get currently loaded catalog
+ *
+ * @example
+ * In React component retrieve current catalog with
+ * ```ts
+ * import { useCatalog } from '@i-vresse/wb-core/dist/store'
+ *
+ * function MyComponent() {
+ *   const catalog = useCatalog()
+ *   return <div>{catalog.title}</div>
+ * }
+ * ```
  *
  * @returns catalog value
  */
@@ -37,6 +72,9 @@ export function useCatalog (): ICatalog {
   return useRecoilValue<ICatalog>(catalogState)
 }
 
+/**
+ * Hook to set current catalog
+ */
 export function useSetCatalog (): SetterOrUpdater<ICatalog> {
   return useSetRecoilState<ICatalog>(catalogState)
 }
@@ -46,7 +84,10 @@ const draggingCatalogNodeState = atom<string | number | null>({
   default: null
 })
 
-export function useDraggingCatalogNodeState (): [string | number | null, SetterOrUpdater<string | number | null>] {
+export function useDraggingCatalogNodeState (): [
+  string | number | null,
+  SetterOrUpdater<string | number | null>
+] {
   return useRecoilState(draggingCatalogNodeState)
 }
 
@@ -70,7 +111,10 @@ const draggingWorkflowNodeState = atom<string | number | null>({
   default: null
 })
 
-export function useDraggingWorkflowNodeState (): [string | number | null, SetterOrUpdater<string | number | null>] {
+export function useDraggingWorkflowNodeState (): [
+  string | number | null,
+  SetterOrUpdater<string | number | null>
+] {
   return useRecoilState(draggingWorkflowNodeState)
 }
 
@@ -83,13 +127,17 @@ const selectedNodeIndexState = atom<number>({
 // See https://github.com/rjsf-team/react-jsonschema-form/issues/500#issuecomment-849051041
 // The current approach of using a singleton to store the active submit button,
 // makes it impossible to have multiple forms renderede at the same time
-export const activeSubmitButtonState = atom<HTMLButtonElement | undefined>({
+const activeSubmitButtonState = atom<HTMLButtonElement | undefined>({
   key: 'activeSubmitButton',
   default: undefined
 })
 
-export function useSetActiveSubmitButton (): (instance: HTMLButtonElement | null) => void {
-  return useSetRecoilState(activeSubmitButtonState) as (instance: HTMLButtonElement | null) => void
+export function useSetActiveSubmitButton (): (
+  instance: HTMLButtonElement | null
+) => void {
+  return useSetRecoilState(activeSubmitButtonState) as (
+    instance: HTMLButtonElement | null
+  ) => void
 }
 
 export function useActiveSubmitButton (): HTMLButtonElement | undefined {
@@ -105,14 +153,23 @@ const filesState = atom<IFiles>({
   default: {}
 })
 
-function formData2parameters (formData: IParameters, newFiles: IFiles, schema: JSONSchema7, uiSchema: UiSchema): IParameters {
+function formData2parameters (
+  formData: IParameters,
+  newFiles: IFiles,
+  schema: JSONSchema7,
+  uiSchema: UiSchema
+): IParameters {
   const ungrouped = unGroupParameters(formData, uiSchema)
   const externalized = externalizeDataUrls(ungrouped, newFiles)
   const pruned = pruneDefaults(externalized, schema)
   return pruned
 }
 
-function parameters2formData (parameters: IParameters, files: IFiles, uiSchema: UiSchema): IParameters {
+function parameters2formData (
+  parameters: IParameters,
+  files: IFiles,
+  uiSchema: UiSchema
+): IParameters {
   const internalized = internalizeDataUrls(parameters, files)
   const grouped = groupParameters(internalized, uiSchema)
   return grouped
@@ -124,7 +181,11 @@ const globalFormDataState = selector<IParameters>({
     const parameters = get(globalParametersState)
     const files = get(filesState)
     const catalog = get(catalogState)
-    const formData = parameters2formData(parameters, files, catalog.global.uiSchema)
+    const formData = parameters2formData(
+      parameters,
+      files,
+      catalog.global.uiSchema
+    )
     return formData
   },
   set: ({ get, set }, formData) => {
@@ -138,7 +199,12 @@ const globalFormDataState = selector<IParameters>({
     if (formData instanceof DefaultValue) {
       parameters = {}
     } else {
-      parameters = formData2parameters(formData, newFiles, catalog.global.schema, catalog.global.uiSchema)
+      parameters = formData2parameters(
+        formData,
+        newFiles,
+        catalog.global.schema,
+        catalog.global.uiSchema
+      )
     }
     const nodes = get(workflowNodesState)
     const newUsedFiles = dropUnusedFiles(parameters, nodes, newFiles)
@@ -147,7 +213,10 @@ const globalFormDataState = selector<IParameters>({
   }
 })
 
-export function useGlobalFormData (): [IParameters, SetterOrUpdater<IParameters>] {
+export function useGlobalFormData (): [
+  IParameters,
+  SetterOrUpdater<IParameters>
+] {
   return useRecoilState(globalFormDataState)
 }
 
@@ -199,7 +268,11 @@ const selectedNodeFormDataState = selector<IParameters | undefined>({
       return undefined
     }
     const files = get(filesState)
-    const formData = parameters2formData(node.parameters, files, catalogNode.uiSchema)
+    const formData = parameters2formData(
+      node.parameters,
+      files,
+      catalogNode.uiSchema
+    )
     return formData
   },
   set: ({ set, get }, formData) => {
@@ -216,7 +289,12 @@ const selectedNodeFormDataState = selector<IParameters | undefined>({
     if (formData instanceof DefaultValue) {
       parameters = {}
     } else {
-      parameters = formData2parameters(formData, newFiles, catalogNode.schema, catalogNode.uiSchema)
+      parameters = formData2parameters(
+        formData,
+        newFiles,
+        catalogNode.schema,
+        catalogNode.uiSchema
+      )
     }
     const nodes = get(workflowNodesState)
     const selectedNodeIndex = get(selectedNodeIndexState)
@@ -229,7 +307,10 @@ const selectedNodeFormDataState = selector<IParameters | undefined>({
   }
 })
 
-export function useSelectedNodeFormData (): [IParameters | undefined, SetterOrUpdater<IParameters | undefined>] {
+export function useSelectedNodeFormData (): [
+  IParameters | undefined,
+  SetterOrUpdater<IParameters | undefined>
+] {
   return useRecoilState(selectedNodeFormDataState)
 }
 
@@ -239,13 +320,26 @@ const selectedNodeFormSchemaState = selector<JSONSchema7 | undefined>({
     const catalogNode = get(selectedCatalogNodeState)
     const globalParameters = get(globalParametersState)
     const catalog = get(catalogState)
-    if (catalogNode === undefined || catalogNode.formSchema === undefined || catalogNode === undefined || catalog === undefined) {
+    if (
+      catalogNode === undefined ||
+      catalogNode.formSchema === undefined ||
+      catalogNode === undefined ||
+      catalog === undefined
+    ) {
       return undefined
     }
-    const schemaWithMaxItems = resolveMaxItemsFrom(catalogNode.formSchema, globalParameters)
+    const schemaWithMaxItems = resolveMaxItemsFrom(
+      catalogNode.formSchema,
+      globalParameters
+    )
     const globalSchema = catalog.global.schema
     const files = get(filesState)
-    const schemaWithMolInfo = await addMoleculeValidation(schemaWithMaxItems, globalParameters, globalSchema, files)
+    const schemaWithMolInfo = await addMoleculeValidation(
+      schemaWithMaxItems,
+      globalParameters,
+      globalSchema,
+      files
+    )
     return schemaWithMolInfo
   }
 })
@@ -254,27 +348,47 @@ export function useSelectedNodeFormSchema (): JSONSchema7 | undefined {
   return useRecoilValue(selectedNodeFormSchemaState)
 }
 
-interface UseWorkflow {
+export interface UseWorkflow {
   nodes: IWorkflowNode[]
+  /**
+   * Whether the form for global parameters is open
+   */
   editingGlobal: boolean
   global: IParameters
   toggleGlobalEdit: () => void
-  addNodeToWorkflow: (nodeId: string) => void
-  addNodeToWorkflowAt: (nodeId: string, targetCode: string) => void
+  addNodeToWorkflow: (nodeType: string) => void
+  addNodeToWorkflowAt: (nodeType: string, targetId: string) => void
   loadWorkflowArchive: (archiveURL: string) => Promise<void>
+  /**
+   * Creates archive from workflow and make web browser save it to disk.
+   */
   save: () => Promise<void>
   clear: () => void
   deleteNode: (nodeIndex: number) => void
+  /**
+   * Select a node so its parameters are rendered in a form.
+   */
   selectNode: (nodeIndex: number) => void
+  /**
+   * Closes the form for editing parameters of the selected node.
+   */
   clearNodeSelection: () => void
-  moveNode: (sourceCode: string, targetCode: string) => void
+  moveNode: (sourceId: string, targetId: string) => void
 }
 
+/**
+ * Hook to retrieve and manipulate workflow
+ */
 export function useWorkflow (): UseWorkflow {
+  // TODO split up into hooks with smaller api
   const [nodes, setNodes] = useRecoilState(workflowNodesState)
   const [global, setGlobal] = useRecoilState(globalParametersState)
-  const [editingGlobal, setEditingGlobal] = useRecoilState(editingGlobalParametersState)
-  const [selectedNodeIndex, setSelectedNodeIndex] = useRecoilState(selectedNodeIndexState)
+  const [editingGlobal, setEditingGlobal] = useRecoilState(
+    editingGlobalParametersState
+  )
+  const [selectedNodeIndex, setSelectedNodeIndex] = useRecoilState(
+    selectedNodeIndexState
+  )
   const [files, setFiles] = useRecoilState(filesState)
   const catalog = useCatalog()
 
@@ -289,7 +403,10 @@ export function useWorkflow (): UseWorkflow {
     addNodeToWorkflowAt (nodeType: string, targetId: string) {
       const targetIndex = nodes.findIndex((n) => n.id === targetId)
       setNodes((oldNodes) => {
-        const newNodes = [...oldNodes, { type: nodeType, parameters: {}, id: nanoid() }]
+        const newNodes = [
+          ...oldNodes,
+          { type: nodeType, parameters: {}, id: nanoid() }
+        ]
         return moveItem(newNodes, newNodes.length - 1, targetIndex)
       })
       if (selectedNodeIndex === -1 && !editingGlobal) {
@@ -297,7 +414,10 @@ export function useWorkflow (): UseWorkflow {
       }
     },
     addNodeToWorkflow (nodeType: string) {
-      setNodes((oldNodes) => [...oldNodes, { type: nodeType, parameters: {}, id: nanoid() }])
+      setNodes((oldNodes) => [
+        ...oldNodes,
+        { type: nodeType, parameters: {}, id: nanoid() }
+      ])
       if (selectedNodeIndex === -1 && !editingGlobal) {
         setSelectedNodeIndex(nodes.length)
       }
@@ -339,21 +459,27 @@ export function useWorkflow (): UseWorkflow {
     async save () {
       await saveArchive(nodes, global, files, catalog2tomlSchemas(catalog))
     },
-    moveNode (sourceCode: string, targetCode: string) {
+    moveNode (sourceId: string, targetId: string) {
       setSelectedNodeIndex(-1)
       setNodes((oldNodes) => {
-        const oldIndex = oldNodes.findIndex((n) => n.id === sourceCode)
-        const newIndex = oldNodes.findIndex((n) => n.id === targetCode)
+        const oldIndex = oldNodes.findIndex((n) => n.id === sourceId)
+        const newIndex = oldNodes.findIndex((n) => n.id === targetId)
         return moveItem(oldNodes, oldIndex, newIndex)
       })
     }
   }
 }
 
+/**
+ * Hook to get files of current workflow
+ */
 export function useFiles (): IFiles {
   return useRecoilValue(filesState)
 }
 
+/**
+ * Hook to get text of workflow config file
+ */
 export function useText (): string {
   const { nodes, global } = useWorkflow()
   const catalog = useCatalog()

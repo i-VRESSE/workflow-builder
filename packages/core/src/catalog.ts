@@ -3,7 +3,10 @@ import { groupCatalog } from './grouper'
 import { ICatalog, ICatalogIndex, IGlobal } from './types'
 import { validateCatalog, ValidationError } from './validate'
 
-export const defaultCatalogIndexURL = new URL('/catalog/index.json', import.meta.url).href
+export const defaultCatalogIndexURL = new URL(
+  '/catalog/index.json',
+  import.meta.url
+).href
 
 export async function fetchCatalog (catalogUrl: string): Promise<ICatalog> {
   const response = await fetch(catalogUrl)
@@ -17,6 +20,11 @@ export async function fetchCatalog (catalogUrl: string): Promise<ICatalog> {
   return prepareCatalog(body)
 }
 
+/**
+ *
+ * @param unGroupedCatalog
+ * @returns
+ */
 export function prepareCatalog (unGroupedCatalog: unknown): ICatalog {
   if (!isCatalog(unGroupedCatalog)) {
     throw new Error('Retrieved catalog is malformed')
@@ -50,10 +58,12 @@ export function globalParameterKeys (global: IGlobal): Set<string> {
 function isCatalogIndex (thing: unknown): thing is ICatalogIndex {
   return (
     Array.isArray(thing) &&
-    thing.every((t) =>
-      Array.isArray(t) &&
-      t.length === 2 &&
-      t.every(s => typeof s === 'string'))
+    thing.every(
+      (t) =>
+        Array.isArray(t) &&
+        t.length === 2 &&
+        t.every((s) => typeof s === 'string')
+    )
   )
 }
 
