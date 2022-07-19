@@ -20,10 +20,12 @@ jobs:
         node-version: 16.x
         cache: 'yarn'
     - run: yarn
-    - run: yarn test
-    - run: yarn lint
     - run: yarn build
+    - run: yarn lint
+    - run: yarn test -- run
     - name: Install Playwright
       run: npx playwright install --with-deps chromium
+      working-directory: apps/haddock3-download
     - name: Run integration tests
       run: yarn test:integration
+      working-directory: apps/haddock3-download

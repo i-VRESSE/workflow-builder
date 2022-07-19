@@ -1,85 +1,28 @@
 {
-  "name": "ivresse-workflow-builder",
-  "version": "0.0.0",
-  "private": true,
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "serve": "vite preview",
-    "test": "vitest",
-    "lint": "ts-standard",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook",
-    "test:integration": "playwright test"
-  },
-  "dependencies": {
-    "@dnd-kit/core": "^6.0.5",
-    "@dnd-kit/modifiers": "^6.0.0",
-    "@dnd-kit/sortable": "^7.0.1",
-    "@i-vresse/pdbtbx-ts": "0.1.7",
-    "@ltd/j-toml": "^1.24.0",
-    "@rjsf/bootstrap-4": "^4.2.0",
-    "@rjsf/core": "^4.2.0",
-    "@zip.js/zip.js": "^2.3.23",
-    "ajv": "^8.9.0",
-    "ajv-formats": "^2.1.1",
-    "bootstrap": "^4",
-    "file-saver": "^2.0.5",
-    "js-yaml": "^4.1.0",
-    "nanoid": "^4.0.0",
-    "papaparse": "^5.3.2",
-    "react": "^17.0.0",
-    "react-bootstrap": "^1",
-    "react-bootstrap-icons": "^1.7.2",
-    "react-dnd-html5-backend": "^14.1.0",
-    "react-dom": "^17.0.0",
-    "react-syntax-highlighter": "^15.4.5",
-    "react-toastify": "^8.1.0",
-    "recoil": "^0.5.2",
-    "web-encoding": "^1.1.5"
-  },
-  "devDependencies": {
-    "@playwright/test": "^1.22.1",
-    "@storybook/addon-a11y": "^6.4.0",
-    "@storybook/addon-docs": "^6.4.0",
-    "@storybook/addon-essentials": "^6.4.19",
-    "@storybook/addon-links": "^6.4.19",
-    "@storybook/builder-vite": "^0.1.35",
-    "@storybook/core-common": "^6.5.6",
-    "@storybook/node-logger": "^6.5.6",
-    "@storybook/react": "^6.5.6",
-    "@storybook/testing-library": "^0.0.9",
-    "@types/adm-zip": "^0.5.0",
-    "@types/file-saver": "^2.0.4",
-    "@types/hoist-non-react-statics": "^3.3.1",
-    "@types/js-yaml": "^4.0.5",
-    "@types/node": "16",
-    "@types/papaparse": "^5.3.2",
-    "@types/react": "^17.0.0",
-    "@types/react-dom": "^17.0.0",
-    "@types/react-syntax-highlighter": "^13.5.2",
-    "@types/ws": "^8.5.3",
-    "@vitejs/plugin-react": "^1.0.0",
-    "adm-zip": "^0.5.9",
-    "c8": "^7.11.0",
-    "ts-dedent": "^2.2.0",
-    "ts-standard": "^11.0.0",
-    "typescript": "^4.3.2",
-    "vite": "^2.6.4",
-    "vite-node": "^0.7.8",
-    "vitest": "^0.12.1"
-  },
-  "engines": {
-    "node": ">=16"
-  },
-  "ts-standard": {
-    "ignore": [
-      "vite.config.ts",
-      "playwright.config.ts"
-    ]
-  },
-  "packageManager": "yarn@3.2.1",
-  "resolutions": {
-    "@types/react": "17.0.47"
-  }
+    "name": "workflow-builder-monorepo",
+    "version": "0.0.0",
+    "private": true,
+    "workspaces": [
+        "apps/*",
+        "packages/*"
+    ],
+    "scripts": {
+        "build": "turbo run build",
+        "dev": "turbo run dev --no-cache --parallel --continue",
+        "test": "turbo run test --parallel",
+        "lint": "turbo run lint",
+        "clean": "turbo run clean && rm -rf node_modules",
+        "storybook": "turbo run storybook --parallel --no-cache"
+    },
+    "devDependencies": {
+        "turbo": "1.2.16"
+    },
+    "engines": {
+        "npm": ">=8.0.0",
+        "node": ">=16.0.0"
+    },
+    "packageManager": "yarn@3.2.1",
+    "resolutions": {
+        "@types/react": "17.0.47"
+    }
 }
