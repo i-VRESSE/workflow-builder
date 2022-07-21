@@ -25,13 +25,7 @@ test.describe('given 1 molecule and a topoaa node with segment id defined', () =
     await page.locator('#expander4molecule svg').click()
     // Click #expander4input_molecules svg
     await page.locator('#expander4input_molecules svg').click()
-    // Click div:nth-child(3) > div > div > .card > .card-body
-    await page.locator('div:nth-child(3) > div > div > .card > .card-body').click()
-    // Click label:has-text("Number of HISD residue")
-    await page.locator('label:has-text("Number of HISD residue")').click()
-    // Click input[type="text"]
-    await page.locator('input[type="text"]').click()
-    // Fill input[type="text"]
+    // Fill input with label Segment ID
     await page.locator('input[type="text"]').fill('B')
     // Click text=Submit
     await page.locator('text=Submit').click()
