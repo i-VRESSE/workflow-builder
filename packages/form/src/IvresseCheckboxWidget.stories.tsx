@@ -1,6 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
-import { screen, userEvent } from '@storybook/testing-library';
+import { screen, userEvent } from '@storybook/testing-library'
 import { Form } from './Form'
 import { JSONSchema7 } from 'json-schema'
 import { IvresseCheckboxWidget } from './IvresseCheckboxWidget'
@@ -61,7 +61,7 @@ const CheckboxArray: ComponentStory<typeof Form> = () => {
     additionalProperties: false
   }
 
-  return render(schema, {array: [false, true]})
+  return render(schema, { array: [false, true] })
 }
 
 export const UncheckedCheckboxInArrayIsSubmiteable = CheckboxArray.bind({})
