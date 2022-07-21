@@ -2039,8 +2039,8 @@ __metadata:
   dependencies:
     "@babel/core": ^7.18.6
     "@mdx-js/react": ^1.6.22
-    "@rjsf/bootstrap-4": ^4.2.0
-    "@rjsf/core": ^4.2.0
+    "@rjsf/bootstrap-4": ^4.2.2
+    "@rjsf/core": ^4.2.2
     "@storybook/addon-actions": ^6.5.9
     "@storybook/addon-docs": ^6.5.9
     "@storybook/addon-essentials": ^6.5.9
@@ -2050,6 +2050,7 @@ __metadata:
     "@storybook/manager-webpack4": ^6.5.9
     "@storybook/react": ^6.5.9
     "@storybook/testing-library": ^0.0.13
+    "@testing-library/react": ^13.3.0
     ajv: ^8.9.0
     babel-loader: ^8.2.5
     json-schema: ^0.4.0
@@ -2058,6 +2059,7 @@ __metadata:
     react-bootstrap-icons: ^1.7.2
     ts-standard: ^11.0.0
     tsup: ^6.1.3
+    vitest: ^0.17.1
   peerDependencies:
     react: ^17.0.0 || ^18.0.0
     react-dom: ^17.0.0 || ^18.0.0
@@ -2453,22 +2455,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rjsf/bootstrap-4@npm:^4.2.0":
-  version: 4.2.0
-  resolution: "@rjsf/bootstrap-4@npm:4.2.0"
+"@rjsf/bootstrap-4@npm:^4.2.2":
+  version: 4.2.2
+  resolution: "@rjsf/bootstrap-4@npm:4.2.2"
   dependencies:
     react-icons: ^3.10.0
   peerDependencies:
     "@rjsf/core": ^4.0.0
     react: ">=16"
     react-bootstrap: ^1.0.1
-  checksum: 2d501fef3c4f5708f23d10d0660d9bbc9b9971f9aaf587b8f5b0413aa7e9bef027b91a97ff1554db1b2857192e800fdc5fedb9cc6d2eeba0e705f40cddee3c13
+  checksum: 76217bfa749dfc5e0c21941f9a6969ed9a47d2aa4e9eb6f52d7ec51fdea43a398af7801efc7f759b8b9c4a862f45c7dd5888599ac0fc01d319048b9379a5de36
   languageName: node
   linkType: hard
 
-"@rjsf/core@npm:^4.2.0":
-  version: 4.2.0
-  resolution: "@rjsf/core@npm:4.2.0"
+"@rjsf/core@npm:^4.2.2":
+  version: 4.2.2
+  resolution: "@rjsf/core@npm:4.2.2"
   dependencies:
     "@types/json-schema": ^7.0.7
     ajv: ^6.7.0
@@ -2476,12 +2478,13 @@ __metadata:
     json-schema-merge-allof: ^0.6.0
     jsonpointer: ^5.0.0
     lodash: ^4.17.15
+    lodash-es: ^4.17.15
     nanoid: ^3.1.23
     prop-types: ^15.7.2
-    react-is: ^16.9.0
+    react-is: 16.9.0
   peerDependencies:
     react: ">=16 || >=17"
-  checksum: b1b602a2460a0069579fd56113a2c67b007f099d4b5dc4033dff5e6277d9621c7111edb97a33d89705f2c69cfc6c1ea697f2b9c3adeb868535ac4e5d44dd269c
+  checksum: ea5f1fef873c78631c915480061048519baca4a0b4794ed6e7b9203928652034493fdcc4587936767d3cfccfcadedd1099f93605905535389921d3221c6720e2
   languageName: node
   linkType: hard
 
@@ -3734,6 +3737,36 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@testing-library/dom@npm:^8.5.0":
+  version: 8.16.0
+  resolution: "@testing-library/dom@npm:8.16.0"
+  dependencies:
+    "@babel/code-frame": ^7.10.4
+    "@babel/runtime": ^7.12.5
+    "@types/aria-query": ^4.2.0
+    aria-query: ^5.0.0
+    chalk: ^4.1.0
+    dom-accessibility-api: ^0.5.9
+    lz-string: ^1.4.4
+    pretty-format: ^27.0.2
+  checksum: 37aabbec872522bcb51106ecb700d9be601293e75445084b6cc195921db4b2d06d6bd4c67ad834174c129f2199c39aa540b6d17c296fcbd701dc99fd800afe36
+  languageName: node
+  linkType: hard
+
+"@testing-library/react@npm:^13.3.0":
+  version: 13.3.0
+  resolution: "@testing-library/react@npm:13.3.0"
+  dependencies:
+    "@babel/runtime": ^7.12.5
+    "@testing-library/dom": ^8.5.0
+    "@types/react-dom": ^18.0.0
+  peerDependencies:
+    react: ^18.0.0
+    react-dom: ^18.0.0
+  checksum: 98fd8616a7cae0ecfcbe97b5b3c5b91fbafccf449c04875395ccc0e3f0b139e53b3261b9536ec2169a5e2883a1be2098907209064061fe0c2ff21dfbc785dd40
+  languageName: node
+  linkType: hard
+
 "@testing-library/user-event@npm:^13.2.1":
   version: 13.5.0
   resolution: "@testing-library/user-event@npm:13.5.0"
@@ -4041,6 +4074,15 @@ __metadata:
   dependencies:
     "@types/react": ^17
   checksum: 23caf98aa03e968811560f92a2c8f451694253ebe16b670929b24eaf0e7fa62ba549abe9db0ac028a9d8a9086acd6ab9c6c773f163fa21224845edbc00ba6232
+  languageName: node
+  linkType: hard
+
+"@types/react-dom@npm:^18.0.0":
+  version: 18.0.6
+  resolution: "@types/react-dom@npm:18.0.6"
+  dependencies:
+    "@types/react": "*"
+  checksum: db571047af1a567631758700b9f7d143e566df939cfe5fbf7535347cc0c726a1cdbb5e3f8566d076e54cf708b6c1166689de194a9ba09ee35efc9e1d45911685
   languageName: node
   linkType: hard
 
@@ -10793,6 +10835,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lodash-es@npm:^4.17.15":
+  version: 4.17.21
+  resolution: "lodash-es@npm:4.17.21"
+  checksum: 05cbffad6e2adbb331a4e16fbd826e7faee403a1a04873b82b42c0f22090f280839f85b95393f487c1303c8a3d2a010048bf06151a6cbe03eee4d388fb0a12d2
+  languageName: node
+  linkType: hard
+
 "lodash.debounce@npm:^4.0.8":
   version: 4.0.8
   resolution: "lodash.debounce@npm:4.0.8"
@@ -13162,6 +13211,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-is@npm:16.9.0":
+  version: 16.9.0
+  resolution: "react-is@npm:16.9.0"
+  checksum: 7a137450539af42d342082b985c518c92af1664f3f8b06835398d902e33a6c4e9ab8d7897db3941fd692ef3af1ac81cfc3861b8a4f830ecbfd210a23e1e80914
+  languageName: node
+  linkType: hard
+
 "react-is@npm:17.0.2, react-is@npm:^17.0.1":
   version: 17.0.2
   resolution: "react-is@npm:17.0.2"
@@ -13169,7 +13225,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-is@npm:^16.13.1, react-is@npm:^16.3.2, react-is@npm:^16.7.0, react-is@npm:^16.9.0":
+"react-is@npm:^16.13.1, react-is@npm:^16.3.2, react-is@npm:^16.7.0":
   version: 16.13.1
   resolution: "react-is@npm:16.13.1"
   checksum: f7a19ac3496de32ca9ae12aa030f00f14a3d45374f1ceca0af707c831b2a6098ef0d6bdae51bd437b0a306d7f01d4677fcc8de7c0d331eb47ad0f46130e53c5f

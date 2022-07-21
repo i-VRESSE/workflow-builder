@@ -10,7 +10,6 @@ export const IvresseCheckboxWidget = (props: WidgetProps): JSX.Element => {
   const {
     id,
     value,
-    required,
     disabled,
     readonly,
     label,
@@ -37,14 +36,14 @@ export const IvresseCheckboxWidget = (props: WidgetProps): JSX.Element => {
   if (schema.description !== undefined || schema.description !== '') {
     descfield = <DescriptionField description={schema.description} />
   }
-
+  // Do not forward props.required to Form.Check as it can not be unchecked
+  // See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/Input/checkbox#validation
   return (
     <Form.Group className={`checkbox ${disabled || readonly ? 'disabled' : ''}`}>
       <Form.Check
         id={id}
         label={desc}
         checked={typeof value === 'undefined' ? false : value}
-        required={required}
         disabled={disabled || readonly}
         autoFocus={autofocus}
         onChange={_onChange}

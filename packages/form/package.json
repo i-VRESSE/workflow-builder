@@ -11,17 +11,19 @@
     "dev": "tsup --watch",
     "build": "tsup",
     "lint": "ts-standard",
+    "test": "vitest",
     "storybook": "start-storybook -p 6007",
     "build-storybook": "build-storybook",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "dependencies": {
-    "@rjsf/bootstrap-4": "^4.2.0",
-    "@rjsf/core": "^4.2.0",
+    "@rjsf/bootstrap-4": "^4.2.2",
+    "@rjsf/core": "^4.2.2",
     "ajv": "^8.9.0",
     "json-schema": "^0.4.0",
     "react-bootstrap": "^1",
-    "react-bootstrap-icons": "^1.7.2"
+    "react-bootstrap-icons": "^1.7.2",
+    "vitest": "^0.17.1"
   },
   "devDependencies": {
     "@babel/core": "^7.18.6",
@@ -35,6 +37,7 @@
     "@storybook/manager-webpack4": "^6.5.9",
     "@storybook/react": "^6.5.9",
     "@storybook/testing-library": "^0.0.13",
+    "@testing-library/react": "^13.3.0",
     "babel-loader": "^8.2.5",
     "postcss": "^8.4.14",
     "ts-standard": "^11.0.0",
