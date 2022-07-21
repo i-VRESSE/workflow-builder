@@ -3,8 +3,7 @@
 import React from 'react'
 
 import { WidgetProps } from '@rjsf/core'
-// was import Form from 'react-bootstrap/Form', but vitest in app complained about `... not supported resolving ES modules imported ...`
-import Form from 'react-bootstrap/cjs/Form.js'
+import Form from 'react-bootstrap/Form'
 
 export const IvresseCheckboxWidget = (props: WidgetProps): JSX.Element => {
   const {
@@ -36,7 +35,7 @@ export const IvresseCheckboxWidget = (props: WidgetProps): JSX.Element => {
   if (schema.description !== undefined || schema.description !== '') {
     descfield = <DescriptionField description={schema.description} />
   }
-  // Do not forward props.required to Form.Check as it can not be unchecked
+  // Do not forward props.required to Form.Check as it can not be unchecked and valid
   // See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/Input/checkbox#validation
   return (
     <Form.Group className={`checkbox ${disabled || readonly ? 'disabled' : ''}`}>

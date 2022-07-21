@@ -1,5 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
+import { screen, userEvent } from '@storybook/testing-library';
 import { Form } from './Form'
 import { JSONSchema7 } from 'json-schema'
 import { IvresseCheckboxWidget } from './IvresseCheckboxWidget'
@@ -12,7 +13,7 @@ const meta: ComponentMeta<typeof IvresseCheckboxWidget> = {
 
 export default meta
 
-function render (schema: JSONSchema7): JSX.Element {
+function render (schema: JSONSchema7, formData = {}): JSX.Element {
   const customWidgets = { CheckboxWidget: IvresseCheckboxWidget }
   const customFields = { DescriptionField: IvresseDescriptionField }
   return (
@@ -21,6 +22,7 @@ function render (schema: JSONSchema7): JSX.Element {
       onSubmit={action('onSubmit')}
       widgets={customWidgets}
       fields={customFields}
+      formData={formData}
     />
   )
 }
@@ -40,4 +42,29 @@ export const CheckboxWidgetDescription: ComponentStory<typeof Form> = () => {
   }
 
   return render(schema)
+}
+
+const CheckboxArray: ComponentStory<typeof Form> = () => {
+  const schema: JSONSchema7 = {
+    type: 'object',
+    title: 'Array of boolean field',
+    properties: {
+      array: {
+        type: 'array',
+        items: {
+          type: 'boolean',
+          title: 'a checkbox',
+          description: 'This is the checkbox-description'
+        }
+      }
+    },
+    additionalProperties: false
+  }
+
+  return render(schema, {array: [false, true]})
+}
+
+export const UncheckedCheckboxInArrayIsSubmiteable = CheckboxArray.bind({})
+UncheckedCheckboxInArrayIsSubmiteable.play = async () => {
+  await userEvent.click(screen.getByText('Submit'))
 }
