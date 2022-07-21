@@ -328,7 +328,7 @@ def config2schema(config):
         else:
             raise ValueError(f"Don't know what to do with {k}:{v}")
         properties[k] = prop
-        if 'group' in v and v['group'] != '':
+        if 'group' in v and v['group'] != '' and v['group'] is not None:
             prop_ui['ui:group'] = v['group']
         if prop_ui:
             uiSchema[k] = prop_ui

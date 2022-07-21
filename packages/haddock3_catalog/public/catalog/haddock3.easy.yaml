@@ -10,6 +10,8 @@ categories:
   description: HADDOCK3 modules to score modules.
 - name: analysis
   description: HADDOCK3 modules related to model analysis.
+- name: extras
+  description: null
 global:
   schema:
     type: object
@@ -155,176 +157,116 @@ global:
       ui:group: clean
   tomlSchema: {}
 nodes:
-- id: gdock
-  category: sampling
-  label: gdock integration sampling module.
-  description: HADDOCK3 gdock module.
+- id: topoaa
+  category: topology
+  label: Create and manage CNS all-atom topology.
+  description: HADDOCK3 module to create CNS all-atom topologies.
   schema:
     type: object
     properties:
-      ambig_fname:
-        type: string
-        format: uri-reference
-    required: []
-    additionalProperties: false
-  uiSchema:
-    ambig_fname:
-      ui:widget: file
-  tomlSchema: {}
-- id: rigidbody
-  category: sampling
-  label: Rigid-body docking module.
-  description: HADDOCK3 module for rigid body sampling.
-  schema:
-    type: object
-    properties:
-      mol_shape:
+      delenph:
+        default: true
+        title: Keep or remove non-polar hydrogen atoms
+        description: If set to true, non-polar hydrogen atoms will be discarded to
+          save computing time
+        $comment: Since HADDOCK uses a united atom force field, the non-polar hydrogen
+          atoms can be in principle discarded. This saves computing time. However
+          this should not be done if you are defining distance restraints to specific
+          hydrogen atoms (e.g. when using NMR distance restraints).
+        type: boolean
+      mol:
+        title: Input molecule configuration
+        $comment: You can expand this parameter and associated sub-parameters to the
+          other input molecules. For example, if you input three molecules, you can
+          define mol1, mol2, and mol3 subparameters. Those not defined will be populated
+          with the defaults.
         type: array
-        maxItemsFrom: molecules
         items:
-          default: false
-          title: Is the molecule a shape?
-          description: Defines a molecule as a shape.
-          $comment: Defines a molecule as a shape, which is a collection of beads.
-          type: boolean
-      ambig_fname:
-        title: Ambiguous distance restraints filename
-        description: Filename of the ambiguous distance restraints file
-        $comment: Filename of the ambiguous distance restraints file. By default 50%
-          of those restraints will be randomly discared. This can be changed/turned
-          off and is controlled by the randremoval and npart parameters. Note that
-          this file can contain both ambiguous and unambiguous restraints.
-        type: string
-        format: uri-reference
-      unambig_fname:
-        title: Unambiguous restraints filename
-        description: Filename of the unambiguous distance restraints file
-        $comment: Filename of the unambiguous distance restraints file. All restraints
-          in that file will be used. Note that this file can contain both ambiguous
-          and unambiguous restraints.
-        type: string
-        format: uri-reference
-      hbond_fname:
-        title: H-bond restraints filename
-        description: Filename of the hydrogen bond distance restraints file
-        $comment: Filename of the hydrogen bond distance restraints file. Note that
-          this file can contain any type of distance restraints.
-        type: string
-        format: uri-reference
-      sampling:
-        default: 1000
-        title: Number of models to generate
-        description: Number of rigidbody docking models to generate
-        $comment: Number of rigidbody docking models to generate
-        type: number
-        maximum: 50000
-        minimum: 1
-      randorien:
-        default: true
-        type: boolean
-      elecflag:
-        default: true
-        title: Include electrostatics energy
-        description: Include electrostatics energy during the calculations.
-        $comment: Include electrostatics energy during the calculations. If set to
-          false electrostatics will not be considered.
-        type: boolean
+          type: object
+          properties:
+            prot_segid:
+              default: A
+              title: Segment ID
+              description: Segment ID assigned to this molecule
+              $comment: Segment ID assigned to this molecule in CNS. Used to distinguish
+                different molecules
+              type: string
+              minLength: 0
+              maxLength: 4
+              format: chain
+            cyclicpept:
+              default: false
+              title: Cyclic peptide
+              description: Defines the molecule as a cyclic peptide
+              $comment: This option defines the molecule as a cyclic peptide and HADDOCK
+                will generate a peptide bond between the N- and C-ter provided those
+                are within 2A. This cutoff can be changed in the generate-topology.cns
+                script.
+              type: boolean
+            nhisd:
+              default: 0
+              title: Number of HISD residue
+              description: Defines the number of HISD residues (neutral HIS with the
+                proton on the ND atom) residues when autohis=false
+              $comment: Defines the number of HISD residues (neutral HIS with the
+                proton on the ND atom) residues. The corresponding residue numbers
+                must be defined in the following parameter (hisd_1, hisd_2, ...).
+                Add as many as needed. Note that HIS is interpreted as a charged Histidine)
+              type: number
+              maximum: 9999
+              minimum: 0
+            hisd:
+              type: array
+              items:
+                title: HISD residue number
+                description: Residue number of the Histidine to be defined as HISD
+                $comment: Residue number of the Histidine to be defined as HISD
+                type: number
+                maximum: 9999
+                minimum: -9999
+                format: residue
+            nhise:
+              default: 0
+              title: Number of HISE residue
+              description: Defines the number of HISE residues (neutral HIS with the
+                proton on the NE atom) residues when autohis=false
+              $comment: Defines the number of HISE residues (neutral HIS with the
+                proton on the NE atom) residues. The corresponding residue numbers
+                must be defined in the following parameter (hise_1, hise_2, ...).
+                Add as many as needed. Note that HIS is interpreted as a charged Histidine)
+              type: number
+              maximum: 9999
+              minimum: 0
+            hise:
+              type: array
+              items:
+                title: HISE residue number
+                description: Residue number of the Histidine to be defined as HISE
+                $comment: Residue number of the Histidine to be defined as HISE
+                type: number
+                maximum: 9999
+                minimum: -9999
+                format: residue
+          required: []
+          additionalProperties: false
+        maxItemsFrom: molecules
     required: []
     additionalProperties: false
   uiSchema:
-    mol_shape:
+    delenph:
       ui:group: molecule
-    ambig_fname:
-      ui:widget: file
-      ui:group: distance restraints
-    unambig_fname:
-      ui:widget: file
-      ui:group: distance restraints
-    hbond_fname:
-      ui:widget: file
-      ui:group: distance restraints
-    sampling:
-      ui:group: sampling
-    randorien:
-      ui:group: sampling
-    elecflag:
-      ui:group: force field
+    mol:
+      ui:group: input molecules
   tomlSchema:
-    mol_shape:
+    mol:
       indexed: true
-- id: lightdock
-  category: sampling
-  label: LightDock integration sampling module.
-  description: HADDOCK3 Lightdock module.
-  schema:
-    type: object
-    properties:
-      glowworms:
-        default: 200
-        type: number
-        maximum: 9999
-        minimum: -9999
-      steps:
-        default: 100
-        type: number
-        maximum: 9999
-        minimum: -9999
-      swarms:
-        default: 400
-        type: number
-        maximum: 9999
-        minimum: -9999
-      scoring:
-        default: fastdfire
-        type: string
-        minLength: 0
-        maxLength: 100
-      top:
-        default: 10
-        type: number
-        maximum: 9999
-        minimum: -9999
-      receptor_chains:
-        default: A
-        type: string
-        minLength: 0
-        maxLength: 100
-        format: chain
-      receptor_active:
-        type: string
-        minLength: 0
-        maxLength: 100
-      receptor_passive:
-        type: string
-        minLength: 0
-        maxLength: 100
-      ligand_chains:
-        default: B
-        type: string
-        minLength: 0
-        maxLength: 100
-        format: chain
-      ligand_active:
-        type: string
-        minLength: 0
-        maxLength: 100
-      ligand_passive:
-        type: string
-        minLength: 0
-        maxLength: 100
-      noxt:
-        default: true
-        type: boolean
-      noh:
-        default: true
-        type: boolean
-      restraints:
-        default: false
-        type: boolean
-    required: []
-    additionalProperties: false
-  uiSchema: {}
-  tomlSchema: {}
+      items:
+        sectioned: true
+        properties:
+          hisd:
+            indexed: true
+          hise:
+            indexed: true
 - id: mdscoring
   category: scoring
   label: MD scoring module.
@@ -425,155 +367,442 @@ nodes:
     elecflag:
       ui:group: force field
   tomlSchema: {}
-- id: topoaa
-  category: topology
-  label: Create and manage CNS all-atom topology.
-  description: HADDOCK3 module to create CNS all-atom topologies.
+- id: mdref
+  category: refinement
+  label: Water refinement with CNS.
+  description: HADDOCK3 module for water refinement.
   schema:
     type: object
     properties:
-      delenph:
-        default: true
-        title: Keep or remove non-polar hydrogen atoms
-        description: If set to true, non-polar hydrogen atoms will be discarded to
-          save computing time
-        $comment: Since HADDOCK uses a united atom force field, the non-polar hydrogen
-          atoms can be in principle discarded. This saves computing time. However
-          this should not be done if you are defining distance restraints to specific
-          hydrogen atoms (e.g. when using NMR distance restraints).
-        type: boolean
-      limit:
-        default: true
-        type: boolean
-      mol:
-        title: Input molecule configuration
-        $comment: You can expand this parameter and associated sub-parameters to the
-          other input molecules. For example, if you input three molecules, you can
-          define mol1, mol2, and mol3 subparameters. Those not defined will be populated
-          with the defaults.
+      mol_shape:
         type: array
-        items:
-          type: object
-          properties:
-            prot_segid:
-              default: A
-              title: Segment ID
-              description: Segment ID assigned to this molecule
-              $comment: Segment ID assigned to this molecule in CNS. Used to distinguish
-                different molecules
-              type: string
-              minLength: 0
-              maxLength: 4
-              format: chain
-            cyclicpept:
-              default: false
-              title: Cyclic peptide
-              description: Defines the molecule as a cyclic peptide
-              $comment: This option defines the molecule as a cyclic peptide and HADDOCK
-                will generate a peptide bond between the N- and C-ter provided those
-                are within 2A. This cutoff can be changed in the generate-topology.cns
-                script.
-              type: boolean
-            nhisd:
-              default: 0
-              title: Number of HISD residue
-              description: Defines the number of HISD residues (neutral HIS with the
-                proton on the ND atom) residues when autohis=false
-              $comment: Defines the number of HISD residues (neutral HIS with the
-                proton on the ND atom) residues. The corresponding residue numbers
-                must be defined in the following parameter (hisd_1, hisd_2, ...).
-                Add as many as needed. Note that HIS is interpreted as a charged Histidine)
-              type: number
-              maximum: 9999
-              minimum: 0
-            hisd:
-              type: array
-              items:
-                title: HISD residue number
-                description: Residue number of the Histidine to be defined as HISD
-                $comment: Residue number of the Histidine to be defined as HISD
-                type: number
-                maximum: 9999
-                minimum: -9999
-                format: residue
-            nhise:
-              default: 0
-              title: Number of HISE residue
-              description: Defines the number of HISE residues (neutral HIS with the
-                proton on the NE atom) residues when autohis=false
-              $comment: Defines the number of HISE residues (neutral HIS with the
-                proton on the NE atom) residues. The corresponding residue numbers
-                must be defined in the following parameter (hise_1, hise_2, ...).
-                Add as many as needed. Note that HIS is interpreted as a charged Histidine)
-              type: number
-              maximum: 9999
-              minimum: 0
-            hise:
-              type: array
-              items:
-                title: HISE residue number
-                description: Residue number of the Histidine to be defined as HISE
-                $comment: Residue number of the Histidine to be defined as HISE
-                type: number
-                maximum: 9999
-                minimum: -9999
-                format: residue
-          required: []
-          additionalProperties: false
         maxItemsFrom: molecules
-    required: []
-    additionalProperties: false
-  uiSchema:
-    delenph:
-      ui:group: molecule
-    mol:
-      ui:group: input molecules
-  tomlSchema:
-    mol:
-      indexed: true
-      items:
-        sectioned: true
-        properties:
-          hisd:
-            indexed: true
-          hise:
-            indexed: true
-- id: clustfcc
-  category: analysis
-  label: Cluster modules with FCC.
-  description: HADDOCK3 module for clustering with FCC.
-  schema:
-    type: object
-    properties:
-      executable:
+        items:
+          default: false
+          title: Is the molecule a shape?
+          description: Defines a molecule as a shape.
+          $comment: Defines a molecule as a shape, which is a collection of beads.
+          type: boolean
+      ambig_fname:
+        title: Ambiguous distance restraints filename
+        description: Filename of the ambiguous distance restraints file
+        $comment: Filename of the ambiguous distance restraints file. By default 50%
+          of those restraints will be randomly discared. This can be changed/turned
+          off and is controlled by the randremoval and npart parameters. Note that
+          this file can contain both ambiguous and unambiguous restraints.
         type: string
         format: uri-reference
-      contact_distance_cutoff:
-        default: 5.0
+      unambig_fname:
+        title: Unambiguous restraints filename
+        description: Filename of the unambiguous distance restraints file
+        $comment: Filename of the unambiguous distance restraints file. All restraints
+          in that file will be used. Note that this file can contain both ambiguous
+          and unambiguous restraints.
+        type: string
+        format: uri-reference
+      hbond_fname:
+        title: H-bond restraints filename
+        description: Filename of the hydrogen bond distance restraints file
+        $comment: Filename of the hydrogen bond distance restraints file. Note that
+          this file can contain any type of distance restraints.
+        type: string
+        format: uri-reference
+      dihe_fname:
+        title: Dihedral angle restraints filename
+        description: Filename of the Dihedral angle restraints file
+        $comment: Filename of the Dihedral angle restraints file.
+        type: string
+        format: uri-reference
+      dihedrals_on:
+        default: false
+        title: Use dihedral angle restraints
+        description: Turns on dihedral angle restraints.
+        $comment: Turns on dihedral angle restraints. Those should be defined in the
+          dihe_fname file.
+        type: boolean
+      ssdihed:
+        default: none
+        title: Define automatically backbone dihedral angle restraints
+        description: If turned on, this option will automatically defined backbone
+          dihedral angle restraints for the selected regions.
+        $comment: This option allows to utomatically defined backbone dihedral angle
+          restraints for the selected regions. The restraints will be defined for
+          the phi and psi backbone dihedral angles of amino acids, with the target
+          value taken from the measured angle in the input structure, and the error
+          bound defined by the error_dih parameter. Those restraints can be applied
+          to the entire structure (all), the alpha/beta secondary structure elements
+          (alphabeta) or only to the alpha helical regions (alpha). Those are automatically
+          detected based on the measured dihedral angle combinations.
+        type: string
+        minLength: 0
+        maxLength: 100
+        enum:
+        - none
+        - all
+        - alpha
+        - alphabeta
+      error_dih:
+        default: 10
+        title: Force constant for backbone dihedral angle restraints
+        description: Force constant for backbone dihedral angle restraints (ssdihed
+          option)
+        $comment: Force constant for backbone dihedral angle restraints (ssdihed option)
         type: number
-        maximum: 9999
-        minimum: -9999
-      fraction_cutoff:
-        default: 0.6
-        type: number
-        maximum: 9999
-        minimum: -9999
-      threshold:
-        default: 4
-        type: number
-        maximum: 9999
-        minimum: -9999
-      strictness:
-        default: 0.75
-        type: number
-        maximum: 9999
-        minimum: -9999
+        maximum: 1000
+        minimum: 0
+      dnarest_on:
+        default: false
+        title: Restrain the DNA conformation
+        description: Automatically creates restraints to maintain the conformation
+          of DNA/RNA
+        $comment: 'This option allows to restraint the conformation of nucleic acids
+          based on the values from the input structures. The following restraints
+          will be automatically defined: - single base planarity - sugar pucker -
+          phosphate backbone diherdral angle restraints - Watson-Crick base pairing'
+        type: boolean
+      elecflag:
+        default: true
+        title: Include electrostatics energy
+        description: Include electrostatics energy during the calculations.
+        $comment: Include electrostatics energy during the calculations. If set to
+          false electrostatics will not be considered.
+        type: boolean
+      solvent:
+        default: water
+        title: Solvent
+        description: Solvent to use during the short MD refinement
+        $comment: Solvent to use during the short MD refinement. Water and DMSO are
+          supported. A solvent shelll is generated by shifting pre-equilibrated boxes
+          around the complex. For water an 8A water shell is generated and for DMSO
+          a 12.5A shell. For DMSO,
+        type: string
+        minLength: 0
+        maxLength: 100
+        enum:
+        - water
+        - dmso
     required: []
     additionalProperties: false
   uiSchema:
-    executable:
+    mol_shape:
+      ui:group: molecule
+    ambig_fname:
       ui:widget: file
-  tomlSchema: {}
+      ui:group: distance restraints
+    unambig_fname:
+      ui:widget: file
+      ui:group: distance restraints
+    hbond_fname:
+      ui:widget: file
+      ui:group: distance restraints
+    dihe_fname:
+      ui:widget: file
+      ui:group: dihedral restraints
+    dihedrals_on:
+      ui:group: dihedral restraints
+    ssdihed:
+      ui:group: dihedral restraints
+    error_dih:
+      ui:group: dihedral restraints
+    dnarest_on:
+      ui:group: other restraints
+    elecflag:
+      ui:group: force field
+  tomlSchema:
+    mol_shape:
+      indexed: true
+- id: flexref
+  category: refinement
+  label: Flexible refinement with CNS.
+  description: HADDOCK3 module for flexible refinement.
+  schema:
+    type: object
+    properties:
+      mol_shape:
+        type: array
+        maxItemsFrom: molecules
+        items:
+          default: false
+          title: Is the molecule a shape?
+          description: Defines a molecule as a shape.
+          $comment: Defines a molecule as a shape, which is a collection of beads.
+          type: boolean
+      ambig_fname:
+        title: Ambiguous distance restraints filename
+        description: Filename of the ambiguous distance restraints file
+        $comment: Filename of the ambiguous distance restraints file. By default 50%
+          of those restraints will be randomly discared. This can be changed/turned
+          off and is controlled by the randremoval and npart parameters. Note that
+          this file can contain both ambiguous and unambiguous restraints.
+        type: string
+        format: uri-reference
+      unambig_fname:
+        title: Unambiguous restraints filename
+        description: Filename of the unambiguous distance restraints file
+        $comment: Filename of the unambiguous distance restraints file. All restraints
+          in that file will be used. Note that this file can contain both ambiguous
+          and unambiguous restraints.
+        type: string
+        format: uri-reference
+      hbond_fname:
+        title: H-bond restraints filename
+        description: Filename of the hydrogen bond distance restraints file
+        $comment: Filename of the hydrogen bond distance restraints file. Note that
+          this file can contain any type of distance restraints.
+        type: string
+        format: uri-reference
+      dihe_fname:
+        title: Dihedral angle restraints filename
+        description: Filename of the Dihedral angle restraints file
+        $comment: Filename of the Dihedral angle restraints file.
+        type: string
+        format: uri-reference
+      dihedrals_on:
+        default: false
+        title: Use dihedral angle restraints
+        description: Turns on dihedral angle restraints.
+        $comment: Turns on dihedral angle restraints. Those should be defined in the
+          dihe_fname file.
+        type: boolean
+      ssdihed:
+        default: none
+        title: Define automatically backbone dihedral angle restraints
+        description: If turned on, this option will automatically defined backbone
+          dihedral angle restraints for the selected regions.
+        $comment: This option allows to utomatically defined backbone dihedral angle
+          restraints for the selected regions. The restraints will be defined for
+          the phi and psi backbone dihedral angles of amino acids, with the target
+          value taken from the measured angle in the input structure, and the error
+          bound defined by the error_dih parameter. Those restraints can be applied
+          to the entire structure (all), the alpha/beta secondary structure elements
+          (alphabeta) or only to the alpha helical regions (alpha). Those are automatically
+          detected based on the measured dihedral angle combinations.
+        type: string
+        minLength: 0
+        maxLength: 100
+        enum:
+        - none
+        - all
+        - alpha
+        - alphabeta
+      error_dih:
+        default: 10
+        title: Force constant for backbone dihedral angle restraints
+        description: Force constant for backbone dihedral angle restraints (ssdihed
+          option)
+        $comment: Force constant for backbone dihedral angle restraints (ssdihed option)
+        type: number
+        maximum: 9999
+        minimum: -9999
+      dnarest_on:
+        default: false
+        title: Restrain the DNA conformation
+        description: Automatically creates restraints to maintain the conformation
+          of DNA/RNA
+        $comment: 'This option allows to restraint the conformation of nucleic acids
+          based on the values from the input structures. The following restraints
+          will be automatically defined: - single base planarity - sugar pucker -
+          phosphate backbone diherdral angle restraints - Watson-Crick base pairing'
+        type: boolean
+      elecflag:
+        default: true
+        title: Include electrostatics energy
+        description: Include electrostatics energy during the calculations.
+        $comment: Include electrostatics energy during the calculations. If set to
+          false electrostatics will not be considered.
+        type: boolean
+      sinter_rigid_final:
+        default: 0.001
+        title: End rigid-body MD intermolecular interactions scaling factor.
+        description: End scaling factor for intermolecular interactions in the first
+          cooling stage.
+        $comment: End scaling factor applied to intermolecular interactions during
+          the first cooling stage of the simulated annealing protocol.
+        type: number
+        maximum: 1
+        minimum: 1.0e-05
+    required: []
+    additionalProperties: false
+  uiSchema:
+    mol_shape:
+      ui:group: molecule
+    ambig_fname:
+      ui:widget: file
+      ui:group: distance restraints
+    unambig_fname:
+      ui:widget: file
+      ui:group: distance restraints
+    hbond_fname:
+      ui:widget: file
+      ui:group: distance restraints
+    dihe_fname:
+      ui:widget: file
+      ui:group: dihedral restraints
+    dihedrals_on:
+      ui:group: dihedral restraints
+    ssdihed:
+      ui:group: dihedral restraints
+    error_dih:
+      ui:group: dihedral restraints
+    dnarest_on:
+      ui:group: other restraints
+    elecflag:
+      ui:group: force field
+  tomlSchema:
+    mol_shape:
+      indexed: true
+- id: emref
+  category: refinement
+  label: Energy minimization refinement with CNS.
+  description: HADDOCK3 module energy minimization refinement.
+  schema:
+    type: object
+    properties:
+      mol_shape:
+        type: array
+        maxItemsFrom: molecules
+        items:
+          default: false
+          title: Is the molecule a shape?
+          description: Defines a molecule as a shape.
+          $comment: Defines a molecule as a shape, which is a collection of beads.
+          type: boolean
+      ambig_fname:
+        title: Ambiguous distance restraints filename
+        description: Filename of the ambiguous distance restraints file
+        $comment: Filename of the ambiguous distance restraints file. By default 50%
+          of those restraints will be randomly discared. This can be changed/turned
+          off and is controlled by the randremoval and npart parameters. Note that
+          this file can contain both ambiguous and unambiguous restraints.
+        type: string
+        format: uri-reference
+      unambig_fname:
+        title: Unambiguous restraints filename
+        description: Filename of the unambiguous distance restraints file
+        $comment: Filename of the unambiguous distance restraints file. All restraints
+          in that file will be used. Note that this file can contain both ambiguous
+          and unambiguous restraints.
+        type: string
+        format: uri-reference
+      hbond_fname:
+        title: H-bond restraints filename
+        description: Filename of the hydrogen bond distance restraints file
+        $comment: Filename of the hydrogen bond distance restraints file. Note that
+          this file can contain any type of distance restraints.
+        type: string
+        format: uri-reference
+      dihe_fname:
+        title: Dihedral angle restraints filename
+        description: Filename of the Dihedral angle restraints file
+        $comment: Filename of the Dihedral angle restraints file.
+        type: string
+        format: uri-reference
+      dihedrals_on:
+        default: false
+        title: Use dihedral angle restraints
+        description: Turns on dihedral angle restraints.
+        $comment: Turns on dihedral angle restraints. Those should be defined in the
+          dihe_fname file.
+        type: boolean
+      dihedrals_scale:
+        default: 200
+        title: Force constant for dihedral angle restraints
+        description: Force constant applied to the dihedral angle restraints read
+          from dihe_fname.
+        $comment: Force constant applied to the dihedral angle restraints read from
+          dihe_fname.
+        type: number
+        maximum: 9999
+        minimum: -9999
+      ssdihed:
+        default: none
+        title: Define automatically backbone dihedral angle restraints
+        description: If turned on, this option will automatically defined backbone
+          dihedral angle restraints for the selected regions.
+        $comment: This option allows to utomatically defined backbone dihedral angle
+          restraints for the selected regions. The restraints will be defined for
+          the phi and psi backbone dihedral angles of amino acids, with the target
+          value taken from the measured angle in the input structure, and the error
+          bound defined by the error_dih parameter. Those restraints can be applied
+          to the entire structure (all), the alpha/beta secondary structure elements
+          (alphabeta) or only to the alpha helical regions (alpha). Those are automatically
+          detected based on the measured dihedral angle combinations.
+        type: string
+        minLength: 0
+        maxLength: 100
+        enum:
+        - none
+        - all
+        - alpha
+        - alphabeta
+      error_dih:
+        default: 10
+        title: Force constant for backbone dihedral angle restraints
+        description: Force constant for backbone dihedral angle restraints (ssdihed
+          option)
+        $comment: Force constant for backbone dihedral angle restraints (ssdihed option)
+        type: number
+        maximum: 9999
+        minimum: -9999
+      dnarest_on:
+        default: false
+        title: Restrain the DNA conformation
+        description: Automatically creates restraints to maintain the conformation
+          of DNA/RNA
+        $comment: 'This option allows to restraint the conformation of nucleic acids
+          based on the values from the input structures. The following restraints
+          will be automatically defined: - single base planarity - sugar pucker -
+          phosphate backbone diherdral angle restraints - Watson-Crick base pairing'
+        type: boolean
+      elecflag:
+        default: true
+        title: Include electrostatics energy
+        description: Include electrostatics energy during the calculations.
+        $comment: Include electrostatics energy during the calculations. If set to
+          false electrostatics will not be considered.
+        type: boolean
+      sampling:
+        default: 200
+        title: Number of models to generate
+        description: Number of EM refined models to generate
+        $comment: Number of EM refined models to generate
+        type: number
+        maximum: 50000
+        minimum: 1
+    required: []
+    additionalProperties: false
+  uiSchema:
+    mol_shape:
+      ui:group: molecule
+    ambig_fname:
+      ui:widget: file
+      ui:group: distance restraints
+    unambig_fname:
+      ui:widget: file
+      ui:group: distance restraints
+    hbond_fname:
+      ui:widget: file
+      ui:group: distance restraints
+    dihe_fname:
+      ui:widget: file
+      ui:group: dihedral restraints
+    dihedrals_on:
+      ui:group: dihedral restraints
+    dihedrals_scale:
+      ui:group: dihedral restraints
+    ssdihed:
+      ui:group: dihedral restraints
+    error_dih:
+      ui:group: dihedral restraints
+    dnarest_on:
+      ui:group: other restraints
+    elecflag:
+      ui:group: force field
+    sampling:
+      ui:group: sampling
+  tomlSchema:
+    mol_shape:
+      indexed: true
 - id: seletopclusts
   category: analysis
   label: Select a top cluster module.
@@ -596,65 +825,6 @@ nodes:
     additionalProperties: false
   uiSchema: {}
   tomlSchema: {}
-- id: seletop
-  category: analysis
-  label: Select a top models.
-  description: HADDOCK3 module to select top cluster/model.
-  schema:
-    type: object
-    properties:
-      select:
-        default: 200
-        type: number
-        maximum: 9999
-        minimum: -9999
-    required: []
-    additionalProperties: false
-  uiSchema: {}
-  tomlSchema: {}
-- id: rmsdmatrix
-  category: analysis
-  label: RMSD matrix module.
-  description: HADDOCK3 module for clustering with RMSD.
-  schema:
-    type: object
-    properties:
-      max_models:
-        default: 10000
-        title: Maximum number of models to calculate RMSD matrix
-        description: If the number of models exceeds max_models the execution is blocked
-        $comment: If the number of models exceeds the few thousands, the calculation
-          of the RMSD matrix is computationally demanding, especially in terms of
-          CPU and disk space.
-        type: number
-        maximum: 20000
-        minimum: 1
-      resdic:
-        default: {}
-        title: List of residues
-        description: The residue numbers that should be used in the alignment and
-          in the RMSD calculation.
-        $comment: resdic_* is an expandable parameter. You can provide resdic_A, resdic_B,
-          resdic_C, etc, where the last capital letter is the chain identifier.
-        type: object
-        additionalProperties:
-          type: array
-          items:
-            type: number
-            format: residue
-            minItems: 0
-            maxItems: 100
-          uniqueItems: true
-        propertyNames:
-          pattern: ^[A-Z]$
-          format: chain
-        maxPropertiesFrom: molecules
-    required: []
-    additionalProperties: false
-  uiSchema: {}
-  tomlSchema:
-    resdic:
-      indexed: true
 - id: clustrmsd
   category: analysis
   label: RMSD clustering module.
@@ -869,10 +1039,141 @@ nodes:
     clt_threshold:
       ui:group: analysis
   tomlSchema: {}
-- id: emref
-  category: refinement
-  label: Energy minimization refinement with CNS.
-  description: HADDOCK3 module energy minimization refinement.
+- id: rmsdmatrix
+  category: analysis
+  label: RMSD matrix module.
+  description: HADDOCK3 module for clustering with RMSD.
+  schema:
+    type: object
+    properties:
+      max_models:
+        default: 10000
+        title: Maximum number of models to calculate RMSD matrix
+        description: If the number of models exceeds max_models the execution is blocked
+        $comment: If the number of models exceeds the few thousands, the calculation
+          of the RMSD matrix is computationally demanding, especially in terms of
+          CPU and disk space.
+        type: number
+        maximum: 20000
+        minimum: 1
+      resdic:
+        default: {}
+        title: List of residues
+        description: The residue numbers that should be used in the alignment and
+          in the RMSD calculation.
+        $comment: resdic_* is an expandable parameter. You can provide resdic_A, resdic_B,
+          resdic_C, etc, where the last capital letter is the chain identifier.
+        type: object
+        additionalProperties:
+          type: array
+          items:
+            type: number
+            format: residue
+            minItems: 0
+            maxItems: 100
+          uniqueItems: true
+          default: []
+        propertyNames:
+          pattern: ^[A-Z]$
+          format: chain
+        maxPropertiesFrom: molecules
+    required: []
+    additionalProperties: false
+  uiSchema: {}
+  tomlSchema:
+    resdic:
+      indexed: true
+- id: clustfcc
+  category: analysis
+  label: Cluster modules with FCC.
+  description: HADDOCK3 module for clustering with FCC.
+  schema:
+    type: object
+    properties:
+      executable:
+        type: string
+        format: uri-reference
+      contact_distance_cutoff:
+        default: 5.0
+        type: number
+        maximum: 9999
+        minimum: -9999
+      fraction_cutoff:
+        default: 0.6
+        type: number
+        maximum: 9999
+        minimum: -9999
+      threshold:
+        default: 4
+        type: number
+        maximum: 9999
+        minimum: -9999
+      strictness:
+        default: 0.75
+        type: number
+        maximum: 9999
+        minimum: -9999
+    required: []
+    additionalProperties: false
+  uiSchema:
+    executable:
+      ui:widget: file
+  tomlSchema: {}
+- id: seletop
+  category: analysis
+  label: Select a top models.
+  description: HADDOCK3 module to select top cluster/model.
+  schema:
+    type: object
+    properties:
+      select:
+        default: 200
+        type: number
+        maximum: 9999
+        minimum: -9999
+    required: []
+    additionalProperties: false
+  uiSchema: {}
+  tomlSchema: {}
+- id: exit
+  category: extras
+  label: Exit module.
+  description: Stop the workflow when this module is reached.
+  schema:
+    type: object
+    properties:
+      message:
+        default: Stopping the workflow.
+        title: Exiting message.
+        description: The message to print when exiting.
+        $comment: The message to print when exiting.
+        type: string
+        minLength: 0
+        maxLength: 1000
+    required: []
+    additionalProperties: false
+  uiSchema: {}
+  tomlSchema: {}
+- id: gdock
+  category: sampling
+  label: gdock integration sampling module.
+  description: HADDOCK3 gdock module.
+  schema:
+    type: object
+    properties:
+      ambig_fname:
+        type: string
+        format: uri-reference
+    required: []
+    additionalProperties: false
+  uiSchema:
+    ambig_fname:
+      ui:widget: file
+  tomlSchema: {}
+- id: rigidbody
+  category: sampling
+  label: Rigid-body docking module.
+  description: HADDOCK3 module for rigid body sampling.
   schema:
     type: object
     properties:
@@ -909,84 +1210,24 @@ nodes:
           this file can contain any type of distance restraints.
         type: string
         format: uri-reference
-      dihe_fname:
-        title: Dihedral angle restraints filename
-        description: Filename of the Dihedral angle restraints file
-        $comment: Filename of the Dihedral angle restraints file.
-        type: string
-        format: uri-reference
-      dihedrals_on:
-        default: false
-        title: Use dihedral angle restraints
-        description: Turns on dihedral angle restraints.
-        $comment: Turns on dihedral angle restraints. Those should be defined in the
-          dihe_fname file.
-        type: boolean
-      dihedrals_scale:
-        default: 200
-        title: Force constant for dihedral angle restraints
-        description: Force constant applied to the dihedral angle restraints read
-          from dihe_fname.
-        $comment: Force constant applied to the dihedral angle restraints read from
-          dihe_fname.
-        type: number
-        maximum: 9999
-        minimum: -9999
-      ssdihed:
-        default: none
-        title: Define automatically backbone dihedral angle restraints
-        description: If turned on, this option will automatically defined backbone
-          dihedral angle restraints for the selected regions.
-        $comment: This option allows to utomatically defined backbone dihedral angle
-          restraints for the selected regions. The restraints will be defined for
-          the phi and psi backbone dihedral angles of amino acids, with the target
-          value taken from the measured angle in the input structure, and the error
-          bound defined by the error_dih parameter. Those restraints can be applied
-          to the entire structure (all), the alpha/beta secondary structure elements
-          (alphabeta) or only to the alpha helical regions (alpha). Those are automatically
-          detected based on the measured dihedral angle combinations.
-        type: string
-        minLength: 0
-        maxLength: 100
-        enum:
-        - none
-        - all
-        - alpha
-        - alphabeta
-      error_dih:
-        default: 10
-        title: Force constant for backbone dihedral angle restraints
-        description: Force constant for backbone dihedral angle restraints (ssdihed
-          option)
-        $comment: Force constant for backbone dihedral angle restraints (ssdihed option)
-        type: number
-        maximum: 9999
-        minimum: -9999
-      dnarest_on:
-        default: false
-        title: Restrain the DNA conformation
-        description: Automatically creates restraints to maintain the conformation
-          of DNA/RNA
-        $comment: 'This option allows to restraint the conformation of nucleic acids
-          based on the values from the input structures. The following restraints
-          will be automatically defined: - single base planarity - sugar pucker -
-          phosphate backbone diherdral angle restraints - Watson-Crick base pairing'
-        type: boolean
-      elecflag:
-        default: true
-        title: Include electrostatics energy
-        description: Include electrostatics energy during the calculations.
-        $comment: Include electrostatics energy during the calculations. If set to
-          false electrostatics will not be considered.
-        type: boolean
       sampling:
-        default: 200
+        default: 1000
         title: Number of models to generate
-        description: Number of EM refined models to generate
-        $comment: Number of EM refined models to generate
+        description: Number of rigidbody docking models to generate
+        $comment: Number of rigidbody docking models to generate
         type: number
         maximum: 50000
         minimum: 1
+      randorien:
+        default: true
+        type: boolean
+      elecflag:
+        default: true
+        title: Include electrostatics energy
+        description: Include electrostatics energy during the calculations.
+        $comment: Include electrostatics energy during the calculations. If set to
+          false electrostatics will not be considered.
+        type: boolean
     required: []
     additionalProperties: false
   uiSchema:
@@ -1001,309 +1242,87 @@ nodes:
     hbond_fname:
       ui:widget: file
       ui:group: distance restraints
-    dihe_fname:
-      ui:widget: file
-      ui:group: dihedral restraints
-    dihedrals_on:
-      ui:group: dihedral restraints
-    dihedrals_scale:
-      ui:group: dihedral restraints
-    ssdihed:
-      ui:group: dihedral restraints
-    error_dih:
-      ui:group: dihedral restraints
-    dnarest_on:
-      ui:group: other restraints
-    elecflag:
-      ui:group: force field
     sampling:
       ui:group: sampling
+    randorien:
+      ui:group: sampling
+    elecflag:
+      ui:group: force field
   tomlSchema:
     mol_shape:
       indexed: true
-- id: flexref
-  category: refinement
-  label: Flexible refinement with CNS.
-  description: HADDOCK3 module for flexible refinement.
+- id: lightdock
+  category: sampling
+  label: LightDock integration sampling module.
+  description: HADDOCK3 Lightdock module.
   schema:
     type: object
     properties:
-      mol_shape:
-        type: array
-        maxItemsFrom: molecules
-        items:
-          default: false
-          title: Is the molecule a shape?
-          description: Defines a molecule as a shape.
-          $comment: Defines a molecule as a shape, which is a collection of beads.
-          type: boolean
-      ambig_fname:
-        title: Ambiguous distance restraints filename
-        description: Filename of the ambiguous distance restraints file
-        $comment: Filename of the ambiguous distance restraints file. By default 50%
-          of those restraints will be randomly discared. This can be changed/turned
-          off and is controlled by the randremoval and npart parameters. Note that
-          this file can contain both ambiguous and unambiguous restraints.
-        type: string
-        format: uri-reference
-      unambig_fname:
-        title: Unambiguous restraints filename
-        description: Filename of the unambiguous distance restraints file
-        $comment: Filename of the unambiguous distance restraints file. All restraints
-          in that file will be used. Note that this file can contain both ambiguous
-          and unambiguous restraints.
-        type: string
-        format: uri-reference
-      hbond_fname:
-        title: H-bond restraints filename
-        description: Filename of the hydrogen bond distance restraints file
-        $comment: Filename of the hydrogen bond distance restraints file. Note that
-          this file can contain any type of distance restraints.
-        type: string
-        format: uri-reference
-      dihe_fname:
-        title: Dihedral angle restraints filename
-        description: Filename of the Dihedral angle restraints file
-        $comment: Filename of the Dihedral angle restraints file.
-        type: string
-        format: uri-reference
-      dihedrals_on:
-        default: false
-        title: Use dihedral angle restraints
-        description: Turns on dihedral angle restraints.
-        $comment: Turns on dihedral angle restraints. Those should be defined in the
-          dihe_fname file.
-        type: boolean
-      ssdihed:
-        default: none
-        title: Define automatically backbone dihedral angle restraints
-        description: If turned on, this option will automatically defined backbone
-          dihedral angle restraints for the selected regions.
-        $comment: This option allows to utomatically defined backbone dihedral angle
-          restraints for the selected regions. The restraints will be defined for
-          the phi and psi backbone dihedral angles of amino acids, with the target
-          value taken from the measured angle in the input structure, and the error
-          bound defined by the error_dih parameter. Those restraints can be applied
-          to the entire structure (all), the alpha/beta secondary structure elements
-          (alphabeta) or only to the alpha helical regions (alpha). Those are automatically
-          detected based on the measured dihedral angle combinations.
-        type: string
-        minLength: 0
-        maxLength: 100
-        enum:
-        - none
-        - all
-        - alpha
-        - alphabeta
-      error_dih:
-        default: 10
-        title: Force constant for backbone dihedral angle restraints
-        description: Force constant for backbone dihedral angle restraints (ssdihed
-          option)
-        $comment: Force constant for backbone dihedral angle restraints (ssdihed option)
+      glowworms:
+        default: 200
         type: number
         maximum: 9999
         minimum: -9999
-      dnarest_on:
-        default: false
-        title: Restrain the DNA conformation
-        description: Automatically creates restraints to maintain the conformation
-          of DNA/RNA
-        $comment: 'This option allows to restraint the conformation of nucleic acids
-          based on the values from the input structures. The following restraints
-          will be automatically defined: - single base planarity - sugar pucker -
-          phosphate backbone diherdral angle restraints - Watson-Crick base pairing'
-        type: boolean
-      elecflag:
-        default: true
-        title: Include electrostatics energy
-        description: Include electrostatics energy during the calculations.
-        $comment: Include electrostatics energy during the calculations. If set to
-          false electrostatics will not be considered.
-        type: boolean
-      sinter_rigid_final:
-        default: 0.001
-        title: End rigid-body MD intermolecular interactions scaling factor.
-        description: End scaling factor for intermolecular interactions in the first
-          cooling stage.
-        $comment: End scaling factor applied to intermolecular interactions during
-          the first cooling stage of the simulated annealing protocol.
+      steps:
+        default: 100
         type: number
-        maximum: 1
-        minimum: 1.0e-05
-    required: []
-    additionalProperties: false
-  uiSchema:
-    mol_shape:
-      ui:group: molecule
-    ambig_fname:
-      ui:widget: file
-      ui:group: distance restraints
-    unambig_fname:
-      ui:widget: file
-      ui:group: distance restraints
-    hbond_fname:
-      ui:widget: file
-      ui:group: distance restraints
-    dihe_fname:
-      ui:widget: file
-      ui:group: dihedral restraints
-    dihedrals_on:
-      ui:group: dihedral restraints
-    ssdihed:
-      ui:group: dihedral restraints
-    error_dih:
-      ui:group: dihedral restraints
-    dnarest_on:
-      ui:group: other restraints
-    elecflag:
-      ui:group: force field
-  tomlSchema:
-    mol_shape:
-      indexed: true
-- id: mdref
-  category: refinement
-  label: Water refinement with CNS.
-  description: HADDOCK3 module for water refinement.
-  schema:
-    type: object
-    properties:
-      mol_shape:
-        type: array
-        maxItemsFrom: molecules
-        items:
-          default: false
-          title: Is the molecule a shape?
-          description: Defines a molecule as a shape.
-          $comment: Defines a molecule as a shape, which is a collection of beads.
-          type: boolean
-      ambig_fname:
-        title: Ambiguous distance restraints filename
-        description: Filename of the ambiguous distance restraints file
-        $comment: Filename of the ambiguous distance restraints file. By default 50%
-          of those restraints will be randomly discared. This can be changed/turned
-          off and is controlled by the randremoval and npart parameters. Note that
-          this file can contain both ambiguous and unambiguous restraints.
-        type: string
-        format: uri-reference
-      unambig_fname:
-        title: Unambiguous restraints filename
-        description: Filename of the unambiguous distance restraints file
-        $comment: Filename of the unambiguous distance restraints file. All restraints
-          in that file will be used. Note that this file can contain both ambiguous
-          and unambiguous restraints.
-        type: string
-        format: uri-reference
-      hbond_fname:
-        title: H-bond restraints filename
-        description: Filename of the hydrogen bond distance restraints file
-        $comment: Filename of the hydrogen bond distance restraints file. Note that
-          this file can contain any type of distance restraints.
-        type: string
-        format: uri-reference
-      dihe_fname:
-        title: Dihedral angle restraints filename
-        description: Filename of the Dihedral angle restraints file
-        $comment: Filename of the Dihedral angle restraints file.
-        type: string
-        format: uri-reference
-      dihedrals_on:
-        default: false
-        title: Use dihedral angle restraints
-        description: Turns on dihedral angle restraints.
-        $comment: Turns on dihedral angle restraints. Those should be defined in the
-          dihe_fname file.
-        type: boolean
-      ssdihed:
-        default: none
-        title: Define automatically backbone dihedral angle restraints
-        description: If turned on, this option will automatically defined backbone
-          dihedral angle restraints for the selected regions.
-        $comment: This option allows to utomatically defined backbone dihedral angle
-          restraints for the selected regions. The restraints will be defined for
-          the phi and psi backbone dihedral angles of amino acids, with the target
-          value taken from the measured angle in the input structure, and the error
-          bound defined by the error_dih parameter. Those restraints can be applied
-          to the entire structure (all), the alpha/beta secondary structure elements
-          (alphabeta) or only to the alpha helical regions (alpha). Those are automatically
-          detected based on the measured dihedral angle combinations.
+        maximum: 9999
+        minimum: -9999
+      swarms:
+        default: 400
+        type: number
+        maximum: 9999
+        minimum: -9999
+      scoring:
+        default: fastdfire
         type: string
         minLength: 0
         maxLength: 100
-        enum:
-        - none
-        - all
-        - alpha
-        - alphabeta
-      error_dih:
+      top:
         default: 10
-        title: Force constant for backbone dihedral angle restraints
-        description: Force constant for backbone dihedral angle restraints (ssdihed
-          option)
-        $comment: Force constant for backbone dihedral angle restraints (ssdihed option)
         type: number
-        maximum: 1000
-        minimum: 0
-      dnarest_on:
-        default: false
-        title: Restrain the DNA conformation
-        description: Automatically creates restraints to maintain the conformation
-          of DNA/RNA
-        $comment: 'This option allows to restraint the conformation of nucleic acids
-          based on the values from the input structures. The following restraints
-          will be automatically defined: - single base planarity - sugar pucker -
-          phosphate backbone diherdral angle restraints - Watson-Crick base pairing'
-        type: boolean
-      elecflag:
-        default: true
-        title: Include electrostatics energy
-        description: Include electrostatics energy during the calculations.
-        $comment: Include electrostatics energy during the calculations. If set to
-          false electrostatics will not be considered.
-        type: boolean
-      solvent:
-        default: water
-        title: Solvent
-        description: Solvent to use during the short MD refinement
-        $comment: Solvent to use during the short MD refinement. Water and DMSO are
-          supported. A solvent shelll is generated by shifting pre-equilibrated boxes
-          around the complex. For water an 8A water shell is generated and for DMSO
-          a 12.5A shell. For DMSO,
+        maximum: 9999
+        minimum: -9999
+      receptor_chains:
+        default: A
         type: string
         minLength: 0
         maxLength: 100
-        enum:
-        - water
-        - dmso
+        format: chain
+      receptor_active:
+        type: string
+        minLength: 0
+        maxLength: 100
+      receptor_passive:
+        type: string
+        minLength: 0
+        maxLength: 100
+      ligand_chains:
+        default: B
+        type: string
+        minLength: 0
+        maxLength: 100
+        format: chain
+      ligand_active:
+        type: string
+        minLength: 0
+        maxLength: 100
+      ligand_passive:
+        type: string
+        minLength: 0
+        maxLength: 100
+      noxt:
+        default: true
+        type: boolean
+      noh:
+        default: true
+        type: boolean
+      restraints:
+        default: false
+        type: boolean
     required: []
     additionalProperties: false
-  uiSchema:
-    mol_shape:
-      ui:group: molecule
-    ambig_fname:
-      ui:widget: file
-      ui:group: distance restraints
-    unambig_fname:
-      ui:widget: file
-      ui:group: distance restraints
-    hbond_fname:
-      ui:widget: file
-      ui:group: distance restraints
-    dihe_fname:
-      ui:widget: file
-      ui:group: dihedral restraints
-    dihedrals_on:
-      ui:group: dihedral restraints
-    ssdihed:
-      ui:group: dihedral restraints
-    error_dih:
-      ui:group: dihedral restraints
-    dnarest_on:
-      ui:group: other restraints
-    elecflag:
-      ui:group: force field
-  tomlSchema:
-    mol_shape:
-      indexed: true
+  uiSchema: {}
+  tomlSchema: {}
 examples:
   docking-protein-ligand: /examples/docking-protein-ligand.zip
