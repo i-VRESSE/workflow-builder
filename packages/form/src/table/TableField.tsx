@@ -1,3 +1,4 @@
+import React from 'react'
 import { FieldProps } from '@rjsf/core'
 
 import { TableFieldTemplate } from './TableFieldTemplate'

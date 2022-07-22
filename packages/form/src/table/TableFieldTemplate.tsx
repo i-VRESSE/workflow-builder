@@ -1,3 +1,4 @@
+import React from 'react'
 import { ArrayFieldTemplateProps } from '@rjsf/core'
 import { Button, Table, OverlayTrigger, Popover } from 'react-bootstrap'
 import { Dash, Plus, QuestionCircle } from 'react-bootstrap-icons'
@@ -29,6 +30,16 @@ export const TableFieldTemplate = (props: ArrayFieldTemplateProps): JSX.Element 
     isObject(props.uiSchema['ui:options'].widths)
   ) {
     widths = props.uiSchema['ui:options'].widths as { [name: string]: string }
+  }
+  let indexColumnHeader = <></>
+  let indexColumnCell = (_index: string) => <></>
+  if (props.uiSchema['ui:options'] !== undefined &&
+    'indexColumn' in props.uiSchema['ui:options'] &&
+    typeof props.uiSchema['ui:options'].indexColumn === 'boolean' &&
+    props.uiSchema['ui:options'].indexColumn
+  ) {
+    indexColumnHeader = <th key="index-th" className="index-th"></th>
+    indexColumnCell = (index: string) => <td style={{verticalAlign: 'middle'}}>{index}</td>
   }
   const headers = Object.entries(rowSchema).map(
     ([key, s]: [string, any], i: number) => {
@@ -97,8 +108,9 @@ export const TableFieldTemplate = (props: ArrayFieldTemplateProps): JSX.Element 
       )
     }
   )
+  headers.unshift(indexColumnHeader)
   headers.push(
-    <th key='actions-th'>
+    <th key='actions-th' className='actions-th'>
       <Button
         className='array-item-add'
         title='Add'
@@ -112,11 +124,12 @@ export const TableFieldTemplate = (props: ArrayFieldTemplateProps): JSX.Element 
   )
   let rows: JSX.Element[] = []
   if ('items' in props) {
-    rows = props.items.map((element: any) => {
+    rows = props.items.map((element: any, index) => {
       return (
         <tr key={element.key} className={element.className}>
+          {indexColumnCell(`${index}`)}
           {element.children}
-          <td>
+          <td className='table-actions'>
             <Button
               type='danger'
               className='array-item-remove btn-light'

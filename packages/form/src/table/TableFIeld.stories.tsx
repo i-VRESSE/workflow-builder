@@ -304,3 +304,51 @@ export const ArrayOfObjectsOfObjectsWithRequiredPropsAsTable: ComponentStory<typ
   }
   return render(schema, uiSchema, formData)
 }
+
+export const ArrayOfObjectWithIndexColumn: ComponentStory<typeof Form> = () => {
+  const schema: JSONSchema7 = {
+    type: 'object',
+    properties: {
+      nested1: {
+        type: 'array',
+        title: 'Array of {prop1}',
+        items: {
+          type: 'object',
+          properties: {
+            prop1: {
+              title: 'Prop 1',
+              description: 'Description 1',
+              type: 'string'
+            }
+          },
+          additionalProperties: false
+        }
+      }
+    },
+    additionalProperties: false
+  }
+  const uiSchema = {
+    nested1: {
+      'ui:field': 'table',
+      'ui:options': {
+        indexColumn: true
+      }
+    }
+  }
+  const formData = {
+    nested1: [{
+      prop1: 'a'
+    }, {
+      prop1: 'b'
+    }, {
+      prop1: 'c'
+    }, {
+      prop1: 'd'
+    }, {
+      prop1: 'e'
+    }, {
+      prop1: 'f'
+    }]
+  }
+  return render(schema, uiSchema, formData)
+}

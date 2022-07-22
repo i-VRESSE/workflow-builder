@@ -96,3 +96,18 @@ For example given an array of objects with properties `prop2` and `prop3`. To ma
     }
 }
 ```
+
+### Index column
+
+When you have many rows it can be hard to tell the index of each row. Add `indexColumn` option to render an additional column with the row index.
+
+```json
+{
+    "prop1": {
+        "ui:field": "table",
+        "ui:options": {
+            "indexColumn": true
+        }
+    }
+}
+```
