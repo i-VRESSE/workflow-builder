@@ -1,5 +1,5 @@
 import React from 'react'
-import { ArrayFieldTemplateProps } from '@rjsf/core'
+import { ArrayFieldTemplateProps, utils } from '@rjsf/core'
 import { Button, Table, OverlayTrigger, Popover } from 'react-bootstrap'
 import { Dash, Plus, QuestionCircle } from 'react-bootstrap-icons'
 
@@ -23,35 +23,36 @@ function isObject (value: unknown): value is object {
 export const TableFieldTemplate = (props: ArrayFieldTemplateProps): JSX.Element => {
   const required = new Set((props.schema as any).items.required)
   const rowSchema = (props.schema as any).items.properties
+  const uiOptions = utils.getUiOptions(props.uiSchema)
   let widths: { [name: string]: string } = {}
   if (
-    props.uiSchema['ui:options'] !== undefined &&
-    'widths' in props.uiSchema['ui:options'] &&
-    isObject(props.uiSchema['ui:options'].widths)
+    uiOptions !== undefined &&
+    'widths' in uiOptions &&
+    isObject(uiOptions.widths)
   ) {
-    widths = props.uiSchema['ui:options'].widths as { [name: string]: string }
+    widths = uiOptions.widths as { [name: string]: string }
   }
   let indexColumnHeader = <></>
-  let indexColumnCell = (_index: string) => <></>
-  if (props.uiSchema['ui:options'] !== undefined &&
-    'indexColumn' in props.uiSchema['ui:options'] &&
-    typeof props.uiSchema['ui:options'].indexColumn === 'boolean' &&
-    props.uiSchema['ui:options'].indexColumn
+  let indexColumnCell = (_index: string): JSX.Element => <></>
+  if (uiOptions !== undefined &&
+    'indexable' in uiOptions &&
+    typeof uiOptions.indexable === 'boolean' &&
+    uiOptions.indexable
   ) {
-    indexColumnHeader = <th key="index-th" className="index-th"></th>
-    indexColumnCell = (index: string) => <td style={{verticalAlign: 'middle'}}>{index}</td>
+    indexColumnHeader = <th key='index-th' className='index-th' />
+    indexColumnCell = (index: string) => <td style={{ verticalAlign: 'middle' }}>{index}</td>
   }
   const headers = Object.entries(rowSchema).map(
     ([key, s]: [string, any], i: number) => {
       const title = required.has(key)
         ? (
           <label>
-            {s.title}
+            {s.title ?? key}
             <span className='required'>*</span>
           </label>
           )
         : (
-          <label>{s.title}</label>
+          <label>{s.title ?? key}</label>
           )
       let description = (
         <span dangerouslySetInnerHTML={{ __html: s.description }} />

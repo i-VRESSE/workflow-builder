@@ -1,10 +1,12 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react'
-import { action } from '@storybook/addon-actions'
-import { TableField } from './TableField'
-import { JSONSchema7 } from 'json-schema'
-import { Form } from '../Form'
-import 'bootstrap/dist/css/bootstrap.min.css'
 import { UiSchema } from '@rjsf/core'
+import { action } from '@storybook/addon-actions'
+import { ComponentMeta, ComponentStory } from '@storybook/react'
+import { JSONSchema7 } from 'json-schema'
+
+import { Form } from '../Form'
+import { TableField } from './TableField'
+
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 const meta: ComponentMeta<typeof TableField> = {
   title: 'TableField',
@@ -331,7 +333,7 @@ export const ArrayOfObjectWithIndexColumn: ComponentStory<typeof Form> = () => {
     nested1: {
       'ui:field': 'table',
       'ui:options': {
-        indexColumn: true
+        indexable: true
       }
     }
   }
