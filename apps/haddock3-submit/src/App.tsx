@@ -11,6 +11,7 @@ import {
   WorkflowPanel
 } from '@i-vresse/wb-core'
 import './App.css'
+import '@i-vresse/wb-form/dist/index.css'
 import { WorkflowSubmitButton } from './WorkflowSubmitButton'
 
 function App (): JSX.Element {
