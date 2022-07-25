@@ -30,19 +30,26 @@ describe('<TableField/>', () => {
       }
     }
 
-    formData = [{
-      prop1: 'a'
-    }, {
-      prop1: 'b'
-    }, {
-      prop1: 'c'
-    }, {
-      prop1: 'd'
-    }, {
-      prop1: 'e'
-    }, {
-      prop1: 'f'
-    }]
+    formData = [
+      {
+        prop1: 'a'
+      },
+      {
+        prop1: 'b'
+      },
+      {
+        prop1: 'c'
+      },
+      {
+        prop1: 'd'
+      },
+      {
+        prop1: 'e'
+      },
+      {
+        prop1: 'f'
+      }
+    ]
     const idSchema = {
       $id: 'root',
       prop1: {
@@ -80,7 +87,14 @@ describe('<TableField/>', () => {
           indexable: true
         }
       }
-      render(<TableField {...props} schema={schema} uiSchema={uiSchema} formData={formData} />)
+      render(
+        <TableField
+          {...props}
+          schema={schema}
+          uiSchema={uiSchema}
+          formData={formData}
+        />
+      )
     })
 
     it('should have 3 columns (index, prop1, actions)', () => {
@@ -88,10 +102,13 @@ describe('<TableField/>', () => {
       expect(prop1th?.parentElement?.children).toHaveLength(3)
     })
 
-    it.each(['0', '1', '2', '4', '5'])('should have an index column with text %s', (index) => {
-      const cell = screen.getByText(index)
-      expect(cell).toBeTruthy()
-    })
+    it.each(['0', '1', '2', '4', '5'])(
+      'should have an index column with text %s',
+      (index) => {
+        const cell = screen.getByText(index)
+        expect(cell).toBeTruthy()
+      }
+    )
   })
 
   describe('with ui:columnIndex', () => {
@@ -100,7 +117,14 @@ describe('<TableField/>', () => {
         'ui:field': 'table',
         'ui:indexable': true
       }
-      render(<TableField {...props} schema={schema} uiSchema={uiSchema} formData={formData} />)
+      render(
+        <TableField
+          {...props}
+          schema={schema}
+          uiSchema={uiSchema}
+          formData={formData}
+        />
+      )
     })
 
     it('should have 3 columns (index, prop1, actions)', () => {
@@ -108,9 +132,59 @@ describe('<TableField/>', () => {
       expect(prop1th?.parentElement?.children).toHaveLength(3)
     })
 
-    it.each(['0', '1', '2', '4', '5'])('should have an index column with text %s', (index) => {
-      const cell = screen.getByText(index)
-      expect(cell).toBeTruthy()
+    it.each(['0', '1', '2', '4', '5'])(
+      'should have an index column with text %s',
+      (index) => {
+        const cell = screen.getByText(index)
+        expect(cell).toBeTruthy()
+      }
+    )
+  })
+
+  describe('table can only render array of objects', () => {
+    it('should complain when root type is not an array', () => {
+      schema = {
+        type: 'string'
+      }
+      const uiSchema = {}
+      const formData = 'foobar'
+      expect(() =>
+        render(
+          <TableField
+            {...props}
+            schema={schema}
+            uiSchema={uiSchema}
+            formData={formData}
+          />
+        )
+      ).toThrowError(
+        'Table field can only render schema with array type and items type object'
+      )
+    })
+
+    it.each([
+      {
+        type: 'string'
+      },
+      [{
+        type: 'string'
+      }],
+      undefined
+    ])('should complain when items type is not an object', (items) => {
+      schema = {
+        type: 'array',
+        items: items as any
+      }
+      expect(() =>
+        render(
+          <TableField
+            {...props}
+            schema={schema}
+          />
+        )
+      ).toThrowError(
+        'Table field can only render schema with array type and items type object'
+      )
     })
   })
 })
