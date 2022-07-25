@@ -160,6 +160,7 @@ global:
         ui:widget: file
         ui:options:
           accept: .pdb
+      ui:indexable: true
     cns_exec:
       ui:widget: file
       ui:group: execution

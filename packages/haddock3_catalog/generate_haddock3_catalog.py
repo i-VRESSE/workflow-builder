@@ -318,7 +318,8 @@ def config2schema(config):
                              # Make comma seperated string, see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file#accept
                              'accept': ",".join(v['accept'])
                          }
-                    }
+                    },
+                    'ui:indexable': True
                 }
             elif k == 'top_cluster':
                 # TODO dont hardcode item type for seletopclusts:top_cluster, but use items:type defined in haddock3
