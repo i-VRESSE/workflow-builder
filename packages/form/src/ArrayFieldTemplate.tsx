@@ -133,7 +133,7 @@ const DefaultArrayItem = (props: any) => {
           ? (
             <>
               <Col xs='1' lg='1'>
-                {props.indexLookup(props.index)}
+                {props.index}
               </Col>
               <Col xs='8' lg='8'>
                 {props.children}
@@ -198,28 +198,21 @@ const DefaultArrayItem = (props: any) => {
 }
 
 // New code not found in https://github.com/rjsf-team/react-jsonschema-form
-const useIndexable = (uiSchema: UiSchema) => {
+const isIndexable = (uiSchema: UiSchema) => {
+  if (uiSchema === undefined) {
+    return false
+  }
   const uiOptions = utils.getUiOptions(uiSchema)
-  const indexable = (
+  return (
     uiOptions !== undefined &&
     'indexable' in uiOptions &&
-    (
-      (typeof uiOptions.indexable === 'boolean' && uiOptions.indexable)
-      ||
-      Array.isArray(uiOptions.indexable)
-    )
+    typeof uiOptions.indexable === 'boolean' &&
+    uiOptions.indexable
   )
-  if (indexable && 
-    Array.isArray(uiOptions.indexable)
-    ) {
-      const lookup: string[] = uiOptions.indexable
-      return [indexable, (i: number) => i < lookup.length ? lookup[i] : `${i}`]
-  } 
-  return [indexable, (i: number) => `${i}`]
 }
 
 const DefaultFixedArrayFieldTemplate = (props: ArrayFieldTemplateProps) => {
-  const [indexable, indexLookup] = useIndexable(props.uiSchema)
+  const indexable = isIndexable(props.uiSchema)
   return (
     <fieldset className={props.className}>
       <ArrayFieldTitle
@@ -244,7 +237,7 @@ const DefaultFixedArrayFieldTemplate = (props: ArrayFieldTemplateProps) => {
         key={`array-item-list-${props.idSchema.$id}`}
       >
         {props.items &&
-          props.items.map((p) => DefaultArrayItem({ ...p, indexable, indexLookup }))}
+          props.items.map((p) => DefaultArrayItem({ ...p, indexable }))}
       </div>
 
       {props.canAdd && (
@@ -259,7 +252,7 @@ const DefaultFixedArrayFieldTemplate = (props: ArrayFieldTemplateProps) => {
 }
 
 const DefaultNormalArrayFieldTemplate = (props: ArrayFieldTemplateProps) => {
-  const [indexable, indexLookup] = useIndexable(props.uiSchema)
+  const indexable = isIndexable(props.uiSchema)
   return (
     <div>
       <Row className='p-0 m-0'>
@@ -289,7 +282,7 @@ const DefaultNormalArrayFieldTemplate = (props: ArrayFieldTemplateProps) => {
             className='p-0 m-0'
           >
             {props.items &&
-              props.items.map((p) => DefaultArrayItem({ ...p, indexable, indexLookup }))}
+              props.items.map((p) => DefaultArrayItem({ ...p, indexable }))}
 
             {props.canAdd && (
               <Container className=''>
