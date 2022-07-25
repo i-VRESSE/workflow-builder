@@ -9,12 +9,14 @@ import { BsPlus } from 'react-icons/bs'
 import { GrAdd } from 'react-icons/gr'
 import { IoIosRemove } from 'react-icons/io'
 /**
- * To add optional index to ech row the ArrayFieldTemplate
- * has been copied from
- * packages/bootstrap-4/src/ArrayFieldTemplate/ArrayFieldTemplate.tsx
+ * Same are original ArrayFieldTemplate, but adds optional index to each row
  *
  */
 
+/*
+ * Due to inflexibility to customize a small part of the original field component the whole file has been copied from
+ * [packages/bootstrap-4/src/ArrayFieldTemplate/ArrayFieldTemplate.tsx](https://github.com/rjsf-team/react-jsonschema-form/tree/master/packages/bootstrap-4/src/ArrayFieldTemplate/ArrayFieldTemplate.tsx)
+ */
 /* As the code has been copied from https://github.com/rjsf-team/react-jsonschema-form it does not adhere to same lint rules */
 /* to make it easier to keep up to date several lint rules have been disabled in this file */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
@@ -37,7 +39,7 @@ export const ArrayFieldTemplate = (props: ArrayFieldTemplateProps) => {
   }
 }
 
-// Copied from packages/bootstrap-4/src/AddButton/AddButton.tsx
+// Copied from packages/bootstrap-4/src/AddButton/AddButton.tsx in react-jsonschema-form repo
 const AddButton: React.FC<AddButtonProps> = (props) => (
   <Button
     {...props}
@@ -48,7 +50,7 @@ const AddButton: React.FC<AddButtonProps> = (props) => (
   </Button>
 )
 
-// packages/bootstrap-4/src/IconButton/IconButton.tsx
+// packages/bootstrap-4/src/IconButton/IconButton.tsx in react-jsonschema-form repo
 const mappings: any = {
   remove: <IoIosRemove />,
   plus: <GrAdd />,
