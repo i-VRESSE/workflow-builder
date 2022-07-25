@@ -78,6 +78,12 @@ Each array item will be a row and each object property will be a column.
 The header cells show the title of the property together with a popup for the description.
 The other cells show the property without any titles or descriptions.
 
+To hide titles and descriptions in table rows {"ui:field": "table"}) a css file must be imported.
+
+```js
+import '@i-vresse/wb-form/index.css'
+```
+
 ### Column widths
 
 The column widths can be customized.
