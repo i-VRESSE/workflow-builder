@@ -34,6 +34,18 @@ global:
           type: string
           format: uri-reference
         format: moleculefilepaths
+      preprocess:
+        default: false
+        title: Tries to correct input PDBs
+        description: If true, evaluates and tries to correct the input PDB before
+          the workflow.
+        $comment: HADDOCK3 checks and processes the input PDB files to ensure they
+          all comply with HADDOCK3's requirements. These checks concerns, for example,
+          residue numbering, compatibility of chain IDs, and many others. You can
+          see all checks performs in the live issue https://github.com/haddocking/haddock3/issues/143.
+          If set to false, no checks are performed and HADDOCK3 directly uses the
+          original input PDBs.
+        type: boolean
       cns_exec:
         title: Path to the CNS executable
         description: If not provided, HADDOCK3 will use the cns path configured during
@@ -346,6 +358,7 @@ nodes:
     tolerance:
       ui:group: module
     mol:
+      ui:indexable: true
       ui:group: input molecules
   tomlSchema:
     mol:
@@ -2688,8 +2701,10 @@ nodes:
     additionalProperties: false
   uiSchema:
     mol_fix_origin:
+      ui:indexable: true
       ui:group: molecule
     mol_shape:
+      ui:indexable: true
       ui:group: molecule
     ambig_fname:
       ui:widget: file
@@ -5080,8 +5095,10 @@ nodes:
     additionalProperties: false
   uiSchema:
     mol_fix_origin:
+      ui:indexable: true
       ui:group: molecule
     mol_shape:
+      ui:indexable: true
       ui:group: molecule
     ambig_fname:
       ui:widget: file
@@ -7141,8 +7158,10 @@ nodes:
     additionalProperties: false
   uiSchema:
     mol_fix_origin:
+      ui:indexable: true
       ui:group: molecule
     mol_shape:
+      ui:indexable: true
       ui:group: molecule
     ambig_fname:
       ui:widget: file
@@ -9050,8 +9069,10 @@ nodes:
     additionalProperties: false
   uiSchema:
     mol_fix_origin:
+      ui:indexable: true
       ui:group: molecule
     mol_shape:
+      ui:indexable: true
       ui:group: molecule
     ambig_fname:
       ui:widget: file
