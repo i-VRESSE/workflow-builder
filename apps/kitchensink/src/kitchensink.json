@@ -58,6 +58,11 @@
         {
             "name": "moleculetest",
             "description": "Nodes with molecules aware parameters"
+        },
+        {
+            "name": "collapsedcat",
+            "description": "Category which is initially collapsed",
+            "collapsed": true
         }
     ],
     "nodes": [
@@ -721,6 +726,22 @@
                     }
                 }
             }
+        },
+        {
+            "id": "node12",
+            "label": "Node in initially collapsed cat",
+            "description": "Description 12",
+            "category": "collapsedcat",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "prop1": {
+                        "type": "string"
+                    }
+                }
+            },
+            "uiSchema": {},
+            "tomlSchema": {}
         }
     ]
 }
