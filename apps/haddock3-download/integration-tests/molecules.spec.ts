@@ -8,11 +8,9 @@ test.describe('given 1 molecule and a flexref node with seg parameter defined', 
     await page.locator('select').selectOption('http://localhost:3000/catalog/haddock3.expert.yaml')
     // Click button:has-text("Global parameters")
     await page.locator('button:has-text("Global parameters")').click()
-    // Click text=Input MoleculesThe input molecules that will be used for docking.* >> input[type="file"]
-    await page.locator('text=Input MoleculesThe input molecules that will be used for docking.* >> input[type="file"]').click()
     // Upload e2a-hpr_1GGR.pdb
     const file1 = await readFile('./integration-tests/data/e2a-hpr_1GGR.pdb')
-    await page.locator('text=Input MoleculesThe input molecules that will be used for docking.* >> input[type="file"]')
+    await page.locator('text=0* >> input[type="file"]')
       .setInputFiles({ name: 'e2a-hpr_1GGR.pdb', mimeType: 'chemical/x-pdb', buffer: file1 })
     // Click input[type="text"]
     await page.locator('input[type="text"]').click()
