@@ -11,7 +11,6 @@ import {
   WorkflowUploadButton,
   Wrapper
 } from '@i-vresse/wb-core'
-import '@i-vresse/wb-form/dist/index.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
 

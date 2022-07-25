@@ -1,7 +1,6 @@
 import React from 'react'
 import { Form } from '@i-vresse/wb-form'
 import { useSetActiveSubmitButton, useCatalog, useGlobalFormData } from './store'
-import '@i-vresse/wb-form/dist/index.css'
 
 export const GlobalForm = (): JSX.Element => {
   const { global: globalSchemas } = useCatalog()
