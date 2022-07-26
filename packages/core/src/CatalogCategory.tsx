@@ -9,7 +9,7 @@ export const CatalogCategory = ({ name, description, collapsed: initiallyCollaps
   const style = {
     // TODO On https://developer.mozilla.org/en-US/docs/Web/CSS/list-style-type
     // disclosure-open/closed are said to be experimental, find how much compatibility there is.
-    listStyleType: collapsed ? 'disclosure-closed' : 'disclosure-open',
+    listStyleType: collapsed ? 'disclosure-closed' : 'disclosure-open'
     // utf failed in chrome
     // listStyleType: collapsed ? '⏷' : '⏵'
   }
