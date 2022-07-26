@@ -383,9 +383,11 @@ def process_module(module_name, category, level):
 def process_category(category):
     package = f'haddock.modules.{category}'
     module = importlib.import_module(package)
+    collapsed_categories = {'extras'}
     return {
         'name': category,
         'description': module.__doc__,
+        'collapsed': category in collapsed_categories,
     }
 
 def get_category_order():
