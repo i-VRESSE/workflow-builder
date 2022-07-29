@@ -2,15 +2,14 @@
 
 import React from 'react'
 
-import { WidgetProps } from '@rjsf/core'
-// was import Form from 'react-bootstrap/Form', but vitest in app complained about `... not supported resolving ES modules imported ...`
+import { WidgetProps, utils } from '@rjsf/core'
+// was import Form from 'react-bootstrap/Form', but vitest in core package complained about `Error: Directory import ... not supported resolving ES modules imported ...`
 import Form from 'react-bootstrap/cjs/Form.js'
 
 export const IvresseCheckboxWidget = (props: WidgetProps): JSX.Element => {
   const {
     id,
     value,
-    required,
     disabled,
     readonly,
     label,
@@ -21,6 +20,12 @@ export const IvresseCheckboxWidget = (props: WidgetProps): JSX.Element => {
     onFocus,
     DescriptionField
   } = props
+
+  // Because an unchecked checkbox will cause html5 validation to fail, only add
+  // the "required" attribute if the field value must be "true", due to the
+  // "const" or "enum" keywords
+  // Code was copied from packages/core/src/components/widgets/CheckboxWidget.js
+  const required = utils.schemaRequiresTrueValue(schema)
 
   const _onChange = ({
     target: { checked }
@@ -37,17 +42,16 @@ export const IvresseCheckboxWidget = (props: WidgetProps): JSX.Element => {
   if (schema.description !== undefined || schema.description !== '') {
     descfield = <DescriptionField description={schema.description} />
   }
-
   return (
     <Form.Group className={`checkbox ${disabled || readonly ? 'disabled' : ''}`}>
       <Form.Check
         id={id}
         label={desc}
         checked={typeof value === 'undefined' ? false : value}
-        required={required}
         disabled={disabled || readonly}
         autoFocus={autofocus}
         onChange={_onChange}
+        required={required}
         type='checkbox'
         onBlur={_onBlur}
         onFocus={_onFocus}
