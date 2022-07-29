@@ -35,8 +35,10 @@ jobs:
         with:
           node-version: 16.x
           cache: "yarn"
-      - run: yarn
-      - run: yarn build
+      - name: Install dependencies
+        run: yarn
+      - name: Build packages
+        run: yarn build --filter=\!./apps/*
       - name: Build api docs for core package
         run: yarn workspace @i-vresse/wb-core apidocs
       # TODO command gives error, need to fix
