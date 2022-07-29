@@ -23,7 +23,7 @@ jobs:
     - run: yarn build
     - run: yarn lint
     - run: yarn test -- run
-    - name: Code coverage upload
+    - name: Code coverage upload --coverage
       uses: codecov/codecov-action@v3
       with:
         files: ./packages/form/coverage/lcov.info,./packages/core/coverage/lcov.info
