@@ -34,28 +34,30 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 16.x
-          cache: 'yarn'
+          cache: "yarn"
       - run: yarn
       - run: yarn build
       - name: Build api docs for core package
         run: yarn workspace @i-vresse/wb-core apidocs
       # TODO command gives error, need to fix
       # - name: Build storybook for core package
-      #   run: yarn workspace @i-vresse/wb-core build-storybook              
-      - name: Build api docs for form package
-        run: yarn workspace @i-vresse/wb-form apidocs
+      #   run: yarn workspace @i-vresse/wb-core build-storybook
+      # TODO enable once 
+      # - name: Build api docs for form package
+      #   run: yarn workspace @i-vresse/wb-form apidocs
       - name: Build storybook for form package
-        run: yarn workspace @i-vresse/wb-form build-storybook              
+        run: yarn workspace @i-vresse/wb-form build-storybook
+      - name: Combine docs into _site.
+        run: |
+          mkdir -p _site/core _site/form &&
+          mv packages/core/docs _site/core/ &&
+          mv packages/form/storybook-static _site/form/
       - name: Setup Pages
         uses: actions/configure-pages@v1
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          # Upload entire repository
-          path: |
-            packages/core/docs
-            packages/form/docs
-            packages/form/storybook-static
+          path: _site/
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@main
