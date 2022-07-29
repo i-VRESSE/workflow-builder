@@ -10,6 +10,7 @@ It adds the following:
 - table field
 - bug fixes for checkbox widget and description field
 - support for molecule formats (moleculefilepaths, chain, residue) in JSON schema
+- index column for array types
 
 See [/docs/uiSchema.md](https://github.com/i-VRESSE/workflow-builder/blob/main/docs/uiSchema.md) how to configure the form.
 

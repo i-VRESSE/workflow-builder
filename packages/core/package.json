@@ -83,7 +83,8 @@
   },
   "ts-standard": {
     "ignore": [
-      "tsup.config.ts"
+      "tsup.config.ts",
+      "vitest.config.ts"
     ]
   }
 }
