@@ -10,6 +10,8 @@ Part of [i-VRESSE/workflow-builder](https://github.com/i-VRESSE/workflow-builder
 
 ## API documentation
 
+API documentation of main branch is at [https://i-vresse.github.io/workflow-builder/core/docs/](https://i-vresse.github.io/workflow-builder/core/docs/).
+
 The API documentation can be generated with
 
 ```shell

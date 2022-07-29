@@ -65,3 +65,27 @@ export const Page = () => {
     );
 };
 ```
+
+## API documentation
+
+API documentation of main branch is at [https://i-vresse.github.io/workflow-builder/form/docs/](https://i-vresse.github.io/workflow-builder/form/docs/).
+
+The API documentation can be generated with
+
+```shell
+yarn apidocs
+```
+
+Will generate a [docs/index.html](docs/index.html).
+
+The API docs exclude React components, their docs can be seen at 
+[https://i-vresse.github.io/workflow-builder/form/storybook-static/](https://i-vresse.github.io/workflow-builder/form/storybook-static/)
+
+Or generated locally with
+
+```shell
+yarn storybook
+```
+
+Which starts a storybook server on http://localhost:6007
+
