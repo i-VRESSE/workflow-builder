@@ -1,5 +1,22 @@
 {
   "name": "@i-vresse/wb-form",
+  "version": "1.0.0",
+  "description": "Enhanced version of the React JSON schema form component with Bootstrap 4 theme",
+  "keywords": [
+    "react",
+    "form",
+    "json-schema"
+  ],
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/i-VRESSE/workflow-builder",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/i-VRESSE/workflow-builder.git",
+    "directory": "packages/form"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "packageManager": "yarn@3.2.1",
   "type": "module",
   "main": "dist/index.js",

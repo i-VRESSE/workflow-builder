@@ -1,6 +1,22 @@
 {
   "name": "@i-vresse/wb-core",
   "version": "1.0.0",
+  "description": "React components to construct a workflow builder application",
+  "keywords": [
+    "react",
+    "components",
+    "workflow"
+  ],
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/i-VRESSE/workflow-builder",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/i-VRESSE/workflow-builder.git",
+    "directory": "packages/core"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "packageManager": "yarn@3.2.1",
   "type": "module",
   "main": "dist/index.js",
