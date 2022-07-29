@@ -138,6 +138,7 @@ def config2schema(config):
                 'items': schemas['schema'],
                 'maxItemsFrom': 'molecules',
             })
+            prop_ui['ui:indexable'] = True
             # TODO rjsf gives error when description is present, so for now remove it
             del prop['description']
 
@@ -239,6 +240,7 @@ def config2schema(config):
                 prop['maxItems'] = v['maxitems']
             elif 'maxItemsFrom' in v:
                 prop['maxItemsFrom'] = v['maxItemsFrom']
+                prop_ui['ui:indexable'] = True
             if 'properties' in v:
                 obj_schemas = config2schema(v['properties'])
                 if v['dim'] == 1:
@@ -316,7 +318,8 @@ def config2schema(config):
                              # Make comma seperated string, see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file#accept
                              'accept': ",".join(v['accept'])
                          }
-                    }
+                    },
+                    'ui:indexable': True
                 }
             elif k == 'top_cluster':
                 # TODO dont hardcode item type for seletopclusts:top_cluster, but use items:type defined in haddock3
@@ -396,11 +399,13 @@ def process_global(level):
     package = 'haddock.modules'
     module = importlib.import_module(package)
     with open(module.modules_defaults_path) as f:
-        optional_global_parameters = load(f, Loader=Loader)
+        modules_defaults = load(f, Loader=Loader)
     gmodule = importlib.import_module('haddock.gear.parameters')
     with open(gmodule.MANDATORY_YAML) as f:
         mandatory_parameters = load(f, Loader=Loader)
-    config = mandatory_parameters | optional_global_parameters
+    with open(gmodule.OPTIONAL_YAML) as f:
+        optional_parameters = load(f, Loader=Loader)
+    config = mandatory_parameters | optional_parameters | modules_defaults
     config4level = filter_on_level(config, level)
 
     schemas = config2schema(config4level)

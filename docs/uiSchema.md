@@ -96,3 +96,30 @@ For example given an array of objects with properties `prop2` and `prop3`. To ma
     }
 }
 ```
+
+## ui:indexable
+
+When you have many rows it can be hard to tell the index of each row. Add `indexable` ui option to render an additional label or column with the row index.
+
+When `prop1` is an array use the default array renderer with
+
+```json
+{
+    "prop1": {
+        "ui:indexable": true
+    }
+}
+```
+
+When `prop1` is an array of objects use a table field and index column with
+
+```json
+{
+    "prop1": {
+        "ui:field": "table",
+        "ui:options": {
+            "indexable": true // Alternative way to write "ui:indexable": true
+        }
+    }
+}
+```
