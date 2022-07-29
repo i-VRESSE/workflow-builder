@@ -54,6 +54,7 @@ const CheckboxArray: ComponentStory<typeof Form> = () => {
         items: {
           type: 'boolean',
           title: 'a checkbox',
+          default: false,
           description: 'This is the checkbox-description'
         }
       }
