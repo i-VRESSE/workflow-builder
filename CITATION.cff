@@ -12,6 +12,14 @@ authors:
     family-names: Verhoeven
     affiliation: Netherlands eScience Center
     orcid: 'https://orcid.org/0000-0002-5821-2060'
+  - given-names: Rodrigo
+    family-names: Honorato
+    affiliation:  Utrecht University @ BonvinLab
+    orcid: 'https://orcid.org/0000-0001-5267-3002'
+  - affiliation: "Netherlands eScience Center"
+    family-names: Vreede
+    given-names: Barbara
+    orcid: https://orcid.org/0000-0002-5023-4601
 repository-code: 'https://github.com/i-VRESSE/workflow-builder'
 abstract: >-
   The builder application allows you to create a complex TOML formatted config file based on a set of JSON schemas.
