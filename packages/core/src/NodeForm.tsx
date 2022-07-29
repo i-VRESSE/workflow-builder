@@ -1,6 +1,7 @@
 import React from 'react'
 import { Form } from '@i-vresse/wb-form'
 import { useSetActiveSubmitButton, useSelectedCatalogNode, useSelectedNode, useSelectedNodeFormData, useSelectedNodeFormSchema } from './store'
+import '@i-vresse/wb-form/dist/index.css'
 
 export const NodeForm = (): JSX.Element => {
   // TODO move setNodeParameters to useSelectedNode
