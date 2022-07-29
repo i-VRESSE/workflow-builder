@@ -157,6 +157,7 @@ The catalog is a YAML formatted file which tells the app what nodes are availabl
 3. catagories: Descriptions of node categories
     * name: Name of category
     * description: Description of category
+    * collapsed (optional): Whether category should be rendered collapsed initially
 4. examples: Title and link to example workflows
     * map with title as key and link as value
 5. title: Title of the catalog

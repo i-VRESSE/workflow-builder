@@ -30,6 +30,7 @@ export interface ICatalogNode {
 export interface ICategory {
   name: string
   description: string
+  collapsed?: boolean
 }
 
 export interface IGlobal {

@@ -2,16 +2,31 @@ title: Haddock 3 on easy level
 categories:
 - name: topology
   description: HADDOCK3 modules to create topologies.
+  collapsed: false
 - name: sampling
   description: HADDOCK3 modules for sampling.
+  collapsed: false
 - name: refinement
   description: HADDOCK3 actions referring to refinement.
+  collapsed: false
 - name: scoring
   description: HADDOCK3 modules to score modules.
+  collapsed: false
 - name: analysis
   description: HADDOCK3 modules related to model analysis.
+  collapsed: false
 - name: extras
-  description: null
+  description: '
+
+    HADDOCK3 extra modules.
+
+
+    The extra modules are modules that do not belong to any of the standard
+
+    simulation categories but that help further configuring the workflow.
+
+    '
+  collapsed: true
 global:
   schema:
     type: object
@@ -150,7 +165,7 @@ global:
         ui:widget: file
         ui:options:
           accept: .pdb
-      ui:indexable: true    
+      ui:indexable: true
     cns_exec:
       ui:widget: file
       ui:group: execution
@@ -1154,7 +1169,7 @@ nodes:
   tomlSchema: {}
 - id: exit
   category: extras
-  label: Exit module.
+  label: Exit module
   description: Stop the workflow when this module is reached.
   schema:
     type: object
@@ -1189,7 +1204,7 @@ nodes:
   tomlSchema: {}
 - id: rigidbody
   category: sampling
-  label: Rigid-body docking module.
+  label: Rigid-body docking sampling module
   description: HADDOCK3 module for rigid body sampling.
   schema:
     type: object
