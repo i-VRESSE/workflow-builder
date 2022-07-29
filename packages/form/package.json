@@ -14,7 +14,8 @@
     "test": "vitest",
     "storybook": "start-storybook -p 6007",
     "build-storybook": "build-storybook",
-    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "apidocs": "typedoc --entryPointStrategy expand --exclude '**/*.tsx' --exclude '**/*.stories.*' ./src"
   },
   "dependencies": {
     "@rjsf/bootstrap-4": "^4.2.2",
@@ -42,6 +43,7 @@
     "postcss": "^8.4.14",
     "ts-standard": "^11.0.0",
     "tsup": "^6.1.3",
+    "typedoc": "^0.23.7",
     "vitest": "^0.18.1"
   },
   "tsup": {
