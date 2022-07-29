@@ -1,0 +1,20 @@
+coverage:
+  status:
+    project:
+      core-unit:
+        flags:
+          - core-unit
+      form-unit:
+        flags:
+          - form-unit
+
+flag_management:
+  individual_flags:
+    - name: core-unit
+      paths:
+        - packages/core
+      carryforward: true
+    - name: form-unit
+      paths:
+        - packages/form
+      carryforward: true
