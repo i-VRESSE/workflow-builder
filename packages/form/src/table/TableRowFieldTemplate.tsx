@@ -1,4 +1,3 @@
-import React from 'react'
 import { FieldProps } from '@rjsf/core'
 
 export const TableRowFieldTemplate = ({ properties }: FieldProps): JSX.Element => {
