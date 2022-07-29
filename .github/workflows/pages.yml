@@ -4,10 +4,7 @@ name: Deploy static content to Pages
 on:
   # Runs on pushes targeting the default branch
   push:
-    # TODO after merge of https://github.com/i-VRESSE/workflow-builder/pull/107 
-    # change back to main branch
-    branches: ["publish-packages"]
-    # branches: ["main"]
+    branches: ["main"]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -39,6 +36,7 @@ jobs:
           node-version: 16.x
           cache: 'yarn'
       - run: yarn
+      - run: yarn build
       - name: Build api docs for core package
         run: yarn workspace @i-vresse/wb-core apidocs
       # TODO command gives error, need to fix

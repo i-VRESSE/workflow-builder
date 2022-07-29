@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: Use Node.js
       uses: actions/setup-node@v2
       with:
         node-version: 16.x
@@ -29,11 +29,3 @@ jobs:
     - name: Run integration tests
       run: yarn test:integration
       working-directory: apps/haddock3-download
-
-    - name: Build api docs for core package
-      run: yarn workspace @i-vresse/wb-core apidocs
-    - name: Build api docs for form package
-      run: yarn workspace @i-vresse/wb-form apidocs
-    - name: Build storybook for form package
-      run: yarn workspace @i-vresse/wb-form build-storybook
-      
