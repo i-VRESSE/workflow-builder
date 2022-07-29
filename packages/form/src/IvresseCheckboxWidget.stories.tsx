@@ -65,7 +65,7 @@ const CheckboxArray: ComponentStory<typeof Form> = () => {
   return render(schema, { array: [false, true] })
 }
 
-export const UncheckedCheckboxInArrayIsSubmiteable = CheckboxArray.bind({})
-UncheckedCheckboxInArrayIsSubmiteable.play = async () => {
+export const UncheckedCheckboxInArrayIsSubmittable = CheckboxArray.bind({})
+UncheckedCheckboxInArrayIsSubmittable.play = async () => {
   await userEvent.click(screen.getByText('Submit'))
 }
