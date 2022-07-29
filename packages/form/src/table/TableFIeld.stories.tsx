@@ -1,12 +1,10 @@
-import { UiSchema } from '@rjsf/core'
-import { action } from '@storybook/addon-actions'
 import { ComponentMeta, ComponentStory } from '@storybook/react'
-import { JSONSchema7 } from 'json-schema'
-
-import { Form } from '../Form'
+import { action } from '@storybook/addon-actions'
 import { TableField } from './TableField'
-
+import { JSONSchema7 } from 'json-schema'
+import { Form } from '../Form'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import { UiSchema } from '@rjsf/core'
 
 const meta: ComponentMeta<typeof TableField> = {
   title: 'TableField',
@@ -302,54 +300,6 @@ export const ArrayOfObjectsOfObjectsWithRequiredPropsAsTable: ComponentStory<typ
         prop1a: '44',
         prop1b: '55'
       }
-    }]
-  }
-  return render(schema, uiSchema, formData)
-}
-
-export const ArrayOfObjectWithIndexColumn: ComponentStory<typeof Form> = () => {
-  const schema: JSONSchema7 = {
-    type: 'object',
-    properties: {
-      nested1: {
-        type: 'array',
-        title: 'Array of {prop1}',
-        items: {
-          type: 'object',
-          properties: {
-            prop1: {
-              title: 'Prop 1',
-              description: 'Description 1',
-              type: 'string'
-            }
-          },
-          additionalProperties: false
-        }
-      }
-    },
-    additionalProperties: false
-  }
-  const uiSchema = {
-    nested1: {
-      'ui:field': 'table',
-      'ui:options': {
-        indexable: true
-      }
-    }
-  }
-  const formData = {
-    nested1: [{
-      prop1: 'a'
-    }, {
-      prop1: 'b'
-    }, {
-      prop1: 'c'
-    }, {
-      prop1: 'd'
-    }, {
-      prop1: 'e'
-    }, {
-      prop1: 'f'
     }]
   }
   return render(schema, uiSchema, formData)

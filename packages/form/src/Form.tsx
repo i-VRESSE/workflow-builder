@@ -5,7 +5,6 @@ import { TableField } from './table/TableField'
 import { moleculeFormatValidators } from './molecule/formats'
 import { IvresseCheckboxWidget } from './IvresseCheckboxWidget'
 import { IvresseDescriptionField } from './IvresseDescriptionField'
-import { ArrayFieldTemplate } from './ArrayFieldTemplate'
 
 // TODO workaround for broken bootsrap-4 file widget, see https://github.com/rjsf-team/react-jsonschema-form/issues/2095
 const registry = utils.getDefaultRegistry()
@@ -28,7 +27,6 @@ if (Theme.fields !== undefined) {
   Theme.fields.table = TableField
   Theme.fields.DescriptionField = IvresseDescriptionField
 }
-Theme.ArrayFieldTemplate = ArrayFieldTemplate
 
 if (Theme.customFormats === undefined) {
   Theme.customFormats = {}

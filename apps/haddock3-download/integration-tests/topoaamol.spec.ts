@@ -13,7 +13,7 @@ test.describe('given 1 molecule and a topoaa node with segment id defined', () =
     await page.locator('input[type="text"]').fill('x')
     // Upload e2a-hpr_1GGR.pdb
     const file1 = await readFile('./integration-tests/data/e2a-hpr_1GGR.pdb')
-    await page.locator('text=0* >> input[type="file"]')
+    await page.locator('text=Input MoleculesThe input molecules that will be used for docking.* >> input[type="file"]')
       .setInputFiles({ name: 'e2a-hpr_1GGR.pdb', mimeType: 'chemical/x-pdb', buffer: file1 })
     // Click text=Submit
     await page.locator('text=Submit').click()
@@ -21,7 +21,6 @@ test.describe('given 1 molecule and a topoaa node with segment id defined', () =
     await page.locator('button:has-text("Cancel")').click()
     // Click button:has-text("topoaa")
     await page.locator('button:has-text("topoaa")').click()
-
     // Click #expander4molecule svg
     await page.locator('#expander4molecule svg').click()
     // Click #expander4input_molecules svg

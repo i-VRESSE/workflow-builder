@@ -1,5 +1,4 @@
-import React from 'react'
-import { ArrayFieldTemplateProps, utils } from '@rjsf/core'
+import { ArrayFieldTemplateProps } from '@rjsf/core'
 import { Button, Table, OverlayTrigger, Popover } from 'react-bootstrap'
 import { Dash, Plus, QuestionCircle } from 'react-bootstrap-icons'
 
@@ -23,36 +22,25 @@ function isObject (value: unknown): value is object {
 export const TableFieldTemplate = (props: ArrayFieldTemplateProps): JSX.Element => {
   const required = new Set((props.schema as any).items.required)
   const rowSchema = (props.schema as any).items.properties
-  const uiOptions = utils.getUiOptions(props.uiSchema)
   let widths: { [name: string]: string } = {}
   if (
-    uiOptions !== undefined &&
-    'widths' in uiOptions &&
-    isObject(uiOptions.widths)
+    props.uiSchema['ui:options'] !== undefined &&
+    'widths' in props.uiSchema['ui:options'] &&
+    isObject(props.uiSchema['ui:options'].widths)
   ) {
-    widths = uiOptions.widths as { [name: string]: string }
-  }
-  let indexColumnHeader = <></>
-  let indexColumnCell = (_index: string): JSX.Element => <></>
-  if (uiOptions !== undefined &&
-    'indexable' in uiOptions &&
-    typeof uiOptions.indexable === 'boolean' &&
-    uiOptions.indexable
-  ) {
-    indexColumnHeader = <th key='index-th' className='index-th' />
-    indexColumnCell = (index: string) => <td style={{ verticalAlign: 'middle' }}>{index}</td>
+    widths = props.uiSchema['ui:options'].widths as { [name: string]: string }
   }
   const headers = Object.entries(rowSchema).map(
     ([key, s]: [string, any], i: number) => {
       const title = required.has(key)
         ? (
           <label>
-            {s.title ?? key}
+            {s.title}
             <span className='required'>*</span>
           </label>
           )
         : (
-          <label>{s.title ?? key}</label>
+          <label>{s.title}</label>
           )
       let description = (
         <span dangerouslySetInnerHTML={{ __html: s.description }} />
@@ -109,9 +97,8 @@ export const TableFieldTemplate = (props: ArrayFieldTemplateProps): JSX.Element 
       )
     }
   )
-  headers.unshift(indexColumnHeader)
   headers.push(
-    <th key='actions-th' className='actions-th'>
+    <th key='actions-th'>
       <Button
         className='array-item-add'
         title='Add'
@@ -125,12 +112,11 @@ export const TableFieldTemplate = (props: ArrayFieldTemplateProps): JSX.Element 
   )
   let rows: JSX.Element[] = []
   if ('items' in props) {
-    rows = props.items.map((element: any, index) => {
+    rows = props.items.map((element: any) => {
       return (
         <tr key={element.key} className={element.className}>
-          {indexColumnCell(`${index}`)}
           {element.children}
-          <td className='table-actions'>
+          <td>
             <Button
               type='danger'
               className='array-item-remove btn-light'
