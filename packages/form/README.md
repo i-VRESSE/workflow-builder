@@ -11,7 +11,9 @@ It adds the following:
 - bug fixes for checkbox widget and description field
 - support for molecule formats (moleculefilepaths, chain, residue) in JSON schema
 
-See [../../docs/uiSchema.md](../../docs/uiSchema.md) how to configure the form.
+See [/docs/uiSchema.md](https://github.com/i-VRESSE/workflow-builder/blob/main/docs/uiSchema.md) how to configure the form.
+
+Part of [i-VRESSE/workflow-builder](https://github.com/i-VRESSE/workflow-builder) monorepo.
 
 ## Install
 

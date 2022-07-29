@@ -4,6 +4,10 @@
 
 React components to construct a workflow builder application.
 
+![Image](https://github.com/i-VRESSE/workflow-builder/raw/main/docs/demo.gif)
+
+Part of [i-VRESSE/workflow-builder](https://github.com/i-VRESSE/workflow-builder) monorepo.
+
 ## API documentation
 
 The API documentation can be generated with

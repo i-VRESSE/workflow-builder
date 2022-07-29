@@ -19,7 +19,7 @@ The workflow builder is organized as a monorepo with packages and apps.
 * [haddock3-submit app](apps/haddock3-submit): To construct haddock3 workflow and submit it for online running
 * [kitchensink app](apps/kitchensink): Demonstration of features of workflow builder
 * [@i-vresse/wb-core package](packages/core): React components, state management, input/output functions to create an application
-* [@i-vresse/wb-form package](packages/form): Web Form from a JSON Schema
+* [@i-vresse/wb-form package](packages/form): Web Form based on JSON Schema
 * [haddock3_catalog package](packages/haddock3_catalog): Generate script and storage place for haddock3 catalogs
 
 ## Develop
