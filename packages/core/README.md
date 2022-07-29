@@ -1,5 +1,7 @@
 # core
 
+[![TS-Standard - Typescript Standard Style Guide](https://badgen.net/badge/code%20style/ts-standard/blue?icon=typescript)](https://github.com/standard/ts-standard)
+
 React components to construct a workflow builder application.
 
 ## API documentation
