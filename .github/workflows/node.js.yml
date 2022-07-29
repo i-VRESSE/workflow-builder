@@ -29,3 +29,11 @@ jobs:
     - name: Run integration tests
       run: yarn test:integration
       working-directory: apps/haddock3-download
+
+    - name: Build api docs for core package
+      run: yarn workspace @i-vresse/wb-core apidocs
+    - name: Build api docs for form package
+      run: yarn workspace @i-vresse/wb-form apidocs
+    - name: Build storybook for form package
+      run: yarn workspace @i-vresse/wb-form build-storybook
+      
