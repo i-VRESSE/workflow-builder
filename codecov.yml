@@ -1,6 +1,8 @@
 coverage:
   status:
     project:
+      default: 
+        target: 90%
       core-unit:
         flags:
           - core-unit
@@ -8,13 +10,20 @@ coverage:
         flags:
           - form-unit
 
-flag_management:
-  individual_flags:
-    - name: core-unit
-      paths:
-        - packages/core
-      carryforward: true
-    - name: form-unit
+comment:
+  layout: "reach, diff, flags, files"
+  behavior: default
+  require_changes: false  
+  require_base: yes
+  require_head: yes       
+  branches: null
+
+flags:
+  core-unit:
+    paths:
+      - packages/core
+    carryforward: true
+  form-unit:
       paths:
         - packages/form
       carryforward: true
