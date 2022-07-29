@@ -14,6 +14,7 @@ import { useSetCatalog } from '@i-vresse/wb-core/dist/store'
 import { prepareCatalog } from '@i-vresse/wb-core/dist/catalog'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
+import '@i-vresse/wb-form/dist/index.css'
 import './App.css'
 import kitchensinkCatalog from './kitchensink.json'
 

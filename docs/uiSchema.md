@@ -78,6 +78,12 @@ Each array item will be a row and each object property will be a column.
 The header cells show the title of the property together with a popup for the description.
 The other cells show the property without any titles or descriptions.
 
+To hide titles and descriptions in table rows {"ui:field": "table"}) a css file must be imported.
+
+```js
+import '@i-vresse/wb-form/index.css'
+```
+
 ### Column widths
 
 The column widths can be customized.
@@ -92,6 +98,33 @@ For example given an array of objects with properties `prop2` and `prop3`. To ma
             "widths": {
                 "prop3": "40%"
             }
+        }
+    }
+}
+```
+
+## ui:indexable
+
+When you have many rows it can be hard to tell the index of each row. Add `indexable` ui option to render an additional label or column with the row index.
+
+When `prop1` is an array use the default array renderer with
+
+```json
+{
+    "prop1": {
+        "ui:indexable": true
+    }
+}
+```
+
+When `prop1` is an array of objects use a table field and index column with
+
+```json
+{
+    "prop1": {
+        "ui:field": "table",
+        "ui:options": {
+            "indexable": true // Alternative way to write "ui:indexable": true
         }
     }
 }
