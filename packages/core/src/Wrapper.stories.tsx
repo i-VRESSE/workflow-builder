@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 
 import { ComponentMeta, ComponentStory } from '@storybook/react'
 import { prepareCatalog } from './catalog'
-import { CatalogPanel, FormActions, NodePanel, WorkflowClear, WorkflowDownloadButton, WorkflowPanel, WorkflowUploadButton, Wrapper } from './index'
+import { CatalogPanel, FormActions, NodePanel, WorkflowPanel, WorkflowUploadButton, Wrapper } from './index'
 import { useSetCatalog } from './store'
 import { ICatalog } from './types'
 
@@ -71,9 +71,9 @@ export const ExampleApp: ComponentStory<typeof Wrapper> = () => {
           <CatalogPanel />
         </td>
         <td>
-          <WorkflowPanel/>
+          <WorkflowPanel />
         </td>
-        <td style={{verticalAlign: 'top'}}>
+        <td style={{ verticalAlign: 'top' }}>
           <NodePanel />
           <FormActions />
         </td>
