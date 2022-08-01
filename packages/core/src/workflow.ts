@@ -10,7 +10,7 @@ export interface ILoadedworkflow extends IWorkflow {
 }
 
 export async function loadWorkflowArchive (archiveURL: string, catalog: ICatalog): Promise<ILoadedworkflow> {
-  const { tomlstring, files } = await readArchive(archiveURL, catalog.nodes)
+  const { tomlstring, files } = await readArchive(archiveURL)
   const globalKeys = globalParameterKeys(catalog.global)
   const tomlSchema4global = catalog.global.tomlSchema ?? {}
   const tomSchema4nodes = Object.fromEntries(catalog.nodes.map(

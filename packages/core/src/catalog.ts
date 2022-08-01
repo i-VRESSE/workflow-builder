@@ -3,6 +3,9 @@ import { groupCatalog } from './grouper'
 import { ICatalog, ICatalogIndex, IGlobal } from './types'
 import { validateCatalog, ValidationError } from './validate'
 
+/**
+ * URL where catalog index can be found. Defaults to `/catalog/index.json` relative to the `import.meta.url`.
+ */
 export const defaultCatalogIndexURL = new URL(
   '/catalog/index.json',
   import.meta.url

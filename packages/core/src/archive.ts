@@ -1,3 +1,9 @@
+/**
+ * Methods to read and write workflow archive file.
+ *
+ * @module
+ */
+
 import {
   BlobReader,
   BlobWriter,
@@ -10,7 +16,7 @@ import {
   ZipWriter
 } from '@zip.js/zip.js'
 import { saveAs } from 'file-saver'
-import { IWorkflowNode, ICatalogNode, IFiles, IParameters } from './types'
+import { IWorkflowNode, IFiles, IParameters } from './types'
 import { TomlSchemas, workflow2tomltext } from './toml'
 import { workflowArchiveFilename, workflowFilename } from './constants'
 
@@ -34,6 +40,12 @@ export async function createZip (
   return await writer.close()
 }
 
+/**
+ * Save workflow archive.
+ *
+ * @remarks
+ * Can only be used in web-browsers. Use low level {@link createZip} to create an workflow archive on non-web browsers.
+ */
 export async function saveArchive (
   nodes: IWorkflowNode[],
   global: IParameters,
@@ -44,12 +56,21 @@ export async function saveArchive (
   saveAs(zip, workflowArchiveFilename)
 }
 
-export function injectFilenameIntoDataURL (filename: string, unnamedDataURL: string): string {
+function injectFilenameIntoDataURL (filename: string, unnamedDataURL: string): string {
   const mimeType = getMimeType(filename)
   return unnamedDataURL.replace('data:;base64,', `data:${mimeType};name=${filename};base64,`)
 }
 
-export async function readArchive (archiveURL: string, nodes: ICatalogNode[]): Promise<{
+/**
+ * Read an workflow archive
+ *
+ * The content of the file called `workflow.cfg` ({@link constants!workflowFilename}) is returned as tomlsting.
+ *
+ * All files in archved not named `workflow.cfg` ({@link constants!workflowFilename}) are returned in files object.
+ *
+ * @param archiveURL URL of archive. Must be fetch()-able.
+ */
+export async function readArchive (archiveURL: string): Promise<{
   tomlstring: string
   files: IFiles
 }> {

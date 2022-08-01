@@ -1,3 +1,9 @@
+/**
+ * Methods to set and retrieve the global state.
+ *
+ * @module
+ */
+
 import {
   atom,
   DefaultValue,
@@ -84,6 +90,11 @@ const draggingCatalogNodeState = atom<string | number | null>({
   default: null
 })
 
+/**
+ * Hook to get and set which catalog node is currently being draggged.
+ *
+ * The dndkit package uses an identifier to know which component is being dragged into a dropzone.
+ */
 export function useDraggingCatalogNodeState (): [
   string | number | null,
   SetterOrUpdater<string | number | null>
@@ -111,6 +122,11 @@ const draggingWorkflowNodeState = atom<string | number | null>({
   default: null
 })
 
+/**
+ * Hook to get and set which workflow node is currently being draggged.
+ *
+ * The dndkit package uses an identifier to know which component is being dragged into a dropzone.
+ */
 export function useDraggingWorkflowNodeState (): [
   string | number | null,
   SetterOrUpdater<string | number | null>
@@ -132,6 +148,11 @@ const activeSubmitButtonState = atom<HTMLButtonElement | undefined>({
   default: undefined
 })
 
+/**
+ * Hook to set the reference of the hidden submit button inside a form.
+ *
+ * To submit a rjsf form using a button which is outside the form, you need a reference to a button inside form.
+ */
 export function useSetActiveSubmitButton (): (
   instance: HTMLButtonElement | null
 ) => void {
@@ -140,10 +161,19 @@ export function useSetActiveSubmitButton (): (
   ) => void
 }
 
+/**
+ * Hook to get the reference of the hidden submit button inside a form.
+ *
+ * To submit a rjsf form using a button which is outside the form, you need a reference to a button inside form.
+ */
+
 export function useActiveSubmitButton (): HTMLButtonElement | undefined {
   return useRecoilValue(activeSubmitButtonState)
 }
 
+/**
+ * Hook to retrieve currently selected node by its index
+ */
 export function useSelectNodeIndex (): number {
   return useRecoilValue(selectedNodeIndexState)
 }
@@ -213,6 +243,9 @@ const globalFormDataState = selector<IParameters>({
   }
 })
 
+/**
+ * Hook to get and set global form data
+ */
 export function useGlobalFormData (): [
   IParameters,
   SetterOrUpdater<IParameters>
@@ -232,6 +265,9 @@ const selectedNodeState = selector<IWorkflowNode | undefined>({
   }
 })
 
+/**
+ * Hook to get currently selected node
+ */
 export function useSelectedNode (): IWorkflowNode | undefined {
   return useRecoilValue(selectedNodeState)
 }
@@ -252,6 +288,9 @@ const selectedCatalogNodeState = selector<ICatalogNode | undefined>({
   }
 })
 
+/**
+ * Hook to get catalog node belonging to type of currently selected node
+ */
 export function useSelectedCatalogNode (): ICatalogNode | undefined {
   return useRecoilValue(selectedCatalogNodeState)
 }
@@ -307,6 +346,9 @@ const selectedNodeFormDataState = selector<IParameters | undefined>({
   }
 })
 
+/**
+ * Hook to get and set form data of currently selected node
+ */
 export function useSelectedNodeFormData (): [
   IParameters | undefined,
   SetterOrUpdater<IParameters | undefined>
@@ -344,10 +386,16 @@ const selectedNodeFormSchemaState = selector<JSONSchema7 | undefined>({
   }
 })
 
+/**
+ * Hook to get JSON schema for currently selected node that can be used in a rjsf form.
+ */
 export function useSelectedNodeFormSchema (): JSONSchema7 | undefined {
   return useRecoilValue(selectedNodeFormSchemaState)
 }
 
+/**
+ * Data and methods returned by {@link useWorkflow}
+ */
 export interface UseWorkflow {
   nodes: IWorkflowNode[]
   /**
@@ -356,23 +404,47 @@ export interface UseWorkflow {
   editingGlobal: boolean
   global: IParameters
   toggleGlobalEdit: () => void
+  /**
+   * @param nodeType A {@link types!ICatalogNode.id | catalog node id}
+   */
   addNodeToWorkflow: (nodeType: string) => void
+  /**
+   * @param nodeType A {@link types!ICatalogNode.id | catalog node id}
+   * @param targetId A {@link types!IWorkflowNode.id | id of a workflow node } to place new node.
+   */
   addNodeToWorkflowAt: (nodeType: string, targetId: string) => void
+  /**
+   * Load a workflow from an archive.
+   *
+   * @param archiveURL The URL can have blob or data scheme to workaround cross-origin problems.
+   */
   loadWorkflowArchive: (archiveURL: string) => Promise<void>
   /**
    * Creates archive from workflow and make web browser save it to disk.
    */
   save: () => Promise<void>
+  /**
+   * Remove the workflow including its files.
+   */
   clear: () => void
+  /**
+   * @param nodeIndex Te index in {@link nodes}
+   */
   deleteNode: (nodeIndex: number) => void
   /**
    * Select a node so its parameters are rendered in a form.
+   *
+   * @param nodeIndex Te index in {@link nodes}
    */
   selectNode: (nodeIndex: number) => void
   /**
    * Closes the form for editing parameters of the selected node.
    */
   clearNodeSelection: () => void
+  /**
+   * @param sourceId A {@link types!IWorkflowNode.id | id of a workflow node } to move.
+   * @param targetId A {@link types!IWorkflowNode.id | id of a workflow node } to place source node.
+   */
   moveNode: (sourceId: string, targetId: string) => void
 }
 
