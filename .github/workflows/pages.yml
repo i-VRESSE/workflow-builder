@@ -41,9 +41,8 @@ jobs:
         run: yarn build --filter=\!./apps/*
       - name: Build api docs for core package
         run: yarn workspace @i-vresse/wb-core apidocs
-      # TODO command gives error, need to fix
-      # - name: Build storybook for core package
-      #   run: yarn workspace @i-vresse/wb-core build-storybook
+      - name: Build storybook for core package
+        run: yarn workspace @i-vresse/wb-core build-storybook
       - name: Build api docs for form package
         run: yarn workspace @i-vresse/wb-form apidocs
       - name: Build storybook for form package
@@ -52,6 +51,7 @@ jobs:
         run: |
           mkdir -p _site/core _site/form &&
           mv packages/core/docs _site/core/ &&
+          mv packages/core/storybook-static _site/core/ &&
           mv packages/form/docs _site/form/ &&
           mv packages/form/storybook-static _site/form/
       - name: Setup Pages

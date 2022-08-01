@@ -20,7 +20,10 @@ yarn apidocs
 
 Will generate a [docs/index.html](docs/index.html).
 
-The API docs exclude React components, their docs can be seen with
+The API docs exclude React components, the docs for the React components can be seen at
+[https://i-vresse.github.io/workflow-builder/core/storybook-static/](https://i-vresse.github.io/workflow-builder/core/storybook-static/)
+
+Or generated locally with
 
 ```shell
 yarn storybook

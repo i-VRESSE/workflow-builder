@@ -79,7 +79,7 @@ yarn apidocs
 
 Will generate a [docs/index.html](docs/index.html).
 
-The API docs exclude React components, their docs can be seen at 
+The API docs exclude React components, the docs for the React components can be seen at
 [https://i-vresse.github.io/workflow-builder/form/storybook-static/](https://i-vresse.github.io/workflow-builder/form/storybook-static/)
 
 Or generated locally with

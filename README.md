@@ -115,7 +115,12 @@ The build also creates `packages/*/dist` directories which should be published t
 
 Components can be developed/tested/documented using [storybook](https://storybook.js.org/).
 
-Storybook can be started with
+The storybooks of the main branch are hosted at
+
+* [storybook for core package](https://i-vresse.github.io/workflow-builder/core/storybook-static/)
+* [storybook for form package](https://i-vresse.github.io/workflow-builder/form/storybook-static/)
+
+Storybook can be started locally with
 
 ```shell
 yarn storybook
@@ -123,6 +128,7 @@ yarn storybook
 
 * Goto http://localhost:6008 for storybook of core package
 * Goto http://localhost:6007 for storybook of form package
+
 
 ## Format
 
