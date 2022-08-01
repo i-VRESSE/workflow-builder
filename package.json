@@ -12,7 +12,8 @@
         "test": "turbo run test --parallel",
         "lint": "turbo run lint",
         "clean": "turbo run clean && rm -rf node_modules",
-        "storybook": "turbo run storybook --parallel --no-cache"
+        "storybook": "turbo run storybook --parallel --no-cache",
+        "release": "yarn build && changeset publish"
     },
     "devDependencies": {
         "turbo": "1.2.16"
@@ -24,5 +25,8 @@
     "packageManager": "yarn@3.2.1",
     "resolutions": {
         "@types/react": "17.0.47"
+    },
+    "dependencies": {
+        "@changesets/cli": "^2.24.1"
     }
 }

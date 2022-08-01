@@ -38,3 +38,21 @@ The sections below outline the steps in each case.
 1. create the pull request, e.g. following the instructions [here](https://help.github.com/articles/creating-a-pull-request/).
 
 In case you feel like you've made a valuable contribution, but you don't know how to write or run tests for it, or how to generate the documentation: don't let this discourage you from making the pull request; we can help you! Just go ahead and submit the pull request, but keep in mind that you might be asked to append additional commits to your pull request (have a look at some of our old pull requests to see how this works, for example [#1](https://github.com/i-VRESSE/workflow-builder/pull/1)).
+
+## You want to publish a new version
+
+This repo uses [changesets](https://github.com/changesets/changesets) to organize CHANGELOGs and publishing.
+
+To create a new change set version run
+
+```shell
+yarn changeset version
+```
+
+After any editing and reviewing of the new `.changeset/*.md` file, commit and make part of `main` branch.
+
+Publish to npmjs with
+
+```shell
+yarn changeset publish
+```
