@@ -9,5 +9,10 @@ export default defineConfig({
   },
   server: {
     port: 3002
+  },
+  optimizeDeps: {
+    esbuildOptions: {
+      target: [ 'es2020' ],
+    }
   }
 })
