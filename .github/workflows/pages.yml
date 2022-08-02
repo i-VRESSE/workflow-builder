@@ -43,6 +43,8 @@ jobs:
         run: yarn workspace @i-vresse/wb-core apidocs
       - name: Build storybook for core package
         run: yarn workspace @i-vresse/wb-core build-storybook
+        env:
+          NODE_OPTIONS: "--max_old_space_size=4096"
       - name: Build api docs for form package
         run: yarn workspace @i-vresse/wb-form apidocs
       - name: Build storybook for form package
