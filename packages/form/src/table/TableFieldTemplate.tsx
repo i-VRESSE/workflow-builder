@@ -1,7 +1,7 @@
 import React from 'react'
 import { ArrayFieldTemplateProps, utils } from '@rjsf/core'
 import { Button, Table, OverlayTrigger, Popover } from 'react-bootstrap'
-import { Dash, Plus, QuestionCircle } from 'react-bootstrap-icons'
+import { BsDash, BsPlus, BsQuestionCircle } from 'react-icons/bs'
 
 import './TableFieldTemplate.css'
 
@@ -102,7 +102,7 @@ export const TableFieldTemplate = (props: ArrayFieldTemplateProps): JSX.Element 
             }
           >
             <Button variant='link' size='sm' title={s.description}>
-              <QuestionCircle />
+              <BsQuestionCircle />
             </Button>
           </OverlayTrigger>
         </th>
@@ -119,7 +119,7 @@ export const TableFieldTemplate = (props: ArrayFieldTemplateProps): JSX.Element 
         onClick={props.onAddClick}
         disabled={props.disabled || props.readonly}
       >
-        <Plus />
+        <BsPlus />
       </Button>
     </th>
   )
@@ -139,7 +139,7 @@ export const TableFieldTemplate = (props: ArrayFieldTemplateProps): JSX.Element 
               disabled={props.disabled || props.readonly}
               onClick={element.onDropIndexClick(element.index)}
             >
-              <Dash />
+              <BsDash />
             </Button>
           </td>
         </tr>
