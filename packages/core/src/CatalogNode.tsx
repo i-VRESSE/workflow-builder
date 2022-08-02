@@ -1,12 +1,12 @@
 /** @jsxRuntime classic */ // storybook builder can not use default jsxRuntime so overwritting it here.
 /** @jsx jsx */
 import { jsx, css } from '@emotion/react'
-import { GripVertical } from 'react-bootstrap-icons'
 import { useDraggable } from '@dnd-kit/core'
 
 import { nodeWidth } from './constants'
 import { useWorkflow } from './store'
 import { ICatalogNode } from './types'
+import { GripVertical } from './GripVertical'
 
 const buttonStyle = css({
   width: `${nodeWidth}rem`,

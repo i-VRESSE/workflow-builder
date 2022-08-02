@@ -4,10 +4,10 @@ import Button, { ButtonProps } from 'react-bootstrap/cjs/Button.js'
 import Col from 'react-bootstrap/cjs/Col.js'
 import Container from 'react-bootstrap/cjs/Container.js'
 import Row from 'react-bootstrap/cjs/Row.js'
-import { AiOutlineArrowDown, AiOutlineArrowUp } from 'react-icons/ai'
-import { BsPlus } from 'react-icons/bs'
-import { GrAdd } from 'react-icons/gr'
-import { IoIosRemove } from 'react-icons/io'
+import { AiOutlineArrowDown, AiOutlineArrowUp } from 'react-icons/ai/index.js'
+import { BsPlus } from 'react-icons/bs/index.js'
+import { GrAdd } from 'react-icons/gr/index.js'
+import { IoIosRemove } from 'react-icons/io/index.js'
 /**
  * Same are original ArrayFieldTemplate, but adds optional index to each row
  *

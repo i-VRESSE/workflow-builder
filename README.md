@@ -4,6 +4,9 @@ Graphical interface to build a workflow file
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/c94745e0-9fbd-44ba-a4ff-1641d686c063/deploy-status)](https://app.netlify.com/sites/wonderful-noether-53a9e8/deploys)
 [![Node.js CI](https://github.com/i-VRESSE/workflow-builder/actions/workflows/node.js.yml/badge.svg)](https://github.com/i-VRESSE/workflow-builder/actions/workflows/node.js.yml)
+[![TS-Standard - Typescript Standard Style Guide](https://badgen.net/badge/code%20style/ts-standard/blue?icon=typescript)](https://github.com/standard/ts-standard)
+[![codecov](https://codecov.io/gh/i-VRESSE/workflow-builder/branch/publish-packages/graph/badge.svg?token=ZT000QUOUW)](https://codecov.io/gh/i-VRESSE/workflow-builder)
+[![fair-software.eu](https://img.shields.io/badge/fair--software.eu-%E2%97%8F%20%20%E2%97%8F%20%20%E2%97%8B%20%20%E2%97%8B%20%20%E2%97%8B-orange)](https://fair-software.eu)
 
 The haddock3-download application of the main branch is published at https://wonderful-noether-53a9e8.netlify.app/
 
@@ -17,7 +20,7 @@ The workflow builder is organized as a monorepo with packages and apps.
 * [haddock3-submit app](apps/haddock3-submit): To construct haddock3 workflow and submit it for online running
 * [kitchensink app](apps/kitchensink): Demonstration of features of workflow builder
 * [@i-vresse/wb-core package](packages/core): React components, state management, input/output functions to create an application
-* [@i-vresse/wb-form package](packages/form): Web Form from a JSON Schema
+* [@i-vresse/wb-form package](packages/form): Web Form based on JSON Schema
 * [haddock3_catalog package](packages/haddock3_catalog): Generate script and storage place for haddock3 catalogs
 
 ## Develop
@@ -112,7 +115,12 @@ The build also creates `packages/*/dist` directories which should be published t
 
 Components can be developed/tested/documented using [storybook](https://storybook.js.org/).
 
-Storybook can be started with
+The storybooks of the main branch are hosted at
+
+* [storybook for core package](https://i-vresse.github.io/workflow-builder/core/storybook-static/)
+* [storybook for form package](https://i-vresse.github.io/workflow-builder/form/storybook-static/)
+
+Storybook can be started locally with
 
 ```shell
 yarn storybook
@@ -120,6 +128,7 @@ yarn storybook
 
 * Goto http://localhost:6008 for storybook of core package
 * Goto http://localhost:6007 for storybook of form package
+
 
 ## Format
 
