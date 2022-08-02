@@ -6,7 +6,7 @@ Graphical interface to build a workflow file
 [![Node.js CI](https://github.com/i-VRESSE/workflow-builder/actions/workflows/node.js.yml/badge.svg)](https://github.com/i-VRESSE/workflow-builder/actions/workflows/node.js.yml)
 [![TS-Standard - Typescript Standard Style Guide](https://badgen.net/badge/code%20style/ts-standard/blue?icon=typescript)](https://github.com/standard/ts-standard)
 [![codecov](https://codecov.io/gh/i-VRESSE/workflow-builder/branch/publish-packages/graph/badge.svg?token=ZT000QUOUW)](https://codecov.io/gh/i-VRESSE/workflow-builder)
-[![fair-software.eu](https://img.shields.io/badge/fair--software.eu-%E2%97%8F%20%20%E2%97%8F%20%20%E2%97%8B%20%20%E2%97%8F%20%20%E2%97%8B-orange)](https://fair-software.eu)
+[![fair-software.eu](https://img.shields.io/badge/fair--software.eu-%E2%97%8F%20%20%E2%97%8F%20%20%E2%97%8F%20%20%E2%97%8F%20%20%E2%97%8B-yellow)](https://fair-software.eu)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6953674.svg)](https://doi.org/10.5281/zenodo.6953674)
 
 The haddock3-download application of the main branch is published at https://wonderful-noether-53a9e8.netlify.app/
