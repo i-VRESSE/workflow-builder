@@ -1,7 +1,7 @@
 import React from 'react'
 import { ArrayFieldTemplateProps, utils } from '@rjsf/core'
 import { Button, Table, OverlayTrigger, Popover } from 'react-bootstrap'
-import { BsDash, BsPlus, BsQuestionCircle } from 'react-icons/bs'
+import { BsDash, BsPlus, BsQuestionCircle } from 'react-icons/bs/index.js'
 
 import './TableFieldTemplate.css'
 
