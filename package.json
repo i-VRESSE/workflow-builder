@@ -12,9 +12,11 @@
         "test": "turbo run test --parallel",
         "lint": "turbo run lint",
         "clean": "turbo run clean && rm -rf node_modules",
-        "storybook": "turbo run storybook --parallel --no-cache"
+        "storybook": "turbo run storybook --parallel --no-cache",
+        "postinstall": "husky install"
     },
     "devDependencies": {
+        "husky": "^8.0.0",
         "turbo": "1.2.16"
     },
     "engines": {
