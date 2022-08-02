@@ -1,6 +1,7 @@
 # @i-vresse/wb-core
 
 [![TS-Standard - Typescript Standard Style Guide](https://badgen.net/badge/code%20style/ts-standard/blue?icon=typescript)](https://github.com/standard/ts-standard)
+[![npmjs.com](https://img.shields.io/npm/v/@i-vresse/wb-core.svg?style=flat)](https://www.npmjs.com/package/@i-vresse/wb-core)
 
 React components and hooks to construct a workflow builder application.
 The workflow builder application allows you to create a complex TOML formatted config file based on a set of JSON schemas.
