@@ -23,11 +23,16 @@ jobs:
     - run: yarn build
     - run: yarn lint
     - run: yarn test -- run --coverage
-    - name: Code coverage upload
+    - name: Code coverage upload 4 core package
       uses: codecov/codecov-action@v3
       with:
-        files: ./packages/form/coverage/lcov.info,./packages/core/coverage/lcov.info
-        flags: form-unit,core-unit
+        files: ./packages/core/coverage/lcov.info
+        flags: core-unit
+    - name: Code coverage upload 4 form package
+      uses: codecov/codecov-action@v3
+      with:
+        files: ./packages/form/coverage/lcov.info
+        flags: form-unit
     - name: Install Playwright
       run: npx playwright install --with-deps chromium
       working-directory: apps/haddock3-download
