@@ -92,7 +92,7 @@ parameterX = 'some value'
 
 describe('useSelectedCatalogNode()', () => {
   describe('given catalog and workflow with single node', () => {
-    it.only('should return catalog of selected node', () => {
+    it('should return catalog of selected node', () => {
       const { result } = renderHook(
         () => {
           // TODO be able to use hooks with have async code
