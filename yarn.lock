@@ -1997,10 +1997,10 @@ __metadata:
     "@storybook/addon-docs": ^6.5.9
     "@storybook/addon-essentials": ^6.5.9
     "@storybook/addon-interactions": ^6.5.9
-    "@storybook/addon-links": ^6.5.9
     "@storybook/builder-vite": ^0.2.2
     "@storybook/react": ^6.5.9
     "@storybook/testing-library": ^0.0.13
+    "@testing-library/react-hooks": ^8.0.1
     "@types/file-saver": ^2.0.4
     "@types/js-yaml": ^4.0.5
     "@types/papaparse": ^5.3.2
@@ -2013,6 +2013,7 @@ __metadata:
     c8: ^7.11.0
     file-saver: ^2.0.5
     js-yaml: ^4.1.0
+    jsdom: ^20.0.0
     nanoid: ^4.0.0
     papaparse: ^5.3.2
     react-bootstrap: ^1
@@ -2046,7 +2047,6 @@ __metadata:
     "@storybook/addon-docs": ^6.5.9
     "@storybook/addon-essentials": ^6.5.9
     "@storybook/addon-interactions": ^6.5.9
-    "@storybook/addon-links": ^6.5.9
     "@storybook/builder-webpack4": ^6.5.9
     "@storybook/manager-webpack4": ^6.5.9
     "@storybook/react": ^6.5.9
@@ -2730,34 +2730,6 @@ __metadata:
     react-dom:
       optional: true
   checksum: a41611b991d32f34b985e4a5bd391e9766fa42f4dd511929cd71fd0fba16384f66a96fc57eb3fd25204625d39d65c35f06ceab8215e6533502f1d255198dffb5
-  languageName: node
-  linkType: hard
-
-"@storybook/addon-links@npm:^6.5.9":
-  version: 6.5.9
-  resolution: "@storybook/addon-links@npm:6.5.9"
-  dependencies:
-    "@storybook/addons": 6.5.9
-    "@storybook/client-logger": 6.5.9
-    "@storybook/core-events": 6.5.9
-    "@storybook/csf": 0.0.2--canary.4566f4d.1
-    "@storybook/router": 6.5.9
-    "@types/qs": ^6.9.5
-    core-js: ^3.8.2
-    global: ^4.4.0
-    prop-types: ^15.7.2
-    qs: ^6.10.0
-    regenerator-runtime: ^0.13.7
-    ts-dedent: ^2.0.0
-  peerDependencies:
-    react: ^16.8.0 || ^17.0.0 || ^18.0.0
-    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  peerDependenciesMeta:
-    react:
-      optional: true
-    react-dom:
-      optional: true
-  checksum: 3bc5901d9446dcf0e806941f374a9681bf9d214b855b4ab470377812b5c03d76a342c1b60a73774604cf1f562de1e0f4e028fe51072a044f11278c153c5f8255
   languageName: node
   linkType: hard
 
@@ -3755,6 +3727,28 @@ __metadata:
     lz-string: ^1.4.4
     pretty-format: ^27.0.2
   checksum: a916ea5167bc02b4666a519814c2b9563be91e912038816e3bd2a4e295122a3aab68b102fc8f0205219e5c4201e6994894bc7d24a8b4aae0e2e8f88cbeb65971
+  languageName: node
+  linkType: hard
+
+"@testing-library/react-hooks@npm:^8.0.1":
+  version: 8.0.1
+  resolution: "@testing-library/react-hooks@npm:8.0.1"
+  dependencies:
+    "@babel/runtime": ^7.12.5
+    react-error-boundary: ^3.1.0
+  peerDependencies:
+    "@types/react": ^16.9.0 || ^17.0.0
+    react: ^16.9.0 || ^17.0.0
+    react-dom: ^16.9.0 || ^17.0.0
+    react-test-renderer: ^16.9.0 || ^17.0.0
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+    react-dom:
+      optional: true
+    react-test-renderer:
+      optional: true
+  checksum: 7fe44352e920deb5cb1876f80d64e48615232072c9d5382f1e0284b3aab46bb1c659a040b774c45cdf084a5257b8fe463f7e08695ad8480d8a15635d4d3d1f6d
   languageName: node
   linkType: hard
 
@@ -13340,6 +13334,17 @@ __metadata:
     react: ^0.14.8 || ^15.0.1 || ^16.0.0 || ^17.0.1
     react-dom: ^0.14.8 || ^15.0.1 || ^16.0.0 || ^17.0.1
   checksum: 42bcd4423f12e9ee21b2d3f0c2a28805ff4953bd82b6be4c1f5b5f9a371115aafa36a6f3d82726d43b4912179b79e99550c2b9a772c7fe6a5cd8f7e93ff34ceb
+  languageName: node
+  linkType: hard
+
+"react-error-boundary@npm:^3.1.0":
+  version: 3.1.4
+  resolution: "react-error-boundary@npm:3.1.4"
+  dependencies:
+    "@babel/runtime": ^7.12.5
+  peerDependencies:
+    react: ">=16.13.1"
+  checksum: f36270a5d775a25c8920f854c0d91649ceea417b15b5bc51e270a959b0476647bb79abb4da3be7dd9a4597b029214e8fe43ea914a7f16fa7543c91f784977f1b
   languageName: node
   linkType: hard
 
