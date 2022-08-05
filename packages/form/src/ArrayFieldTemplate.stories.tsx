@@ -145,3 +145,26 @@ export const IndexableArrayWithPredefinedLabels: ComponentStory<typeof Form> = (
   }
   return render(schema, uiSchema)
 }
+
+export const IndexableArrayWithLongPredefinedLabels: ComponentStory<typeof Form> = () => {
+  const schema: JSONSchema7 = {
+    type: 'object',
+    properties: {
+      nested1: {
+        type: 'array',
+        title: 'Array of string',
+        items: {
+          type: 'string'
+        }
+      }
+    },
+    additionalProperties: false
+  }
+  const uiSchema = {
+    nested1: {
+      'ui:indexable': ['a/very/long_path/to.1st', '2nd', '3rd'],
+      'ui:orderable': true
+    }
+  }
+  return render(schema, uiSchema)
+}

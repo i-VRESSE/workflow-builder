@@ -1,4 +1,4 @@
-import { AddButtonProps, ArrayFieldTemplateProps, IdSchema, UiSchema, utils } from '@rjsf/core'
+import { AddButtonProps, ArrayFieldTemplateProps, IdSchema, utils } from '@rjsf/core'
 import React from 'react'
 import Button, { ButtonProps } from 'react-bootstrap/cjs/Button.js'
 import Col from 'react-bootstrap/cjs/Col.js'
@@ -8,6 +8,7 @@ import { AiOutlineArrowDown, AiOutlineArrowUp } from 'react-icons/ai/index.js'
 import { BsPlus } from 'react-icons/bs/index.js'
 import { GrAdd } from 'react-icons/gr/index.js'
 import { IoIosRemove } from 'react-icons/io/index.js'
+import { useIndexable } from './useIndexable'
 /**
  * Same are original ArrayFieldTemplate, but adds optional index to each row
  *
@@ -132,7 +133,7 @@ const DefaultArrayItem = (props: any) => {
         {props.indexable
           ? (
             <>
-              <Col xs='1' lg='1'>
+              <Col xs='2' lg='2'>
                 {props.indexLookup(props.index)}
               </Col>
               <Col xs='8' lg='8'>
@@ -141,12 +142,12 @@ const DefaultArrayItem = (props: any) => {
             </>
             )
           : (
-            <Col xs='9' lg='9'>
+            <Col xs='10' lg='10'>
               {props.children}
             </Col>
             )}
 
-        <Col xs='3' lg='3' className='py-4'>
+        <Col xs='2' lg='2' className='py-4'>
           {props.hasToolbar && (
             <div className='d-flex flex-row'>
               {(props.hasMoveUp || props.hasMoveDown) && (
@@ -197,28 +198,10 @@ const DefaultArrayItem = (props: any) => {
   )
 }
 
-// New code not found in https://github.com/rjsf-team/react-jsonschema-form
-const useIndexable = (uiSchema: UiSchema) => {
-  const uiOptions = utils.getUiOptions(uiSchema)
-  const indexable = (
-    uiOptions !== undefined &&
-    'indexable' in uiOptions &&
-    (
-      (typeof uiOptions.indexable === 'boolean' && uiOptions.indexable) ||
-      Array.isArray(uiOptions.indexable)
-    )
-  )
-  if (indexable &&
-    Array.isArray(uiOptions.indexable)
-  ) {
-    const lookup: string[] = uiOptions.indexable
-    return [indexable, (i: number) => i < lookup.length ? lookup[i] : `${i}`]
-  }
-  return [indexable, (i: number) => `${i}`]
-}
-
 const DefaultFixedArrayFieldTemplate = (props: ArrayFieldTemplateProps) => {
+  // New code not found in https://github.com/rjsf-team/react-jsonschema-form
   const [indexable, indexLookup] = useIndexable(props.uiSchema)
+
   return (
     <fieldset className={props.className}>
       <ArrayFieldTitle
@@ -258,7 +241,9 @@ const DefaultFixedArrayFieldTemplate = (props: ArrayFieldTemplateProps) => {
 }
 
 const DefaultNormalArrayFieldTemplate = (props: ArrayFieldTemplateProps) => {
+  // New code not found in https://github.com/rjsf-team/react-jsonschema-form
   const [indexable, indexLookup] = useIndexable(props.uiSchema)
+
   return (
     <div>
       <Row className='p-0 m-0'>
