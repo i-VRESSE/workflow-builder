@@ -1,11 +1,21 @@
 import { init, open_pdb } from '@i-vresse/pdbtbx-ts'
 
 export interface MoleculeInfo {
+  /**
+   * Path of PDB file
+   */
+  path: string
+  /**
+   * Chains found in PDB file
+   */
   chains: string[]
+  /**
+   * Unique residue numbers found in PDB file
+   */
   residueSequenceNumbers: number[]
 }
 
-export async function parsePDB (content: string): Promise<MoleculeInfo> {
+export async function parsePDB (content: string): Promise<Omit<MoleculeInfo, 'path'>> {
   // TODO do init only once
   await init()
   try {
