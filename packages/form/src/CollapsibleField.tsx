@@ -1,5 +1,5 @@
+import React, { useState } from 'react'
 import { FieldProps, utils } from '@rjsf/core'
-import { useState } from 'react'
 
 // Caret up with square around icon is not in react-icons package, copied from https://icons.getbootstrap.com/icons/caret-up-square/
 const CaretUpSquare = (): JSX.Element => (
