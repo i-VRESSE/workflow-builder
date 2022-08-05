@@ -204,17 +204,16 @@ const useIndexable = (uiSchema: UiSchema) => {
     uiOptions !== undefined &&
     'indexable' in uiOptions &&
     (
-      (typeof uiOptions.indexable === 'boolean' && uiOptions.indexable)
-      ||
+      (typeof uiOptions.indexable === 'boolean' && uiOptions.indexable) ||
       Array.isArray(uiOptions.indexable)
     )
   )
-  if (indexable && 
+  if (indexable &&
     Array.isArray(uiOptions.indexable)
-    ) {
-      const lookup: string[] = uiOptions.indexable
-      return [indexable, (i: number) => i < lookup.length ? lookup[i] : `${i}`]
-  } 
+  ) {
+    const lookup: string[] = uiOptions.indexable
+    return [indexable, (i: number) => i < lookup.length ? lookup[i] : `${i}`]
+  }
   return [indexable, (i: number) => `${i}`]
 }
 
