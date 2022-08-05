@@ -29,8 +29,8 @@
     "build": "tsup",
     "lint": "ts-standard",
     "test": "vitest",
-    "storybook": "start-storybook -p 6007",
-    "build-storybook": "build-storybook",
+    "storybook": "NODE_OPTIONS=--openssl-legacy-provider start-storybook -p 6007",
+    "build-storybook": "NODE_OPTIONS=--openssl-legacy-provider build-storybook",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
     "apidocs": "typedoc --entryPointStrategy expand --exclude '**/*.tsx' --exclude '**/*.stories.*' ./src"
   },
@@ -49,7 +49,6 @@
     "@storybook/addon-docs": "^6.5.9",
     "@storybook/addon-essentials": "^6.5.9",
     "@storybook/addon-interactions": "^6.5.9",
-    "@storybook/addon-links": "^6.5.9",
     "@storybook/builder-webpack4": "^6.5.9",
     "@storybook/manager-webpack4": "^6.5.9",
     "@storybook/react": "^6.5.9",
