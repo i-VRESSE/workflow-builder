@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: Use Node.js
       uses: actions/setup-node@v2
       with:
         node-version: 16.x
@@ -22,7 +22,17 @@ jobs:
     - run: yarn
     - run: yarn build
     - run: yarn lint
-    - run: yarn test -- run
+    - run: yarn test -- run --coverage
+    - name: Code coverage upload 4 core package
+      uses: codecov/codecov-action@v3
+      with:
+        files: ./packages/core/coverage/lcov.info
+        flags: core-unit
+    - name: Code coverage upload 4 form package
+      uses: codecov/codecov-action@v3
+      with:
+        files: ./packages/form/coverage/lcov.info
+        flags: form-unit
     - name: Install Playwright
       run: npx playwright install --with-deps chromium
       working-directory: apps/haddock3-download

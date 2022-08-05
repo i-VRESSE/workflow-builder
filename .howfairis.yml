@@ -1,0 +1,1 @@
+skip_registry_checks_reason: "Npm packages of monorepo are on npmjs.com"

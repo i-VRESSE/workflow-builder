@@ -40,5 +40,11 @@ Theme.customFormats = { ...Theme.customFormats, ...moleculeFormatValidators }
  *
  * Fixes file upload and checkobox.
  * Adds several fields and widgets.
+ *
+ * To hide titles and descriptions in table rows {"ui:field": "table"}) a css file must be imported.
+ *
+ * ```js
+ * import '@i-vresse/wb-form/index.css'
+ * ```
  */
 export const Form = withTheme(Theme)

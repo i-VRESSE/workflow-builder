@@ -1,12 +1,13 @@
 /** @jsxRuntime classic */ // storybook builder can not use default jsxRuntime so overwritting it here.
 /** @jsx jsx */
 import { jsx, css } from '@emotion/react'
-import { GripVertical, X } from 'react-bootstrap-icons'
+import { BsX } from 'react-icons/bs'
 import { CSS } from '@dnd-kit/utilities'
 import { useSortable } from '@dnd-kit/sortable'
 
 import { useDraggingWorkflowNodeState, useSelectNodeIndex, useWorkflow } from './store'
 import { nodeWidth } from './constants'
+import { GripVertical } from './GripVertical'
 
 interface IProp {
   type: string
@@ -90,7 +91,7 @@ export const VisualNode = ({ type, index, id }: IProp): JSX.Element => {
               event.stopPropagation()
             }}
           >
-            <X />
+            <BsX />
           </div>
         </div>
       </button>

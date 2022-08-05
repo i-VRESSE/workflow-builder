@@ -1,8 +1,18 @@
 import { JSONSchema7 } from 'json-schema'
 import { UiSchema } from '@rjsf/core'
 
+/**
+ * Array of tuples.
+ *
+ * Where first item in tuple is the title of the catalog.
+ *
+ * Where second item in tuple is the URL of the catalog YAML file.
+ */
 export type ICatalogIndex = Array<[string, string]>
 
+/**
+ * See [/docs/tomlSchema.md](https://github.com/i-VRESSE/workflow-builder/blob/main/docs/uiSchema.md) for documentation and examples.
+ */
 export interface TomlScalarSchema {
   indexed?: boolean
   flatten?: boolean
@@ -30,6 +40,7 @@ export interface ICatalogNode {
 export interface ICategory {
   name: string
   description: string
+  collapsed?: boolean
 }
 
 export interface IGlobal {
