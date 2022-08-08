@@ -22,7 +22,7 @@ Create vite React project and install the core package with
 npm create vite my-ivresse-app -- --template react-ts
 cd my-ivresse-app
 npm install
-npm install @i-vresses/wb-core bootstrap@4
+npm install @i-vresse/wb-core bootstrap@4
 ```
 
 Rewrite `src/main.tsx` to include wrapper component for global state, notifications and drag-n-drop support.
