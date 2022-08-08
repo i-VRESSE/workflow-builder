@@ -30,6 +30,7 @@ Rewrite `src/main.tsx` to include wrapper component for global state, notificati
 ```jsx
 ...
 import { Wrapper } from '@i-vresse/wb-core'
+import App from './App'
 
 ReactDOM.render(
   <React.StrictMode>
@@ -45,13 +46,11 @@ Rewrite `src/App.tsx` to combine the components of the `@i-vresse/wb-core` packa
 
 ```jsx
 import { useEffect } from "react";
-import { WorkflowUploadButton } from "./WorkflowUploadButton";
 import {
   CatalogPanel,
   FormActions,
   NodePanel,
   WorkflowPanel,
-  Wrapper,
 } from "@i-vresse/wb-core";
 import { useSetCatalog } from "@i-vresse/wb-core/dist/store";
 import { prepareCatalog } from "@i-vresse/wb-core/dist/catalog";
