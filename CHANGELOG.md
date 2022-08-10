@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## @i-vresse/wb-core 1.1.1 - 2022-08-10
+
+Previous release did not contain code.
+
+## @i-vresse/wb-form 1.1.1 - 2022-08-10
+
+Previous release did not contain code.
+
 ## @i-vresse/wb-core 1.1.0 - 2022-08-10
 
 ### Added
