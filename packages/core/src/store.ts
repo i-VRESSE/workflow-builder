@@ -462,13 +462,13 @@ export interface UseWorkflow {
    */
   clear: () => void
   /**
-   * @param nodeIndex Te index in {@link nodes}
+   * @param nodeIndex The index in {@link UseWorkflow.nodes}
    */
   deleteNode: (nodeIndex: number) => void
   /**
    * Select a node so its parameters are rendered in a form.
    *
-   * @param nodeIndex Te index in {@link nodes}
+   * @param nodeIndex The index in {@link UseWorkflow.nodes}
    */
   selectNode: (nodeIndex: number) => void
   /**
