@@ -22,7 +22,7 @@ Create vite React project and install the core package with
 npm create vite my-ivresse-app -- --template react-ts
 cd my-ivresse-app
 npm install
-npm install @i-vresses/wb-core bootstrap@4
+npm install @i-vresse/wb-core bootstrap@4
 ```
 
 Rewrite `src/main.tsx` to include wrapper component for global state, notifications and drag-n-drop support.
@@ -30,6 +30,7 @@ Rewrite `src/main.tsx` to include wrapper component for global state, notificati
 ```jsx
 ...
 import { Wrapper } from '@i-vresse/wb-core'
+import App from './App'
 
 ReactDOM.render(
   <React.StrictMode>
@@ -45,13 +46,11 @@ Rewrite `src/App.tsx` to combine the components of the `@i-vresse/wb-core` packa
 
 ```jsx
 import { useEffect } from "react";
-import { WorkflowUploadButton } from "./WorkflowUploadButton";
 import {
   CatalogPanel,
   FormActions,
   NodePanel,
   WorkflowPanel,
-  Wrapper,
 } from "@i-vresse/wb-core";
 import { useSetCatalog } from "@i-vresse/wb-core/dist/store";
 import { prepareCatalog } from "@i-vresse/wb-core/dist/catalog";
