@@ -126,10 +126,13 @@ const DefaultArrayItem = (props: any) => {
     paddingRight: 6,
     fontWeight: 'bold'
   }
+  /* New code not found in https://github.com/rjsf-team/react-jsonschema-form */
+  const childType = props.children.props.schema.type
+  const potentiallyHighChild = (childType === 'object' || childType === 'array')
+  const verticalAlign = potentiallyHighChild ? 'align-items-top' : 'align-items-center'
   return (
     <div key={props.key}>
-      <Row className='mb-2  d-flex align-items-center'>
-        {/* New code not found in https://github.com/rjsf-team/react-jsonschema-form */}
+      <Row className={`mb-2 d-flex ${verticalAlign}`}>
         {props.indexable
           ? (
             <>
