@@ -42,7 +42,8 @@ import {
 import { groupParameters, unGroupParameters } from './grouper'
 import { pruneDefaults } from './pruner'
 import { resolveMaxItemsFrom } from './resolveMaxItemsFrom'
-import { addMoleculeValidation } from './molecule/addMoleculeValidation'
+import { addMoleculeUi, addMoleculeValidation, parseMolecules } from './molecule/addMoleculeValidation'
+import { MoleculeInfo } from './molecule/parse'
 
 const catalogState = atom<ICatalog>({
   key: 'catalog',
@@ -356,17 +357,29 @@ export function useSelectedNodeFormData (): [
   return useRecoilState(selectedNodeFormDataState)
 }
 
+const moleculeInfosState = selector<[MoleculeInfo[], string | undefined]>({
+  key: 'moleculeInfos',
+  get: async ({ get }) => {
+    const catalog = get(catalogState)
+    const globalSchema = catalog.global.schema
+    const globalParameters = get(globalParametersState)
+    const files = get(filesState)
+    return await parseMolecules(
+      globalParameters,
+      globalSchema,
+      files
+    )
+  }
+})
+
 const selectedNodeFormSchemaState = selector<JSONSchema7 | undefined>({
   key: 'selectedNodeFormSchema',
-  get: async ({ get }) => {
+  get: ({ get }) => {
     const catalogNode = get(selectedCatalogNodeState)
     const globalParameters = get(globalParametersState)
-    const catalog = get(catalogState)
     if (
       catalogNode === undefined ||
-      catalogNode.formSchema === undefined ||
-      catalogNode === undefined ||
-      catalog === undefined
+      catalogNode.formSchema === undefined
     ) {
       return undefined
     }
@@ -374,13 +387,11 @@ const selectedNodeFormSchemaState = selector<JSONSchema7 | undefined>({
       catalogNode.formSchema,
       globalParameters
     )
-    const globalSchema = catalog.global.schema
-    const files = get(filesState)
-    const schemaWithMolInfo = await addMoleculeValidation(
+    const [moleculeInfos, moleculesPropName] = get(moleculeInfosState)
+    const schemaWithMolInfo = addMoleculeValidation(
       schemaWithMaxItems,
-      globalParameters,
-      globalSchema,
-      files
+      moleculeInfos,
+      moleculesPropName
     )
     return schemaWithMolInfo
   }
@@ -391,6 +402,29 @@ const selectedNodeFormSchemaState = selector<JSONSchema7 | undefined>({
  */
 export function useSelectedNodeFormSchema (): JSONSchema7 | undefined {
   return useRecoilValue(selectedNodeFormSchemaState)
+}
+
+const selectedNodeFormUiSchemaState = selector<UiSchema | undefined>({
+  key: 'selectedNodeFormUiSchema',
+  get: ({ get }) => {
+    const schema = get(selectedNodeFormSchemaState)
+    const catalogNode = get(selectedCatalogNodeState)
+    if (schema === undefined || catalogNode === undefined || catalogNode.formUiSchema === undefined) {
+      return undefined
+    }
+    const [moleculeInfos, moleculesPropName] = get(moleculeInfosState)
+    const uiSchemaWithMolInfo = addMoleculeUi(
+      catalogNode.formUiSchema,
+      schema,
+      moleculeInfos,
+      moleculesPropName
+    )
+    return uiSchemaWithMolInfo
+  }
+})
+
+export function useSelectedNodeFormUiSchema (): UiSchema | undefined {
+  return useRecoilValue(selectedNodeFormUiSchemaState)
 }
 
 /**

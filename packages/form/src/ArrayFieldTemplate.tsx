@@ -1,4 +1,4 @@
-import { AddButtonProps, ArrayFieldTemplateProps, IdSchema, UiSchema, utils } from '@rjsf/core'
+import { AddButtonProps, ArrayFieldTemplateProps, IdSchema, utils } from '@rjsf/core'
 import React from 'react'
 import Button, { ButtonProps } from 'react-bootstrap/cjs/Button.js'
 import Col from 'react-bootstrap/cjs/Col.js'
@@ -8,6 +8,7 @@ import { AiOutlineArrowDown, AiOutlineArrowUp } from 'react-icons/ai/index.js'
 import { BsPlus } from 'react-icons/bs/index.js'
 import { GrAdd } from 'react-icons/gr/index.js'
 import { IoIosRemove } from 'react-icons/io/index.js'
+import { useIndexable } from './useIndexable'
 /**
  * Same are original ArrayFieldTemplate, but adds optional index to each row
  *
@@ -125,15 +126,18 @@ const DefaultArrayItem = (props: any) => {
     paddingRight: 6,
     fontWeight: 'bold'
   }
+  /* New code not found in https://github.com/rjsf-team/react-jsonschema-form */
+  const childType = props.children.props.schema.type
+  const potentiallyHighChild = (childType === 'object' || childType === 'array')
+  const verticalAlign = potentiallyHighChild ? 'align-items-top' : 'align-items-center'
   return (
     <div key={props.key}>
-      <Row className='mb-2  d-flex align-items-center'>
-        {/* New code not found in https://github.com/rjsf-team/react-jsonschema-form */}
+      <Row className={`mb-2 d-flex ${verticalAlign}`}>
         {props.indexable
           ? (
             <>
-              <Col xs='1' lg='1'>
-                {props.index}
+              <Col xs='2' lg='2'>
+                {props.indexLookup(props.index)}
               </Col>
               <Col xs='8' lg='8'>
                 {props.children}
@@ -141,12 +145,12 @@ const DefaultArrayItem = (props: any) => {
             </>
             )
           : (
-            <Col xs='9' lg='9'>
+            <Col xs='10' lg='10'>
               {props.children}
             </Col>
             )}
 
-        <Col xs='3' lg='3' className='py-4'>
+        <Col xs='2' lg='2' className='py-4'>
           {props.hasToolbar && (
             <div className='d-flex flex-row'>
               {(props.hasMoveUp || props.hasMoveDown) && (
@@ -197,22 +201,10 @@ const DefaultArrayItem = (props: any) => {
   )
 }
 
-// New code not found in https://github.com/rjsf-team/react-jsonschema-form
-const isIndexable = (uiSchema: UiSchema) => {
-  if (uiSchema === undefined) {
-    return false
-  }
-  const uiOptions = utils.getUiOptions(uiSchema)
-  return (
-    uiOptions !== undefined &&
-    'indexable' in uiOptions &&
-    typeof uiOptions.indexable === 'boolean' &&
-    uiOptions.indexable
-  )
-}
-
 const DefaultFixedArrayFieldTemplate = (props: ArrayFieldTemplateProps) => {
-  const indexable = isIndexable(props.uiSchema)
+  // New code not found in https://github.com/rjsf-team/react-jsonschema-form
+  const [indexable, indexLookup] = useIndexable(props.uiSchema)
+
   return (
     <fieldset className={props.className}>
       <ArrayFieldTitle
@@ -237,7 +229,7 @@ const DefaultFixedArrayFieldTemplate = (props: ArrayFieldTemplateProps) => {
         key={`array-item-list-${props.idSchema.$id}`}
       >
         {props.items &&
-          props.items.map((p) => DefaultArrayItem({ ...p, indexable }))}
+          props.items.map((p) => DefaultArrayItem({ ...p, indexable, indexLookup }))}
       </div>
 
       {props.canAdd && (
@@ -252,7 +244,9 @@ const DefaultFixedArrayFieldTemplate = (props: ArrayFieldTemplateProps) => {
 }
 
 const DefaultNormalArrayFieldTemplate = (props: ArrayFieldTemplateProps) => {
-  const indexable = isIndexable(props.uiSchema)
+  // New code not found in https://github.com/rjsf-team/react-jsonschema-form
+  const [indexable, indexLookup] = useIndexable(props.uiSchema)
+
   return (
     <div>
       <Row className='p-0 m-0'>
@@ -282,7 +276,7 @@ const DefaultNormalArrayFieldTemplate = (props: ArrayFieldTemplateProps) => {
             className='p-0 m-0'
           >
             {props.items &&
-              props.items.map((p) => DefaultArrayItem({ ...p, indexable }))}
+              props.items.map((p) => DefaultArrayItem({ ...p, indexable, indexLookup }))}
 
             {props.canAdd && (
               <Container className=''>

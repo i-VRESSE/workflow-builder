@@ -79,7 +79,7 @@ The root, packages and apps have independend versions. To make a release of the 
 1. Add changes to [CHANGELOG.md](CHANGELOG.md)
 2. Set version in `/package.json` with `yarn version <patch|minor|major>` and push changes to main branch
 3. Goto https://github.com/i-VRESSE/workflow-builder/releases/new
-4. Create a tag in format 'v' + version value in `/package.json`
+4. Create a tag in format 'v' + version value from `/package.json`
 5. Set title to `i-VRESSE workflow-builder`
 6. Copy `The workflow builder allows you to create a complex TOML formatted config file based on a set of JSON schemas.` to release description
 7. Append newest sections in CHANGELOG.md to release description

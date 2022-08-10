@@ -13,7 +13,7 @@ import type {
   IFiles
 } from './types'
 import { ajvKeyword, resolveMaxItemsFrom } from './resolveMaxItemsFrom'
-import { addMoleculeValidation } from './molecule/addMoleculeValidation'
+import { addMoleculeValidation, parseMolecules } from './molecule/addMoleculeValidation'
 
 const ajv = new Ajv({
   // In addMoleculeValidation() we replace items:{} with items:[{}, {}, ...]
@@ -80,6 +80,11 @@ async function validateNodeFactory (
 ): Promise<
   (value: IWorkflowNode, index: number, array: IWorkflowNode[]) => Errors
   > {
+  const [moleculeInfos, moleculesPropName] = await parseMolecules(
+    globalParameters,
+    globalSchema,
+    files
+  )
   const id2schema = Object.fromEntries(
     await Promise.all(
       catalogNodes.map(async (c) => {
@@ -87,11 +92,10 @@ async function validateNodeFactory (
           c.schema,
           globalParameters
         )
-        const schemaWithMolInfo = await addMoleculeValidation(
+        const schemaWithMolInfo = addMoleculeValidation(
           schemaWithMaxItems,
-          globalParameters,
-          globalSchema,
-          files
+          moleculeInfos,
+          moleculesPropName
         )
         return [c.id, schemaWithMolInfo]
       })
