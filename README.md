@@ -5,7 +5,7 @@ Graphical interface to build a workflow file
 [![Netlify Status](https://api.netlify.com/api/v1/badges/c94745e0-9fbd-44ba-a4ff-1641d686c063/deploy-status)](https://app.netlify.com/sites/wonderful-noether-53a9e8/deploys)
 [![Node.js CI](https://github.com/i-VRESSE/workflow-builder/actions/workflows/node.js.yml/badge.svg)](https://github.com/i-VRESSE/workflow-builder/actions/workflows/node.js.yml)
 [![TS-Standard - Typescript Standard Style Guide](https://badgen.net/badge/code%20style/ts-standard/blue?icon=typescript)](https://github.com/standard/ts-standard)
-[![codecov](https://codecov.io/gh/i-VRESSE/workflow-builder/branch/publish-packages/graph/badge.svg?token=ZT000QUOUW)](https://codecov.io/gh/i-VRESSE/workflow-builder)
+[![codecov](https://codecov.io/gh/i-VRESSE/workflow-builder/branch/main/graph/badge.svg?token=ZT000QUOUW)](https://codecov.io/gh/i-VRESSE/workflow-builder)
 [![fair-software.eu](https://img.shields.io/badge/fair--software.eu-%E2%97%8F%20%20%E2%97%8F%20%20%E2%97%8F%20%20%E2%97%8F%20%20%E2%97%8B-yellow)](https://fair-software.eu)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6953674.svg)](https://doi.org/10.5281/zenodo.6953674)
 
