@@ -72,3 +72,17 @@ export function emptyParams (): IParameters {
 export function clearFiles (): IFiles {
   return {}
 }
+
+export async function loadWorkflowTextFile (tomlstring: string, catalog: ICatalog): Promise<ILoadedworkflow> {
+  const globalKeys = globalParameterKeys(catalog.global)
+  const tomlSchema4global = catalog.global.tomlSchema ?? {}
+  const tomSchema4nodes = Object.fromEntries(catalog.nodes.map(
+    n => [n.id, n.tomlSchema !== undefined ? n.tomlSchema : {}])
+  )
+  const { nodes, global } = parseWorkflow(
+    tomlstring, globalKeys, tomlSchema4global, tomSchema4nodes
+  )
+  // TODO handle file refs in nodes and global var
+
+  return { nodes, global, files: {} }
+}

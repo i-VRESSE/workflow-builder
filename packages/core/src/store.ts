@@ -31,7 +31,8 @@ import {
   dropUnusedFiles,
   loadWorkflowArchive,
   emptyParams,
-  clearFiles
+  clearFiles,
+  loadWorkflowTextFile
 } from './workflow'
 import {
   removeItemAtIndex,
@@ -453,6 +454,7 @@ export interface UseWorkflow {
    * @param archiveURL The URL can have blob or data scheme to workaround cross-origin problems.
    */
   loadWorkflowArchive: (archiveURL: string) => Promise<void>
+  loadWorkflowTextFile: (body: string) => Promise<void>
   /**
    * Creates archive from workflow and make web browser save it to disk.
    */
@@ -558,6 +560,12 @@ export function useWorkflow (): UseWorkflow {
     },
     async loadWorkflowArchive (archiveURL: string) {
       const r = await loadWorkflowArchive(archiveURL, catalog)
+      setNodes(r.nodes)
+      setFiles(r.files)
+      setGlobal(r.global)
+    },
+    async loadWorkflowTextFile (body: string) {
+      const r = await loadWorkflowTextFile(body, catalog)
       setNodes(r.nodes)
       setFiles(r.files)
       setGlobal(r.global)
