@@ -24,7 +24,7 @@ for await (const p of walk("./src")) {
 export default defineConfig({
   entry,
   dts: true,
-  sourcemap: true,
+  sourcemap: process.env.NODE_ENV !== 'production',
   target: "node16",
   format: "esm",
 });
