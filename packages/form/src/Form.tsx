@@ -1,3 +1,4 @@
+import React from 'react'
 import { withTheme, utils, WidgetProps } from '@rjsf/core'
 import { Theme } from '@rjsf/bootstrap-4'
 import { CollapsibleField } from './CollapsibleField'
