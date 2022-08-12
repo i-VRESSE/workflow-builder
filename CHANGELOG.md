@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## @i-vresse/wb-form 1.1.2 - 2022-08-12
+
+### Added
+
+* Missing React import ([#115](https://github.com/i-VRESSE/workflow-builder/pull/115))
+
 ## @i-vresse/wb-core 1.1.1 - 2022-08-10
 
 Previous release did not contain code.
