@@ -1,9 +1,12 @@
 import React from 'react'
 import { Form } from '@i-vresse/wb-form'
-import { useSetActiveSubmitButton, useSelectedCatalogNode, useSelectedNode, useSelectedNodeFormData, useSelectedNodeFormSchema, useSelectedNodeFormUiSchema } from './store'
+
+import { FormProps } from './FormProps'
+import { useSelectedCatalogNode, useSelectedNode, useSelectedNodeFormData, useSelectedNodeFormSchema, useSelectedNodeFormUiSchema, useSetActiveSubmitButton } from './store'
+
 import '@i-vresse/wb-form/dist/index.css'
 
-export const NodeForm = (): JSX.Element => {
+export const NodeForm = ({ fields, widgets }: FormProps): JSX.Element => {
   const [formData, setFormData] = useSelectedNodeFormData()
   const node = useSelectedNode()
   const catalogNode = useSelectedCatalogNode()
@@ -28,6 +31,8 @@ export const NodeForm = (): JSX.Element => {
         uiSchema={uiSchema}
         formData={formData}
         onSubmit={({ formData }) => setFormData(formData)}
+        fields={fields}
+        widgets={widgets}
       >
         <button ref={submitFormRefSetter} style={{ display: 'none' }} />
       </Form>
