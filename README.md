@@ -10,6 +10,8 @@ The haddock3-download application of the main branch is published at https://won
 The builder allows you to create a complex TOML formatted config file based on a set of JSON schemas.
 
 ![Image](docs/demo.gif)
+![Demo-playwright](docs/videos/screencast.webm.mp4)
+
 
 The workflow builder is organized as a monorepo with packages and apps.
 
