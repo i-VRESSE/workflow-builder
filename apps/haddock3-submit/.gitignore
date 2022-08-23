@@ -1,0 +1,7 @@
+dist
+dist-ssr
+*.local
+coverage
+.coverage
+util/__pycache__/
+playwright-report/

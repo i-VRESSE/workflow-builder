@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+      "target": "es2022",
+      "module": "ES2022",
+      "jsx": "react-jsx",
+      "jsxImportSource": "@emotion/react",
+      "esModuleInterop": true,
+      "declaration": true,
+      "forceConsistentCasingInFileNames": true,
+      "resolveJsonModule": true,
+      "moduleResolution": "node",
+      "strict": true,
+      "skipLibCheck": true,
+      "outDir": "./dist"
+    },
+    "include": ["src"],
+    "exclude": ["dist", "build", "node_modules"]
+}
