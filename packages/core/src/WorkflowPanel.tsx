@@ -5,6 +5,11 @@ import { useWorkflow } from './store'
 
 type ITab = 'text' | 'visual'
 
+/**
+ * Panel which renders the workflow.
+ *
+ * Used selected the node of which edit its parameters.
+ */
 export const WorkflowPanel = ({ children }: PropsWithChildren<{}>): JSX.Element => {
   const [tab, setTab] = useState<ITab>('visual')
   const { toggleGlobalEdit } = useWorkflow()

@@ -12,6 +12,9 @@ export interface IProps {
   code: string
 }
 
+/**
+ * Render piece of TOML formatted text in colors.
+ */
 export const HighlightedCode = ({ code }: IProps): JSX.Element => (
   <div id='highlightedcode'>
     <SyntaxHighlighter language='toml' style={style}>

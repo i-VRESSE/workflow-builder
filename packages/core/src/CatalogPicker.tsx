@@ -8,6 +8,11 @@ interface Props {
   catalogIndexURL?: string
 }
 
+/**
+ * Component to pick a catalog.
+ *
+ * See https://github.com/i-VRESSE/workflow-builder#catalog-index for format of catalog index.
+ */
 export const CatalogPicker = ({ catalogIndexURL = defaultCatalogIndexURL }: Props): JSX.Element => {
   const [catalogIndex, setCatalogIndex] = useState<ICatalogIndex>([])
   const [catalogURL, setCatalogURL] = useState('')
