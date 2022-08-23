@@ -15,7 +15,7 @@ The builder allows you to create a complex TOML formatted config file based on a
 
 ![Image](docs/demo.gif)
 
-<video src='docs/videos/screencast.webm.mp4' width=180></video>
+https://github.com/i-VRESSE/workflow-builder/blob/update_screencast/docs/videos/screencast.webm.mp4
 
 The workflow builder is organized as a monorepo with packages and apps.
 
