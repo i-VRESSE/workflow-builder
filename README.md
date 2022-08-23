@@ -15,7 +15,7 @@ The builder allows you to create a complex TOML formatted config file based on a
 
 ![Image](docs/demo.gif)
 
-<demo_plawright src='docs/videos/screencast.webm.mp4' width=180/>
+<video src='docs/videos/screencast.webm.mp4' width=180/>
 
 The workflow builder is organized as a monorepo with packages and apps.
 
