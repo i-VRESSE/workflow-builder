@@ -78,6 +78,12 @@ Each array item will be a row and each object property will be a column.
 The header cells show the title of the property together with a popup for the description.
 The other cells show the property without any titles or descriptions.
 
+To hide titles and descriptions in table rows {"ui:field": "table"}) a css file must be imported.
+
+```js
+import '@i-vresse/wb-form/index.css'
+```
+
 ### Column widths
 
 The column widths can be customized.
@@ -122,4 +128,56 @@ When `prop1` is an array of objects use a table field and index column with
         }
     }
 }
+```
+
+### Label lookup as index
+
+Instead of using a array index number you could use a lookup array.
+For example
+
+```json
+{
+    "prop1": {
+        "ui:indexable": ["1st", "2nd", "3rd"]
+    }
+}
+```
+
+The fourth array item will get index `3` as the lookup array only resolves the first 3 array items.
+
+### Molecule filename as index
+
+To use the molecule filename as the index you could use the following.
+
+A schema/uiSchema of a node
+
+```yaml
+    schema:
+        type: object
+        properties:
+        shape:
+            type: array
+            maxItemsFrom: molecules
+            title: Which molecules should be treated as shape?
+            items:
+                type: boolean
+                title: Shape
+                default: false
+    uiSchema:
+        shape:
+            ui:indexable: true
+```
+
+and a global schema
+
+```yaml
+    type: object
+    properties:
+      molecules:
+        title: Input Molecules
+        type: array
+        format: moleculefilepaths
+        items:
+          type: string
+          format: uri-reference
 ```

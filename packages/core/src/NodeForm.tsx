@@ -1,15 +1,15 @@
 import React from 'react'
 import { Form } from '@i-vresse/wb-form'
-import { useSetActiveSubmitButton, useSelectedCatalogNode, useSelectedNode, useSelectedNodeFormData, useSelectedNodeFormSchema } from './store'
+import { useSetActiveSubmitButton, useSelectedCatalogNode, useSelectedNode, useSelectedNodeFormData, useSelectedNodeFormSchema, useSelectedNodeFormUiSchema } from './store'
+import '@i-vresse/wb-form/dist/index.css'
 
 export const NodeForm = (): JSX.Element => {
-  // TODO move setNodeParameters to useSelectedNode
   const [formData, setFormData] = useSelectedNodeFormData()
   const node = useSelectedNode()
   const catalogNode = useSelectedCatalogNode()
   const schema = useSelectedNodeFormSchema() ?? {}
   const submitFormRefSetter = useSetActiveSubmitButton()
-
+  const uiSchema = useSelectedNodeFormUiSchema() ?? {}
   if (node === undefined) {
     return <div>No node selected</div>
   }
@@ -17,7 +17,6 @@ export const NodeForm = (): JSX.Element => {
     return <div>Unable to find schema belonging to node</div>
   }
 
-  const uiSchema = catalogNode.formUiSchema
   return (
     <>
       <h4>{catalogNode.label} ({node.type})</h4>

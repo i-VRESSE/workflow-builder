@@ -6,7 +6,10 @@ import { useCatalog } from './store'
 /**
  * Panel where nodes and examples of catalog are listed.
  *
- * Catalog is retrieved from store.
+ * Catalog is retrieved from [store](https://i-vresse.github.io/workflow-builder/core/docs/modules/store.html).
+ *
+ * The catalog can be filled with [store.useSetCatalog](https://i-vresse.github.io/workflow-builder/core/docs/functions/store.useSetCatalog.html) method.
+ *
  */
 export const CatalogPanel = ({ children }: PropsWithChildren<{}>): JSX.Element => {
   const catalog = useCatalog()

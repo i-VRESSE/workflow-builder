@@ -4,7 +4,7 @@ import { DnDWrapper } from './DndWrapper'
 import { ErrorBoundary } from './ErrorBoundary'
 
 /**
- * Wrapper around app which initializes recoil and dndkit
+ * Wrapper around app which initializes recoil, toast notifications and dndkit
  *
  * @param children
  */

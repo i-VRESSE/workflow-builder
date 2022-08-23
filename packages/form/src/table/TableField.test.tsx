@@ -111,7 +111,7 @@ describe('<TableField/>', () => {
     )
   })
 
-  describe('with ui:columnIndex', () => {
+  describe('with ui:columnIndex=true', () => {
     beforeEach(() => {
       const uiSchema = {
         'ui:field': 'table',
@@ -133,6 +133,36 @@ describe('<TableField/>', () => {
     })
 
     it.each(['0', '1', '2', '4', '5'])(
+      'should have an index column with text %s',
+      (index) => {
+        const cell = screen.getByText(index)
+        expect(cell).toBeTruthy()
+      }
+    )
+  })
+
+  describe('with ui:columnIndex=array', () => {
+    beforeEach(() => {
+      const uiSchema = {
+        'ui:field': 'table',
+        'ui:indexable': ['a', 'b', 'c']
+      }
+      render(
+        <TableField
+          {...props}
+          schema={schema}
+          uiSchema={uiSchema}
+          formData={formData}
+        />
+      )
+    })
+
+    it('should have 3 columns (index, prop1, actions)', () => {
+      const prop1th = screen.getAllByTitle('Description 1')[0] // use [0] to get th from [th, button]
+      expect(prop1th?.parentElement?.children).toHaveLength(3)
+    })
+
+    it.each(['a', 'b', 'c', '4', '5'])(
       'should have an index column with text %s',
       (index) => {
         const cell = screen.getByText(index)

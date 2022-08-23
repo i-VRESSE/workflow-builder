@@ -1,9 +1,10 @@
 import React from 'react'
 import { ArrayFieldTemplateProps, utils } from '@rjsf/core'
 import { Button, Table, OverlayTrigger, Popover } from 'react-bootstrap'
-import { Dash, Plus, QuestionCircle } from 'react-bootstrap-icons'
+import { BsDash, BsPlus, BsQuestionCircle } from 'react-icons/bs/index.js'
 
 import './TableFieldTemplate.css'
+import { useIndexable } from '../useIndexable'
 
 const btnStyle = {
   flex: 1,
@@ -33,14 +34,11 @@ export const TableFieldTemplate = (props: ArrayFieldTemplateProps): JSX.Element 
     widths = uiOptions.widths as { [name: string]: string }
   }
   let indexColumnHeader = <></>
-  let indexColumnCell = (_index: string): JSX.Element => <></>
-  if (uiOptions !== undefined &&
-    'indexable' in uiOptions &&
-    typeof uiOptions.indexable === 'boolean' &&
-    uiOptions.indexable
-  ) {
+  let indexColumnCell = (_index: number): JSX.Element => <></>
+  const [indexable, indexLookup] = useIndexable(props.uiSchema)
+  if (indexable) {
     indexColumnHeader = <th key='index-th' className='index-th' />
-    indexColumnCell = (index: string) => <td style={{ verticalAlign: 'middle' }}>{index}</td>
+    indexColumnCell = (index: number) => <td style={{ verticalAlign: 'middle' }}>{indexLookup(index)}</td>
   }
   const headers = Object.entries(rowSchema).map(
     ([key, s]: [string, any], i: number) => {
@@ -102,7 +100,7 @@ export const TableFieldTemplate = (props: ArrayFieldTemplateProps): JSX.Element 
             }
           >
             <Button variant='link' size='sm' title={s.description}>
-              <QuestionCircle />
+              <BsQuestionCircle />
             </Button>
           </OverlayTrigger>
         </th>
@@ -119,7 +117,7 @@ export const TableFieldTemplate = (props: ArrayFieldTemplateProps): JSX.Element 
         onClick={props.onAddClick}
         disabled={props.disabled || props.readonly}
       >
-        <Plus />
+        <BsPlus />
       </Button>
     </th>
   )
@@ -128,7 +126,7 @@ export const TableFieldTemplate = (props: ArrayFieldTemplateProps): JSX.Element 
     rows = props.items.map((element: any, index) => {
       return (
         <tr key={element.key} className={element.className}>
-          {indexColumnCell(`${index}`)}
+          {indexColumnCell(index)}
           {element.children}
           <td className='table-actions'>
             <Button
@@ -139,7 +137,7 @@ export const TableFieldTemplate = (props: ArrayFieldTemplateProps): JSX.Element 
               disabled={props.disabled || props.readonly}
               onClick={element.onDropIndexClick(element.index)}
             >
-              <Dash />
+              <BsDash />
             </Button>
           </td>
         </tr>

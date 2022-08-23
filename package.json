@@ -1,6 +1,6 @@
 {
     "name": "workflow-builder-monorepo",
-    "version": "0.0.0",
+    "version": "1.1.0",
     "private": true,
     "workspaces": [
         "apps/*",
@@ -12,14 +12,16 @@
         "test": "turbo run test --parallel",
         "lint": "turbo run lint",
         "clean": "turbo run clean && rm -rf node_modules",
-        "storybook": "turbo run storybook --parallel --no-cache"
+        "storybook": "turbo run storybook --parallel --no-cache",
+        "postinstall": "husky install"
     },
     "devDependencies": {
+        "husky": "^8.0.0",
         "turbo": "1.2.16"
     },
     "engines": {
         "npm": ">=8.0.0",
-        "node": ">=16.0.0"
+        "node": ">=18.0.0"
     },
     "packageManager": "yarn@3.2.1",
     "resolutions": {

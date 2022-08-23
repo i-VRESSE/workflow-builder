@@ -5,7 +5,7 @@ import {
   verticalListSortingStrategy
 } from '@dnd-kit/sortable'
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
-import { GripVertical, X } from 'react-bootstrap-icons'
+import { BsX } from 'react-icons/bs'
 import { nodeWidth } from './constants'
 import {
   useDraggingCatalogNodeState,
@@ -13,6 +13,7 @@ import {
   useWorkflow
 } from './store'
 import { VisualNode } from './VisualNode'
+import { GripVertical } from './GripVertical'
 
 export const VisualPanel = (): JSX.Element => {
   const { nodes } = useWorkflow()
@@ -99,7 +100,7 @@ export const VisualPanel = (): JSX.Element => {
                     <GripVertical />
                   </div>
                   <div className='btn btn-light btn-sm'>
-                    <X />
+                    <BsX />
                   </div>
                 </div>
               </div>

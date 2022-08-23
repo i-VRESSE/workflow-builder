@@ -11,10 +11,13 @@ const meta: ComponentMeta<typeof Form> = {
 
 export default meta
 
-function render (schema: JSONSchema7, uiSchema: {} = {}): JSX.Element {
-  const formData = {
+function render (
+  schema: JSONSchema7,
+  uiSchema: {} = {},
+  formData: any = {
     nested1: ['a', 'b', 'c', 'd', 'e', 'f']
   }
+): JSX.Element {
   return (
     <Form
       schema={schema}
@@ -71,19 +74,26 @@ export const NoUiSchemaFixed: ComponentStory<typeof Form> = () => {
       nested1: {
         type: 'array',
         title: 'Array of string',
-        items: [{
-          type: 'string'
-        }, {
-          type: 'string'
-        }, {
-          type: 'string'
-        }, {
-          type: 'string'
-        }, {
-          type: 'string'
-        }, {
-          type: 'string'
-        }]
+        items: [
+          {
+            type: 'string'
+          },
+          {
+            type: 'string'
+          },
+          {
+            type: 'string'
+          },
+          {
+            type: 'string'
+          },
+          {
+            type: 'string'
+          },
+          {
+            type: 'string'
+          }
+        ]
       }
     },
     additionalProperties: false
@@ -98,19 +108,26 @@ export const IndexableArrayFixed: ComponentStory<typeof Form> = () => {
       nested1: {
         type: 'array',
         title: 'Array of string',
-        items: [{
-          type: 'string'
-        }, {
-          type: 'string'
-        }, {
-          type: 'string'
-        }, {
-          type: 'string'
-        }, {
-          type: 'string'
-        }, {
-          type: 'string'
-        }]
+        items: [
+          {
+            type: 'string'
+          },
+          {
+            type: 'string'
+          },
+          {
+            type: 'string'
+          },
+          {
+            type: 'string'
+          },
+          {
+            type: 'string'
+          },
+          {
+            type: 'string'
+          }
+        ]
       }
     },
     additionalProperties: false
@@ -121,4 +138,108 @@ export const IndexableArrayFixed: ComponentStory<typeof Form> = () => {
     }
   }
   return render(schema, uiSchema)
+}
+
+export const IndexableArrayWithPredefinedLabels: ComponentStory<typeof Form> =
+  () => {
+    const schema: JSONSchema7 = {
+      type: 'object',
+      properties: {
+        nested1: {
+          type: 'array',
+          title: 'Array of string',
+          items: {
+            type: 'string'
+          }
+        }
+      },
+      additionalProperties: false
+    }
+    const uiSchema = {
+      nested1: {
+        'ui:indexable': ['1st', '2nd', '3rd'],
+        'ui:orderable': false
+      }
+    }
+    return render(schema, uiSchema)
+  }
+
+export const IndexableArrayWithLongPredefinedLabels: ComponentStory<
+  typeof Form
+> = () => {
+  const schema: JSONSchema7 = {
+    type: 'object',
+    properties: {
+      nested1: {
+        type: 'array',
+        title: 'Array of string',
+        items: {
+          type: 'string'
+        }
+      }
+    },
+    additionalProperties: false
+  }
+  const uiSchema = {
+    nested1: {
+      'ui:indexable': ['a/very/long_path/to.1st', '2nd', '3rd'],
+      'ui:orderable': true
+    }
+  }
+  return render(schema, uiSchema)
+}
+
+export const IndexableArrayWithHighObjectItem: ComponentStory<typeof Form> = () => {
+  const schema: JSONSchema7 = {
+    type: 'object',
+    properties: {
+      nested1: {
+        type: 'array',
+        title: 'Array of object',
+        items: {
+          type: 'object',
+          properties: {
+            prop1: {
+              type: 'string'
+            },
+            prop2: {
+              type: 'string'
+            },
+            prop3: {
+              type: 'string'
+            },
+            prop4: {
+              type: 'string'
+            },
+            prop5: {
+              type: 'string'
+            },
+            prop6: {
+              type: 'string'
+            }
+          }
+        }
+      }
+    },
+    additionalProperties: false
+  }
+  const uiSchema = {
+    nested1: {
+      'ui:indexable': ['1st', '2nd', '3rd'],
+      'ui:orderable': true
+    }
+  }
+  const formData = {
+    nested1: [
+      {
+        prop1: 'a',
+        prop2: 'a',
+        prop3: 'a',
+        prop4: 'a',
+        prop5: 'a',
+        prop6: 'a'
+      }
+    ]
+  }
+  return render(schema, uiSchema, formData)
 }

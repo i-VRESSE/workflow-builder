@@ -3,7 +3,7 @@ import dedent from 'ts-dedent'
 import { parsePDB, MoleculeInfo } from './parse'
 
 describe('parsePDB', () => {
-  const cases: Array<[string, string, MoleculeInfo]> = [
+  const cases: Array<[string, string, Omit<MoleculeInfo, 'path'>]> = [
     [
       'given empty file should return zero chains and zero residues',
       '',

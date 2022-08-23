@@ -1,5 +1,22 @@
 {
   "name": "@i-vresse/wb-form",
+  "version": "1.1.2",
+  "description": "Enhanced version of the React JSON schema form component with Bootstrap 4 theme",
+  "keywords": [
+    "react",
+    "form",
+    "json-schema"
+  ],
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/i-VRESSE/workflow-builder",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/i-VRESSE/workflow-builder.git",
+    "directory": "packages/form"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "packageManager": "yarn@3.2.1",
   "type": "module",
   "main": "dist/index.js",
@@ -12,9 +29,10 @@
     "build": "tsup",
     "lint": "ts-standard",
     "test": "vitest",
-    "storybook": "start-storybook -p 6007",
-    "build-storybook": "build-storybook",
-    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
+    "storybook": "NODE_OPTIONS=--openssl-legacy-provider start-storybook -p 6007",
+    "build-storybook": "NODE_OPTIONS=--openssl-legacy-provider build-storybook",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "apidocs": "typedoc --entryPointStrategy expand --exclude '**/*.tsx' --exclude '**/*.stories.*' ./src"
   },
   "dependencies": {
     "@rjsf/bootstrap-4": "^4.2.2",
@@ -22,7 +40,7 @@
     "ajv": "^8.9.0",
     "json-schema": "^0.4.0",
     "react-bootstrap": "^1",
-    "react-bootstrap-icons": "^1.7.2"
+    "react-icons": "^3.10.0"
   },
   "devDependencies": {
     "@babel/core": "^7.18.6",
@@ -31,7 +49,6 @@
     "@storybook/addon-docs": "^6.5.9",
     "@storybook/addon-essentials": "^6.5.9",
     "@storybook/addon-interactions": "^6.5.9",
-    "@storybook/addon-links": "^6.5.9",
     "@storybook/builder-webpack4": "^6.5.9",
     "@storybook/manager-webpack4": "^6.5.9",
     "@storybook/react": "^6.5.9",
@@ -42,7 +59,8 @@
     "postcss": "^8.4.14",
     "ts-standard": "^11.0.0",
     "tsup": "^6.1.3",
-    "vitest": "^0.18.1"
+    "typedoc": "^0.23.7",
+    "vitest": "^0.20.2"
   },
   "tsup": {
     "entry": [

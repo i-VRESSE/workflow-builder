@@ -58,6 +58,11 @@
       "description": "Nodes with molecules aware parameters"
     },
     {
+      "name": "collapsedcat",
+      "description": "Category which is initially collapsed",
+      "collapsed": true
+    },
+    {
       "name": "indexable",
       "description": "Array with index"
     }
@@ -667,6 +672,125 @@
       }
     },
     {
+      "id": "node1",
+      "label": "Node with prop1 has same size as global molecules parameter",
+      "description": "Description 1",
+      "category": "moleculetest",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "prop1": {
+            "type": "array",
+            "title": "Which molecules are a shape?",
+            "items": {
+              "default": false,
+              "title": "Is this molecule a shape?",
+              "type": "boolean"
+            },
+            "maxItemsFrom": "molecules"
+          }
+        }
+      },
+      "uiSchema": {
+        "prop1": {
+          "items": {
+            "ui:widget": "radio"
+          }
+        }
+      },
+      "tomlSchema": {}
+    },
+    {
+      "id": "node2",
+      "label": "Node same as node1, but with ui:group",
+      "description": "Description 1",
+      "category": "moleculetest",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "prop1": {
+            "type": "array",
+            "title": "Which molecules are a shape?",
+            "items": {
+              "default": false,
+              "title": "Is this molecule a shape?",
+              "type": "boolean"
+            },
+            "maxItemsFrom": "molecules"
+          }
+        }
+      },
+      "uiSchema": {
+        "prop1": {
+          "items": {
+            "ui:widget": "radio"
+          },
+          "ui:group": "Molecules"
+        }
+      },
+      "tomlSchema": {}
+    },
+    {
+      "id": "node3",
+      "label": "Node with segments (with chain and residue formats) for each molecule",
+      "description": "Description 1",
+      "category": "moleculetest",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "seg": {
+            "type": "array",
+            "maxItemsFrom": "molecules",
+            "title": "Segments",
+            "items": {
+              "type": "array",
+              "title": "Segments of a molecule",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "chain": {
+                    "title": "Chain",
+                    "type": "string",
+                    "format": "chain"
+                  },
+                  "sta": {
+                    "title": "Starting residue number",
+                    "type": "number",
+                    "format": "residue"
+                  },
+                  "end": {
+                    "title": "Ending residue number",
+                    "type": "number",
+                    "format": "residue"
+                  }
+                },
+                "required": [],
+                "additionalProperties": false
+              }
+            }
+          }
+        }
+      },
+      "uiSchema": {
+        "seg": {
+          "items": {
+            "ui:field": "table"
+          }
+        }
+      },
+      "tomlSchema": {
+        "seg": {
+          "indexed": true,
+          "items": {
+            "indexed": true,
+            "items": {
+              "flatten": true
+            }
+          }
+        }
+      }
+    },
+    {
       "id": "node4",
       "label": "Node with array of object with property which array of scalar. Scalar is a residue and rendered as multi select.",
       "description": "Description 1",
@@ -753,10 +877,10 @@
             "type": "array",
             "title": "Array of object with prop string",
             "items": {
-                "type": "object",
-                "properties": {
-                    "prop1": { "type": "string" }
-                }
+              "type": "object",
+              "properties": {
+                "prop1": { "type": "string" }
+              }
             }
           }
         }
@@ -767,6 +891,22 @@
           "ui:indexable": true
         }
       }
+    },
+    {
+        "id": "node12",
+        "label": "Node in initially collapsed cat",
+        "description": "Description 12",
+        "category": "collapsedcat",
+        "schema": {
+            "type": "object",
+            "properties": {
+                "prop1": {
+                    "type": "string"
+                }
+            }
+        },
+        "uiSchema": {},
+        "tomlSchema": {}      
     }
   ]
 }
