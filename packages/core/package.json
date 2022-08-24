@@ -1,6 +1,6 @@
 {
   "name": "@i-vresse/wb-core",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "React components to construct a workflow builder application",
   "keywords": [
     "react",
