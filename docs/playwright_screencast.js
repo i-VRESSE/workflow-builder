@@ -7,11 +7,19 @@ const { chromium } = require('playwright');
   const browser = await chromium.launch({
     headless: false
   })
-  const context = await browser.newContext({ recordVideo: { dir: 'docs/videos/' } })
+  const context = await browser.newContext({
+    recordVideo: {
+      dir: 'docs/temp',
+      size: {
+        width: 1920,
+        height: 1080,
+      }
+    }
+  })
   const page = await context.newPage()
 
-  // await page.goto('https://wonderful-noether-53a9e8.netlify.app/');
-  await page.goto('http://localhost:3000/')
+  await page.goto('https://wonderful-noether-53a9e8.netlify.app/');
+  //await page.goto('http://localhost:3000/')
 
   // workflow example steps
   await page.locator('text=docking-protein-ligand').click()
