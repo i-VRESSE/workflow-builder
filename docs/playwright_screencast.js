@@ -16,8 +16,11 @@ const { chromium } = require('playwright');
       }
     }
   })
-  const page = await context.newPage()
 
+  // start trace
+  await context.tracing.start({ snapshots: true });
+
+  const page = await context.newPage()
   await page.goto('https://wonderful-noether-53a9e8.netlify.app/');
   //await page.goto('http://localhost:3000/')
 
@@ -40,6 +43,10 @@ const { chromium } = require('playwright');
   await page.locator('text=Submit').click()
   await page.waitForTimeout(t)
   await page.locator('text=Text').click()
+  await page.waitForTimeout(t_long)
+
+  // stop trace
+  await context.tracing.stop({ path: 'docs/trace.zip' });
 
   // close browser
   await context.close()
