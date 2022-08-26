@@ -15,12 +15,6 @@ The builder allows you to create a complex TOML formatted config file based on a
 
 ![Image](docs/demo.gif)
 
-https://raw.githubusercontent.com/i-VRESSE/workflow-builder/update_screencast/docs/videos/screencast.webm.mp4
-
-https://user-images.githubusercontent.com/5747405/186249006-bd1c9a85-39a1-4530-bad3-bca7b6584d3d.mp4
-
-
-
 The workflow builder is organized as a monorepo with packages and apps.
 
 * [haddock3-download app](apps/haddock3-download): To construct haddock3 workflow and download it for offline running
