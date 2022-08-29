@@ -24,4 +24,9 @@ repository-code: 'https://github.com/i-VRESSE/workflow-builder'
 abstract: >-
   The builder application allows you to create a complex TOML formatted config file based on a set of JSON schemas.
 license: Apache-2.0
-
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.6953674
+    description: >-
+      This DOI represents all versions, and will
+      always resolve to the latest one.
