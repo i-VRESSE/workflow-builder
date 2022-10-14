@@ -1973,6 +1973,25 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@i-vresse/haddock3-galaxy@workspace:apps/haddock3-galaxy":
+  version: 0.0.0-use.local
+  resolution: "@i-vresse/haddock3-galaxy@workspace:apps/haddock3-galaxy"
+  dependencies:
+    "@i-vresse/wb-core": "workspace:^"
+    "@types/node": 16
+    "@types/react": ^17.0.0
+    "@types/react-dom": ^17.0.0
+    "@vitejs/plugin-react": ^2.0.0
+    bootstrap: ^4
+    react: ^17.0.0
+    react-bootstrap: ^1
+    react-dom: ^17.0.0
+    ts-standard: ^11.0.0
+    typescript: ^4.7.4
+    vite: ^3.0.4
+  languageName: unknown
+  linkType: soft
+
 "@i-vresse/pdbtbx-ts@npm:0.1.7":
   version: 0.1.7
   resolution: "@i-vresse/pdbtbx-ts@npm:0.1.7"
