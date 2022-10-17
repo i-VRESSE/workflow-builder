@@ -6,6 +6,7 @@ export default defineConfig({
   plugins: [react()],
   build: {
     target: [ 'es2020' ]
+    ,sourcemap: true
   },
   server: {
     port: 3001
@@ -15,5 +16,6 @@ export default defineConfig({
       target: [ 'es2020' ],
     }
   },
-  base: '/plugins/visualizations/haddock3/show'
+  // TODO mention base in docs
+  base: '/static/plugins/visualizations/haddock3/static/'
 })
