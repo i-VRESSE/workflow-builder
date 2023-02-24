@@ -61,6 +61,15 @@ global:
           If set to false, no checks are performed and HADDOCK3 directly uses the
           original input PDBs.
         type: boolean
+      postprocess:
+        default: true
+        title: Executes haddock3-analyse on the CAPRI folders at the end of the run
+        description: If true, executes haddock3-analyse on the CAPRI folders at the
+          end of the workflow
+        $comment: haddock3-analyse is a cli (see https://github.com/haddocking/haddock3/blob/main/src/haddock/clis/cli_analyse.py)
+          used to plot the results of a HADDOCK3 workflow. If this option, this command
+          is automatically executed at the end of the workflow (on the caprieval folders).
+        type: boolean
       cns_exec:
         title: Path to the CNS executable
         description: If not provided, HADDOCK3 will use the cns path configured during
@@ -158,6 +167,7 @@ global:
         type: boolean
     required:
     - run_dir
+    - postprocess
     additionalProperties: false
   uiSchema:
     molecules:
@@ -304,7 +314,6 @@ nodes:
     type: object
     properties:
       ssdihed:
-        default: none
         title: Define automatically backbone dihedral angle restraints
         description: If turned on, this option will automatically defined backbone
           dihedral angle restraints for the selected regions.
@@ -320,7 +329,7 @@ nodes:
         minLength: 0
         maxLength: 100
         enum:
-        - none
+        - ''
         - all
         - alpha
         - alphabeta
@@ -450,7 +459,6 @@ nodes:
           dihe_fname file.
         type: boolean
       ssdihed:
-        default: none
         title: Define automatically backbone dihedral angle restraints
         description: If turned on, this option will automatically defined backbone
           dihedral angle restraints for the selected regions.
@@ -466,7 +474,7 @@ nodes:
         minLength: 0
         maxLength: 100
         enum:
-        - none
+        - ''
         - all
         - alpha
         - alphabeta
@@ -595,7 +603,6 @@ nodes:
           dihe_fname file.
         type: boolean
       ssdihed:
-        default: none
         title: Define automatically backbone dihedral angle restraints
         description: If turned on, this option will automatically defined backbone
           dihedral angle restraints for the selected regions.
@@ -611,7 +618,7 @@ nodes:
         minLength: 0
         maxLength: 100
         enum:
-        - none
+        - ''
         - all
         - alpha
         - alphabeta
@@ -746,7 +753,6 @@ nodes:
         maximum: 9999
         minimum: -9999
       ssdihed:
-        default: none
         title: Define automatically backbone dihedral angle restraints
         description: If turned on, this option will automatically defined backbone
           dihedral angle restraints for the selected regions.
@@ -762,7 +768,7 @@ nodes:
         minLength: 0
         maxLength: 100
         enum:
-        - none
+        - ''
         - all
         - alpha
         - alphabeta
@@ -792,14 +798,6 @@ nodes:
         $comment: Include electrostatics energy during the calculations. If set to
           false electrostatics will not be considered.
         type: boolean
-      sampling:
-        default: 200
-        title: Number of models to generate
-        description: Number of EM refined models to generate
-        $comment: Number of EM refined models to generate
-        type: number
-        maximum: 50000
-        minimum: 1
     required: []
     additionalProperties: false
   uiSchema:
@@ -830,8 +828,6 @@ nodes:
       ui:group: other restraints
     elecflag:
       ui:group: force field
-    sampling:
-      ui:group: sampling
   tomlSchema:
     mol_shape:
       indexed: true
@@ -843,12 +839,13 @@ nodes:
     type: object
     properties:
       top_cluster:
-        default: []
-        type: array
-        minItems: 0
-        maxItems: 100
-        items:
-          type: number
+        default: 1000
+        title: Number of clusters to consider
+        description: Number of clusters to consider (ranked by score)
+        $comment: Number of clusters to consider (ranked by score)
+        type: number
+        maximum: 99999
+        minimum: 1
       top_models:
         type: number
         maximum: 9999
