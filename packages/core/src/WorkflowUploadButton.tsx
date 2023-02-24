@@ -34,7 +34,7 @@ export const WorkflowUploadButton = (): JSX.Element => {
   }
 
   return (
-    <button className='btn btn-light' onClick={() => uploadRef.current?.click()}>
+    <button className='btn btn-light' onClick={() => uploadRef.current?.click()} title='Upload an archive'>
       Upload
       <input
         type='file'

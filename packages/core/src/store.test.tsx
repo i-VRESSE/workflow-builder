@@ -98,11 +98,12 @@ describe('useSelectedCatalogNode()', () => {
           // TODO be able to use hooks with have async code
           const catalogNode = useSelectedCatalogNode()
           const setCatalog = useSetCatalog()
-          const { addNodeToWorkflow } = useWorkflow()
+          const { addNodeToWorkflow, selectNode } = useWorkflow()
           return {
             catalogNode,
             setCatalog,
-            addNodeToWorkflow
+            addNodeToWorkflow,
+            selectNode
           }
         },
         {
@@ -149,6 +150,7 @@ describe('useSelectedCatalogNode()', () => {
         const c = result.current
         c.setCatalog(prepareCatalog(catalog))
         c.addNodeToWorkflow('somenode')
+        c.selectNode(0)
       })
 
       const expected = {

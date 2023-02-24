@@ -231,7 +231,7 @@ def config2schema(config):
             if 'maxchars' in v:
                 prop['maxLength'] = v['maxchars']
             if 'choices' in v:
-                prop['enum'] = v['choices']
+                prop['enum'] = [choice for choice in v['choices'] if choice != '']
             if v['default'] == '':
                 del prop['default']
             if chain_like(k, v):

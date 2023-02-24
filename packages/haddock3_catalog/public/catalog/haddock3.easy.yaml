@@ -329,7 +329,6 @@ nodes:
         minLength: 0
         maxLength: 100
         enum:
-        - ''
         - all
         - alpha
         - alphabeta
@@ -474,7 +473,6 @@ nodes:
         minLength: 0
         maxLength: 100
         enum:
-        - ''
         - all
         - alpha
         - alphabeta
@@ -618,7 +616,6 @@ nodes:
         minLength: 0
         maxLength: 100
         enum:
-        - ''
         - all
         - alpha
         - alphabeta
@@ -768,7 +765,6 @@ nodes:
         minLength: 0
         maxLength: 100
         enum:
-        - ''
         - all
         - alpha
         - alphabeta
