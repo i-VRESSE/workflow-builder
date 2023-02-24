@@ -576,6 +576,22 @@ describe('pruneDefaults()', () => {
         prop1: [{}]
       },
       {}
+    ],
+    [
+      'given required prop same as default should include prop',
+      {
+        prop1: true
+      },
+      {
+        ...p1({
+          type: 'boolean',
+          default: true
+        }),
+        required: ['prop1']
+      },
+      {
+        prop1: true
+      }
     ]
   ]
 
