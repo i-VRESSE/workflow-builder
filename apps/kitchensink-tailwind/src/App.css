@@ -35,7 +35,7 @@ h5 {
 }
 
 .btn-outline-danger {
-  @apply border border-red-500 text-red-500;
+  @apply border border-red-500 text-red-500 hover:bg-red-500 hover:text-white;
 }
 
 .btn-danger {
@@ -86,7 +86,8 @@ li {
   @apply ml-2;
 }
 
-.array-item-add {
+.array-item-add,
+.object-property-expand {
   /* TODO full width + center plus sign */
   @apply m-4 !w-auto;
 }
@@ -129,6 +130,10 @@ li {
 
 .col-12 {
   @apply max-w-full basis-full;
+}
+
+.offset-9 {
+  @apply ml-[75%];
 }
 
 .nav {
