@@ -24,7 +24,7 @@ function App (): JSX.Element {
     setCatalog(catalog)
   }, [])
   return (
-    <div className='grid w-full h-screen gap-2 p-4 page'>
+    <div className='page grid h-screen w-full gap-2 p-4'>
       <GridArea area='head'>
         <Header />
       </GridArea>
