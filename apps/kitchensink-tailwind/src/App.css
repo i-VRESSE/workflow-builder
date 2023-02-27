@@ -1,0 +1,199 @@
+h1 {
+    @apply text-4xl
+}
+
+legend {
+    @apply text-2xl
+}
+
+h4 {
+    @apply text-xl
+}
+
+h5 {
+    @apply text-xl
+}
+
+.btn {
+    @apply inline-block rounded px-3 py-1.5 text-base font-normal text-center align-middle transition duration-150 ease-in-out
+}
+
+.btn-primary {
+    @apply bg-blue-500 hover:bg-blue-600 text-white
+}
+
+.btn-light {
+    @apply bg-gray-100 hover:bg-gray-200
+}
+
+.btn-sm {
+    @apply p-1 text-sm
+}
+
+.btn-link {
+    @apply text-blue-600
+}
+
+.btn-outline-danger {
+    @apply text-red-500 border-red-500 border
+}
+
+.btn-danger {
+    @apply bg-red-500 text-white
+}
+
+.btn-toolbar {
+    @apply flex flex-wrap justify-start
+}
+
+ul {
+    @apply list-inside
+}
+
+ul ul {
+    /* TODO add circle before button or not? */
+}
+
+li {
+    @apply pl-2
+}
+
+.card {
+    @apply border border-gray-300
+}
+
+.card-header {
+    @apply bg-gray-100 align-middle p-2 border border-gray-100 py-4
+}
+
+.card-header svg {
+    @apply inline mr-3
+}
+
+.form-group {
+   @apply p-1 mb-4
+}
+
+.form-label {
+    @apply mb-2 inline-block
+}
+
+.form-control {
+    @apply w-full p-1.5
+}
+
+.form-check-label {
+    @apply ml-2
+}
+
+.array-item-add {
+    /* TODO full width + center plus sign */
+    @apply !w-auto m-4
+}
+
+.container {
+    @apply w-full
+}
+
+.container-fluid {
+    @apply w-full 
+}
+
+.row {
+    @apply flex flex-wrap
+}
+
+.col {
+    @apply basis-0 grow max-w-full
+}
+
+.col-2 {
+    @apply basis-2/12 w-full max-w-[16.666667%] px-3
+}
+
+.col-3 {
+    @apply basis-3/12 w-full max-w-[25%] px-3
+}
+
+.col-5 {
+    @apply basis-5/12 max-w-[41.666667%]
+}
+
+.col-9 {
+    @apply basis-9/12 max-w-[75%]
+}
+
+.col-10 {
+    @apply basis-10/12 max-w-[85%]
+}
+
+.col-12 {
+    @apply basis-full max-w-full
+}
+
+.nav {
+    @apply flex flex-wrap
+}
+
+.nav-tabs {
+    @apply border-b-2  border-b-gray-100
+}
+
+.nav-link {
+    @apply block border rounded-t-md px-4 py-2 bg-gray-100
+}
+
+.nav .active {
+    @apply bg-white text-black border-gray-100
+}
+
+.justify-content-end {
+    @apply justify-end
+}
+
+.d-flex {
+    @apply !flex
+}
+
+.align-items-center {
+    @apply items-center
+}
+
+.table-field {
+    @apply table w-full mb-4 border-collapse border border-gray-300
+}
+
+.table-bordered td, .table-bordered th {
+  @apply border border-gray-300
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    @apply bg-gray-100
+}
+
+.array-item-remove {
+    @apply !text-black
+}
+
+.popover-header {
+    @apply px-3 py-2 bg-gray-100 border-b border-gray-200 rounded
+}
+
+.popover-body {
+    @apply px-3 py-2 text-black bg-white
+}
+
+.page {
+    /* TODO replace with tailwind */
+    grid-template-areas: "head head head"
+                         "catalog workflow node"
+                         "catalog workflow-actions node-actions";
+    grid-template-columns: 1fr 1fr 2fr;
+    grid-template-rows: auto 1fr auto;
+}
+
+.page > div {
+    overflow: auto;
+}
+
+
