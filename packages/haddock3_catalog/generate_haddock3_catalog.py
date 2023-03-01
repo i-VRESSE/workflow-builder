@@ -118,10 +118,6 @@ def config2schema(config):
         elif 'type' in v and v['type'] != 'list':
             # If there is no default then user must supply a value so prop is required
             required.append(k)
-        if k == 'postprocess':
-            # Builder always wants postprocess=true
-            required.append(k)
-            prop["default"] = True
         if 'title' in v and v['title'] != 'No title yet':
             prop['title'] = v['title']
         if 'short' in v and v['short'] != 'No short description yet':

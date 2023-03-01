@@ -17,7 +17,6 @@ Translations from haddock3 -> i-VRESSE workflow builder:
 
 * module -> node
 * generic parameters-> global parameters
-    * postprocess -> default=true + made required
 * Module info
     * haddock.modules.<catagory>.<module>.__doc__ -> node.label
     * haddock.modules.<catagory>.<module>.HaddockModule.__doc__ -> node.description

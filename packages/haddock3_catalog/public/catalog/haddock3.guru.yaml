@@ -62,7 +62,7 @@ global:
           original input PDBs.
         type: boolean
       postprocess:
-        default: true
+        default: false
         title: Executes haddock3-analyse on the CAPRI folders at the end of the run
         description: If true, executes haddock3-analyse on the CAPRI folders at the
           end of the workflow
@@ -187,7 +187,6 @@ global:
         type: boolean
     required:
     - run_dir
-    - postprocess
     additionalProperties: false
   uiSchema:
     molecules:
