@@ -41,6 +41,7 @@ test.describe('given an uploaded archive with a workflow.cfg file with a duplica
               'some.pdb',
             ]
             
+
             [caprieval]
 
             ['caprieval.2']
