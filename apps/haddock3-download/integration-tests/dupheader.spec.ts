@@ -15,8 +15,6 @@ test.describe('given an uploaded archive with a workflow.cfg file with a duplica
               'some.pdb'
             ]
             
-            postprocess = true
-
             [caprieval]
 
             [caprieval]
@@ -43,8 +41,6 @@ test.describe('given an uploaded archive with a workflow.cfg file with a duplica
               'some.pdb',
             ]
             
-            postprocess = true
-
             [caprieval]
 
             ['caprieval.2']
