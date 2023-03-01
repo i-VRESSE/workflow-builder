@@ -23,7 +23,7 @@ export const WorkflowPanel = ({ children }: PropsWithChildren<{}>): JSX.Element 
       <legend>Workflow</legend>
       <div style={{ display: 'flex', flexFlow: 'column', height: '100%', gap: '5px', paddingBottom: '5px' }}>
         <div className='btn-toolbar'>
-          <button className='btn btn-light' onClick={toggleGlobalEdit}>Global parameters</button>
+          <button className='btn btn-light' onClick={toggleGlobalEdit} title='Edit global parameters'>Global parameters</button>
           {children}
         </div>
         <ul className='nav nav-tabs'>

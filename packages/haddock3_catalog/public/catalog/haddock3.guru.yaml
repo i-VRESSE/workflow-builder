@@ -81,6 +81,16 @@ global:
         type: number
         maximum: 500
         minimum: 1
+      max_cpus:
+        default: true
+        title: The max number of CPUs allowed.
+        description: By default the max number of CPUs allowed is the max available
+          on the system.
+        $comment: If you want to spare a minimum amount of resources for daily tasks,
+          set max_cpus to false; in that case the maximum number of CPUs allowed will
+          be the total available in the machine minus 1. This calculation is done
+          automatically.
+        type: boolean
       mode:
         default: local
         title: Mode of execution
@@ -181,6 +191,8 @@ global:
       ui:group: execution
     ncores:
       ui:group: execution
+    max_cpus:
+      ui:group: execution
     mode:
       ui:group: execution
     batch_type:
@@ -266,7 +278,7 @@ nodes:
         title: Limit the number of input molecules.
         description: When TRUE, the topoaa module can accept any number of input molecules.
         $comment: Enable/disable the limit of input molecules for the topoaa module.
-          Setting the limit to FALSE is useful when the topoaa module is followed
+          Setting the limit to false is useful when the topoaa module is followed
           by scoring modules such as emscoring, or other analysis modules. If topoaa
           is used in the middle of the workflow this parameter has no effect.
         type: boolean
@@ -462,7 +474,6 @@ nodes:
         maximum: 1000
         minimum: 0
       ssdihed:
-        default: none
         title: Define automatically backbone dihedral angle restraints
         description: If turned on, this option will automatically defined backbone
           dihedral angle restraints for the selected regions.
@@ -478,7 +489,6 @@ nodes:
         minLength: 0
         maxLength: 100
         enum:
-        - none
         - all
         - alpha
         - alphabeta
@@ -634,7 +644,7 @@ nodes:
         $comment: Write water molecules if present to the output file.
         type: boolean
       tolerance:
-        default: 0
+        default: 5
         title: Failure tolerance percentage
         description: Percentage of allowed failures for a module to successfully complete
         $comment: Percentage of allowed failures for a module to successfully complete
@@ -928,6 +938,17 @@ nodes:
           this file can contain both ambiguous and unambiguous restraints.
         type: string
         format: uri-reference
+      previous_ambig:
+        default: false
+        title: Boolean condition on the previous ambiguous distance restraints file
+        description: Boolean condition on the previous ambiguous distance restraints
+          file. If true, use the the restraint information coming from the previous
+          CNS module. If False, don't use previous information.
+        $comment: Boolean condition on the ambiguous distance restraints file. If
+          true, use the restraint information coming from the previous CNS module,
+          as long as an ambig_fname is not defined for the current module. If False,
+          don't use previous information.
+        type: boolean
       unambig_fname:
         title: Unambiguous restraints filename
         description: Filename of the unambiguous distance restraints file
@@ -1077,7 +1098,6 @@ nodes:
         maximum: 1000
         minimum: 0
       ssdihed:
-        default: none
         title: Define automatically backbone dihedral angle restraints
         description: If turned on, this option will automatically defined backbone
           dihedral angle restraints for the selected regions.
@@ -1093,7 +1113,6 @@ nodes:
         minLength: 0
         maxLength: 100
         enum:
-        - none
         - all
         - alpha
         - alphabeta
@@ -2135,7 +2154,7 @@ nodes:
         $comment: Write water molecules if present to the output file.
         type: boolean
       tolerance:
-        default: 0
+        default: 5
         title: Failure tolerance percentage
         description: Percentage of allowed failures for a module to successfully complete
         $comment: Percentage of allowed failures for a module to successfully complete
@@ -2490,7 +2509,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -2529,7 +2548,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -2539,7 +2558,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -2549,7 +2568,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -2559,7 +2578,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -2569,7 +2588,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -2579,7 +2598,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -2589,7 +2608,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -2599,7 +2618,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -2609,7 +2628,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -2619,7 +2638,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -2629,7 +2648,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -2639,7 +2658,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -2649,7 +2668,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -2659,7 +2678,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -2669,7 +2688,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -2679,7 +2698,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -2689,7 +2708,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -2699,7 +2718,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -2709,7 +2728,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -2724,6 +2743,8 @@ nodes:
       ui:group: molecule
     ambig_fname:
       ui:widget: file
+      ui:group: distance restraints
+    previous_ambig:
       ui:group: distance restraints
     unambig_fname:
       ui:widget: file
@@ -3025,6 +3046,17 @@ nodes:
           this file can contain both ambiguous and unambiguous restraints.
         type: string
         format: uri-reference
+      previous_ambig:
+        default: false
+        title: Boolean condition on the previous ambiguous distance restraints file
+        description: Boolean condition on the previous ambiguous distance restraints
+          file. If true, use the the restraint information coming from the previous
+          CNS module. If false, don't use previous information.
+        $comment: Boolean condition on the ambiguous distance restraints file. If
+          true, use the restraint information coming from the previous CNS module,
+          as long as an ambig_fname is not defined for the current module. If false,
+          don't use previous information.
+        type: boolean
       unambig_fname:
         title: Unambiguous restraints filename
         description: Filename of the unambiguous distance restraints file
@@ -3321,7 +3353,6 @@ nodes:
         maximum: 1000
         minimum: 0
       ssdihed:
-        default: none
         title: Define automatically backbone dihedral angle restraints
         description: If turned on, this option will automatically defined backbone
           dihedral angle restraints for the selected regions.
@@ -3337,7 +3368,6 @@ nodes:
         minLength: 0
         maxLength: 100
         enum:
-        - none
         - all
         - alpha
         - alphabeta
@@ -4529,7 +4559,7 @@ nodes:
         $comment: Write water molecules if present to the output file.
         type: boolean
       tolerance:
-        default: 0
+        default: 5
         title: Failure tolerance percentage
         description: Percentage of allowed failures for a module to successfully complete
         $comment: Percentage of allowed failures for a module to successfully complete
@@ -4884,7 +4914,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -4923,7 +4953,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -4933,7 +4963,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -4943,7 +4973,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -4953,7 +4983,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -4963,7 +4993,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -4973,7 +5003,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -4983,7 +5013,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -4993,7 +5023,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -5003,7 +5033,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -5013,7 +5043,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -5023,7 +5053,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -5033,7 +5063,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -5043,7 +5073,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -5053,7 +5083,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -5063,7 +5093,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -5073,7 +5103,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -5083,7 +5113,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -5093,7 +5123,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -5103,7 +5133,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -5118,6 +5148,8 @@ nodes:
       ui:group: molecule
     ambig_fname:
       ui:widget: file
+      ui:group: distance restraints
+    previous_ambig:
       ui:group: distance restraints
     unambig_fname:
       ui:widget: file
@@ -5471,6 +5503,17 @@ nodes:
           this file can contain both ambiguous and unambiguous restraints.
         type: string
         format: uri-reference
+      previous_ambig:
+        default: false
+        title: Boolean condition on the previous ambiguous distance restraints file
+        description: Boolean condition on the previous ambiguous distance restraints
+          file. If true, use the the restraint information coming from the previous
+          CNS module. If false, don't use previous information.
+        $comment: Boolean condition on the ambiguous distance restraints file. If
+          true, use the restraint information coming from the previous CNS module,
+          as long as an ambig_fname is not defined for the current module. If false,
+          don't use previous information.
+        type: boolean
       unambig_fname:
         title: Unambiguous restraints filename
         description: Filename of the unambiguous distance restraints file
@@ -5579,7 +5622,6 @@ nodes:
         maximum: 9999
         minimum: -9999
       ssdihed:
-        default: none
         title: Define automatically backbone dihedral angle restraints
         description: If turned on, this option will automatically defined backbone
           dihedral angle restraints for the selected regions.
@@ -5595,7 +5637,6 @@ nodes:
         minLength: 0
         maxLength: 100
         enum:
-        - none
         - all
         - alpha
         - alphabeta
@@ -6549,14 +6590,6 @@ nodes:
       dihedflag:
         default: true
         type: boolean
-      sampling:
-        default: 200
-        title: Number of models to generate
-        description: Number of EM refined models to generate
-        $comment: Number of EM refined models to generate
-        type: number
-        maximum: 50000
-        minimum: 1
       sampling_factor:
         default: 1
         title: Sampling factor for each starting model
@@ -6947,7 +6980,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -6986,7 +7019,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -6996,7 +7029,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -7006,7 +7039,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -7016,7 +7049,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -7026,7 +7059,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -7036,7 +7069,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -7046,7 +7079,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -7056,7 +7089,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -7066,7 +7099,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -7076,7 +7109,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -7086,7 +7119,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -7096,7 +7129,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -7106,7 +7139,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -7116,7 +7149,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -7126,7 +7159,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -7136,7 +7169,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -7146,7 +7179,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -7156,7 +7189,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -7166,7 +7199,7 @@ nodes:
         description: This defines the number of fully flexible segments.
         $comment: This parameter defines the number of fully flexible segments for
           the specified molecule. If >=1 then those must be defined manually with
-          starting and end residue numbers in the fle_sta_ and fle_end_ variables.
+          starting and end residue numbers in the fle_sta_* and fle_end_* variables.
         type: number
         maximum: 1000
         minimum: 0
@@ -7181,6 +7214,8 @@ nodes:
       ui:group: molecule
     ambig_fname:
       ui:widget: file
+      ui:group: distance restraints
+    previous_ambig:
       ui:group: distance restraints
     unambig_fname:
       ui:widget: file
@@ -7289,8 +7324,6 @@ nodes:
       ui:group: force field
     dihedflag:
       ui:group: force field
-    sampling:
-      ui:group: sampling
     sampling_factor:
       ui:group: sampling
     nemsteps:
@@ -7444,12 +7477,13 @@ nodes:
     type: object
     properties:
       top_cluster:
-        default: []
-        type: array
-        minItems: 0
-        maxItems: 100
-        items:
-          type: number
+        default: 1000
+        title: Number of clusters to consider
+        description: Number of clusters to consider (ranked by score)
+        $comment: Number of clusters to consider (ranked by score)
+        type: number
+        maximum: 99999
+        minimum: 1
       top_models:
         type: number
         maximum: 9999
@@ -7866,6 +7900,17 @@ nodes:
           this file can contain both ambiguous and unambiguous restraints.
         type: string
         format: uri-reference
+      previous_ambig:
+        default: false
+        title: Boolean condition on the previous ambiguous distance restraints file
+        description: Boolean condition on the previous ambiguous distance restraints
+          file. If true, use the the restraint information coming from the previous
+          CNS module. If false, don't use previous information.
+        $comment: Boolean condition on the ambiguous distance restraints file. If
+          true, use the restraint information coming from the previous CNS module,
+          as long as an ambig_fname is not defined for the current module. If false,
+          don't use previous information.
+        type: boolean
       unambig_fname:
         title: Unambiguous restraints filename
         description: Filename of the unambiguous distance restraints file
@@ -9092,6 +9137,8 @@ nodes:
       ui:group: molecule
     ambig_fname:
       ui:widget: file
+      ui:group: distance restraints
+    previous_ambig:
       ui:group: distance restraints
     unambig_fname:
       ui:widget: file

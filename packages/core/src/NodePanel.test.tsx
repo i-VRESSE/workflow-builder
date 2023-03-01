@@ -118,7 +118,6 @@ describe('<NodePanel/>', () => {
       }
       const StoreContext: React.FC<{}> = ({ children }) => {
         const setCatalog = useSetCatalog()
-        const { toggleGlobalEdit } = useWorkflow()
         useEffect(() => {
           const catalog = prepareCatalog({
             title: 'Some title',
@@ -153,7 +152,6 @@ describe('<NodePanel/>', () => {
             examples: {}
           })
           setCatalog(catalog)
-          toggleGlobalEdit()
         }, [])
         return (
           <Suspense fallback={<span>busy</span>}>{children}</Suspense>

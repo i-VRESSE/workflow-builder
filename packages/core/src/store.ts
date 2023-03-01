@@ -110,7 +110,7 @@ const globalParametersState = atom<IParameters>({
 
 const editingGlobalParametersState = atom<boolean>({
   key: 'editingGlobal',
-  default: false
+  default: true
 })
 
 const workflowNodesState = atom<IWorkflowNode[]>({

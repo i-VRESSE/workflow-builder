@@ -55,10 +55,10 @@ export const FormActions = (): JSX.Element => {
       <button
         type='submit'
         className='btn btn-primary'
-        title='Save parameters in node'
+        title={editingGlobal ? 'Save global parameters' : 'Save parameters to node'}
         onClick={() => submitFormRef.click()}
       >
-        Submit
+        Save
       </button>
       <button
         className='btn btn-light'
