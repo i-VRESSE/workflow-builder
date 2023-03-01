@@ -3,13 +3,18 @@ import { IParameters } from './types'
 
 /**
  * Any parameter whose value is same as the default defined in the schema will be pruned and not returned.
+ *
+ * Unless parameter is required, then it will always be kept.
  */
 export function pruneDefaults (parameters: IParameters, schema: JSONSchema7, reshapeArray = false): IParameters {
   const newParameters: IParameters = {}
+  const required = new Set(schema.required)
   Object.entries(parameters).forEach(([k, v]) => {
     if (schema.properties !== undefined && k in schema.properties) {
       const schemaOfK = schema.properties[k] as JSONSchema7
-      if (v === schemaOfK.default || v === undefined) {
+      if (required.has(k)) {
+        newParameters[k] = v
+      } else if (v === schemaOfK.default || v === undefined) {
         // skip it
       } else if (schemaOfK.type === 'object') {
         const prunedV = pruneDefaults(v as IParameters, schemaOfK)
