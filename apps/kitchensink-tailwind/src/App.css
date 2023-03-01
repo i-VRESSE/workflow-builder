@@ -15,7 +15,7 @@ h5 {
 }
 
 .btn {
-  @apply inline-block rounded px-3 py-1.5 text-center align-middle text-base font-normal transition duration-150 ease-in-out;
+  @apply inline-block rounded px-3 py-1.5 text-center align-middle text-base font-normal transition-colors duration-150 ease-in-out;
 }
 
 .btn-primary {

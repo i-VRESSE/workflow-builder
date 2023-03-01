@@ -42,7 +42,11 @@ import {
 import { groupParameters, unGroupParameters } from './grouper'
 import { pruneDefaults } from './pruner'
 import { resolveMaxItemsFrom } from './resolveMaxItemsFrom'
-import { addMoleculeUi, addMoleculeValidation, parseMolecules } from './molecule/addMoleculeValidation'
+import {
+  addMoleculeUi,
+  addMoleculeValidation,
+  parseMolecules
+} from './molecule/addMoleculeValidation'
 import { MoleculeInfo } from './molecule/parse'
 
 const catalogState = atom<ICatalog>({
@@ -364,11 +368,7 @@ const moleculeInfosState = selector<[MoleculeInfo[], string | undefined]>({
     const globalSchema = catalog.global.schema
     const globalParameters = get(globalParametersState)
     const files = get(filesState)
-    return await parseMolecules(
-      globalParameters,
-      globalSchema,
-      files
-    )
+    return await parseMolecules(globalParameters, globalSchema, files)
   }
 })
 
@@ -377,10 +377,7 @@ const selectedNodeFormSchemaState = selector<JSONSchema7 | undefined>({
   get: ({ get }) => {
     const catalogNode = get(selectedCatalogNodeState)
     const globalParameters = get(globalParametersState)
-    if (
-      catalogNode === undefined ||
-      catalogNode.formSchema === undefined
-    ) {
+    if (catalogNode === undefined || catalogNode.formSchema === undefined) {
       return undefined
     }
     const schemaWithMaxItems = resolveMaxItemsFrom(
@@ -409,7 +406,11 @@ const selectedNodeFormUiSchemaState = selector<UiSchema | undefined>({
   get: ({ get }) => {
     const schema = get(selectedNodeFormSchemaState)
     const catalogNode = get(selectedCatalogNodeState)
-    if (schema === undefined || catalogNode === undefined || catalogNode.formUiSchema === undefined) {
+    if (
+      schema === undefined ||
+      catalogNode === undefined ||
+      catalogNode.formUiSchema === undefined
+    ) {
       return undefined
     }
     const [moleculeInfos, moleculesPropName] = get(moleculeInfosState)
@@ -590,4 +591,28 @@ export function useText (): string {
   const { nodes, global } = useWorkflow()
   const catalog = useCatalog()
   return workflow2tomltext(nodes, global, catalog2tomlSchemas(catalog))
+}
+
+export function useSubmitForm (close = false): () => void {
+  const submitFormRef = useActiveSubmitButton()
+  const { editingGlobal, toggleGlobalEdit, clearNodeSelection } = useWorkflow()
+  return () => {
+    if (submitFormRef === undefined) {
+      return
+    }
+
+    if (close) {
+      if (editingGlobal) {
+        submitFormRef.click()
+        // TODO wait for all recoil updates to finish
+        toggleGlobalEdit()
+      } else {
+        submitFormRef.click()
+        // TODO wait for all recoil updates to finish
+        clearNodeSelection()
+      }
+    } else {
+      submitFormRef.click()
+    }
+  }
 }

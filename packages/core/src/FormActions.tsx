@@ -1,5 +1,5 @@
 import React from 'react'
-import { useSelectNodeIndex, useActiveSubmitButton, useWorkflow } from './store'
+import { useSelectNodeIndex, useActiveSubmitButton, useWorkflow, useSubmitForm } from './store'
 
 /**
  * Panel for actions to be performed on the currently active form.
@@ -37,6 +37,8 @@ export const FormActions = (): JSX.Element => {
   const index = useSelectNodeIndex()
   const { deleteNode, clearNodeSelection } = useWorkflow()
   const submitFormRef = useActiveSubmitButton()
+  const submitForm = useSubmitForm()
+  const submitFormAndClose = useSubmitForm(true)
   const { editingGlobal, toggleGlobalEdit } = useWorkflow()
   if (submitFormRef === undefined || !(index > -1 || editingGlobal)) {
     return <></>
@@ -53,10 +55,17 @@ export const FormActions = (): JSX.Element => {
   return (
     <div className='nav justify-content-end'>
       <button
-        type='submit'
         className='btn btn-primary'
+        title={editingGlobal ? 'Save global parameters and close form' : 'Save parameters to node and close form'}
+        onClick={submitFormAndClose}
+      >
+        Save & close
+      </button>
+      <button
+        type='submit'
+        className='btn'
         title={editingGlobal ? 'Save global parameters' : 'Save parameters to node'}
-        onClick={() => submitFormRef.click()}
+        onClick={submitForm}
       >
         Save
       </button>
