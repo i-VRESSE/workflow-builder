@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## @i-vresse/wb-core 1.1.3 - 2023-03-01
+
 ### Changed
 
 * Show global parameters form on page load ([#123](https://github.com/i-VRESSE/workflow-builder/pull/123))
