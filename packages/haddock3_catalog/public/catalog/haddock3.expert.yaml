@@ -7133,7 +7133,7 @@ nodes:
         - distance
         - maxclust
       linkage:
-        default: single
+        default: average
         title: Linkage type
         description: How to lump together clusters in hierarchical clustering
         $comment: check out the full description at https://docs.scipy.org/doc/scipy/reference/generated/scipy.cluster.hierarchy.linkage.html
@@ -7151,13 +7151,19 @@ nodes:
       threshold:
         default: 4
         title: Clustering population threshold
+        description: Threshold employed to exclude clusters with less than this number
+          of members
+        $comment: Threshold employed to exclude clusters with less than this number
+          of members. When criterion is maxclust, this value is ignored.
         type: number
         maximum: 9999
         minimum: 1
       tolerance:
         title: Numeric value for clustering
         description: if criterion is maxclust, the number of desired clusters. if
-          criterion is distance, the value of cophenetic distance
+          criterion is distance, the value of cutoff cophenetic distance
+        $comment: if criterion is maxclust, the number of desired clusters. if criterion
+          is distance, the value of cutoff cophenetic distance
         type: number
         maximum: 9999
         minimum: 1
