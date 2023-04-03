@@ -1993,14 +1993,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@i-vresse/haddock3_catalog@workspace:packages/haddock3_catalog":
-  version: 0.0.0-use.local
-  resolution: "@i-vresse/haddock3_catalog@workspace:packages/haddock3_catalog"
-  dependencies:
-    js-yaml: ^4.1.0
-  languageName: unknown
-  linkType: soft
-
 "@i-vresse/pdbtbx-ts@npm:0.1.7":
   version: 0.1.7
   resolution: "@i-vresse/pdbtbx-ts@npm:0.1.7"
