@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
-## @i-vresse/wb-core 1.1.4 - 2023-04-06
+## @i-vresse/wb-core 1.2.0 - 2023-04-06
 
 ### Changed
 
