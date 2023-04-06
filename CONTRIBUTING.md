@@ -67,7 +67,7 @@ There is a single [CHANGELOG.md](CHANGELOG.md) that is for consumers of the pack
 
 1. Set version in `packages/core/package.json` with `yarn workspace @i-vresse/wb-core version <patch|minor|major>`
 2. Add changes to [CHANGELOG.md](CHANGELOG.md) and push changes to main branch
-3. Make sure you are logged see step 3 in  chapter above.
+3. Make sure you are logged see step 3 in chapter above.
 4. Clean `dist/` with `yarn workspace @i-vresse/wb-core clean`, make sure `yarn dev` is not running
 5. Build with `yarn workspace @i-vresse/wb-core build`
 6. Publish with `yarn workspace @i-vresse/wb-core npm publish --otp <otp code>`
