@@ -9,7 +9,7 @@ Graphical interface to build a workflow file
 [![fair-software.eu](https://img.shields.io/badge/fair--software.eu-%E2%97%8F%20%20%E2%97%8F%20%20%E2%97%8F%20%20%E2%97%8F%20%20%E2%97%8B-yellow)](https://fair-software.eu)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6953674.svg)](https://doi.org/10.5281/zenodo.6953674)
 
-The haddock3-download application of the main branch is published at https://wonderful-noether-53a9e8.netlify.app/
+The haddock3-download application of the main branch is published at https://i-vresse-workflow-builder.netlify.app
 
 The builder allows you to create a complex TOML formatted config file based on a set of JSON schemas.
 
