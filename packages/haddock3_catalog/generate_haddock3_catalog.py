@@ -331,6 +331,7 @@ def config2schema(config):
                     "type": "string",
                     "format": "chain"
                 }
+                prop['default'] = v['default']
             else:
                 raise ValueError(f"Don't know how to determine type of items of {v}")
         else:

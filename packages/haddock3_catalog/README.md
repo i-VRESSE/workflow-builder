@@ -11,6 +11,8 @@ Run with
 # Reads modules from haddock3 in Python path
 ./generate_haddock3_catalog.py
 # Writes catalog files in public/catalog/ dir
+
+# TODO add command to check JSON schemas are valid.
 ```
 
 Translations from haddock3 -> i-VRESSE workflow builder:
