@@ -10,7 +10,7 @@ categories:
   description: HADDOCK3 actions referring to refinement.
   collapsed: false
 - name: scoring
-  description: HADDOCK3 modules to score modules.
+  description: HADDOCK3 modules to score models.
   collapsed: false
 - name: analysis
   description: HADDOCK3 modules related to model analysis.
@@ -854,7 +854,7 @@ nodes:
         title: Boolean condition on the previous ambiguous distance restraints file
         description: Boolean condition on the previous ambiguous distance restraints
           file. If true, use the the restraint information coming from the previous
-          CNS module. If False, don't use previous information.
+          CNS module. If false, don't use previous information.
         $comment: Boolean condition on the ambiguous distance restraints file. If
           true, use the restraint information coming from the previous CNS module,
           as long as an ambig_fname is not defined for the current module. If False,
@@ -1987,7 +1987,15 @@ nodes:
         description: This paramater control how many times a model will be refined.
         $comment: This paramater control how many times a model will be refined.
         type: number
-        maximum: 1
+        maximum: 200
+        minimum: 1
+      max_nmodels:
+        default: 10000
+        title: Maximum number of models to refine
+        description: This paramater controls the maximum number of models to refine.
+        $comment: This paramater controls the maximum number of models to refine.
+        type: number
+        maximum: 50000
         minimum: 1
       solvent:
         default: water
@@ -2735,6 +2743,8 @@ nodes:
     dihedflag:
       ui:group: force field
     sampling_factor:
+      ui:group: sampling
+    max_nmodels:
       ui:group: sampling
     nemsteps:
       ui:group: sampling
@@ -4195,10 +4205,18 @@ nodes:
       sampling_factor:
         default: 1
         title: Sampling factor for each starting model
-        description: This paramater control how many times a model will be refined.
-        $comment: This paramater control how many times a model will be refined.
+        description: This paramater controls how many times a model will be refined.
+        $comment: This paramater controls how many times a model will be refined.
         type: number
-        maximum: 1
+        maximum: 200
+        minimum: 1
+      max_nmodels:
+        default: 10000
+        title: Maximum number of models to refine
+        description: This paramater controls the maximum number of models to refine.
+        $comment: This paramater controls the maximum number of models to refine.
+        type: number
+        maximum: 50000
         minimum: 1
       nemsteps:
         default: 200
@@ -4977,6 +4995,8 @@ nodes:
     dihedflag:
       ui:group: force field
     sampling_factor:
+      ui:group: sampling
+    max_nmodels:
       ui:group: sampling
     nemsteps:
       ui:group: sampling
@@ -6253,7 +6273,15 @@ nodes:
           of restraints is turned on. If not then the energy minimisation will lead
           to the same final conformation.
         type: number
-        maximum: 1
+        maximum: 200
+        minimum: 1
+      max_nmodels:
+        default: 50000
+        title: Maximum number of models to refine
+        description: This paramater controls the maximum number of models to refine.
+        $comment: This paramater controls the maximum number of models to refine.
+        type: number
+        maximum: 100000
         minimum: 1
       nemsteps:
         default: 200
@@ -6952,6 +6980,8 @@ nodes:
       ui:group: force field
     sampling_factor:
       ui:group: sampling
+    max_nmodels:
+      ui:group: sampling
     nemsteps:
       ui:group: sampling
     tolerance:
@@ -7209,7 +7239,7 @@ nodes:
         description: Performs Ligand RMSD calculations.
         $comment: Calculates the Ligand Root Mean Square Deviation. This calculation
           is done by superimposing the receptors (defined by the receptor_chain parameter)
-          and then evaluating the RMSD on the ligands (defined by the ligand_chain
+          and then evaluating the RMSD on the ligands (defined by the ligand_chains
           parameter). Superposition and RMSD calculations are done on backbone heavy
           atoms.
         type: boolean
@@ -7221,7 +7251,7 @@ nodes:
           calculation is done by superimposing the model and the target on the interface
           backbone atoms of the receptor (defined by the receptor_chain parameter)
           and calculating the RMSD on all heavy atoms of the ligand (defined by the
-          ligand_chain parameter).
+          ligand_chains parameter).
         type: boolean
       dockq:
         default: true
@@ -7262,17 +7292,20 @@ nodes:
         minLength: 1
         maxLength: 1
         format: chain
-      ligand_chain:
-        default: B
-        title: Ligand ChainID
-        description: Ligand ChainID to be considered for the RMSD calculations.
-        $comment: Ligand ChainID to be considered for the RMSD calculations. This
-          determines which chain will be treated as the ligand for the L-RMSD and
+      ligand_chains:
+        default:
+        - B
+        title: Ligand ChainIDs
+        description: Ligand ChainIDs to be considered for the RMSD calculations.
+        $comment: Ligand ChainIDs to be considered for the RMSD calculations. This
+          determines which chains will be treated as the ligand for the L-RMSD and
           for I-L-RMSD.
-        type: string
-        minLength: 1
-        maxLength: 1
-        format: chain
+        type: array
+        minItems: 0
+        maxItems: 100
+        items:
+          type: string
+          format: chain
       sortby:
         default: score
         title: Sort the structures/clusters in the output file by this value
@@ -7348,7 +7381,7 @@ nodes:
       ui:group: analysis
     receptor_chain:
       ui:group: analysis
-    ligand_chain:
+    ligand_chains:
       ui:group: analysis
     sortby:
       ui:group: analysis

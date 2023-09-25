@@ -326,6 +326,11 @@ def config2schema(config):
                 prop['items'] = {
                     "type": "number"
                 }
+            elif k == 'ligand_chains':
+                prop['items'] = {
+                    "type": "string",
+                    "format": "chain"
+                }
             else:
                 raise ValueError(f"Don't know how to determine type of items of {v}")
         else:
