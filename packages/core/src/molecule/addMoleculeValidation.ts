@@ -179,13 +179,13 @@ function walkSchemaForMoleculeFormats (
                   pv.items.format !== undefined &&
                   moleculeFormats.has(pv.items.format)
                 ) {
-                  if (pv.items.format === 'chain') {
+                  if (pv.items.format === 'chain' && molinfo.chains.length > 0) {
                     return [
                       pk,
                       { ...pv, items: { ...pv.items, enum: molinfo.chains } }
                     ]
                   }
-                  if (pv.items.format === 'residue') {
+                  if (pv.items.format === 'residue' && molinfo.residueSequenceNumbers.length > 0) {
                     return [
                       pk,
                       {
