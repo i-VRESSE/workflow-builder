@@ -431,7 +431,8 @@ def process_level(level_fn: Path, level: str):
     broken_modules = {
         'topocg', # Gives `AttributeError: module 'haddock.modules.topology.topocg' has no attribute 'HaddockModule'` error
     }
-    # TODL like category order also define module order
+    # TODO define module order like category order
+    # now they are sorted alphabetically
     nodes = [process_module(module, category, level) for module, category in sorted(modules_category.items()) if module not in broken_modules]
 
     catalog = {
