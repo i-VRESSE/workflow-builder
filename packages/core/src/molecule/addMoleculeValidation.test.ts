@@ -592,8 +592,11 @@ describe('addMoleculeValidation()', () => {
       )
     })
 
-    describe('given array of object with array of scalar with format:residue', () => {
-      it('should make items an array and not set enums', async () => {
+    describe('given array of object with array of scalar', () => {
+      it.each([
+        ['residue', 'number'],
+        ['chain', 'string']
+      ] as const)('should make items an array and not set enums for %s format', async (moleculeformat, moleculeType) => {
         const propSchema: JSONSchema7WithMaxItemsFrom = {
           type: 'array',
           maxItemsFrom: 'molecules',
@@ -603,8 +606,8 @@ describe('addMoleculeValidation()', () => {
               prop2: {
                 type: 'array',
                 items: {
-                  type: 'number',
-                  format: 'residue'
+                  type: moleculeType,
+                  format: moleculeformat
                 }
               }
             }
@@ -631,8 +634,8 @@ describe('addMoleculeValidation()', () => {
                 prop2: {
                   type: 'array',
                   items: {
-                    type: 'number',
-                    format: 'residue'
+                    type: moleculeType,
+                    format: moleculeformat
                   }
                 }
               }
@@ -645,7 +648,6 @@ describe('addMoleculeValidation()', () => {
             prop1: expectedPropSchema
           }
         }
-        console.log(JSON.stringify(actual, null, 2))
         expect(actual).toEqual(expected)
       })
     })
