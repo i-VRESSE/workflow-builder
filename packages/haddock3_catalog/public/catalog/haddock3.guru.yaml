@@ -10,7 +10,7 @@ categories:
   description: HADDOCK3 actions referring to refinement.
   collapsed: false
 - name: scoring
-  description: HADDOCK3 modules to score modules.
+  description: HADDOCK3 modules to score models.
   collapsed: false
 - name: analysis
   description: HADDOCK3 modules related to model analysis.
@@ -218,705 +218,298 @@ global:
       ui:group: clean
   tomlSchema: {}
 nodes:
-- id: topoaa
-  category: topology
-  label: Create and manage CNS all-atom topology.
-  description: HADDOCK3 module to create CNS all-atom topologies.
+- id: caprieval
+  category: analysis
+  label: Calculate CAPRI metrics.
+  description: HADDOCK3 module to calculate the CAPRI metrics.
   schema:
     type: object
     properties:
-      autohis:
-        default: true
-        title: Automatic HIS protonation state
-        description: 'The protonation state of histidine (+1: HIS or 0: HISD/HISE)
-          will be automatically set by HADDOCK'
-        $comment: 'If set to true, HADDOCK will automatically define the protonation
-          state of histidines ((+1: HIS or 0: HISD/HISE) by selecting the state leading
-          to the lowest electrostatic energy'
-        type: boolean
-      delenph:
-        default: true
-        title: Keep or remove non-polar hydrogen atoms
-        description: If set to true, non-polar hydrogen atoms will be discarded to
-          save computing time
-        $comment: Since HADDOCK uses a united atom force field, the non-polar hydrogen
-          atoms can be in principle discarded. This saves computing time. However
-          this should not be done if you are defining distance restraints to specific
-          hydrogen atoms (e.g. when using NMR distance restraints).
-        type: boolean
-      log_level:
-        default: quiet
-        title: Log level verbosity for CNS
-        description: Set the log level verbosity for CNS
-        $comment: CNS, the computational engine used by HADDOCK can generate a lot
-          of output messages. This parameter controls the verbosity of CNS (verbose,
-          normal or quiet).
-        type: string
-        minLength: 0
-        maxLength: 100
-        enum:
-        - verbose
-        - normal
-        - quiet
-      iniseed:
-        default: 917
-        title: Random seed
-        description: Random seed used in CNS to initialize the random seed function
-        $comment: Random seed used in CNS to initialize the random seed function
-        type: number
-        maximum: 9999999999999999
-        minimum: 0
-      ligand_param_fname:
-        title: Custom ligand parameter file
-        description: Ligand parameter file in CNS format
-        $comment: Ligand parameter file in CNS format containing all force field parameters
-          (bond, angles, dihedrals, impropers, van der waals) for any ligand not supported
-          by default by HADDOCK
+      reference_fname:
+        title: Reference structure
+        description: Structure to be used when calculating the CAPRI metrics.
+        $comment: Reference tructure to be used when calculating the CAPRI metrics.
+          If none is defined then the lowest scoring model is selected by default.
         type: string
         format: uri-reference
-      ligand_top_fname:
-        title: Custom ligand topology file
-        description: Ligand topology file in CNS format
-        $comment: Ligand topology file in CNS format containing the ligand topologies
-          (atoms, masses, charges, bond definitions...) for any ligand not supported
-          by default by HADDOCK
-        type: string
-        format: uri-reference
-      limit:
+      irmsd:
         default: true
-        title: Limit the number of input molecules.
-        description: When TRUE, the topoaa module can accept any number of input molecules.
-        $comment: Enable/disable the limit of input molecules for the topoaa module.
-          Setting the limit to false is useful when the topoaa module is followed
-          by scoring modules such as emscoring, or other analysis modules. If topoaa
-          is used in the middle of the workflow this parameter has no effect.
+        title: Calculate I-RMSD
+        description: Performs Interface RMSD calculations.
+        $comment: Calculates the Interface Root Mean Square Deviation. This calculate
+          the RMSD of interface backbone atoms after fitting on the interface backbone
+          atoms. The interface is idenfied based on intermolecular contacts shorter
+          than the defined irmsd_cutoff.
         type: boolean
-      tolerance:
-        default: 0
-        title: Failure tolerance percentage
-        description: Percentage of allowed failures for a module to successfully complete
-        $comment: Percentage of allowed failures for a module to successfully complete
+      fnat:
+        default: true
+        title: Calculate FNAT
+        description: Performs FNAT calculations.
+        $comment: Calculates the Fraction of Native Contacts. This evaluates how many
+          contacts observed in the reference are present in the model. The distance
+          cutoff used to define intermolecular contacts is defined by the fnat_cutoff
+          parameter.
+        type: boolean
+      lrmsd:
+        default: true
+        title: Calculate L-RMSD
+        description: Performs Ligand RMSD calculations.
+        $comment: Calculates the Ligand Root Mean Square Deviation. This calculation
+          is done by superimposing the receptors (defined by the receptor_chain parameter)
+          and then evaluating the RMSD on the ligands (defined by the ligand_chains
+          parameter). Superposition and RMSD calculations are done on backbone heavy
+          atoms.
+        type: boolean
+      ilrmsd:
+        default: true
+        title: Calculate I-L-RMSD
+        description: Performs Interface Ligand RMSD calculations.
+        $comment: Calculates the Interface Ligand Root Mean Square Deviation. This
+          calculation is done by superimposing the model and the target on the interface
+          backbone atoms of the receptor (defined by the receptor_chain parameter)
+          and calculating the RMSD on all heavy atoms of the ligand (defined by the
+          ligand_chains parameter).
+        type: boolean
+      dockq:
+        default: true
+        title: Calculate DockQ
+        description: Evaluate DockQ.
+        $comment: Evaluate DockQ. A single continuous quality measure for protein
+          docked models based on the CAPRI criteria, a combination of i-RMSD, l-RMSD
+          and FNAT value. For details check the DockQ publication `DOI:10.1371/journal.pone.0161879`
+        type: boolean
+      irmsd_cutoff:
+        default: 10.0
+        title: "Distance cutoff (\xC5) used to define interface residues."
+        description: "Distance cutoff (\xC5) used to define interface residues based\
+          \ on intermolecular contacts."
+        $comment: "Distance cutoff (\xC5) used to define interface residues based\
+          \ on intermolecular contacts."
         type: number
-        maximum: 99
-        minimum: 0
-      mol:
-        title: Input molecule configuration
-        $comment: You can expand this parameter and associated sub-parameters to the
-          other input molecules. For example, if you input three molecules, you can
-          define mol1, mol2, and mol3 subparameters. Those not defined will be populated
-          with the defaults.
+        maximum: 20.0
+        minimum: 3.0
+      fnat_cutoff:
+        default: 5.0
+        title: "Distance cutoff (\xC5) used to define interface contacts."
+        description: "Distance cutoff (\xC5) used to define interface contacts between\
+          \ two interacting molecules."
+        $comment: "Distance cutoff (\xC5) used to define interface contacts between\
+          \ two interacting molecules."
+        type: number
+        maximum: 20.0
+        minimum: 3.0
+      receptor_chain:
+        default: A
+        title: Receptor ChainID
+        description: Receptor ChainID to be considered for the RMSD calculations.
+        $comment: Receptor ChainID to be considered for the RMSD calculations. This
+          determines which chain will be treated as the receptor for the L-RMSD and
+          for I-L-RMSD.
+        type: string
+        minLength: 1
+        maxLength: 1
+        format: chain
+      ligand_chains:
+        default:
+        - B
+        title: Ligand ChainIDs
+        description: Ligand ChainIDs to be considered for the RMSD calculations.
+        $comment: Ligand ChainIDs to be considered for the RMSD calculations. This
+          determines which chains will be treated as the ligand for the L-RMSD and
+          for I-L-RMSD.
         type: array
+        minItems: 0
+        maxItems: 100
         items:
-          type: object
-          properties:
-            prot_segid:
-              default: A
-              title: Segment ID
-              description: Segment ID assigned to this molecule
-              $comment: Segment ID assigned to this molecule in CNS. Used to distinguish
-                different molecules
-              type: string
-              minLength: 0
-              maxLength: 4
-              format: chain
-            cyclicpept:
-              default: false
-              title: Cyclic peptide
-              description: Defines the molecule as a cyclic peptide
-              $comment: This option defines the molecule as a cyclic peptide and HADDOCK
-                will generate a peptide bond between the N- and C-ter provided those
-                are within 2A. This cutoff can be changed in the generate-topology.cns
-                script.
-              type: boolean
-            nhisd:
-              default: 0
-              title: Number of HISD residue
-              description: Defines the number of HISD residues (neutral HIS with the
-                proton on the ND atom) residues when autohis=false
-              $comment: Defines the number of HISD residues (neutral HIS with the
-                proton on the ND atom) residues. The corresponding residue numbers
-                must be defined in the following parameter (hisd_1, hisd_2, ...).
-                Add as many as needed. Note that HIS is interpreted as a charged Histidine)
-              type: number
-              maximum: 9999
-              minimum: 0
-            hisd:
-              type: array
-              items:
-                title: HISD residue number
-                description: Residue number of the Histidine to be defined as HISD
-                $comment: Residue number of the Histidine to be defined as HISD
-                type: number
-                maximum: 9999
-                minimum: -9999
-                format: residue
-            nhise:
-              default: 0
-              title: Number of HISE residue
-              description: Defines the number of HISE residues (neutral HIS with the
-                proton on the NE atom) residues when autohis=false
-              $comment: Defines the number of HISE residues (neutral HIS with the
-                proton on the NE atom) residues. The corresponding residue numbers
-                must be defined in the following parameter (hise_1, hise_2, ...).
-                Add as many as needed. Note that HIS is interpreted as a charged Histidine)
-              type: number
-              maximum: 9999
-              minimum: 0
-            hise:
-              type: array
-              items:
-                title: HISE residue number
-                description: Residue number of the Histidine to be defined as HISE
-                $comment: Residue number of the Histidine to be defined as HISE
-                type: number
-                maximum: 9999
-                minimum: -9999
-                format: residue
-          required: []
-          additionalProperties: false
-        maxItemsFrom: molecules
+          type: string
+          format: chain
+      sortby:
+        default: score
+        title: Sort the structures/clusters in the output file by this value
+        description: Which value should be used to sort the output.
+        $comment: Which value should be used to sort the output, the output table
+          will be sorted accordingly.
+        type: string
+        minLength: 0
+        maxLength: 20
+        enum:
+        - score
+        - irmsd
+        - lrmsd
+        - ilrmsd
+        - fnat
+        - dockq
+      sort_ascending:
+        default: true
+        title: Sort in ascending order
+        description: Sort in ascending order.
+        $comment: Sort in ascending order.
+        type: boolean
+      alignment_method:
+        default: sequence
+        title: Alignment method used to match the numbering.
+        description: Which alignment method should be used to match the numbering.
+        $comment: Alignment method used to match the numbering. Sequence alignment
+          is haddock3-friendly but might not produce best results for structures that
+          are too different, for that use
+        type: string
+        minLength: 0
+        maxLength: 100
+        enum:
+        - structure
+        - sequence
+      lovoalign_exec:
+        title: Location (path) of the LovoAlign executable
+        description: Location (path) of the LovoAlign executable.
+        $comment: Location (path) of the LovoAlign executable.
+        type: string
+        minLength: 0
+        maxLength: 200
+      clt_threshold:
+        default: 4
+        title: Threshold (n) used for the average evaluation in the cluster-based
+          output
+        description: Threshold (n) used for the average evaluation in the cluster-based
+          output.
+        $comment: Threshold (n) used for the average evaluation in the cluster-based
+          output.
+        type: number
+        maximum: 1000
+        minimum: 1
     required: []
     additionalProperties: false
   uiSchema:
-    autohis:
-      ui:group: molecule
-    delenph:
-      ui:group: molecule
-    log_level:
-      ui:group: module
-    iniseed:
-      ui:group: molecule
-    ligand_param_fname:
+    reference_fname:
       ui:widget: file
-      ui:group: force field
-    ligand_top_fname:
-      ui:widget: file
-      ui:group: force field
-    tolerance:
-      ui:group: module
-    mol:
-      ui:indexable: true
-      ui:group: input molecules
-  tomlSchema:
-    mol:
-      indexed: true
-      items:
-        sectioned: true
-        properties:
-          hisd:
-            indexed: true
-          hise:
-            indexed: true
-- id: mdscoring
-  category: scoring
-  label: MD scoring module.
-  description: HADDOCK3 module to perform energy minimization scoring.
+      ui:group: analysis
+    irmsd:
+      ui:group: analysis
+    fnat:
+      ui:group: analysis
+    lrmsd:
+      ui:group: analysis
+    ilrmsd:
+      ui:group: analysis
+    dockq:
+      ui:group: analysis
+    irmsd_cutoff:
+      ui:group: analysis
+    fnat_cutoff:
+      ui:group: analysis
+    receptor_chain:
+      ui:group: analysis
+    ligand_chains:
+      ui:group: analysis
+    sortby:
+      ui:group: analysis
+    sort_ascending:
+      ui:group: analysis
+    alignment_method:
+      ui:group: analysis
+    lovoalign_exec:
+      ui:group: analysis
+    clt_threshold:
+      ui:group: analysis
+  tomlSchema: {}
+- id: clustfcc
+  category: analysis
+  label: Cluster modules with FCC.
+  description: HADDOCK3 module for clustering with FCC.
   schema:
     type: object
     properties:
-      w_bsa:
-        default: 0.0
-        title: Weight of the buried surface area term
-        description: Weight of the buried surface area term in the scoring function
-        $comment: Weight of the buried surface area (BSA) term in the scoring function.
-          Note that the BSA is only used for scoring.
-        type: number
-        maximum: 9999
-        minimum: -9999
-      w_cdih:
-        default: 0.0
-        title: Weight of the dihedral angle restraint energy
-        description: Weight of the dihedral angle restraints energy in the scoring
-          function
-        $comment: Weight of the dihedral angle restraints energy in the scoring function.
-          Note that this is different from the force constant used during the calculations.
-        type: number
-        maximum: 9999
-        minimum: 0
-      w_desolv:
-        default: 1.0
-        title: Weight of the desolvation energy term
-        description: Weight of the desolvation energy term in the scoring function
-        $comment: Weight of the desolvation energy term in the scoring function. Note
-          that the desolvation energy is only used for scoring.
-        type: number
-        maximum: 9999
-        minimum: -9999
-      w_elec:
-        default: 0.2
-        title: Weight of the intermolecular electrostatic energy
-        description: Weight of the intermolecular electrostatic energy in the scoring
-          function
-        $comment: Weight of the intermolecular electrostatic energy in the scoring
-          function. Note that this does not affect the electostatic energy during
-          the EM minimization.
-        type: number
-        maximum: 9999
-        minimum: -9999
-      w_vdw:
-        default: 1.0
-        title: Weight of the intermolecular van der Waals energy
-        description: Weight of the intermolecular van der Waals energy in the scoring
-          function
-        $comment: Weight of the intermolecular van der Waals energy in the scoring
-          function. Note that this does not affect the van der Waals energy during
-          the EM minimization.
-        type: number
-        maximum: 9999
-        minimum: -9999
-      contactairs:
-        default: false
-        title: Contact restraints
-        description: Contact restraints between molecules
-        $comment: Contact restraints between molecules. These are defined as ambiguous
-          distance restraint between each residue of a molecule and all residues of
-          the other molecules with 5A from that residue. This can be used to restraint
-          the contacts between the interfaces. Note that this can generate a large
-          number of ambiguous restraints and slow down the computations
-        type: boolean
-      kcont:
-        default: 1.0
-        title: Contact restraints force constant
-        description: Force constant applied to the contact restraints.
-        $comment: Force constant applied to the contact restraints.
-        type: number
-        maximum: 1000
-        minimum: 0
-      ssdihed:
-        title: Define automatically backbone dihedral angle restraints
-        description: If turned on, this option will automatically defined backbone
-          dihedral angle restraints for the selected regions.
-        $comment: This option allows to utomatically defined backbone dihedral angle
-          restraints for the selected regions. The restraints will be defined for
-          the phi and psi backbone dihedral angles of amino acids, with the target
-          value taken from the measured angle in the input structure, and the error
-          bound defined by the error_dih parameter. Those restraints can be applied
-          to the entire structure (all), the alpha/beta secondary structure elements
-          (alphabeta) or only to the alpha helical regions (alpha). Those are automatically
-          detected based on the measured dihedral angle combinations.
-        type: string
-        minLength: 0
-        maxLength: 100
-        enum:
-        - all
-        - alpha
-        - alphabeta
-      error_dih:
-        default: 10
-        title: Force constant for backbone dihedral angle restraints
-        description: Force constant for backbone dihedral angle restraints (ssdihed
-          option)
-        $comment: Force constant for backbone dihedral angle restraints (ssdihed option)
-        type: number
-        maximum: 1000
-        minimum: 0
-      dnarest_on:
-        default: false
-        title: Restrain the DNA conformation
-        description: Automatically creates restraints to maintain the conformation
-          of DNA/RNA
-        $comment: 'This option allows to restraint the conformation of nucleic acids
-          based on the values from the input structures. The following restraints
-          will be automatically defined: - single base planarity - sugar pucker -
-          phosphate backbone diherdral angle restraints - Watson-Crick base pairing'
-        type: boolean
-      ligand_param_fname:
-        title: Custom ligand parameter file
-        description: Ligand parameter file in CNS format
-        $comment: Ligand parameter file in CNS format containing all force field parameters
-          (bond, angles, dihedrals, impropers, van der waals) for any ligand not supported
-          by default by HADDOCK
+      executable:
         type: string
         format: uri-reference
-      ligand_top_fname:
-        title: Custom ligand topology file
-        description: Ligand topology file in CNS format
-        $comment: Ligand topology file in CNS format containing the ligand topologies
-          (atoms, masses, charges, bond definitions...) for any ligand not supported
-          by default by HADDOCK
-        type: string
-        format: uri-reference
-      elecflag:
-        default: true
-        title: Include electrostatics energy
-        description: Include electrostatics energy during the calculations.
-        $comment: Include electrostatics energy during the calculations. If set to
-          false electrostatics will not be considered.
-        type: boolean
-      dielec:
-        default: cdie
-        title: Constant (cdie) or distance-dependent dielectric (rdie) constant.
-        description: Use a constant (cdie option) or a distance-dependent dielectric
-          (rdie) constant in the Coulomb potential.
-        $comment: Use a constant (cdie option) or a distance-dependent dielectric
-          (rdie) constant in the Coulomb potential. A distance dependent dielectric
-          constant will effectively scale down the electrostatic energy by having
-          a 1/r**2 dependency instead of 1/r
-        type: string
-        minLength: 0
-        maxLength: 4
-        enum:
-        - cdie
-        - rdie
-      epsilon:
-        default: 1.0
-        title: Dielectric constant
-        description: Dielectric constant for the electrostatic Coulomb energy term.
-        $comment: Dielectric constant for the electrostatic Coulomb energy term.
+      contact_distance_cutoff:
+        default: 5.0
         type: number
-        maximum: 78
-        minimum: 1
-      dihedflag:
-        default: true
-        type: boolean
-      individualize:
-        default: true
-        title: Individualise models
-        description: Treat each model in the PDB ensemble as a separate entity.
-        $comment: Treat each model in the PDB ensemble as a separate entity. This
-          means that for each a separate topology file will be generated. The models
-          in the ensemble can thus correspond to different molecules.
-        type: boolean
-      solvent:
-        default: water
-        title: Solvent
-        description: Solvent to use during the short MD refinement
-        $comment: Solvent to use during the short MD refinement. Water and DMSO are
-          supported. A solvent shelll is generated by shifting pre-equilibrated boxes
-          around the complex. For water an 8A water shell is generated and for DMSO
-          a 12.5A shell. For DMSO,
-        type: string
-        minLength: 0
-        maxLength: 100
-        enum:
-        - water
-        - dmso
-      nemsteps:
-        default: 200
-        title: Number of EM steps
-        description: Number of energy minimisation steps to perform.
-        $comment: Number of energy minimisation steps to perform in the various EM
-          stages of this refinement protocol. Note that the effective number might
-          be smaller if the minimisation converges earlier.
+        maximum: 9999
+        minimum: -9999
+      fraction_cutoff:
+        default: 0.6
         type: number
-        maximum: 10000
-        minimum: 1
-      timestep:
-        default: 0.002
-        title: MD integrating time step
-        description: Integration time step for the molecular dynamics.
-        $comment: Integration time step for the molecular dynamics.
+        maximum: 9999
+        minimum: -9999
+      threshold:
+        default: 4
         type: number
-        maximum: 0.004
-        minimum: 0.0005
-      waterheatsteps:
-        default: 100
-        title: Number of MD steps for the heating
-        description: Number of MD steps for the heating phase.
-        $comment: Number of MD steps for the heating phase. The heating consists of
-          three successive short molecular dynamics simluations at 100, 200 and 300
-          Kelvin.
+        maximum: 9999
+        minimum: -9999
+      strictness:
+        default: 0.75
         type: number
-        maximum: 10000
-        minimum: 0
-      watersteps:
-        default: 1250
-        title: Number of MD steps at 300K.
-        description: Number of MD steps for 300K simulation.
-        $comment: Number of MD steps for 300K simulation. This is the sampling state
-          of the refinement.
-        type: number
-        maximum: 100000
-        minimum: 0
-      watercoolsteps:
-        default: 500
-        title: Number of MD steps for the cooling
-        description: Number of MD steps for the cooling phase.
-        $comment: Number of MD steps for the cooling phase. The cooling consists of
-          three successive short molecular dynamics simluations at 300, 200 and 100
-          Kelvin.
-        type: number
-        maximum: 10000
-        minimum: 0
-      iniseed:
-        default: 917
-        title: Random seed
-        description: Random seed used in CNS to initialize the random seed function
-        $comment: Random seed used in CNS to initialize the random seed function
-        type: number
-        maximum: 9999999999999999
-        minimum: 0
-      keepwater:
-        default: false
-        title: Write water molecules to output file
-        description: Write water molecules if present to the output file.
-        $comment: Write water molecules if present to the output file.
-        type: boolean
-      tolerance:
-        default: 5
-        title: Failure tolerance percentage
-        description: Percentage of allowed failures for a module to successfully complete
-        $comment: Percentage of allowed failures for a module to successfully complete
-        type: number
-        maximum: 99
-        minimum: 0
-      log_level:
-        default: quiet
-        title: Log level verbosity for CNS
-        description: Set the log level verbosity for CNS
-        $comment: CNS, the computational engine used by HADDOCK can generate a lot
-          of output messages. This parameter controls the verbosity of CNS (verbose,
-          normal or quiet).
-        type: string
-        minLength: 0
-        maxLength: 100
-        enum:
-        - verbose
-        - normal
-        - quiet
+        maximum: 9999
+        minimum: -9999
     required: []
     additionalProperties: false
   uiSchema:
-    w_bsa:
-      ui:group: scoring
-    w_cdih:
-      ui:group: scoring
-    w_desolv:
-      ui:group: scoring
-    w_elec:
-      ui:group: scoring
-    w_vdw:
-      ui:group: scoring
-    contactairs:
-      ui:group: distance restraints
-    kcont:
-      ui:group: distance restraints
-    ssdihed:
-      ui:group: dihedral restraints
-    error_dih:
-      ui:group: dihedral restraints
-    dnarest_on:
-      ui:group: other restraints
-    ligand_param_fname:
+    executable:
       ui:widget: file
-      ui:group: force field
-    ligand_top_fname:
-      ui:widget: file
-      ui:group: force field
-    elecflag:
-      ui:group: force field
-    dielec:
-      ui:group: force field
-    epsilon:
-      ui:group: force field
-    dihedflag:
-      ui:group: force field
-    individualize:
-      ui:group: sampling
-    nemsteps:
-      ui:group: sampling
-    timestep:
-      ui:group: sampling
-    waterheatsteps:
-      ui:group: sampling
-    watersteps:
-      ui:group: sampling
-    watercoolsteps:
-      ui:group: sampling
-    iniseed:
-      ui:group: sampling
-    keepwater:
-      ui:group: sampling
-    tolerance:
-      ui:group: module
-    log_level:
-      ui:group: module
   tomlSchema: {}
-- id: emscoring
-  category: scoring
-  label: EM scoring module.
-  description: HADDOCK3 module to perform energy minimization scoring.
+- id: clustrmsd
+  category: analysis
+  label: RMSD clustering module.
+  description: HADDOCK3 module for clustering with RMSD.
   schema:
     type: object
     properties:
-      w_bsa:
-        default: 0.0
-        title: Weight of the buried surface area term
-        description: Weight of the buried surface area term in the scoring function
-        $comment: Weight of the buried surface area (BSA) term in the scoring function.
-          Note that the BSA is only used for scoring.
-        type: number
-        maximum: 9999
-        minimum: -9999
-      w_cdih:
-        default: 0.0
-        title: Weight of the dihedral angle restraint energy
-        description: Weight of the dihedral angle restraints energy in the scoring
-          function
-        $comment: Weight of the dihedral angle restraints energy in the scoring function.
-          Note that this is different from the force constant used during the calculations.
-        type: number
-        maximum: 9999
-        minimum: 0
-      w_desolv:
-        default: 1.0
-        title: Weight of the desolvation energy term
-        description: Weight of the desolvation energy term in the scoring function
-        $comment: Weight of the desolvation energy term in the scoring function. Note
-          that the desolvation energy is only used for scoring.
-        type: number
-        maximum: 9999
-        minimum: -9999
-      w_elec:
-        default: 0.2
-        title: Weight of the intermolecular electrostatic energy
-        description: Weight of the intermolecular electrostatic energy in the scoring
-          function
-        $comment: Weight of the intermolecular electrostatic energy in the scoring
-          function. Note that this does not affect the electostatic energy during
-          the EM minimization.
-        type: number
-        maximum: 9999
-        minimum: -9999
-      w_vdw:
-        default: 1.0
-        title: Weight of the intermolecular van der Waals energy
-        description: Weight of the intermolecular van der Waals energy in the scoring
-          function
-        $comment: Weight of the intermolecular van der Waals energy in the scoring
-          function. Note that this does not affect the van der Waals energy during
-          the EM minimization.
-        type: number
-        maximum: 9999
-        minimum: -9999
-      ligand_param_fname:
-        title: Custom ligand parameter file
-        description: Ligand parameter file in CNS format
-        $comment: Ligand parameter file in CNS format containing all force field parameters
-          (bond, angles, dihedrals, impropers, van der waals) for any ligand not supported
-          by default by HADDOCK
-        type: string
-        format: uri-reference
-      ligand_top_fname:
-        title: Custom ligand topology file
-        description: Ligand topology file in CNS format
-        $comment: Ligand topology file in CNS format containing the ligand topologies
-          (atoms, masses, charges, bond definitions...) for any ligand not supported
-          by default by HADDOCK
-        type: string
-        format: uri-reference
-      elecflag:
-        default: true
-        title: Include electrostatics energy
-        description: Include electrostatics energy during the calculations.
-        $comment: Include electrostatics energy during the calculations. If set to
-          false electrostatics will not be considered.
-        type: boolean
-      dielec:
-        default: cdie
-        title: Constant (cdie) or distance-dependent dielectric (rdie) constant.
-        description: Use a constant (cdie option) or a distance-dependent dielectric
-          (rdie) constant in the Coulomb potential.
-        $comment: Use a constant (cdie option) or a distance-dependent dielectric
-          (rdie) constant in the Coulomb potential. A distance dependent dielectric
-          constant will effectively scale down the electrostatic energy by having
-          a 1/r**2 dependency instead of 1/r
-        type: string
-        minLength: 0
-        maxLength: 4
-        enum:
-        - cdie
-        - rdie
-      epsilon:
-        default: 1.0
-        title: Dielectric constant
-        description: Dielectric constant for the electrostatic Coulomb energy term.
-        $comment: Dielectric constant for the electrostatic Coulomb energy term.
-        type: number
-        maximum: 78
-        minimum: 1
-      dihedflag:
-        default: true
-        type: boolean
-      individualize:
-        default: true
-        title: Individualise models
-        description: Treat each model in the PDB ensemble as a separate entity.
-        $comment: Treat each model in the PDB ensemble as a separate entity. This
-          means that for each a separate topology file will be generated. The models
-          in the ensemble can thus correspond to different molecules.
-        type: boolean
-      nemsteps:
-        default: 50
-        title: Number of EM steps
-        description: Number of energy minimisation steps to perform.
-        $comment: Number of energy minimisation steps to perform. Note that the effective
-          number might be smaller if the minimisation converges earlier.
-        type: number
-        maximum: 10000
-        minimum: 1
-      tolerance:
-        default: 0
-        title: Failure tolerance percentage
-        description: Percentage of allowed failures for a module to successfully complete
-        $comment: Percentage of allowed failures for a module to successfully complete
-        type: number
-        maximum: 99
-        minimum: 0
-      log_level:
-        default: quiet
-        title: Log level verbosity for CNS
-        description: Set the log level verbosity for CNS
-        $comment: CNS, the computational engine used by HADDOCK can generate a lot
-          of output messages. This parameter controls the verbosity of CNS (verbose,
-          normal or quiet)
+      criterion:
+        default: maxclust
+        title: Criterion for fcluster
+        description: Criterion to be used to cut the dendrogram
+        $comment: if criterion is maxclust, the dendrogram is cut when a certain number
+          of clusters is formed. If criterion is distance, the dendrogram will be
+          cut based on the value of the cophenetic distance
         type: string
         minLength: 0
         maxLength: 100
         enum:
-        - verbose
-        - normal
-        - quiet
+        - distance
+        - maxclust
+      linkage:
+        default: average
+        title: Linkage type
+        description: How to lump together clusters in hierarchical clustering
+        $comment: check out the full description at https://docs.scipy.org/doc/scipy/reference/generated/scipy.cluster.hierarchy.linkage.html
+        type: string
+        minLength: 0
+        maxLength: 100
+        enum:
+        - average
+        - centroid
+        - complete
+        - median
+        - single
+        - ward
+        - weighted
+      threshold:
+        default: 4
+        title: Clustering population threshold
+        description: Threshold employed to exclude clusters with less than this number
+          of members
+        $comment: Threshold employed to exclude clusters with less than this number
+          of members. When criterion is maxclust, this value is ignored.
+        type: number
+        maximum: 9999
+        minimum: 1
+      tolerance:
+        title: Numeric value for clustering
+        description: if criterion is maxclust, the number of desired clusters. if
+          criterion is distance, the value of cutoff cophenetic distance
+        $comment: if criterion is maxclust, the number of desired clusters. if criterion
+          is distance, the value of cutoff cophenetic distance
+        type: number
+        maximum: 9999
+        minimum: 1
     required: []
     additionalProperties: false
-  uiSchema:
-    w_bsa:
-      ui:group: scoring
-    w_cdih:
-      ui:group: scoring
-    w_desolv:
-      ui:group: scoring
-    w_elec:
-      ui:group: scoring
-    w_vdw:
-      ui:group: scoring
-    ligand_param_fname:
-      ui:widget: file
-      ui:group: force field
-    ligand_top_fname:
-      ui:widget: file
-      ui:group: force field
-    elecflag:
-      ui:group: force field
-    dielec:
-      ui:group: force field
-    epsilon:
-      ui:group: force field
-    dihedflag:
-      ui:group: force field
-    individualize:
-      ui:group: sampling
-    nemsteps:
-      ui:group: sampling
-    tolerance:
-      ui:group: module
-    log_level:
-      ui:group: module
+  uiSchema: {}
   tomlSchema: {}
-- id: mdref
+- id: emref
   category: refinement
-  label: Water refinement with CNS.
-  description: HADDOCK3 module for water refinement.
+  label: Energy minimization refinement with CNS.
+  description: HADDOCK3 module energy minimization refinement.
   schema:
     type: object
     properties:
@@ -952,10 +545,10 @@ nodes:
         title: Boolean condition on the previous ambiguous distance restraints file
         description: Boolean condition on the previous ambiguous distance restraints
           file. If true, use the the restraint information coming from the previous
-          CNS module. If False, don't use previous information.
+          CNS module. If false, don't use previous information.
         $comment: Boolean condition on the ambiguous distance restraints file. If
           true, use the restraint information coming from the previous CNS module,
-          as long as an ambig_fname is not defined for the current module. If False,
+          as long as an ambig_fname is not defined for the current module. If false,
           don't use previous information.
         type: boolean
       unambig_fname:
@@ -1042,47 +635,6 @@ nodes:
         type: number
         maximum: 1000
         minimum: 0
-      cmrest:
-        default: false
-        title: Center of mass restraints
-        description: Automatically defines distance restraints between the geometric
-          center of the various molecules.
-        $comment: When turned on, this option will automatically define center of
-          mass restraints between the various molecules. This allows HADDOCK to operate
-          in ab-initio mode in the absence of any other restraints. But those restraints
-          can also be combined with other restraints to ensure more compact solutions.
-          The distance restraints are defined between the geometrical centers of the
-          various molecules (calculated on CA atoms for proteins (BB in case of Martini
-          coarse-grained molecules) and N1 atoms for nucleic acids. For small ligands,
-          all atoms will be used to define the geometric center. The upper limit distance
-          is automatically calculated based on the dimension of the molecules (see
-          cmtight description).
-        type: boolean
-      cmtight:
-        default: true
-        title: Center of mass restraint tightness
-        description: Defines the upper distance limit based on the sum of the average
-          dimension of the two molecule, if cmtight=false all three dimensions are
-          used, if set to true the shortest two only are used, resulting in tighter
-          distance restraints.
-        $comment: This parameter controls how the upper limit distance is defined
-          for the center of mass restraints between molecules. Each molecule is oriented
-          along its principle components and the x,y and z dimensions are calculated.
-          If cmtight=true, the molecule distance (size) is set to the average of its
-          smallest two half dimensions. If cmtight=false, the molecule distance (size)
-          is set to the average of its three half dimensions.. In case of DNA or small
-          ligands the molecule distance (size) is set to 0. The effective upper distance
-          limit for the center or mass distance restraint is the sum of the two molecule
-          distances.
-        type: boolean
-      kcm:
-        default: 1.0
-        title: Center of mass restraints force constant
-        description: Force constant applied to the center of mass restraints
-        $comment: Force constant applied to the center of mass restraints
-        type: number
-        maximum: 1000
-        minimum: 0
       dihe_fname:
         title: Dihedral angle restraints filename
         description: Filename of the Dihedral angle restraints file
@@ -1104,8 +656,8 @@ nodes:
         $comment: Force constant applied to the dihedral angle restraints read from
           dihe_fname.
         type: number
-        maximum: 1000
-        minimum: 0
+        maximum: 9999
+        minimum: -9999
       ssdihed:
         title: Define automatically backbone dihedral angle restraints
         description: If turned on, this option will automatically defined backbone
@@ -1132,8 +684,8 @@ nodes:
           option)
         $comment: Force constant for backbone dihedral angle restraints (ssdihed option)
         type: number
-        maximum: 1000
-        minimum: 0
+        maximum: 9999
+        minimum: -9999
       dnarest_on:
         default: false
         title: Restrain the DNA conformation
@@ -2002,7 +1554,7 @@ nodes:
           function
         $comment: Weight of the intermolecular electrostatic energy in the scoring
           function. Note that this does not affect the electostatic energy during
-          the MD refinement.
+          the EM minimization.
         type: number
         maximum: 9999
         minimum: -9999
@@ -2022,7 +1574,7 @@ nodes:
           function
         $comment: Weight of the intermolecular van der Waals energy in the scoring
           function. Note that this does not affect the van der Waals energy during
-          the MD refinement.
+          the EM minimization.
         type: number
         maximum: 9999
         minimum: -9999
@@ -2074,80 +1626,35 @@ nodes:
         minimum: 1
       dihedflag:
         default: true
-        title: Use torsion angle dihedral energy term
-        description: Turns on the torsion angle dihedral energy terms of the force
-          field.
-        $comment: Turns on the torsion angle dihedral energy terms of the force field.
         type: boolean
       sampling_factor:
         default: 1
         title: Sampling factor for each starting model
         description: This paramater control how many times a model will be refined.
-        $comment: This paramater control how many times a model will be refined.
+        $comment: This paramater control how many times a model will be refined. For
+          EM refinement only it does not make sense to increase it unless random removal
+          of restraints is turned on. If not then the energy minimisation will lead
+          to the same final conformation.
         type: number
-        maximum: 1
+        maximum: 200
         minimum: 1
-      solvent:
-        default: water
-        title: Solvent
-        description: Solvent to use during the short MD refinement
-        $comment: Solvent to use during the short MD refinement. Water and DMSO are
-          supported. A solvent shelll is generated by shifting pre-equilibrated boxes
-          around the complex. For water an 8A water shell is generated and for DMSO
-          a 12.5A shell. For DMSO,
-        type: string
-        minLength: 0
-        maxLength: 100
-        enum:
-        - water
-        - dmso
+      max_nmodels:
+        default: 50000
+        title: Maximum number of models to refine
+        description: This paramater controls the maximum number of models to refine.
+        $comment: This paramater controls the maximum number of models to refine.
+        type: number
+        maximum: 100000
+        minimum: 1
       nemsteps:
         default: 200
         title: Number of EM steps
         description: Number of energy minimisation steps to perform.
-        $comment: Number of energy minimisation steps to perform in the various EM
-          stages of this refinement protocol. Note that the effective number might
-          be smaller if the minimisation converges earlier.
+        $comment: Number of energy minimisation steps to perform. Note that the effective
+          number might be smaller if the minimisation converges earlier.
         type: number
         maximum: 10000
         minimum: 1
-      timestep:
-        default: 0.002
-        title: MD integrating time step
-        description: Integration time step for the molecular dynamics.
-        $comment: Integration time step for the molecular dynamics.
-        type: number
-        maximum: 0.004
-        minimum: 0.0005
-      waterheatsteps:
-        default: 100
-        title: Number of MD steps for the heating
-        description: Number of MD steps for the heating phase.
-        $comment: Number of MD steps for the heating phase. The heating consists of
-          three successive short molecular dynamics simluations at 100, 200 and 300
-          Kelvin.
-        type: number
-        maximum: 10000
-        minimum: 0
-      watersteps:
-        default: 1250
-        title: Number of MD steps at 300K.
-        description: Number of MD steps for 300K simulation.
-        $comment: Number of MD steps for 300K simulation. This is the sampling state
-          of the refinement.
-        type: number
-        maximum: 100000
-        minimum: 0
-      watercoolsteps:
-        default: 500
-        title: Number of MD steps for the cooling
-        description: Number of MD steps for the cooling phase.
-        $comment: Number of MD steps for the cooling phase. The cooling consists of
-          three successive short molecular dynamics simluations at 300, 200 and 100
-          Kelvin.
-        type: number
-        maximum: 10000
-        minimum: 0
       iniseed:
         default: 917
         title: Random seed
@@ -2163,7 +1670,7 @@ nodes:
         $comment: Write water molecules if present to the output file.
         type: boolean
       tolerance:
-        default: 5
+        default: 0
         title: Failure tolerance percentage
         description: Percentage of allowed failures for a module to successfully complete
         $comment: Percentage of allowed failures for a module to successfully complete
@@ -2176,7 +1683,7 @@ nodes:
         description: Set the log level verbosity for CNS
         $comment: CNS, the computational engine used by HADDOCK can generate a lot
           of output messages. This parameter controls the verbosity of CNS (verbose,
-          normal or quiet).
+          normal or quiet)
         type: string
         minLength: 0
         maxLength: 100
@@ -2775,12 +2282,6 @@ nodes:
       ui:group: distance restraints
     kcont:
       ui:group: distance restraints
-    cmrest:
-      ui:group: distance restraints
-    cmtight:
-      ui:group: distance restraints
-    kcm:
-      ui:group: distance restraints
     dihe_fname:
       ui:widget: file
       ui:group: dihedral restraints
@@ -2870,15 +2371,9 @@ nodes:
       ui:group: force field
     sampling_factor:
       ui:group: sampling
+    max_nmodels:
+      ui:group: sampling
     nemsteps:
-      ui:group: sampling
-    timestep:
-      ui:group: sampling
-    waterheatsteps:
-      ui:group: sampling
-    watersteps:
-      ui:group: sampling
-    watercoolsteps:
       ui:group: sampling
     iniseed:
       ui:group: sampling
@@ -3021,6 +2516,206 @@ nodes:
         indexed: true
         items:
           flatten: true
+- id: emscoring
+  category: scoring
+  label: EM scoring module.
+  description: HADDOCK3 module to perform energy minimization scoring.
+  schema:
+    type: object
+    properties:
+      w_bsa:
+        default: 0.0
+        title: Weight of the buried surface area term
+        description: Weight of the buried surface area term in the scoring function
+        $comment: Weight of the buried surface area (BSA) term in the scoring function.
+          Note that the BSA is only used for scoring.
+        type: number
+        maximum: 9999
+        minimum: -9999
+      w_cdih:
+        default: 0.0
+        title: Weight of the dihedral angle restraint energy
+        description: Weight of the dihedral angle restraints energy in the scoring
+          function
+        $comment: Weight of the dihedral angle restraints energy in the scoring function.
+          Note that this is different from the force constant used during the calculations.
+        type: number
+        maximum: 9999
+        minimum: 0
+      w_desolv:
+        default: 1.0
+        title: Weight of the desolvation energy term
+        description: Weight of the desolvation energy term in the scoring function
+        $comment: Weight of the desolvation energy term in the scoring function. Note
+          that the desolvation energy is only used for scoring.
+        type: number
+        maximum: 9999
+        minimum: -9999
+      w_elec:
+        default: 0.2
+        title: Weight of the intermolecular electrostatic energy
+        description: Weight of the intermolecular electrostatic energy in the scoring
+          function
+        $comment: Weight of the intermolecular electrostatic energy in the scoring
+          function. Note that this does not affect the electostatic energy during
+          the EM minimization.
+        type: number
+        maximum: 9999
+        minimum: -9999
+      w_vdw:
+        default: 1.0
+        title: Weight of the intermolecular van der Waals energy
+        description: Weight of the intermolecular van der Waals energy in the scoring
+          function
+        $comment: Weight of the intermolecular van der Waals energy in the scoring
+          function. Note that this does not affect the van der Waals energy during
+          the EM minimization.
+        type: number
+        maximum: 9999
+        minimum: -9999
+      ligand_param_fname:
+        title: Custom ligand parameter file
+        description: Ligand parameter file in CNS format
+        $comment: Ligand parameter file in CNS format containing all force field parameters
+          (bond, angles, dihedrals, impropers, van der waals) for any ligand not supported
+          by default by HADDOCK
+        type: string
+        format: uri-reference
+      ligand_top_fname:
+        title: Custom ligand topology file
+        description: Ligand topology file in CNS format
+        $comment: Ligand topology file in CNS format containing the ligand topologies
+          (atoms, masses, charges, bond definitions...) for any ligand not supported
+          by default by HADDOCK
+        type: string
+        format: uri-reference
+      elecflag:
+        default: true
+        title: Include electrostatics energy
+        description: Include electrostatics energy during the calculations.
+        $comment: Include electrostatics energy during the calculations. If set to
+          false electrostatics will not be considered.
+        type: boolean
+      dielec:
+        default: cdie
+        title: Constant (cdie) or distance-dependent dielectric (rdie) constant.
+        description: Use a constant (cdie option) or a distance-dependent dielectric
+          (rdie) constant in the Coulomb potential.
+        $comment: Use a constant (cdie option) or a distance-dependent dielectric
+          (rdie) constant in the Coulomb potential. A distance dependent dielectric
+          constant will effectively scale down the electrostatic energy by having
+          a 1/r**2 dependency instead of 1/r
+        type: string
+        minLength: 0
+        maxLength: 4
+        enum:
+        - cdie
+        - rdie
+      epsilon:
+        default: 1.0
+        title: Dielectric constant
+        description: Dielectric constant for the electrostatic Coulomb energy term.
+        $comment: Dielectric constant for the electrostatic Coulomb energy term.
+        type: number
+        maximum: 78
+        minimum: 1
+      dihedflag:
+        default: true
+        type: boolean
+      individualize:
+        default: true
+        title: Individualise models
+        description: Treat each model in the PDB ensemble as a separate entity.
+        $comment: Treat each model in the PDB ensemble as a separate entity. This
+          means that for each a separate topology file will be generated. The models
+          in the ensemble can thus correspond to different molecules.
+        type: boolean
+      nemsteps:
+        default: 50
+        title: Number of EM steps
+        description: Number of energy minimisation steps to perform.
+        $comment: Number of energy minimisation steps to perform. Note that the effective
+          number might be smaller if the minimisation converges earlier.
+        type: number
+        maximum: 10000
+        minimum: 1
+      tolerance:
+        default: 0
+        title: Failure tolerance percentage
+        description: Percentage of allowed failures for a module to successfully complete
+        $comment: Percentage of allowed failures for a module to successfully complete
+        type: number
+        maximum: 99
+        minimum: 0
+      log_level:
+        default: quiet
+        title: Log level verbosity for CNS
+        description: Set the log level verbosity for CNS
+        $comment: CNS, the computational engine used by HADDOCK can generate a lot
+          of output messages. This parameter controls the verbosity of CNS (verbose,
+          normal or quiet)
+        type: string
+        minLength: 0
+        maxLength: 100
+        enum:
+        - verbose
+        - normal
+        - quiet
+    required: []
+    additionalProperties: false
+  uiSchema:
+    w_bsa:
+      ui:group: scoring
+    w_cdih:
+      ui:group: scoring
+    w_desolv:
+      ui:group: scoring
+    w_elec:
+      ui:group: scoring
+    w_vdw:
+      ui:group: scoring
+    ligand_param_fname:
+      ui:widget: file
+      ui:group: force field
+    ligand_top_fname:
+      ui:widget: file
+      ui:group: force field
+    elecflag:
+      ui:group: force field
+    dielec:
+      ui:group: force field
+    epsilon:
+      ui:group: force field
+    dihedflag:
+      ui:group: force field
+    individualize:
+      ui:group: sampling
+    nemsteps:
+      ui:group: sampling
+    tolerance:
+      ui:group: module
+    log_level:
+      ui:group: module
+  tomlSchema: {}
+- id: exit
+  category: extras
+  label: Exit module
+  description: Stop the workflow when this module is reached.
+  schema:
+    type: object
+    properties:
+      message:
+        default: Stopping the workflow.
+        title: Exiting message.
+        description: The message to print when exiting.
+        $comment: The message to print when exiting.
+        type: string
+        minLength: 0
+        maxLength: 1000
+    required: []
+    additionalProperties: false
+  uiSchema: {}
+  tomlSchema: {}
 - id: flexref
   category: refinement
   label: Flexible refinement with CNS.
@@ -4337,10 +4032,18 @@ nodes:
       sampling_factor:
         default: 1
         title: Sampling factor for each starting model
-        description: This paramater control how many times a model will be refined.
-        $comment: This paramater control how many times a model will be refined.
+        description: This paramater controls how many times a model will be refined.
+        $comment: This paramater controls how many times a model will be refined.
         type: number
-        maximum: 1
+        maximum: 200
+        minimum: 1
+      max_nmodels:
+        default: 10000
+        title: Maximum number of models to refine
+        description: This paramater controls the maximum number of models to refine.
+        $comment: This paramater controls the maximum number of models to refine.
+        type: number
+        maximum: 50000
         minimum: 1
       nemsteps:
         default: 200
@@ -5299,6 +5002,8 @@ nodes:
       ui:group: force field
     sampling_factor:
       ui:group: sampling
+    max_nmodels:
+      ui:group: sampling
     nemsteps:
       ui:group: sampling
     mdsteps_rigid:
@@ -5478,10 +5183,99 @@ nodes:
         indexed: true
         items:
           flatten: true
-- id: emref
+- id: gdock
+  category: sampling
+  label: gdock integration sampling module.
+  description: HADDOCK3 gdock module.
+  schema:
+    type: object
+    properties:
+      ambig_fname:
+        type: string
+        format: uri-reference
+    required: []
+    additionalProperties: false
+  uiSchema:
+    ambig_fname:
+      ui:widget: file
+  tomlSchema: {}
+- id: lightdock
+  category: sampling
+  label: LightDock integration sampling module.
+  description: HADDOCK3 Lightdock module.
+  schema:
+    type: object
+    properties:
+      glowworms:
+        default: 200
+        type: number
+        maximum: 9999
+        minimum: -9999
+      steps:
+        default: 100
+        type: number
+        maximum: 9999
+        minimum: -9999
+      swarms:
+        default: 400
+        type: number
+        maximum: 9999
+        minimum: -9999
+      scoring:
+        default: fastdfire
+        type: string
+        minLength: 0
+        maxLength: 100
+      top:
+        default: 10
+        type: number
+        maximum: 9999
+        minimum: -9999
+      receptor_chains:
+        default: A
+        type: string
+        minLength: 0
+        maxLength: 100
+        format: chain
+      receptor_active:
+        type: string
+        minLength: 0
+        maxLength: 100
+      receptor_passive:
+        type: string
+        minLength: 0
+        maxLength: 100
+      ligand_chains:
+        default: B
+        type: string
+        minLength: 0
+        maxLength: 100
+        format: chain
+      ligand_active:
+        type: string
+        minLength: 0
+        maxLength: 100
+      ligand_passive:
+        type: string
+        minLength: 0
+        maxLength: 100
+      noxt:
+        default: true
+        type: boolean
+      noh:
+        default: true
+        type: boolean
+      restraints:
+        default: false
+        type: boolean
+    required: []
+    additionalProperties: false
+  uiSchema: {}
+  tomlSchema: {}
+- id: mdref
   category: refinement
-  label: Energy minimization refinement with CNS.
-  description: HADDOCK3 module energy minimization refinement.
+  label: Water refinement with CNS.
+  description: HADDOCK3 module for water refinement.
   schema:
     type: object
     properties:
@@ -5520,7 +5314,7 @@ nodes:
           CNS module. If false, don't use previous information.
         $comment: Boolean condition on the ambiguous distance restraints file. If
           true, use the restraint information coming from the previous CNS module,
-          as long as an ambig_fname is not defined for the current module. If false,
+          as long as an ambig_fname is not defined for the current module. If False,
           don't use previous information.
         type: boolean
       unambig_fname:
@@ -5607,6 +5401,47 @@ nodes:
         type: number
         maximum: 1000
         minimum: 0
+      cmrest:
+        default: false
+        title: Center of mass restraints
+        description: Automatically defines distance restraints between the geometric
+          center of the various molecules.
+        $comment: When turned on, this option will automatically define center of
+          mass restraints between the various molecules. This allows HADDOCK to operate
+          in ab-initio mode in the absence of any other restraints. But those restraints
+          can also be combined with other restraints to ensure more compact solutions.
+          The distance restraints are defined between the geometrical centers of the
+          various molecules (calculated on CA atoms for proteins (BB in case of Martini
+          coarse-grained molecules) and N1 atoms for nucleic acids. For small ligands,
+          all atoms will be used to define the geometric center. The upper limit distance
+          is automatically calculated based on the dimension of the molecules (see
+          cmtight description).
+        type: boolean
+      cmtight:
+        default: true
+        title: Center of mass restraint tightness
+        description: Defines the upper distance limit based on the sum of the average
+          dimension of the two molecule, if cmtight=false all three dimensions are
+          used, if set to true the shortest two only are used, resulting in tighter
+          distance restraints.
+        $comment: This parameter controls how the upper limit distance is defined
+          for the center of mass restraints between molecules. Each molecule is oriented
+          along its principle components and the x,y and z dimensions are calculated.
+          If cmtight=true, the molecule distance (size) is set to the average of its
+          smallest two half dimensions. If cmtight=false, the molecule distance (size)
+          is set to the average of its three half dimensions.. In case of DNA or small
+          ligands the molecule distance (size) is set to 0. The effective upper distance
+          limit for the center or mass distance restraint is the sum of the two molecule
+          distances.
+        type: boolean
+      kcm:
+        default: 1.0
+        title: Center of mass restraints force constant
+        description: Force constant applied to the center of mass restraints
+        $comment: Force constant applied to the center of mass restraints
+        type: number
+        maximum: 1000
+        minimum: 0
       dihe_fname:
         title: Dihedral angle restraints filename
         description: Filename of the Dihedral angle restraints file
@@ -5628,8 +5463,8 @@ nodes:
         $comment: Force constant applied to the dihedral angle restraints read from
           dihe_fname.
         type: number
-        maximum: 9999
-        minimum: -9999
+        maximum: 1000
+        minimum: 0
       ssdihed:
         title: Define automatically backbone dihedral angle restraints
         description: If turned on, this option will automatically defined backbone
@@ -5656,8 +5491,8 @@ nodes:
           option)
         $comment: Force constant for backbone dihedral angle restraints (ssdihed option)
         type: number
-        maximum: 9999
-        minimum: -9999
+        maximum: 1000
+        minimum: 0
       dnarest_on:
         default: false
         title: Restrain the DNA conformation
@@ -6526,7 +6361,7 @@ nodes:
           function
         $comment: Weight of the intermolecular electrostatic energy in the scoring
           function. Note that this does not affect the electostatic energy during
-          the EM minimization.
+          the MD refinement.
         type: number
         maximum: 9999
         minimum: -9999
@@ -6546,7 +6381,7 @@ nodes:
           function
         $comment: Weight of the intermolecular van der Waals energy in the scoring
           function. Note that this does not affect the van der Waals energy during
-          the EM minimization.
+          the MD refinement.
         type: number
         maximum: 9999
         minimum: -9999
@@ -6598,27 +6433,88 @@ nodes:
         minimum: 1
       dihedflag:
         default: true
+        title: Use torsion angle dihedral energy term
+        description: Turns on the torsion angle dihedral energy terms of the force
+          field.
+        $comment: Turns on the torsion angle dihedral energy terms of the force field.
         type: boolean
       sampling_factor:
         default: 1
         title: Sampling factor for each starting model
         description: This paramater control how many times a model will be refined.
-        $comment: This paramater control how many times a model will be refined. For
-          EM refinement only it does not make sense to increase it unless random removal
-          of restraints is turned on. If not then the energy minimisation will lead
-          to the same final conformation.
+        $comment: This paramater control how many times a model will be refined.
         type: number
-        maximum: 1
+        maximum: 200
         minimum: 1
+      max_nmodels:
+        default: 10000
+        title: Maximum number of models to refine
+        description: This paramater controls the maximum number of models to refine.
+        $comment: This paramater controls the maximum number of models to refine.
+        type: number
+        maximum: 50000
+        minimum: 1
+      solvent:
+        default: water
+        title: Solvent
+        description: Solvent to use during the short MD refinement
+        $comment: Solvent to use during the short MD refinement. Water and DMSO are
+          supported. A solvent shelll is generated by shifting pre-equilibrated boxes
+          around the complex. For water an 8A water shell is generated and for DMSO
+          a 12.5A shell. For DMSO,
+        type: string
+        minLength: 0
+        maxLength: 100
+        enum:
+        - water
+        - dmso
       nemsteps:
         default: 200
         title: Number of EM steps
         description: Number of energy minimisation steps to perform.
-        $comment: Number of energy minimisation steps to perform. Note that the effective
-          number might be smaller if the minimisation converges earlier.
+        $comment: Number of energy minimisation steps to perform in the various EM
+          stages of this refinement protocol. Note that the effective number might
+          be smaller if the minimisation converges earlier.
         type: number
         maximum: 10000
         minimum: 1
+      timestep:
+        default: 0.002
+        title: MD integrating time step
+        description: Integration time step for the molecular dynamics.
+        $comment: Integration time step for the molecular dynamics.
+        type: number
+        maximum: 0.004
+        minimum: 0.0005
+      waterheatsteps:
+        default: 100
+        title: Number of MD steps for the heating
+        description: Number of MD steps for the heating phase.
+        $comment: Number of MD steps for the heating phase. The heating consists of
+          three successive short molecular dynamics simluations at 100, 200 and 300
+          Kelvin.
+        type: number
+        maximum: 10000
+        minimum: 0
+      watersteps:
+        default: 1250
+        title: Number of MD steps at 300K.
+        description: Number of MD steps for 300K simulation.
+        $comment: Number of MD steps for 300K simulation. This is the sampling state
+          of the refinement.
+        type: number
+        maximum: 100000
+        minimum: 0
+      watercoolsteps:
+        default: 500
+        title: Number of MD steps for the cooling
+        description: Number of MD steps for the cooling phase.
+        $comment: Number of MD steps for the cooling phase. The cooling consists of
+          three successive short molecular dynamics simluations at 300, 200 and 100
+          Kelvin.
+        type: number
+        maximum: 10000
+        minimum: 0
       iniseed:
         default: 917
         title: Random seed
@@ -6634,7 +6530,7 @@ nodes:
         $comment: Write water molecules if present to the output file.
         type: boolean
       tolerance:
-        default: 0
+        default: 5
         title: Failure tolerance percentage
         description: Percentage of allowed failures for a module to successfully complete
         $comment: Percentage of allowed failures for a module to successfully complete
@@ -6647,7 +6543,7 @@ nodes:
         description: Set the log level verbosity for CNS
         $comment: CNS, the computational engine used by HADDOCK can generate a lot
           of output messages. This parameter controls the verbosity of CNS (verbose,
-          normal or quiet)
+          normal or quiet).
         type: string
         minLength: 0
         maxLength: 100
@@ -7246,6 +7142,12 @@ nodes:
       ui:group: distance restraints
     kcont:
       ui:group: distance restraints
+    cmrest:
+      ui:group: distance restraints
+    cmtight:
+      ui:group: distance restraints
+    kcm:
+      ui:group: distance restraints
     dihe_fname:
       ui:widget: file
       ui:group: dihedral restraints
@@ -7335,7 +7237,17 @@ nodes:
       ui:group: force field
     sampling_factor:
       ui:group: sampling
+    max_nmodels:
+      ui:group: sampling
     nemsteps:
+      ui:group: sampling
+    timestep:
+      ui:group: sampling
+    waterheatsteps:
+      ui:group: sampling
+    watersteps:
+      ui:group: sampling
+    watercoolsteps:
       ui:group: sampling
     iniseed:
       ui:group: sampling
@@ -7478,408 +7390,330 @@ nodes:
         indexed: true
         items:
           flatten: true
-- id: seletopclusts
-  category: analysis
-  label: Select a top cluster module.
-  description: Haddock Module for 'seletopclusts'.
+- id: mdscoring
+  category: scoring
+  label: MD scoring module.
+  description: HADDOCK3 module to perform energy minimization scoring.
   schema:
     type: object
     properties:
-      top_cluster:
-        default: 1000
-        title: Number of clusters to consider
-        description: Number of clusters to consider (ranked by score)
-        $comment: Number of clusters to consider (ranked by score)
-        type: number
-        maximum: 99999
-        minimum: 1
-      top_models:
+      w_bsa:
+        default: 0.0
+        title: Weight of the buried surface area term
+        description: Weight of the buried surface area term in the scoring function
+        $comment: Weight of the buried surface area (BSA) term in the scoring function.
+          Note that the BSA is only used for scoring.
         type: number
         maximum: 9999
         minimum: -9999
-    required: []
-    additionalProperties: false
-  uiSchema: {}
-  tomlSchema: {}
-- id: clustrmsd
-  category: analysis
-  label: RMSD clustering module.
-  description: HADDOCK3 module for clustering with RMSD.
-  schema:
-    type: object
-    properties:
-      criterion:
-        default: maxclust
-        title: Criterion for fcluster
-        description: Criterion to be used to cut the dendrogram
-        $comment: if criterion is maxclust, the dendrogram is cut when a certain number
-          of clusters is formed. If criterion is distance, the dendrogram will be
-          cut based on the value of the cophenetic distance
-        type: string
-        minLength: 0
-        maxLength: 100
-        enum:
-        - distance
-        - maxclust
-      linkage:
-        default: average
-        title: Linkage type
-        description: How to lump together clusters in hierarchical clustering
-        $comment: check out the full description at https://docs.scipy.org/doc/scipy/reference/generated/scipy.cluster.hierarchy.linkage.html
-        type: string
-        minLength: 0
-        maxLength: 100
-        enum:
-        - average
-        - centroid
-        - complete
-        - median
-        - single
-        - ward
-        - weighted
-      threshold:
-        default: 4
-        title: Clustering population threshold
-        description: Threshold employed to exclude clusters with less than this number
-          of members
-        $comment: Threshold employed to exclude clusters with less than this number
-          of members. When criterion is maxclust, this value is ignored.
+      w_cdih:
+        default: 0.0
+        title: Weight of the dihedral angle restraint energy
+        description: Weight of the dihedral angle restraints energy in the scoring
+          function
+        $comment: Weight of the dihedral angle restraints energy in the scoring function.
+          Note that this is different from the force constant used during the calculations.
         type: number
         maximum: 9999
-        minimum: 1
-      tolerance:
-        title: Numeric value for clustering
-        description: if criterion is maxclust, the number of desired clusters. if
-          criterion is distance, the value of cutoff cophenetic distance
-        $comment: if criterion is maxclust, the number of desired clusters. if criterion
-          is distance, the value of cutoff cophenetic distance
+        minimum: 0
+      w_desolv:
+        default: 1.0
+        title: Weight of the desolvation energy term
+        description: Weight of the desolvation energy term in the scoring function
+        $comment: Weight of the desolvation energy term in the scoring function. Note
+          that the desolvation energy is only used for scoring.
         type: number
         maximum: 9999
-        minimum: 1
-    required: []
-    additionalProperties: false
-  uiSchema: {}
-  tomlSchema: {}
-- id: caprieval
-  category: analysis
-  label: Calculate CAPRI metrics.
-  description: HADDOCK3 module to calculate the CAPRI metrics.
-  schema:
-    type: object
-    properties:
-      reference_fname:
-        title: Reference structure
-        description: Structure to be used when calculating the CAPRI metrics.
-        $comment: Reference tructure to be used when calculating the CAPRI metrics.
-          If none is defined then the lowest scoring model is selected by default.
-        type: string
-        format: uri-reference
-      irmsd:
-        default: true
-        title: Calculate I-RMSD
-        description: Performs Interface RMSD calculations.
-        $comment: Calculates the Interface Root Mean Square Deviation. This calculate
-          the RMSD of interface backbone atoms after fitting on the interface backbone
-          atoms. The interface is idenfied based on intermolecular contacts shorter
-          than the defined irmsd_cutoff.
-        type: boolean
-      fnat:
-        default: true
-        title: Calculate FNAT
-        description: Performs FNAT calculations.
-        $comment: Calculates the Fraction of Native Contacts. This evaluates how many
-          contacts observed in the reference are present in the model. The distance
-          cutoff used to define intermolecular contacts is defined by the fnat_cutoff
-          parameter.
-        type: boolean
-      lrmsd:
-        default: true
-        title: Calculate L-RMSD
-        description: Performs Ligand RMSD calculations.
-        $comment: Calculates the Ligand Root Mean Square Deviation. This calculation
-          is done by superimposing the receptors (defined by the receptor_chain parameter)
-          and then evaluating the RMSD on the ligands (defined by the ligand_chain
-          parameter). Superposition and RMSD calculations are done on backbone heavy
-          atoms.
-        type: boolean
-      ilrmsd:
-        default: true
-        title: Calculate I-L-RMSD
-        description: Performs Interface Ligand RMSD calculations.
-        $comment: Calculates the Interface Ligand Root Mean Square Deviation. This
-          calculation is done by superimposing the model and the target on the interface
-          backbone atoms of the receptor (defined by the receptor_chain parameter)
-          and calculating the RMSD on all heavy atoms of the ligand (defined by the
-          ligand_chain parameter).
-        type: boolean
-      dockq:
-        default: true
-        title: Calculate DockQ
-        description: Evaluate DockQ.
-        $comment: Evaluate DockQ. A single continuous quality measure for protein
-          docked models based on the CAPRI criteria, a combination of i-RMSD, l-RMSD
-          and FNAT value. For details check the DockQ publication `DOI:10.1371/journal.pone.0161879`
-        type: boolean
-      irmsd_cutoff:
-        default: 10.0
-        title: "Distance cutoff (\xC5) used to define interface residues."
-        description: "Distance cutoff (\xC5) used to define interface residues based\
-          \ on intermolecular contacts."
-        $comment: "Distance cutoff (\xC5) used to define interface residues based\
-          \ on intermolecular contacts."
+        minimum: -9999
+      w_elec:
+        default: 0.2
+        title: Weight of the intermolecular electrostatic energy
+        description: Weight of the intermolecular electrostatic energy in the scoring
+          function
+        $comment: Weight of the intermolecular electrostatic energy in the scoring
+          function. Note that this does not affect the electostatic energy during
+          the EM minimization.
         type: number
-        maximum: 20.0
-        minimum: 3.0
-      fnat_cutoff:
-        default: 5.0
-        title: "Distance cutoff (\xC5) used to define interface contacts."
-        description: "Distance cutoff (\xC5) used to define interface contacts between\
-          \ two interacting molecules."
-        $comment: "Distance cutoff (\xC5) used to define interface contacts between\
-          \ two interacting molecules."
+        maximum: 9999
+        minimum: -9999
+      w_vdw:
+        default: 1.0
+        title: Weight of the intermolecular van der Waals energy
+        description: Weight of the intermolecular van der Waals energy in the scoring
+          function
+        $comment: Weight of the intermolecular van der Waals energy in the scoring
+          function. Note that this does not affect the van der Waals energy during
+          the EM minimization.
         type: number
-        maximum: 20.0
-        minimum: 3.0
-      receptor_chain:
-        default: A
-        title: Receptor ChainID
-        description: Receptor ChainID to be considered for the RMSD calculations.
-        $comment: Receptor ChainID to be considered for the RMSD calculations. This
-          determines which chain will be treated as the receptor for the L-RMSD and
-          for I-L-RMSD.
-        type: string
-        minLength: 1
-        maxLength: 1
-        format: chain
-      ligand_chain:
-        default: B
-        title: Ligand ChainID
-        description: Ligand ChainID to be considered for the RMSD calculations.
-        $comment: Ligand ChainID to be considered for the RMSD calculations. This
-          determines which chain will be treated as the ligand for the L-RMSD and
-          for I-L-RMSD.
-        type: string
-        minLength: 1
-        maxLength: 1
-        format: chain
-      sortby:
-        default: score
-        title: Sort the structures/clusters in the output file by this value
-        description: Which value should be used to sort the output.
-        $comment: Which value should be used to sort the output, the output table
-          will be sorted accordingly.
-        type: string
-        minLength: 0
-        maxLength: 20
-        enum:
-        - score
-        - irmsd
-        - lrmsd
-        - ilrmsd
-        - fnat
-        - dockq
-      sort_ascending:
-        default: true
-        title: Sort in ascending order
-        description: Sort in ascending order.
-        $comment: Sort in ascending order.
+        maximum: 9999
+        minimum: -9999
+      contactairs:
+        default: false
+        title: Contact restraints
+        description: Contact restraints between molecules
+        $comment: Contact restraints between molecules. These are defined as ambiguous
+          distance restraint between each residue of a molecule and all residues of
+          the other molecules with 5A from that residue. This can be used to restraint
+          the contacts between the interfaces. Note that this can generate a large
+          number of ambiguous restraints and slow down the computations
         type: boolean
-      alignment_method:
-        default: sequence
-        title: Alignment method used to match the numbering.
-        description: Which alignment method should be used to match the numbering.
-        $comment: Alignment method used to match the numbering. Sequence alignment
-          is haddock3-friendly but might not produce best results for structures that
-          are too different, for that use
-        type: string
-        minLength: 0
-        maxLength: 100
-        enum:
-        - structure
-        - sequence
-      lovoalign_exec:
-        title: Location (path) of the LovoAlign executable
-        description: Location (path) of the LovoAlign executable.
-        $comment: Location (path) of the LovoAlign executable.
-        type: string
-        minLength: 0
-        maxLength: 200
-      clt_threshold:
-        default: 4
-        title: Threshold (n) used for the average evaluation in the cluster-based
-          output
-        description: Threshold (n) used for the average evaluation in the cluster-based
-          output.
-        $comment: Threshold (n) used for the average evaluation in the cluster-based
-          output.
+      kcont:
+        default: 1.0
+        title: Contact restraints force constant
+        description: Force constant applied to the contact restraints.
+        $comment: Force constant applied to the contact restraints.
         type: number
         maximum: 1000
-        minimum: 1
-    required: []
-    additionalProperties: false
-  uiSchema:
-    reference_fname:
-      ui:widget: file
-      ui:group: analysis
-    irmsd:
-      ui:group: analysis
-    fnat:
-      ui:group: analysis
-    lrmsd:
-      ui:group: analysis
-    ilrmsd:
-      ui:group: analysis
-    dockq:
-      ui:group: analysis
-    irmsd_cutoff:
-      ui:group: analysis
-    fnat_cutoff:
-      ui:group: analysis
-    receptor_chain:
-      ui:group: analysis
-    ligand_chain:
-      ui:group: analysis
-    sortby:
-      ui:group: analysis
-    sort_ascending:
-      ui:group: analysis
-    alignment_method:
-      ui:group: analysis
-    lovoalign_exec:
-      ui:group: analysis
-    clt_threshold:
-      ui:group: analysis
-  tomlSchema: {}
-- id: rmsdmatrix
-  category: analysis
-  label: RMSD matrix module.
-  description: HADDOCK3 module for clustering with RMSD.
-  schema:
-    type: object
-    properties:
-      max_models:
-        default: 10000
-        title: Maximum number of models to calculate RMSD matrix
-        description: If the number of models exceeds max_models the execution is blocked
-        $comment: If the number of models exceeds the few thousands, the calculation
-          of the RMSD matrix is computationally demanding, especially in terms of
-          CPU and disk space.
-        type: number
-        maximum: 20000
-        minimum: 1
-      resdic:
-        default: {}
-        title: List of residues
-        description: The residue numbers that should be used in the alignment and
-          in the RMSD calculation.
-        $comment: resdic_* is an expandable parameter. You can provide resdic_A, resdic_B,
-          resdic_C, etc, where the last capital letter is the chain identifier.
-        type: object
-        additionalProperties:
-          type: array
-          items:
-            type: number
-            format: residue
-            minItems: 0
-            maxItems: 100
-          uniqueItems: true
-          default: []
-        propertyNames:
-          pattern: ^[A-Z]$
-          format: chain
-        maxPropertiesFrom: molecules
-    required: []
-    additionalProperties: false
-  uiSchema: {}
-  tomlSchema:
-    resdic:
-      indexed: true
-- id: clustfcc
-  category: analysis
-  label: Cluster modules with FCC.
-  description: HADDOCK3 module for clustering with FCC.
-  schema:
-    type: object
-    properties:
-      executable:
-        type: string
-        format: uri-reference
-      contact_distance_cutoff:
-        default: 5.0
-        type: number
-        maximum: 9999
-        minimum: -9999
-      fraction_cutoff:
-        default: 0.6
-        type: number
-        maximum: 9999
-        minimum: -9999
-      threshold:
-        default: 4
-        type: number
-        maximum: 9999
-        minimum: -9999
-      strictness:
-        default: 0.75
-        type: number
-        maximum: 9999
-        minimum: -9999
-    required: []
-    additionalProperties: false
-  uiSchema:
-    executable:
-      ui:widget: file
-  tomlSchema: {}
-- id: seletop
-  category: analysis
-  label: Select a top models.
-  description: HADDOCK3 module to select top cluster/model.
-  schema:
-    type: object
-    properties:
-      select:
-        default: 200
-        type: number
-        maximum: 9999
-        minimum: -9999
-    required: []
-    additionalProperties: false
-  uiSchema: {}
-  tomlSchema: {}
-- id: exit
-  category: extras
-  label: Exit module
-  description: Stop the workflow when this module is reached.
-  schema:
-    type: object
-    properties:
-      message:
-        default: Stopping the workflow.
-        title: Exiting message.
-        description: The message to print when exiting.
-        $comment: The message to print when exiting.
+        minimum: 0
+      ssdihed:
+        title: Define automatically backbone dihedral angle restraints
+        description: If turned on, this option will automatically defined backbone
+          dihedral angle restraints for the selected regions.
+        $comment: This option allows to utomatically defined backbone dihedral angle
+          restraints for the selected regions. The restraints will be defined for
+          the phi and psi backbone dihedral angles of amino acids, with the target
+          value taken from the measured angle in the input structure, and the error
+          bound defined by the error_dih parameter. Those restraints can be applied
+          to the entire structure (all), the alpha/beta secondary structure elements
+          (alphabeta) or only to the alpha helical regions (alpha). Those are automatically
+          detected based on the measured dihedral angle combinations.
         type: string
         minLength: 0
-        maxLength: 1000
-    required: []
-    additionalProperties: false
-  uiSchema: {}
-  tomlSchema: {}
-- id: gdock
-  category: sampling
-  label: gdock integration sampling module.
-  description: HADDOCK3 gdock module.
-  schema:
-    type: object
-    properties:
-      ambig_fname:
+        maxLength: 100
+        enum:
+        - all
+        - alpha
+        - alphabeta
+      error_dih:
+        default: 10
+        title: Force constant for backbone dihedral angle restraints
+        description: Force constant for backbone dihedral angle restraints (ssdihed
+          option)
+        $comment: Force constant for backbone dihedral angle restraints (ssdihed option)
+        type: number
+        maximum: 1000
+        minimum: 0
+      dnarest_on:
+        default: false
+        title: Restrain the DNA conformation
+        description: Automatically creates restraints to maintain the conformation
+          of DNA/RNA
+        $comment: 'This option allows to restraint the conformation of nucleic acids
+          based on the values from the input structures. The following restraints
+          will be automatically defined: - single base planarity - sugar pucker -
+          phosphate backbone diherdral angle restraints - Watson-Crick base pairing'
+        type: boolean
+      ligand_param_fname:
+        title: Custom ligand parameter file
+        description: Ligand parameter file in CNS format
+        $comment: Ligand parameter file in CNS format containing all force field parameters
+          (bond, angles, dihedrals, impropers, van der waals) for any ligand not supported
+          by default by HADDOCK
         type: string
         format: uri-reference
+      ligand_top_fname:
+        title: Custom ligand topology file
+        description: Ligand topology file in CNS format
+        $comment: Ligand topology file in CNS format containing the ligand topologies
+          (atoms, masses, charges, bond definitions...) for any ligand not supported
+          by default by HADDOCK
+        type: string
+        format: uri-reference
+      elecflag:
+        default: true
+        title: Include electrostatics energy
+        description: Include electrostatics energy during the calculations.
+        $comment: Include electrostatics energy during the calculations. If set to
+          false electrostatics will not be considered.
+        type: boolean
+      dielec:
+        default: cdie
+        title: Constant (cdie) or distance-dependent dielectric (rdie) constant.
+        description: Use a constant (cdie option) or a distance-dependent dielectric
+          (rdie) constant in the Coulomb potential.
+        $comment: Use a constant (cdie option) or a distance-dependent dielectric
+          (rdie) constant in the Coulomb potential. A distance dependent dielectric
+          constant will effectively scale down the electrostatic energy by having
+          a 1/r**2 dependency instead of 1/r
+        type: string
+        minLength: 0
+        maxLength: 4
+        enum:
+        - cdie
+        - rdie
+      epsilon:
+        default: 1.0
+        title: Dielectric constant
+        description: Dielectric constant for the electrostatic Coulomb energy term.
+        $comment: Dielectric constant for the electrostatic Coulomb energy term.
+        type: number
+        maximum: 78
+        minimum: 1
+      dihedflag:
+        default: true
+        type: boolean
+      individualize:
+        default: true
+        title: Individualise models
+        description: Treat each model in the PDB ensemble as a separate entity.
+        $comment: Treat each model in the PDB ensemble as a separate entity. This
+          means that for each a separate topology file will be generated. The models
+          in the ensemble can thus correspond to different molecules.
+        type: boolean
+      solvent:
+        default: water
+        title: Solvent
+        description: Solvent to use during the short MD refinement
+        $comment: Solvent to use during the short MD refinement. Water and DMSO are
+          supported. A solvent shelll is generated by shifting pre-equilibrated boxes
+          around the complex. For water an 8A water shell is generated and for DMSO
+          a 12.5A shell. For DMSO,
+        type: string
+        minLength: 0
+        maxLength: 100
+        enum:
+        - water
+        - dmso
+      nemsteps:
+        default: 200
+        title: Number of EM steps
+        description: Number of energy minimisation steps to perform.
+        $comment: Number of energy minimisation steps to perform in the various EM
+          stages of this refinement protocol. Note that the effective number might
+          be smaller if the minimisation converges earlier.
+        type: number
+        maximum: 10000
+        minimum: 1
+      timestep:
+        default: 0.002
+        title: MD integrating time step
+        description: Integration time step for the molecular dynamics.
+        $comment: Integration time step for the molecular dynamics.
+        type: number
+        maximum: 0.004
+        minimum: 0.0005
+      waterheatsteps:
+        default: 100
+        title: Number of MD steps for the heating
+        description: Number of MD steps for the heating phase.
+        $comment: Number of MD steps for the heating phase. The heating consists of
+          three successive short molecular dynamics simluations at 100, 200 and 300
+          Kelvin.
+        type: number
+        maximum: 10000
+        minimum: 0
+      watersteps:
+        default: 1250
+        title: Number of MD steps at 300K.
+        description: Number of MD steps for 300K simulation.
+        $comment: Number of MD steps for 300K simulation. This is the sampling state
+          of the refinement.
+        type: number
+        maximum: 100000
+        minimum: 0
+      watercoolsteps:
+        default: 500
+        title: Number of MD steps for the cooling
+        description: Number of MD steps for the cooling phase.
+        $comment: Number of MD steps for the cooling phase. The cooling consists of
+          three successive short molecular dynamics simluations at 300, 200 and 100
+          Kelvin.
+        type: number
+        maximum: 10000
+        minimum: 0
+      iniseed:
+        default: 917
+        title: Random seed
+        description: Random seed used in CNS to initialize the random seed function
+        $comment: Random seed used in CNS to initialize the random seed function
+        type: number
+        maximum: 9999999999999999
+        minimum: 0
+      keepwater:
+        default: false
+        title: Write water molecules to output file
+        description: Write water molecules if present to the output file.
+        $comment: Write water molecules if present to the output file.
+        type: boolean
+      tolerance:
+        default: 5
+        title: Failure tolerance percentage
+        description: Percentage of allowed failures for a module to successfully complete
+        $comment: Percentage of allowed failures for a module to successfully complete
+        type: number
+        maximum: 99
+        minimum: 0
+      log_level:
+        default: quiet
+        title: Log level verbosity for CNS
+        description: Set the log level verbosity for CNS
+        $comment: CNS, the computational engine used by HADDOCK can generate a lot
+          of output messages. This parameter controls the verbosity of CNS (verbose,
+          normal or quiet).
+        type: string
+        minLength: 0
+        maxLength: 100
+        enum:
+        - verbose
+        - normal
+        - quiet
     required: []
     additionalProperties: false
   uiSchema:
-    ambig_fname:
+    w_bsa:
+      ui:group: scoring
+    w_cdih:
+      ui:group: scoring
+    w_desolv:
+      ui:group: scoring
+    w_elec:
+      ui:group: scoring
+    w_vdw:
+      ui:group: scoring
+    contactairs:
+      ui:group: distance restraints
+    kcont:
+      ui:group: distance restraints
+    ssdihed:
+      ui:group: dihedral restraints
+    error_dih:
+      ui:group: dihedral restraints
+    dnarest_on:
+      ui:group: other restraints
+    ligand_param_fname:
       ui:widget: file
+      ui:group: force field
+    ligand_top_fname:
+      ui:widget: file
+      ui:group: force field
+    elecflag:
+      ui:group: force field
+    dielec:
+      ui:group: force field
+    epsilon:
+      ui:group: force field
+    dihedflag:
+      ui:group: force field
+    individualize:
+      ui:group: sampling
+    nemsteps:
+      ui:group: sampling
+    timestep:
+      ui:group: sampling
+    waterheatsteps:
+      ui:group: sampling
+    watersteps:
+      ui:group: sampling
+    watercoolsteps:
+      ui:group: sampling
+    iniseed:
+      ui:group: sampling
+    keepwater:
+      ui:group: sampling
+    tolerance:
+      ui:group: module
+    log_level:
+      ui:group: module
   tomlSchema: {}
 - id: rigidbody
   category: sampling
@@ -9326,78 +9160,277 @@ nodes:
       indexed: true
       items:
         flatten: true
-- id: lightdock
-  category: sampling
-  label: LightDock integration sampling module.
-  description: HADDOCK3 Lightdock module.
+- id: rmsdmatrix
+  category: analysis
+  label: RMSD matrix module.
+  description: HADDOCK3 module for clustering with RMSD.
   schema:
     type: object
     properties:
-      glowworms:
+      max_models:
+        default: 10000
+        title: Maximum number of models to calculate RMSD matrix
+        description: If the number of models exceeds max_models the execution is blocked
+        $comment: If the number of models exceeds the few thousands, the calculation
+          of the RMSD matrix is computationally demanding, especially in terms of
+          CPU and disk space.
+        type: number
+        maximum: 20000
+        minimum: 1
+      resdic:
+        default: {}
+        title: List of residues
+        description: The residue numbers that should be used in the alignment and
+          in the RMSD calculation.
+        $comment: resdic_* is an expandable parameter. You can provide resdic_A, resdic_B,
+          resdic_C, etc, where the last capital letter is the chain identifier.
+        type: object
+        additionalProperties:
+          type: array
+          items:
+            type: number
+            format: residue
+            minItems: 0
+            maxItems: 100
+          uniqueItems: true
+          default: []
+        propertyNames:
+          pattern: ^[A-Z]$
+          format: chain
+        maxPropertiesFrom: molecules
+    required: []
+    additionalProperties: false
+  uiSchema: {}
+  tomlSchema:
+    resdic:
+      indexed: true
+- id: seletop
+  category: analysis
+  label: Select a top models.
+  description: HADDOCK3 module to select top cluster/model.
+  schema:
+    type: object
+    properties:
+      select:
         default: 200
         type: number
         maximum: 9999
         minimum: -9999
-      steps:
-        default: 100
-        type: number
-        maximum: 9999
-        minimum: -9999
-      swarms:
-        default: 400
-        type: number
-        maximum: 9999
-        minimum: -9999
-      scoring:
-        default: fastdfire
-        type: string
-        minLength: 0
-        maxLength: 100
-      top:
-        default: 10
-        type: number
-        maximum: 9999
-        minimum: -9999
-      receptor_chains:
-        default: A
-        type: string
-        minLength: 0
-        maxLength: 100
-        format: chain
-      receptor_active:
-        type: string
-        minLength: 0
-        maxLength: 100
-      receptor_passive:
-        type: string
-        minLength: 0
-        maxLength: 100
-      ligand_chains:
-        default: B
-        type: string
-        minLength: 0
-        maxLength: 100
-        format: chain
-      ligand_active:
-        type: string
-        minLength: 0
-        maxLength: 100
-      ligand_passive:
-        type: string
-        minLength: 0
-        maxLength: 100
-      noxt:
-        default: true
-        type: boolean
-      noh:
-        default: true
-        type: boolean
-      restraints:
-        default: false
-        type: boolean
     required: []
     additionalProperties: false
   uiSchema: {}
   tomlSchema: {}
+- id: seletopclusts
+  category: analysis
+  label: Select a top cluster module.
+  description: Haddock Module for 'seletopclusts'.
+  schema:
+    type: object
+    properties:
+      top_cluster:
+        default: 1000
+        title: Number of clusters to consider
+        description: Number of clusters to consider (ranked by score)
+        $comment: Number of clusters to consider (ranked by score)
+        type: number
+        maximum: 99999
+        minimum: 1
+      top_models:
+        type: number
+        maximum: 9999
+        minimum: -9999
+    required: []
+    additionalProperties: false
+  uiSchema: {}
+  tomlSchema: {}
+- id: topoaa
+  category: topology
+  label: Create and manage CNS all-atom topology.
+  description: HADDOCK3 module to create CNS all-atom topologies.
+  schema:
+    type: object
+    properties:
+      autohis:
+        default: true
+        title: Automatic HIS protonation state
+        description: 'The protonation state of histidine (+1: HIS or 0: HISD/HISE)
+          will be automatically set by HADDOCK'
+        $comment: 'If set to true, HADDOCK will automatically define the protonation
+          state of histidines ((+1: HIS or 0: HISD/HISE) by selecting the state leading
+          to the lowest electrostatic energy'
+        type: boolean
+      delenph:
+        default: true
+        title: Keep or remove non-polar hydrogen atoms
+        description: If set to true, non-polar hydrogen atoms will be discarded to
+          save computing time
+        $comment: Since HADDOCK uses a united atom force field, the non-polar hydrogen
+          atoms can be in principle discarded. This saves computing time. However
+          this should not be done if you are defining distance restraints to specific
+          hydrogen atoms (e.g. when using NMR distance restraints).
+        type: boolean
+      log_level:
+        default: quiet
+        title: Log level verbosity for CNS
+        description: Set the log level verbosity for CNS
+        $comment: CNS, the computational engine used by HADDOCK can generate a lot
+          of output messages. This parameter controls the verbosity of CNS (verbose,
+          normal or quiet).
+        type: string
+        minLength: 0
+        maxLength: 100
+        enum:
+        - verbose
+        - normal
+        - quiet
+      iniseed:
+        default: 917
+        title: Random seed
+        description: Random seed used in CNS to initialize the random seed function
+        $comment: Random seed used in CNS to initialize the random seed function
+        type: number
+        maximum: 9999999999999999
+        minimum: 0
+      ligand_param_fname:
+        title: Custom ligand parameter file
+        description: Ligand parameter file in CNS format
+        $comment: Ligand parameter file in CNS format containing all force field parameters
+          (bond, angles, dihedrals, impropers, van der waals) for any ligand not supported
+          by default by HADDOCK
+        type: string
+        format: uri-reference
+      ligand_top_fname:
+        title: Custom ligand topology file
+        description: Ligand topology file in CNS format
+        $comment: Ligand topology file in CNS format containing the ligand topologies
+          (atoms, masses, charges, bond definitions...) for any ligand not supported
+          by default by HADDOCK
+        type: string
+        format: uri-reference
+      limit:
+        default: true
+        title: Limit the number of input molecules.
+        description: When TRUE, the topoaa module can accept any number of input molecules.
+        $comment: Enable/disable the limit of input molecules for the topoaa module.
+          Setting the limit to false is useful when the topoaa module is followed
+          by scoring modules such as emscoring, or other analysis modules. If topoaa
+          is used in the middle of the workflow this parameter has no effect.
+        type: boolean
+      tolerance:
+        default: 0
+        title: Failure tolerance percentage
+        description: Percentage of allowed failures for a module to successfully complete
+        $comment: Percentage of allowed failures for a module to successfully complete
+        type: number
+        maximum: 99
+        minimum: 0
+      mol:
+        title: Input molecule configuration
+        $comment: You can expand this parameter and associated sub-parameters to the
+          other input molecules. For example, if you input three molecules, you can
+          define mol1, mol2, and mol3 subparameters. Those not defined will be populated
+          with the defaults.
+        type: array
+        items:
+          type: object
+          properties:
+            prot_segid:
+              default: A
+              title: Segment ID
+              description: Segment ID assigned to this molecule
+              $comment: Segment ID assigned to this molecule in CNS. Used to distinguish
+                different molecules
+              type: string
+              minLength: 0
+              maxLength: 4
+              format: chain
+            cyclicpept:
+              default: false
+              title: Cyclic peptide
+              description: Defines the molecule as a cyclic peptide
+              $comment: This option defines the molecule as a cyclic peptide and HADDOCK
+                will generate a peptide bond between the N- and C-ter provided those
+                are within 2A. This cutoff can be changed in the generate-topology.cns
+                script.
+              type: boolean
+            nhisd:
+              default: 0
+              title: Number of HISD residue
+              description: Defines the number of HISD residues (neutral HIS with the
+                proton on the ND atom) residues when autohis=false
+              $comment: Defines the number of HISD residues (neutral HIS with the
+                proton on the ND atom) residues. The corresponding residue numbers
+                must be defined in the following parameter (hisd_1, hisd_2, ...).
+                Add as many as needed. Note that HIS is interpreted as a charged Histidine)
+              type: number
+              maximum: 9999
+              minimum: 0
+            hisd:
+              type: array
+              items:
+                title: HISD residue number
+                description: Residue number of the Histidine to be defined as HISD
+                $comment: Residue number of the Histidine to be defined as HISD
+                type: number
+                maximum: 9999
+                minimum: -9999
+                format: residue
+            nhise:
+              default: 0
+              title: Number of HISE residue
+              description: Defines the number of HISE residues (neutral HIS with the
+                proton on the NE atom) residues when autohis=false
+              $comment: Defines the number of HISE residues (neutral HIS with the
+                proton on the NE atom) residues. The corresponding residue numbers
+                must be defined in the following parameter (hise_1, hise_2, ...).
+                Add as many as needed. Note that HIS is interpreted as a charged Histidine)
+              type: number
+              maximum: 9999
+              minimum: 0
+            hise:
+              type: array
+              items:
+                title: HISE residue number
+                description: Residue number of the Histidine to be defined as HISE
+                $comment: Residue number of the Histidine to be defined as HISE
+                type: number
+                maximum: 9999
+                minimum: -9999
+                format: residue
+          required: []
+          additionalProperties: false
+        maxItemsFrom: molecules
+    required: []
+    additionalProperties: false
+  uiSchema:
+    autohis:
+      ui:group: molecule
+    delenph:
+      ui:group: molecule
+    log_level:
+      ui:group: module
+    iniseed:
+      ui:group: molecule
+    ligand_param_fname:
+      ui:widget: file
+      ui:group: force field
+    ligand_top_fname:
+      ui:widget: file
+      ui:group: force field
+    tolerance:
+      ui:group: module
+    mol:
+      ui:indexable: true
+      ui:group: input molecules
+  tomlSchema:
+    mol:
+      indexed: true
+      items:
+        sectioned: true
+        properties:
+          hisd:
+            indexed: true
+          hise:
+            indexed: true
 examples:
   docking-protein-ligand: /examples/docking-protein-ligand.zip

@@ -326,6 +326,12 @@ def config2schema(config):
                 prop['items'] = {
                     "type": "number"
                 }
+            elif k == 'ligand_chains':
+                prop['items'] = {
+                    "type": "string",
+                    "format": "chain"
+                }
+                prop['default'] = v['default']
             else:
                 raise ValueError(f"Don't know how to determine type of items of {v}")
         else:
@@ -425,7 +431,9 @@ def process_level(level_fn: Path, level: str):
     broken_modules = {
         'topocg', # Gives `AttributeError: module 'haddock.modules.topology.topocg' has no attribute 'HaddockModule'` error
     }
-    nodes = [process_module(module, category, level) for module, category in modules_category.items() if module not in broken_modules]
+    # TODO define module order like category order
+    # now they are sorted alphabetically
+    nodes = [process_module(module, category, level) for module, category in sorted(modules_category.items()) if module not in broken_modules]
 
     catalog = {
         "title": f"Haddock 3 on {level} level",
