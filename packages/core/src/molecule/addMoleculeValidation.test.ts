@@ -557,6 +557,98 @@ describe('addMoleculeValidation()', () => {
       })
     })
   })
+
+  describe('given unparsable molecule', () => {
+    let moleculeInfos: MoleculeInfo[]
+    let moleculesPropName: string | undefined
+
+    beforeEach(async () => {
+      const globalParameters = {
+        molecules: ['a.pdb']
+      }
+      const globalSchema: JSONSchema7 = {
+        type: 'object',
+        properties: {
+          molecules: {
+            type: 'array',
+            format: 'moleculefilepaths',
+            items: {
+              type: 'string'
+            }
+          }
+        }
+      }
+      const body = 'foo'
+      const file =
+        'data:text/plain;name=a.pdb;base64,' +
+        Buffer.from(body).toString('base64')
+      const files = {
+        'a.pdb': file
+      };
+      [moleculeInfos, moleculesPropName] = await parseMolecules(
+        globalParameters,
+        globalSchema,
+        files
+      )
+    })
+
+    describe('given array of array of object with props with format:chain, format:residue and no format', () => {
+      it('should make items an array and not set enums', async () => {
+        const propSchema: JSONSchema7WithMaxItemsFrom = {
+          type: 'array',
+          maxItemsFrom: 'molecules',
+          items: {
+            type: 'object',
+            properties: {
+              prop2: {
+                type: 'array',
+                items: {
+                    type: 'number',
+                    format: 'residue'
+                }
+              }
+            }
+          }
+        }
+        const schema: JSONSchema7 = {
+          type: 'object',
+          properties: {
+            prop1: propSchema
+          }
+        }
+        const actual = await addMoleculeValidation(
+          schema,
+          moleculeInfos,
+          moleculesPropName
+        )
+        const expectedPropSchema: JSONSchema7WithMaxItemsFrom = {
+          type: 'array',
+          maxItemsFrom: 'molecules',
+          properties: {
+            prop2: {
+              type: 'array',
+              items: [
+                {
+                  type: 'array',
+                  items: {
+                      type: 'number',
+                      format: 'residue'
+                  }
+                }
+              ]
+            }
+          }
+        }
+        const expected: JSONSchema7 = {
+          type: 'object',
+          properties: {
+            prop1: expectedPropSchema
+          }
+        }
+        expect(actual).toEqual(expected)
+      })
+    })
+  })
 })
 
 describe('addMoleculeUi()', () => {

@@ -185,7 +185,9 @@ function walkSchemaForMoleculeFormats (
                       { ...pv, items: { ...pv.items, enum: molinfo.chains } }
                     ]
                   }
-                  if (pv.items.format === 'residue' && molinfo.residueSequenceNumbers.length > 0) {
+                  if (pv.items.format === 'residue'
+                  // && molinfo.residueSequenceNumbers.length > 0
+                  ) {
                     return [
                       pk,
                       {
