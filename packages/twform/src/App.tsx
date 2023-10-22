@@ -34,6 +34,10 @@ const schema: JSONSchema7 = {
       description: "A string property with a default value",
       default: "default value",
     },
+    stringAreaProp: {
+      type: "string",
+      description: "A string property with a textarea widget",
+    },
     emailProp: {
       type: "string",
       format: "email",
@@ -74,9 +78,16 @@ const schema: JSONSchema7 = {
       items: {
         type: "string",
       },
-      minItems: 1,
-      maxItems: 5,
-      uniqueItems: true,
+    },
+    arrayValidatedProp: {
+      type: "array",
+      description: "An array property with length validation",
+      items: {
+        type: "string",
+      },
+      minItems: 2,
+      maxItems: 3,
+      default: ['one', 'two']
     },
     objectProp: {
       type: "object",
@@ -137,22 +148,36 @@ const schema: JSONSchema7 = {
   required: ["stringRequiredProp"],
 };
 
+const ui = {
+  schema: {
+    stringAreaProp: {
+      "field": "textarea",
+    },
+  }
+}
+
 function App() {
   const [isDirty, setIsDirty] = useState(false)
+  const [values, setValues] = useState({})
   return (
     <>
-      <p className="text-3xl">
-        Click on the Vite and React logos to learn more
-      </p>
       <div className="p-5">
-        <SchemaForm schema={schema} onSubmit={(values) => console.log(values)} 
-        onDirtySwitch={(isDirty) => setIsDirty(isDirty)}
+        <SchemaForm schema={schema} onSubmit={(values) => {
+          console.log('onSubmit', values)
+          setValues(values)
+        }} 
+        // TODO only call when dirtyness changes
+        onDirtySwitch={(isDirty) => setIsDirty((isDirty))}
+        ui={ui}
         />
       </div>
-      <div>
+      <div className="p-5">
         is dirty form: {isDirty ? 'true' : 'false'}
-        {/* TODO can be used to ff you forget to press save button then you lose all your set values. It would be nice not to have a save button or when you leave a dirty form you are asked for confirmation to discard or save form values. */}
+        {/* TODO can be used to if you forget to press save button then you lose all your set values. It would be nice not to have a save button or when you leave a dirty form you are asked for confirmation to discard or save form values. */}
       </div>
+      <pre className="p-5">
+        <code>{JSON.stringify(values, null, 2)}</code>
+      </pre>
     </>
   );
 }

@@ -17,3 +17,33 @@ npm run dev
 ```
 
 Renders [src/App.tsx](src/App.tsx) which shows all features of the form component.
+
+Run to run stories written with ladle:
+
+```shell
+npx ladle serve
+```
+
+## Usage
+
+The form uses tailwindcss for styling. To capture the css classes used in the form you need to add the following to your
+tailwind.config.js:
+
+```js
+module.exports = {
+  // ...
+  content: [
+    // ...
+    './node_modules/@i-vresse/wb-tailwind-form/src/components/ui/**/*.tsx',
+  ],
+}
+```
+
+
+
+## Glossary
+
+- **Field**
+- **Widget**
+- **Schema**
+- **UI Schema**

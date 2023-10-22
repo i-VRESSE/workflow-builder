@@ -29,6 +29,7 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
+    "@ladle/react": "^3.2.2",
     "@types/json-schema": "^7.0.14",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
