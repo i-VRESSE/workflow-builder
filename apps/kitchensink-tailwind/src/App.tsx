@@ -1,34 +1,51 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useEffect } from 'react'
+import {
+  CatalogPanel,
+  FormActions,
+  Header,
+  NodePanel,
+  WorkflowClear,
+  WorkflowDownloadButton,
+  WorkflowPanel,
+  WorkflowUploadButton
+} from '@i-vresse/wb-core'
+import { useSetCatalog } from '@i-vresse/wb-core/dist/store'
+import { prepareCatalog } from '@i-vresse/wb-core/dist/catalog'
+
 import './App.css'
+import kitchensinkCatalog from './kitchensink.json'
 
-function App() {
-  const [count, setCount] = useState(0)
-
+function App (): JSX.Element {
+  const setCatalog = useSetCatalog()
+  useEffect(() => {
+    const catalog = prepareCatalog(kitchensinkCatalog)
+    setCatalog(catalog)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
   return (
-    <>
+    <div className='grid grid-cols-3'>
+      <div className="col-span-3 text-2xl pb-2">
+        <Header />
+      </div>
+      <div className='row-span-2'>
+        <CatalogPanel />
+      </div>
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <WorkflowPanel>
+          <WorkflowUploadButton />
+        </WorkflowPanel>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+      <div>
+        <NodePanel />
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+      <div>
+        <WorkflowDownloadButton />
+        <WorkflowClear />
+      </div>
+      <div>
+        <FormActions />
+      </div>
+    </div>
   )
 }
 
