@@ -1,3 +1,4 @@
+
 h1 {
   @apply text-4xl;
 }
@@ -159,11 +160,11 @@ div.checkbox {
 }
 
 .nav-link {
-  @apply block rounded-t-md border bg-primary px-4 py-2;
+  @apply block rounded-t-md border bg-primary-foreground px-4 py-2;
 }
 
 .nav .active {
-  @apply border-primary bg-primary text-primary;
+  @apply border-primary bg-primary text-primary-foreground;
 }
 
 .justify-content-end {

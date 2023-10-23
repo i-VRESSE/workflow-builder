@@ -13,18 +13,14 @@
             "format": "moleculefilepaths",
             "items": {
               "type": "string",
-              "format": "uri-reference"
+              "contentEncoding": "base64",
+              "contentMediaType": "chemical/x-pdb,.pdb"
             }
           }
         },
         "required": ["molecules"]
       },
       "uiSchema": {
-        "molecules": {
-          "items": {
-            "ui:widget": "file"
-          }
-        }
       },
       "tomlSchema": {}
     },

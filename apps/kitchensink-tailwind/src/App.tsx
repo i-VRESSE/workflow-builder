@@ -3,7 +3,6 @@ import {
   CatalogPanel,
   FormActions,
   Header,
-  NodePanel,
   WorkflowClear,
   WorkflowDownloadButton,
   WorkflowPanel,
@@ -14,6 +13,7 @@ import { prepareCatalog } from '@i-vresse/wb-core/dist/catalog'
 
 import './App.css'
 import kitchensinkCatalog from './kitchensink.json'
+import { TwNodePanel } from './TwNodePanel'
 
 function App (): JSX.Element {
   const setCatalog = useSetCatalog()
@@ -36,7 +36,7 @@ function App (): JSX.Element {
         </WorkflowPanel>
       </div>
       <div>
-        <NodePanel />
+        <TwNodePanel />
       </div>
       <div>
         <WorkflowDownloadButton />

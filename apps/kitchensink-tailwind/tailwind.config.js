@@ -6,6 +6,7 @@ module.exports = {
     './components/**/*.{ts,tsx}',
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
+    '../../node_modules/@i-vresse/wb-tailwind-form/dist/SchemaForm.js',
 	],
   theme: {
     container: {

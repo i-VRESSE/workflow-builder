@@ -24,6 +24,7 @@ import { fullFormats } from "ajv-formats/dist/formats";
 import { ajvResolver } from "./ajvresolver";
 import { FormCollapsible, FormGroup } from "./components/ui/FormGroup";
 import { createContext, useContext, useEffect, useState } from "react";
+import { Checkbox } from "./components/ui/checkbox";
 
 interface SchemaFieldProps {
   schema: JSONSchema7;
@@ -32,8 +33,9 @@ interface SchemaFieldProps {
   required?: boolean;
 }
 
-function getNestedUiSchema(path: string, uiSchema) {
-  if (path === 'root') {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function getNestedUiSchema(path: string, uiSchema: any) {
+  if (path === 'root' || uiSchema === undefined) {
     return uiSchema
   }
   const pathParts = path.split('.')
@@ -48,11 +50,12 @@ function getNestedUiSchema(path: string, uiSchema) {
 }
 
 function ObjectSchemaField({ schema, name }: SchemaFieldProps) {
+  const { formElements, schema: rootUiSchema } = useContext(UiContext);
   if (schema.type !== "object" || schema.properties === undefined) {
-    throw new Error("schema type is not object or has no properties");
+    console.info('schema type is not object or has no properties, skipping it')
+    return <></>
   }
   const required = schema.required ?? [];
-  const { formElements, schema: rootUiSchema } = useContext(UiContext);
   const uiSchema = getNestedUiSchema(name, rootUiSchema)
 
   // TODO support schema.dependentRequired
@@ -110,7 +113,8 @@ function StringSelectEnumSchemaField({ schema, name }: SchemaFieldProps) {
       name={name}
       schema={schema}
       renderAsControl={true}
-      render={(field) => (
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      render={(field: any) => (
         <Select onValueChange={field.onChange} defaultValue={field.value}>
           <formElements.control>
             <SelectTrigger>
@@ -168,7 +172,8 @@ function FileField({ schema, name }: SchemaFieldProps) {
     <formElements.scalar
     name={name}
     schema={schema}
-    render={({ field }) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    render={({ field }: {field: any}) => {
       return (
           <div>
         <formElements.input
@@ -223,7 +228,8 @@ function StringSchemaField({ schema, name }: SchemaFieldProps) {
     <formElements.scalar
       name={name}
       schema={schema}
-      render={({ field }) => (
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      render={({ field }: {field: any}) => (
         <formElements.input
           type={format}
           placeholder={placeholder}
@@ -368,12 +374,14 @@ function NumberSchemaField({ schema, name }: SchemaFieldProps) {
     <formElements.scalar
       name={name}
       schema={schema}
-      render={({ field }) => (
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      render={({ field }: {field: any}) => (
         <formElements.input
           type="number"
           placeholder={placeholder}
           {...field}
-          onChange={(e) => field.onChange(parseFloat(e.target.value))}
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          onChange={(e:any) => field.onChange(parseFloat(e.target.value))}
           value={field.value.toString() ?? ""}
         />
       )}
@@ -388,12 +396,14 @@ function IntegerSchemaField({ schema, name }: SchemaFieldProps) {
     <formElements.scalar
       name={name}
       schema={schema}
-      render={({ field }) => (
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      render={({ field }: {field:any}) => (
         <formElements.input
           type="number"
           placeholder={placeholder}
           {...field}
-          onChange={(e) => field.onChange(parseInt(e.target.value))}
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          onChange={(e: any) => field.onChange(parseInt(e.target.value))}
           value={field.value.toString() ?? ""}
         />
       )}
@@ -406,17 +416,17 @@ function BooleanSchemaField({ schema, name }: SchemaFieldProps) {
 
   // TODO support rendering as 2 radios aka Yes / No
   // TODO support rendering as toggle
-
+  // TODO more space between label and checkbox
   return (
     <formElements.scalar
       name={name}
       schema={schema}
-      render={({ field }) => (
-        <formElements.input
-          type="checkbox"
-          {...field}
-          value={field.value ?? ""}
-        />
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      render={({ field }:{field:any}) => (
+        <formElements.checkbox
+          checked={field.value ?? false}
+          onCheckedChange={field.onChange}
+          />
       )}
     />
   );
@@ -436,7 +446,8 @@ function ScalarSchemaField({
     <formElements.field
       name={name}
       control={control}
-      render={({ field }) => (
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      render={({ field }: {field:any}) => (
         <formElements.item>
           <formElements.label>
             {schema.title ?? name}
@@ -524,6 +535,7 @@ const defaultFormElements = {
   description: FormDescription,
   message: FormMessage,
   input: Input,
+  checkbox: Checkbox,
   control: FormControl,
   arraywrap: ArrayWrapperField,
   scalar: ScalarSchemaField,
@@ -546,7 +558,8 @@ const defaultWidgets = {
   boolean: BooleanSchemaField,
 };
 
-const UiContext = createContext({
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const UiContext = createContext<any>({
   schema: {},
   formElements: defaultFormElements,
   fields: defaultFields,
@@ -595,6 +608,7 @@ export function SchemaForm({
       return;
     }
     onDirtySwitch(form.formState.isDirty);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form.formState.isDirty]);
 
   return (

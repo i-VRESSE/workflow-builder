@@ -22,8 +22,9 @@ export function FormGroup({ schema, name, children }: FormGroupProps) {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function FormCollapsible({ schema, name, uiSchema, children }: FormGroupProps & { uiSchema: any }) {
+    const open = uiSchema['ui:open'] || (uiSchema['ui:collapsed'] !==undefined && !uiSchema['ui:collapsed'])
     return (
-        <details className="shadow-md p-2" open={uiSchema['ui:open']}>
+        <details className="shadow-md p-2" open={open}>
             <summary className="text-lg font-medium">{schema.title ?? name}</summary>
             <p>{schema.description}</p>
             <Separator />
