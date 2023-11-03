@@ -62,7 +62,7 @@ global:
           original input PDBs.
         type: boolean
       postprocess:
-        default: false
+        default: true
         title: Executes haddock3-analyse on the CAPRI folders at the end of the run
         description: If true, executes haddock3-analyse on the CAPRI folders at the
           end of the workflow
@@ -148,7 +148,7 @@ global:
         maximum: 9999
         minimum: 1
       clean:
-        default: false
+        default: true
         title: Clean the module output files.
         description: Clean the module if run succeeds by compressing or removing output
           files.
@@ -194,6 +194,102 @@ global:
       ui:group: clean
   tomlSchema: {}
 nodes:
+- id: alascan
+  category: analysis
+  label: HADDOCK3 module for alanine scan.
+  description: HADDOCK3 module for alanine scan.
+  schema:
+    type: object
+    properties:
+      int_cutoff:
+        default: 5.0
+        title: "Distance cutoff (\xC5) used to define interface contacts."
+        description: "Distance cutoff (\xC5) used to define interface contacts between\
+          \ two interacting molecules."
+        $comment: "Distance cutoff (\xC5) used to define interface contacts between\
+          \ two interacting molecules."
+        type: number
+        maximum: 20.0
+        minimum: 1.0
+      output:
+        default: false
+        title: Dump all the models in the output folder
+        description: Dump all the models in the output folder with the delta_score
+          written in the b-factor column.
+        $comment: Dump all the models in the output folder with the delta_score written
+          in the b-factor column.
+        type: boolean
+      scan_residue:
+        default: ALA
+        title: Residue to be used for the scanning
+        description: Residue to be used for the scanning. The default is alanine.
+        $comment: Residue to be used for the scanning. The default is alanine. Use
+          bigger residues at your own risk.
+        type: string
+        minLength: 3
+        maxLength: 3
+        enum:
+        - ALA
+        - ARG
+        - ASN
+        - ASP
+        - CYS
+        - GLN
+        - GLU
+        - GLY
+        - HIS
+        - ILE
+        - LEU
+        - LYS
+        - MET
+        - PHE
+        - PRO
+        - SER
+        - THR
+        - TRP
+        - TYR
+        - VAL
+        - ALY
+        - ASH
+        - CFE
+        - CSP
+        - CYC
+        - CYF
+        - CYM
+        - DDZ
+        - GLH
+        - HLY
+        - HY3
+        - HYP
+        - M3L
+        - MLY
+        - MLZ
+        - MSE
+        - NEP
+        - PNS
+        - PTR
+        - SEP
+        - TOP
+        - TYP
+        - TYS
+      plot:
+        default: false
+        title: Plot scanning data.
+        description: Plot scanning data.
+        $comment: Plot scanning data.
+        type: boolean
+    required: []
+    additionalProperties: false
+  uiSchema:
+    int_cutoff:
+      ui:group: analysis
+    output:
+      ui:group: analysis
+    scan_residue:
+      ui:group: analysis
+    plot:
+      ui:group: analysis
+  tomlSchema: {}
 - id: caprieval
   category: analysis
   label: Calculate CAPRI metrics.
