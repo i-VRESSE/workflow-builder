@@ -194,102 +194,6 @@ global:
       ui:group: clean
   tomlSchema: {}
 nodes:
-- id: alascan
-  category: analysis
-  label: HADDOCK3 module for alanine scan.
-  description: HADDOCK3 module for alanine scan.
-  schema:
-    type: object
-    properties:
-      int_cutoff:
-        default: 5.0
-        title: "Distance cutoff (\xC5) used to define interface contacts."
-        description: "Distance cutoff (\xC5) used to define interface contacts between\
-          \ two interacting molecules."
-        $comment: "Distance cutoff (\xC5) used to define interface contacts between\
-          \ two interacting molecules."
-        type: number
-        maximum: 20.0
-        minimum: 1.0
-      output:
-        default: false
-        title: Dump all the models in the output folder
-        description: Dump all the models in the output folder with the delta_score
-          written in the b-factor column.
-        $comment: Dump all the models in the output folder with the delta_score written
-          in the b-factor column.
-        type: boolean
-      scan_residue:
-        default: ALA
-        title: Residue to be used for the scanning
-        description: Residue to be used for the scanning. The default is alanine.
-        $comment: Residue to be used for the scanning. The default is alanine. Use
-          bigger residues at your own risk.
-        type: string
-        minLength: 3
-        maxLength: 3
-        enum:
-        - ALA
-        - ARG
-        - ASN
-        - ASP
-        - CYS
-        - GLN
-        - GLU
-        - GLY
-        - HIS
-        - ILE
-        - LEU
-        - LYS
-        - MET
-        - PHE
-        - PRO
-        - SER
-        - THR
-        - TRP
-        - TYR
-        - VAL
-        - ALY
-        - ASH
-        - CFE
-        - CSP
-        - CYC
-        - CYF
-        - CYM
-        - DDZ
-        - GLH
-        - HLY
-        - HY3
-        - HYP
-        - M3L
-        - MLY
-        - MLZ
-        - MSE
-        - NEP
-        - PNS
-        - PTR
-        - SEP
-        - TOP
-        - TYP
-        - TYS
-      plot:
-        default: false
-        title: Plot scanning data.
-        description: Plot scanning data.
-        $comment: Plot scanning data.
-        type: boolean
-    required: []
-    additionalProperties: false
-  uiSchema:
-    int_cutoff:
-      ui:group: analysis
-    output:
-      ui:group: analysis
-    scan_residue:
-      ui:group: analysis
-    plot:
-      ui:group: analysis
-  tomlSchema: {}
 - id: caprieval
   category: analysis
   label: Calculate CAPRI metrics.
@@ -498,12 +402,12 @@ nodes:
         type: number
         maximum: 9999
         minimum: -9999
-      fraction_cutoff:
+      clust_cutoff:
         default: 0.6
         type: number
         maximum: 9999
         minimum: -9999
-      threshold:
+      min_population:
         default: 4
         type: number
         maximum: 9999
@@ -518,6 +422,15 @@ nodes:
   uiSchema:
     executable:
       ui:widget: file
+      ui:group: analysis
+    contact_distance_cutoff:
+      ui:group: analysis
+    clust_cutoff:
+      ui:group: analysis
+    min_population:
+      ui:group: analysis
+    strictness:
+      ui:group: analysis
   tomlSchema: {}
 - id: clustrmsd
   category: analysis
@@ -526,9 +439,9 @@ nodes:
   schema:
     type: object
     properties:
-      threshold:
+      min_population:
         default: 4
-        title: Clustering population threshold
+        title: Minimum cluster population
         description: Threshold employed to exclude clusters with less than this number
           of members
         $comment: Threshold employed to exclude clusters with less than this number
@@ -536,18 +449,33 @@ nodes:
         type: number
         maximum: 9999
         minimum: 1
-      tolerance:
-        title: Numeric value for clustering
-        description: if criterion is maxclust, the number of desired clusters. if
-          criterion is distance, the value of cutoff cophenetic distance
-        $comment: if criterion is maxclust, the number of desired clusters. if criterion
-          is distance, the value of cutoff cophenetic distance
+      clust_cutoff:
+        default: 7.5
+        title: Clustering cutoff distance
+        description: Value of cutoff cophenetic distance.
+        $comment: Value of cutoff cophenetic distance. When criterion is maxclust,
+          this value is ignored.
+        type: number
+        maximum: 9999
+        minimum: 1
+      n_clusters:
+        default: 4
+        title: Number of clusters
+        description: Number of clusters to be formed
+        $comment: Number of clusters to be formed. When criterion is distance, this
+          value is ignored.
         type: number
         maximum: 9999
         minimum: 1
     required: []
     additionalProperties: false
-  uiSchema: {}
+  uiSchema:
+    min_population:
+      ui:group: analysis
+    clust_cutoff:
+      ui:group: analysis
+    n_clusters:
+      ui:group: analysis
   tomlSchema: {}
 - id: emref
   category: refinement
