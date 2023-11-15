@@ -12,7 +12,7 @@ import type {
   ICatalog,
   IFiles
 } from './types'
-import { ajvKeyword, resolveMaxItemsFrom } from './resolveMaxItemsFrom'
+import { ajvKeyword, ajvKeyword2, resolveMaxItemsFrom } from './resolveMaxItemsFrom'
 import { addMoleculeValidation, parseMolecules } from './molecule/addMoleculeValidation'
 
 const ajv = new Ajv({
@@ -25,6 +25,7 @@ const ajv = new Ajv({
 addFormats(ajv)
 addMoleculeFormats(ajv)
 ajv.addKeyword(ajvKeyword)
+ajv.addKeyword(ajvKeyword2)
 
 export interface IvresseErrorObject
   extends ErrorObject<string, Record<string, any>, unknown> {
