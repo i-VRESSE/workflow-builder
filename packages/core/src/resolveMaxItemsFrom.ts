@@ -57,3 +57,16 @@ export const ajvKeyword: KeywordDefinition = {
     cxt.ok(true)
   }
 }
+
+/**
+ * Keyword that can be added to ajv instance with addKeyword()
+ * to make it aware of `maxPropertiesFrom` keyword in JSON schemas.
+ */
+export const ajvKeyword2: KeywordDefinition = {
+  keyword: 'maxPropertiesFrom',
+  type: 'object',
+  code (cxt: KeywordCxt) {
+    // Unable to validate because needs data from outside, so always OK
+    cxt.ok(true)
+  }
+}
