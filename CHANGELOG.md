@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## @i-vresse/wb-core 1.2.2 - 2024-01-25
+
+### Added
+
+* Ignore maxPropertiesFrom in catalog ([#132](https://github.com/i-VRESSE/workflow-builder/pull/132))
+
 ## @i-vresse/wb-core 1.2.1 - 2023-04-06
 
 ### Changed
