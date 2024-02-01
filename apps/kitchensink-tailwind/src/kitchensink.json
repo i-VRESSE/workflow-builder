@@ -893,20 +893,20 @@
       }
     },
     {
-        "id": "node12",
-        "label": "Node in initially collapsed cat",
-        "description": "Description 12",
-        "category": "collapsedcat",
-        "schema": {
-            "type": "object",
-            "properties": {
-                "prop1": {
-                    "type": "string"
-                }
-            }
-        },
-        "uiSchema": {},
-        "tomlSchema": {}      
+      "id": "node12",
+      "label": "Node in initially collapsed cat",
+      "description": "Description 12",
+      "category": "collapsedcat",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "prop1": {
+            "type": "string"
+          }
+        }
+      },
+      "uiSchema": {},
+      "tomlSchema": {}
     }
   ]
 }
