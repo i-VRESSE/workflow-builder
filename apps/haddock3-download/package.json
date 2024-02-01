@@ -8,6 +8,7 @@
     "serve": "vite preview",
     "lint": "ts-standard",
     "test:integration": "playwright test",
+    "test:headed": "playwright test --project=chromium --headed",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "dependencies": {

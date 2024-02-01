@@ -102,7 +102,7 @@ describe('<TableField/>', () => {
       expect(prop1th?.parentElement?.children).toHaveLength(3)
     })
 
-    it.each(['0', '1', '2', '4', '5'])(
+    it.each(['1', '2', '3', '4', '5', '6'])(
       'should have an index column with text %s',
       (index) => {
         const cell = screen.getByText(index)
@@ -132,7 +132,7 @@ describe('<TableField/>', () => {
       expect(prop1th?.parentElement?.children).toHaveLength(3)
     })
 
-    it.each(['0', '1', '2', '4', '5'])(
+    it.each(['1', '2', '3', '4', '5', '6'])(
       'should have an index column with text %s',
       (index) => {
         const cell = screen.getByText(index)
@@ -162,7 +162,7 @@ describe('<TableField/>', () => {
       expect(prop1th?.parentElement?.children).toHaveLength(3)
     })
 
-    it.each(['a', 'b', 'c', '4', '5'])(
+    it.each(['a', 'b', 'c', '4', '5', '6'])(
       'should have an index column with text %s',
       (index) => {
         const cell = screen.getByText(index)

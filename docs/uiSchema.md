@@ -143,7 +143,7 @@ For example
 }
 ```
 
-The fourth array item will get index `3` as the lookup array only resolves the first 3 array items.
+The fourth array item will get index `4` as the lookup array only resolves the first 3 array items.
 
 ### Molecule filename as index
 

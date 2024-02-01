@@ -13,7 +13,7 @@ export const useIndexable = (uiSchema: UiSchema): [boolean, (n: number) => strin
   if (indexable &&
     Array.isArray(uiOptions.indexable)) {
     const lookup: string[] = uiOptions.indexable
-    return [indexable, (i: number) => i < lookup.length ? lookup[i] : `${i}`]
+    return [indexable, (i: number) => i < lookup.length ? lookup[i] : `${i + 1}`]
   }
-  return [indexable, (i: number) => `${i}`]
+  return [indexable, (i: number) => `${i + 1}`]
 }
