@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## @i-vresse/wb-core 1.2.3 - 2024-02-02
+
+### Changed
+
+* Export more workflow parsing and validation methods
+
 ## @i-vresse/wb-core 1.2.2 - 2024-01-25
 
 ### Added

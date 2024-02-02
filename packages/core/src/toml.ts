@@ -3,6 +3,7 @@ import { isObject } from './utils/isObject'
 import { IWorkflowNode, IParameters, IWorkflow, TomlObjectSchema, ICatalog } from './types'
 import { mergeHeader, splitHeader } from './dsv'
 import { nanoid } from 'nanoid'
+import { globalParameterKeys } from './catalog'
 
 export interface TomlSchemas {
   nodes: Record<string, TomlObjectSchema>
@@ -186,9 +187,24 @@ function toml2parameters (tomledParameters: IParameters, tomlSchema: TomlObjectS
   return parameters
 }
 
-export function parseWorkflow (workflow: string, globalKeys: Set<string>, tomlSchema4global: TomlObjectSchema, tomSchema4nodes: Record<string, TomlObjectSchema>): IWorkflow {
+export function parseWorkflow (workflow: string,
+  catalog: ICatalog): IWorkflow {
+  const table = tomlstring2table(workflow)
+  return parseWorkflowFromTable(table, catalog)
+}
+
+export function tomlstring2table (workflow: string): ReturnType<typeof parse> {
   const deduppedWorkflow = dedupWorkflow(workflow)
   const table = parse(deduppedWorkflow, { bigint: false })
+  return table
+}
+
+export function parseWorkflowByCatalogPieces (
+  table: ReturnType<typeof parse>,
+  globalKeys: Set<string>,
+  tomlSchema4global: TomlObjectSchema,
+  tomSchema4nodes: Record<string, TomlObjectSchema>
+): IWorkflow {
   const global: IParameters = {}
   const nodes: IWorkflowNode[] = []
   const sectionwithindex = /\.?\d+$/
@@ -211,6 +227,24 @@ export function parseWorkflow (workflow: string, globalKeys: Set<string>, tomlSc
     nodes,
     global: toml2parameters(global, tomlSchema4global)
   }
+}
+
+export function parseWorkflowFromTable (
+  table: ReturnType<typeof parse>,
+  catalog: ICatalog
+): IWorkflow {
+  const globalKeys = globalParameterKeys(catalog.global)
+  const tomlSchema4global = catalog.global.tomlSchema ?? {}
+  const tomSchema4nodes = Object.fromEntries(catalog.nodes.map(
+    n => [n.id, n.tomlSchema !== undefined ? n.tomlSchema : {}])
+  )
+  return parseWorkflowByCatalogPieces(
+    table,
+    globalKeys,
+    tomlSchema4global,
+    tomSchema4nodes
+
+  )
 }
 
 /**
