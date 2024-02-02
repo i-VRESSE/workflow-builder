@@ -1,6 +1,6 @@
 import dedent from 'ts-dedent'
 import { expect, describe, it } from 'vitest'
-import { dedupWorkflow, parseWorkflow, TomlSchemas, workflow2tomltext } from './toml'
+import { dedupWorkflow, parseWorkflowByCatalogPieces, TomlSchemas, workflow2tomltext, tomlstring2table } from './toml'
 import { IParameters } from './types'
 
 describe('workflow2tomltext()', () => {
@@ -373,7 +373,7 @@ param_C = 33
   })
 })
 
-describe('parseWorkflow()', () => {
+describe('parseWorkflowByCatalogPieces()', () => {
   it('should divide global and module parameters', () => {
     const workflow = `
 myglobalvar = 'something'
@@ -383,7 +383,7 @@ myglobalvar = 'something'
 foo = 'bar'
 `
     const globalKeys = new Set(['myglobalvar'])
-    const result = parseWorkflow(workflow, globalKeys, {}, {})
+    const result = parseWorkflowByCatalogPieces(tomlstring2table(workflow), globalKeys, {}, {})
     const expected = {
       global: {
         myglobalvar: 'something'
@@ -411,7 +411,8 @@ foo = 'bar'
 
 foo = 'fizz'
 `
-    const result = parseWorkflow(workflow, new Set(), {}, {})
+    const result = parseWorkflowByCatalogPieces(
+      tomlstring2table(workflow), new Set(), {}, {})
     const expected = {
       global: {},
       nodes: [
@@ -553,7 +554,7 @@ key8 = [
         id: expect.stringMatching(/\w+/)
       }]
     }
-    const result = parseWorkflow(workflow, new Set(Object.keys(expected.global)), {}, {})
+    const result = parseWorkflowByCatalogPieces(tomlstring2table(workflow), new Set(Object.keys(expected.global)), {}, {})
     expect(result).toEqual(expected)
   })
 
@@ -563,7 +564,7 @@ key8 = [
   [[foo]]
   bar = 'fizz'
   `
-      const result = parseWorkflow(workflow, new Set(['foo']), {}, {})
+      const result = parseWorkflowByCatalogPieces(tomlstring2table(workflow), new Set(['foo']), {}, {})
       const expected = {
         global: {
           foo: [{
@@ -585,8 +586,8 @@ key8 = [
       }
       const tomSchema4nodes = {}
 
-      const result = parseWorkflow(
-        workflow,
+      const result = parseWorkflowByCatalogPieces(
+        tomlstring2table(workflow),
         new Set(['foo']),
         tomlSchema4global,
         tomSchema4nodes
@@ -610,8 +611,8 @@ key8 = [
       }
       const tomlSchema4nodes = {}
 
-      const result = parseWorkflow(
-        workflow,
+      const result = parseWorkflowByCatalogPieces(
+        tomlstring2table(workflow),
         new Set(['foo']),
         tomlSchema4global,
         tomlSchema4nodes
@@ -643,8 +644,8 @@ key8 = [
       }
       const tomSchema4nodes = {}
 
-      const result = parseWorkflow(
-        workflow,
+      const result = parseWorkflowByCatalogPieces(
+        tomlstring2table(workflow),
         new Set(['fle']),
         tomlSchema4global,
         tomSchema4nodes
@@ -693,8 +694,8 @@ key8 = [
       }
       const tomSchema4nodes = {}
 
-      const result = parseWorkflow(
-        workflow,
+      const result = parseWorkflowByCatalogPieces(
+        tomlstring2table(workflow),
         new Set(['mol']),
         tomlSchema4global,
         tomSchema4nodes
@@ -737,8 +738,8 @@ key8 = [
       }
       const tomSchema4nodes = {}
 
-      const result = parseWorkflow(
-        workflow,
+      const result = parseWorkflowByCatalogPieces(
+        tomlstring2table(workflow),
         new Set(['mol']),
         tomlSchema4global,
         tomSchema4nodes
@@ -774,8 +775,8 @@ key8 = [
         }
       }
 
-      const result = parseWorkflow(
-        workflow,
+      const result = parseWorkflowByCatalogPieces(
+        tomlstring2table(workflow),
         new Set(),
         tomlSchema4global,
         tomSchema4nodes
@@ -809,8 +810,8 @@ key8 = [
       }
       const tomSchema4nodes = {}
 
-      const result = parseWorkflow(
-        workflow,
+      const result = parseWorkflowByCatalogPieces(
+        tomlstring2table(workflow),
         new Set(['fle']),
         tomlSchema4global,
         tomSchema4nodes
@@ -848,8 +849,8 @@ key8 = [
       }
       const tomlSchema4nodes = {}
 
-      const result = parseWorkflow(
-        workflow,
+      const result = parseWorkflowByCatalogPieces(
+        tomlstring2table(workflow),
         new Set(['foo']),
         tomlSchema4global,
         tomlSchema4nodes
@@ -870,7 +871,7 @@ key8 = [
   [[somenode.foo]]
   bar = 'fizz'
   `
-      const result = parseWorkflow(workflow, new Set(), {}, {})
+      const result = parseWorkflowByCatalogPieces(tomlstring2table(workflow), new Set(), {}, {})
       const expected = {
         global: {},
         nodes: [{
@@ -899,8 +900,8 @@ key8 = [
         }
       }
 
-      const result = parseWorkflow(
-        workflow,
+      const result = parseWorkflowByCatalogPieces(
+        tomlstring2table(workflow),
         new Set(),
         tomlSchema4global,
         tomSchema4nodes

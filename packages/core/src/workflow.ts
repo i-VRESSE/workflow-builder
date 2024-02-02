@@ -1,5 +1,4 @@
 import { readArchive } from './archive'
-import { globalParameterKeys } from './catalog'
 import { parseWorkflow } from './toml'
 import { ICatalog, IFiles, IParameters, IWorkflow, IWorkflowNode } from './types'
 import { walk } from './utils/searchreplace'
@@ -11,31 +10,14 @@ export interface ILoadedworkflow extends IWorkflow {
 
 export async function loadWorkflowArchive (archiveURL: string, catalog: ICatalog): Promise<ILoadedworkflow> {
   const { tomlstring, files } = await readArchive(archiveURL)
-  const globalKeys = globalParameterKeys(catalog.global)
-  const tomlSchema4global = catalog.global.tomlSchema ?? {}
-  const tomSchema4nodes = Object.fromEntries(catalog.nodes.map(
-    n => [n.id, n.tomlSchema !== undefined ? n.tomlSchema : {}])
-  )
-  const { nodes, global } = parseWorkflow(
-    tomlstring, globalKeys, tomlSchema4global, tomSchema4nodes
-  )
-  const errors = await validateWorkflow(
-    {
-      global,
-      nodes
-    }, {
-      global: catalog.global,
-      nodes: catalog.nodes
-    },
-    files
-  )
+  const workflow = parseWorkflow(tomlstring, catalog)
+  const errors = await validateWorkflow(workflow, catalog, files)
   if (errors.length > 0) {
     console.error(errors)
     throw new ValidationError('Invalid workflow loaded', errors)
   }
   return {
-    global,
-    nodes,
+    ...workflow,
     files
   }
 }
