@@ -74,10 +74,10 @@ Tests can be run with
 yarn test:integration
 ```
 
-To run in a non-headless browser use
+To run a non-headless chromium browser use
 
 ```shell
-yarn test:integration --headed
+yarn test:headed
 ```
 
 The browser will pause when a test calls `await page.pause()`, so you can investigate current state.

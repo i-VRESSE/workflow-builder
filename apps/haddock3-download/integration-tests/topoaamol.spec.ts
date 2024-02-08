@@ -11,7 +11,7 @@ test.describe('given 1 molecule and a topoaa node with segment id defined', () =
     await page.locator('input[type="text"]').fill('x')
     // Upload e2a-hpr_1GGR.pdb
     const file1 = await readFile('./integration-tests/data/e2a-hpr_1GGR.pdb')
-    await page.locator('text=0* >> input[type="file"]')
+    await page.locator('text=1* >> input[type="file"]')
       .setInputFiles({ name: 'e2a-hpr_1GGR.pdb', mimeType: 'chemical/x-pdb', buffer: file1 })
     // Click text=Save
     await page.locator('button:has-text("Save")').click()
