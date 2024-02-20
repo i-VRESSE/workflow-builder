@@ -1589,16 +1589,6 @@ nodes:
         items:
           type: object
           properties:
-            prot_segid:
-              default: A
-              title: Segment ID
-              description: Segment ID assigned to this molecule
-              $comment: Segment ID assigned to this molecule in CNS. Used to distinguish
-                different molecules
-              type: string
-              minLength: 0
-              maxLength: 4
-              format: chain
             cyclicpept:
               default: false
               title: Cyclic peptide
