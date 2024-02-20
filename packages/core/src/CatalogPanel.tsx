@@ -14,7 +14,7 @@ import { useCatalog } from './store'
 export const CatalogPanel = ({ children }: PropsWithChildren<{}>): JSX.Element => {
   const catalog = useCatalog()
   return (
-    <fieldset>
+    <fieldset style={{ padding: '0.5rem' }}>
       <legend>Catalog</legend>
       <React.Suspense fallback={<span>Loading catalog...</span>}>
         {children}

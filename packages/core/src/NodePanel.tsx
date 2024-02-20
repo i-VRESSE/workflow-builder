@@ -10,6 +10,11 @@ import { useSelectNodeIndex, useWorkflow } from './store'
  *
  */
 export const NodePanel = ({ fields, widgets }: FormProps): JSX.Element => {
+  console.group('NodePanel')
+  console.log('fields...', fields)
+  console.log('widgets...', widgets)
+  console.groupEnd()
+
   const selectedNodeIndex = useSelectNodeIndex()
   const { editingGlobal } = useWorkflow()
   let form = <div>No node or global parameters selected for configuration.</div>

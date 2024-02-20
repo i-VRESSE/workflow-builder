@@ -4,7 +4,8 @@ import { JSONSchema7 } from 'json-schema'
 import { Form } from './Form'
 import { CollapsibleField } from './CollapsibleField'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { UiSchema } from '@rjsf/core'
+import { UiSchema } from '@rjsf/utils'
+import validator from "@rjsf/validator-ajv8";
 
 const meta: ComponentMeta<typeof CollapsibleField> = {
   title: 'CollapsibleField',
@@ -23,6 +24,7 @@ function render (schema: JSONSchema7, uiSchema: UiSchema): JSX.Element {
       schema={schema}
       uiSchema={uiSchema}
       onSubmit={action('onSubmit')}
+      validator={validator}
     />
   )
 }

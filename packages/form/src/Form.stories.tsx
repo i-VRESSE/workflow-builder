@@ -1,5 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react'
 import { Form } from './Form'
+import validator from '@rjsf/validator-ajv8'
 
 const meta: ComponentMeta<typeof Form> = {
   component: Form,
@@ -7,7 +8,7 @@ const meta: ComponentMeta<typeof Form> = {
 }
 export default meta
 
-const Template: ComponentStory<typeof Form> = (args) => <Form {...args} />
+const Template: ComponentStory<typeof Form> = (args) => <Form {...args} validator={validator}/>
 
 export const File = Template.bind({})
 

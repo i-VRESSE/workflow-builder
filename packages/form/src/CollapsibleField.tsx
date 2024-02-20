@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { FieldProps, utils } from '@rjsf/core'
+// import { FieldProps } from '@rjsf/core'
+import {getUiOptions} from '@rjsf/utils'
 
 // Caret up with square around icon is not in react-icons package, copied from https://icons.getbootstrap.com/icons/caret-up-square/
 const CaretUpSquare = (): JSX.Element => (
@@ -34,12 +35,12 @@ const CaretDownSquare = (): JSX.Element => (
 const CollapsedIcon = CaretDownSquare
 const ExpandedIcon = CaretUpSquare
 
-export const CollapsibleField = (props: FieldProps): JSX.Element => {
+export const CollapsibleField = (props: any): JSX.Element => {
   if (props.schema.type !== 'object') {
     throw Error('CollapsibleField only works with type:object')
   }
   const ObjectField = props.registry.fields.ObjectField
-  const uiOptions = utils.getUiOptions(props.uiSchema)
+  const uiOptions = getUiOptions(props.uiSchema)
   const initialCollapsed =
     uiOptions !== undefined && 'collapsed' in uiOptions
       ? uiOptions.collapsed === true
@@ -85,9 +86,9 @@ export const CollapsibleField = (props: FieldProps): JSX.Element => {
 }
 
 function extractTitle (
-  props: FieldProps<any>,
+  props: any,
   uiOptions:
-  | { [key: string]: string | number | boolean | object | any[] | null }
+  | { [key: string]: string | number | boolean | object | any[] | null | undefined }
   | undefined
 ): string {
   let title = props.name
@@ -104,7 +105,7 @@ function extractTitle (
   return title
 }
 
-function dropTitle (props: FieldProps<any>): FieldProps<any> {
+function dropTitle (props: any){
   const oprops = { ...props }
   oprops.name = ''
   if ('title' in oprops.schema) {

@@ -1,4 +1,4 @@
-import type Ajv from 'ajv'
+// import type Ajv from 'ajv'
 
 /*
  * A molecule format can not be validated by its own, it needs context.
@@ -21,7 +21,7 @@ export const moleculeFormats = new Set(Object.keys(moleculeFormatValidators))
 /**
  * Adds all molecule formats to an ajv instance
  */
-export function addMoleculeFormats (ajv: Ajv): void {
+export function addMoleculeFormats (ajv: any): void {
   Object.entries(moleculeFormatValidators).forEach(
     ([name, format]) => ajv.addFormat(name, format)
   )

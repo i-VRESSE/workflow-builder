@@ -13,7 +13,7 @@
  *
  * @packageDocumentation
  */
-import { UiSchema } from '@rjsf/core'
+import { UiSchema } from '@rjsf/utils'
 import { ICatalog, IParameters } from './types'
 import { JSONSchema7 } from 'json-schema'
 import { isObject } from './utils/isObject'

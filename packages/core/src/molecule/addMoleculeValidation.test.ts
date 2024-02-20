@@ -1,4 +1,4 @@
-import { UiSchema } from '@rjsf/core'
+import { UiSchema } from '@rjsf/utils'
 import { JSONSchema7 } from 'json-schema'
 import { beforeEach, describe, expect, it } from 'vitest'
 

@@ -1,6 +1,8 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
 import { JSONSchema7 } from 'json-schema'
+import validator from '@rjsf/validator-ajv8'
+
 
 import { Form } from './Form'
 
@@ -24,6 +26,7 @@ function render (
       uiSchema={uiSchema}
       formData={formData}
       onSubmit={action('onSubmit')}
+      validator={validator}
     />
   )
 }

@@ -2,8 +2,9 @@ import React from 'react'
 
 import { cleanup, render, screen } from '@testing-library/react'
 import { TableField } from './TableField'
-import { IdSchema, utils } from '@rjsf/core'
+import { getDefaultRegistry } from '@rjsf/core'
 import { JSONSchema7 } from 'json-schema'
+import {IdSchema} from '@rjsf/utils'
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
@@ -56,7 +57,7 @@ describe('<TableField/>', () => {
         $id: 'root_prop1'
       }
     } as any as IdSchema
-    const registry = utils.getDefaultRegistry()
+    const registry = getDefaultRegistry()
     props = {
       id: 'someid',
       label: 'Some label',
