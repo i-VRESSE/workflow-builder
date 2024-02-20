@@ -2,7 +2,7 @@ import { expect, Page, test } from '@playwright/test'
 import AdmZip from 'adm-zip'
 import { readFile } from 'fs/promises'
 
-test.describe('given 1 molecule and a topoaa node with segment id defined', () => {
+test.describe('given 1 molecule and a topoaa node', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('http://localhost:3000')
     // Click input[type="text"]
@@ -24,8 +24,6 @@ test.describe('given 1 molecule and a topoaa node with segment id defined', () =
     await page.locator('#expander4molecule svg').click()
     // Click #expander4input_molecules svg
     await page.locator('#expander4input_molecules svg').click()
-    // Fill input with label Segment ID
-    await page.locator('input[type="text"]').fill('B')
     // Click text=Save
     await page.locator('button:has-text("Save")').click()
     // Click text=Text
