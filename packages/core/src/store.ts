@@ -503,7 +503,7 @@ export function useWorkflow (): UseWorkflow {
     editingGlobal,
     global,
     toggleGlobalEdit () {
-      setEditingGlobal(!editingGlobal)
+      setEditingGlobal(true)
       setSelectedNodeIndex(-1)
     },
     addNodeToWorkflowAt (nodeType: string, targetId: string) {

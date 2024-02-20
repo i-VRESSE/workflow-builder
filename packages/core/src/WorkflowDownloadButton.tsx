@@ -22,6 +22,6 @@ export const WorkflowDownloadButton = (): JSX.Element => {
   }
 
   return (
-    <button className='btn btn-primary' onClick={downloadWorkflow}>Download archive</button>
+    <button className='btn btn-primary' onClick={downloadWorkflow}>Download</button>
   )
 }

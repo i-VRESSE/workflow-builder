@@ -10,7 +10,7 @@
   grid-template-areas: "head head head"
                         "catalog workflow node"
                         "catalog workflow-actions node-actions";
-  grid-template-columns: min-content minmax(12rem,1fr) minmax(20rem,2fr);
+  grid-template-columns: min-content minmax(19rem,1fr) minmax(20rem,2fr);
   grid-template-rows: auto 1fr auto;
   column-gap: 1rem;
 }

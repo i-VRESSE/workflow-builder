@@ -29,17 +29,13 @@ function App (): JSX.Element {
         </GridArea>
         <GridArea area='workflow' className='workflow-area'>
           <WorkflowPanel>
+            <WorkflowDownloadButton />
             <WorkflowUploadButton />
+            <WorkflowClear />
           </WorkflowPanel>
         </GridArea>
         <GridArea area='node'>
           <NodePanel />
-        </GridArea>
-        <GridArea className='action-row' area='workflow-actions'>
-          <WorkflowDownloadButton />
-          <WorkflowClear />
-        </GridArea>
-        <GridArea className='action-row' area='node-actions'>
           <FormActions />
         </GridArea>
       </div>
