@@ -220,7 +220,7 @@ global:
 nodes:
 - id: alascan
   category: analysis
-  label: HADDOCK3 module for alanine scan.
+  label: ''
   description: HADDOCK3 module for alanine scan.
   schema:
     type: object
@@ -342,7 +342,7 @@ nodes:
       indexed: true
 - id: caprieval
   category: analysis
-  label: Calculate CAPRI metrics.
+  label: ''
   description: HADDOCK3 module to calculate the CAPRI metrics.
   schema:
     type: object
@@ -535,7 +535,7 @@ nodes:
   tomlSchema: {}
 - id: clustfcc
   category: analysis
-  label: Cluster modules with FCC.
+  label: ''
   description: HADDOCK3 module for clustering with FCC.
   schema:
     type: object
@@ -759,20 +759,20 @@ nodes:
         maximum: 100
         minimum: 1
       cluster_heatmap_datatype:
-        default: shortest-cont-ratio
+        default: shortest-cont-probability
         title: Type of data to be used in the heatmap.
         description: Type of data to be used in the heatmap.
-        $comment: ca-ca-dist and shortest-dist are averages distances observed in
-          cluster. While ca-ca-cont-ratio and shortest-cont-ratio are ratio of the
+        $comment: ca-ca-dist & shortest-dist are averages distances observed in cluster.
+          ca-ca-cont-probability & shortest-cont-probability are probability of the
           distances to be observed under their respective thresholds.
         type: string
         minLength: 5
         maxLength: 30
         enum:
         - ca-ca-dist
-        - ca-ca-cont-ratio
+        - ca-ca-cont-probability
         - shortest-dist
-        - shortest-cont-ratio
+        - shortest-cont-probability
       chordchart_datatype:
         default: shortest-dist
         title: Type of data to be used in the chordchart.
@@ -2821,7 +2821,14 @@ nodes:
           flatten: true
 - id: emscoring
   category: scoring
-  label: EM scoring module.
+  label: 'EM scoring module.
+
+
+    This module performs energy minimization and scoring of the models generated
+
+    in the previous step of the workflow. No restraints are applied during this step.
+
+    '
   description: HADDOCK3 module to perform energy minimization scoring.
   schema:
     type: object
@@ -7760,7 +7767,12 @@ nodes:
           flatten: true
 - id: mdscoring
   category: scoring
-  label: MD scoring module.
+  label: 'MD scoring module.
+
+
+    This module will perform a short MD simulation on the input models and
+
+    score them. No restraints are applied during this step.'
   description: HADDOCK3 module to perform energy minimization scoring.
   schema:
     type: object
@@ -9576,7 +9588,7 @@ nodes:
       indexed: true
 - id: seletop
   category: analysis
-  label: Select a top models.
+  label: ''
   description: HADDOCK3 module to select top cluster/model.
   schema:
     type: object
@@ -9600,7 +9612,7 @@ nodes:
   tomlSchema: {}
 - id: seletopclusts
   category: analysis
-  label: Select a top cluster module.
+  label: ''
   description: Haddock Module for 'seletopclusts'.
   schema:
     type: object
