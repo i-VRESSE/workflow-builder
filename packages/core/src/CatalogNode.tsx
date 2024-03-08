@@ -1,32 +1,13 @@
-/** @jsxRuntime classic */ // storybook builder can not use default jsxRuntime so overwritting it here.
-/** @jsx jsx */
-import { jsx, css } from '@emotion/react'
+import React from 'react'
 import { useDraggable } from '@dnd-kit/core'
+import {CSS} from '@dnd-kit/utilities'
 
-import { nodeWidth } from './constants'
 import { useWorkflow } from './store'
 import { ICatalogNode } from './types'
 import { GripVertical } from './GripVertical'
 
-const buttonStyle = css({
-  width: `${nodeWidth}rem`,
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  marginBottom: 4,
-
-  '& .grip': {
-    visibility: 'hidden',
-    cursor: 'grab'
-  },
-
-  '&:hover .grip': {
-    visibility: 'visible'
-  }
-})
-
 export const CatalogNode = ({ id, label }: ICatalogNode): JSX.Element => {
-  const { attributes, listeners, setNodeRef, transform, setActivatorNodeRef } =
+  const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform } =
     useDraggable({ id, data: { catalog: true } })
   const dragStyle =
     transform != null
@@ -35,17 +16,21 @@ export const CatalogNode = ({ id, label }: ICatalogNode): JSX.Element => {
         }
       : {}
 
+  const style = {
+    transform: CSS.Translate.toString(transform),
+  };
+
   const { addNodeToWorkflow } = useWorkflow()
 
   return (
     <li>
       <button
         ref={setNodeRef}
-        css={buttonStyle}
-        style={dragStyle}
+        // style={dragStyle}
+        style={style}
         {...attributes}
         title={label}
-        className='btn btn-light btn-sm'
+        className='btn btn-light btn-sm btn-catalog-node'
         onClick={() => addNodeToWorkflow(id)}
       >
         <span>{id}</span>

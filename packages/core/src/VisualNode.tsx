@@ -1,12 +1,10 @@
-/** @jsxRuntime classic */ // storybook builder can not use default jsxRuntime so overwritting it here.
-/** @jsx jsx */
-import { jsx, css } from '@emotion/react'
+import React from 'react'
+
 import { BsX } from 'react-icons/bs'
 import { CSS } from '@dnd-kit/utilities'
 import { useSortable } from '@dnd-kit/sortable'
 
 import { useDraggingWorkflowNodeState, useSelectNodeIndex, useWorkflow } from './store'
-import { nodeWidth } from './constants'
 import { GripVertical } from './GripVertical'
 
 interface IProp {
@@ -14,27 +12,6 @@ interface IProp {
   index: number
   id: string
 }
-
-const buttonStyle = css({
-  width: `${nodeWidth + 2}rem`,
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  marginBottom: 4,
-  '& .grip': {
-    visibility: 'hidden',
-    cursor: 'grab'
-  },
-  '&:hover .grip': {
-    visibility: 'visible'
-  },
-  '& .delete': {
-    visibility: 'hidden'
-  },
-  '&:hover .delete': {
-    visibility: 'visible'
-  }
-})
 
 export const VisualNode = ({ type, index, id }: IProp): JSX.Element => {
   const selectedNodeIndex = useSelectNodeIndex()
@@ -63,9 +40,8 @@ export const VisualNode = ({ type, index, id }: IProp): JSX.Element => {
   return (
     <div ref={setNodeRef} style={style} {...attributes}>
       <button
-        className='btn btn-light btn-sm btn-block'
+        className='btn btn-light btn-sm btn-block btn-visual-node'
         title='Click to configure'
-        css={buttonStyle}
         style={selectedStyle}
         onClick={() => {
           selectNode(index)

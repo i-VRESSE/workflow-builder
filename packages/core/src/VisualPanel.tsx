@@ -6,7 +6,6 @@ import {
 } from '@dnd-kit/sortable'
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 import { BsX } from 'react-icons/bs'
-import { nodeWidth } from './constants'
 import {
   useDraggingCatalogNodeState,
   useDraggingWorkflowNodeState,
@@ -68,9 +67,8 @@ export const VisualPanel = (): JSX.Element => {
         {draggingCatalogNode !== null
           ? (
             <button
-              style={{ width: `${nodeWidth}rem` }}
               title={`${draggingCatalogNode}`}
-              className='btn btn-light btn-sm'
+              className='btn btn-light btn-sm btn-visual-panel'
             >
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <span>{draggingCatalogNode}</span>
@@ -90,17 +88,16 @@ export const VisualPanel = (): JSX.Element => {
         {draggingWorkflowNode !== undefined
           ? (
             <button
-              style={{ width: `${nodeWidth + 2}rem` }}
-              className='btn btn-light btn-sm'
+              className='btn btn-light btn-sm btn-visual-panel'
             >
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <span>{draggingWorkflowNode.type}</span>
                 <div className='btn-group'>
                   <div className='btn btn-light btn-sm'>
-                    <GripVertical />
+                    <BsX />
                   </div>
                   <div className='btn btn-light btn-sm'>
-                    <BsX />
+                    <GripVertical />
                   </div>
                 </div>
               </div>

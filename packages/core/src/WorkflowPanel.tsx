@@ -19,7 +19,7 @@ export const WorkflowPanel = ({ children }: PropsWithChildren<{}>): JSX.Element 
   const textTabStyle = tab === 'text' ? 'nav-link active' : 'nav-link'
 
   return (
-    <fieldset style={{ height: '100%' }}>
+    <fieldset>
       <legend>Workflow</legend>
       <div style={{ display: 'flex', flexFlow: 'column', height: '100%', gap: '5px', paddingBottom: '5px' }}>
         <div className='btn-toolbar'>
