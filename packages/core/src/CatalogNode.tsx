@@ -1,24 +1,17 @@
 import React from 'react'
 import { useDraggable } from '@dnd-kit/core'
-import {CSS} from '@dnd-kit/utilities'
+import { CSS } from '@dnd-kit/utilities'
 
 import { useWorkflow } from './store'
 import { ICatalogNode } from './types'
 import { GripVertical } from './GripVertical'
 
 export const CatalogNode = ({ id, label }: ICatalogNode): JSX.Element => {
-  const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform } =
-    useDraggable({ id, data: { catalog: true } })
-  const dragStyle =
-    transform != null
-      ? {
-          transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`
-        }
-      : {}
+  const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform } = useDraggable({ id, data: { catalog: true } })
 
   const style = {
-    transform: CSS.Translate.toString(transform),
-  };
+    transform: CSS.Translate.toString(transform)
+  }
 
   const { addNodeToWorkflow } = useWorkflow()
 
@@ -26,7 +19,6 @@ export const CatalogNode = ({ id, label }: ICatalogNode): JSX.Element => {
     <li>
       <button
         ref={setNodeRef}
-        // style={dragStyle}
         style={style}
         {...attributes}
         title={label}
