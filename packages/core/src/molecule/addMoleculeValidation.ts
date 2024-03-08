@@ -4,7 +4,7 @@ import { dataURL2content } from '../dataurls'
 import { JSONSchema7WithMaxItemsFrom } from '../resolveMaxItemsFrom'
 import { IFiles, IParameters } from '../types'
 import { MoleculeInfo, parsePDB } from './parse'
-import { UiSchema, utils } from '@rjsf/core'
+import { UiSchema, getUiOptions } from '@rjsf/utils'
 
 // TODO can be quite expensive to parse big molecules, should try to use memoization
 export async function parseMolecules (
@@ -262,7 +262,7 @@ function walkUiSchemaForMoleculeFormats (
     if (schema.properties !== undefined && k in schema.properties) {
       const s = schema.properties[k] as JSONSchema7WithMaxItemsFrom
 
-      const uiOptions = utils.getUiOptions(v)
+      const uiOptions = getUiOptions(v)
       const isIndexable =
         uiOptions !== undefined &&
         'indexable' in uiOptions &&

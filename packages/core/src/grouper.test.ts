@@ -1,6 +1,6 @@
 import { expect, describe, it, beforeEach } from 'vitest'
 import { JSONSchema7 } from 'json-schema'
-import { UiSchema } from '@rjsf/core'
+import { UiSchema } from '@rjsf/utils'
 import { groupCatalog, groupParameters, groupSchema, groupUiSchema, unGroupParameters } from './grouper'
 import { ICatalog, IParameters } from './types'
 

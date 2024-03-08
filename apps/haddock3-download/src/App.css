@@ -6,15 +6,20 @@
     grid-template-areas: "head head head"
                          "catalog workflow node"
                          "catalog workflow-actions node-actions";
-    grid-template-columns: 1fr 1fr 2fr;
+    grid-template-columns: min-content 26rem 1fr;
     grid-template-rows: auto 1fr auto;
-    column-gap: 0.5rem;
+    column-gap: 1rem;
 }
 
-.page > div {
+/* .page > div {
     overflow: auto;
-}
+} */
 
 .action-row {
     padding: 0.25rem
+}
+
+
+.btn-toolbar > .btn {
+    margin: 0.25rem;
 }

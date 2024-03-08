@@ -1,7 +1,8 @@
 import React from 'react'
-import { ArrayFieldTemplateProps, utils } from '@rjsf/core'
+// import { ArrayFieldTemplateProps, utils } from '@rjsf/core'
 import { Button, Table, OverlayTrigger, Popover } from 'react-bootstrap'
 import { BsDash, BsPlus, BsQuestionCircle } from 'react-icons/bs/index.js'
+import { getUiOptions } from '@rjsf/utils'
 
 import './TableFieldTemplate.css'
 import { useIndexable } from '../useIndexable'
@@ -21,10 +22,10 @@ function isObject (value: unknown): value is object {
  * This table field template was copied from https://github.com/iomega/paired-data-form/blob/master/app/src/fields/TableFieldTemplate.tsx
  * and adjusted.
  */
-export const TableFieldTemplate = (props: ArrayFieldTemplateProps): JSX.Element => {
+export const TableFieldTemplate = (props: any): JSX.Element => {
   const required = new Set((props.schema as any).items.required)
   const rowSchema = (props.schema as any).items.properties
-  const uiOptions = utils.getUiOptions(props.uiSchema)
+  const uiOptions = getUiOptions(props.uiSchema)
   let widths: { [name: string]: string } = {}
   if (
     uiOptions !== undefined &&

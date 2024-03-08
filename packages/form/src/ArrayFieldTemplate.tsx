@@ -1,4 +1,4 @@
-import { AddButtonProps, ArrayFieldTemplateProps, IdSchema, utils } from '@rjsf/core'
+// import { AddButtonProps, ArrayFieldTemplateProps, IdSchema, utils } from '@rjsf/core'
 import React from 'react'
 import Button, { ButtonProps } from 'react-bootstrap/cjs/Button.js'
 import Col from 'react-bootstrap/cjs/Col.js'
@@ -9,6 +9,9 @@ import { BsPlus } from 'react-icons/bs/index.js'
 import { GrAdd } from 'react-icons/gr/index.js'
 import { IoIosRemove } from 'react-icons/io/index.js'
 import { useIndexable } from './useIndexable'
+import { isMultiSelect, IdSchema, ArrayFieldTemplateProps, ValidatorType, RJSFSchema } from '@rjsf/utils'
+import validator from "@rjsf/validator-ajv8";
+import { moleculeFormatValidators } from './molecule/formats'
 /**
  * Same are original ArrayFieldTemplate, but adds optional index to each row
  *
@@ -28,20 +31,21 @@ import { useIndexable } from './useIndexable'
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 
-const { isMultiSelect, getDefaultRegistry } = utils
+// const { isMultiSelect, getDefaultRegistry } = utils
 
 export const ArrayFieldTemplate = (props: ArrayFieldTemplateProps) => {
-  const { schema, registry = getDefaultRegistry() } = props
-
-  if (isMultiSelect(schema, registry.rootSchema)) {
+  const { schema, registry } = props
+  if (isMultiSelect(validator,schema,registry.rootSchema)) {
+    debugger
     return <DefaultFixedArrayFieldTemplate {...props} />
   } else {
+    debugger
     return <DefaultNormalArrayFieldTemplate {...props} />
   }
 }
 
 // Copied from packages/bootstrap-4/src/AddButton/AddButton.tsx in react-jsonschema-form repo
-const AddButton: React.FC<AddButtonProps> = (props) => (
+const AddButton: React.FC<any> = (props) => (
   <Button
     {...props}
     style={{ width: '100%' }}
@@ -91,7 +95,8 @@ const ArrayFieldTitle = ({
   title,
   required
 }: ArrayFieldTitleProps) => {
-  if (!title) {
+  debugger
+  if (!title || !TitleField) {
     return null
   }
 
@@ -201,7 +206,7 @@ const DefaultArrayItem = (props: any) => {
   )
 }
 
-const DefaultFixedArrayFieldTemplate = (props: ArrayFieldTemplateProps) => {
+const DefaultFixedArrayFieldTemplate = (props: any) => {
   // New code not found in https://github.com/rjsf-team/react-jsonschema-form
   const [indexable, indexLookup] = useIndexable(props.uiSchema)
 
@@ -243,7 +248,7 @@ const DefaultFixedArrayFieldTemplate = (props: ArrayFieldTemplateProps) => {
   )
 }
 
-const DefaultNormalArrayFieldTemplate = (props: ArrayFieldTemplateProps) => {
+const DefaultNormalArrayFieldTemplate = (props: any) => {
   // New code not found in https://github.com/rjsf-team/react-jsonschema-form
   const [indexable, indexLookup] = useIndexable(props.uiSchema)
 

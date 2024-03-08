@@ -35,11 +35,12 @@
     "apidocs": "typedoc --entryPointStrategy expand --exclude '**/*.tsx' --exclude '**/*.stories.*' ./src"
   },
   "dependencies": {
-    "@rjsf/bootstrap-4": "^4.2.2",
-    "@rjsf/core": "^4.2.2",
-    "ajv": "^8.9.0",
+    "@rjsf/bootstrap-4": "^5.17.0",
+    "@rjsf/core": "^5.17.0",
+    "@rjsf/utils": "^5.17.0",
+    "@rjsf/validator-ajv8": "^5.17.0",
     "json-schema": "^0.4.0",
-    "react-bootstrap": "^1",
+    "react-bootstrap": "^2",
     "react-icons": "^3.10.0"
   },
   "devDependencies": {

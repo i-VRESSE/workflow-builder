@@ -5,6 +5,7 @@ import { Form } from './Form'
 import { JSONSchema7 } from 'json-schema'
 import { IvresseCheckboxWidget } from './IvresseCheckboxWidget'
 import { IvresseDescriptionField } from './IvresseDescriptionField'
+import validator from '@rjsf/validator-ajv8'
 
 const meta: ComponentMeta<typeof IvresseCheckboxWidget> = {
   title: 'Checkbox',
@@ -23,6 +24,7 @@ function render (schema: JSONSchema7, formData = {}): JSX.Element {
       widgets={customWidgets}
       fields={customFields}
       formData={formData}
+      validator={validator}
     />
   )
 }

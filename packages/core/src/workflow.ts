@@ -2,7 +2,7 @@ import { readArchive } from './archive'
 import { parseWorkflow } from './toml'
 import { ICatalog, IFiles, IParameters, IWorkflow, IWorkflowNode } from './types'
 import { walk } from './utils/searchreplace'
-import { validateWorkflow, ValidationError } from './validate'
+// import { validateWorkflow, ValidationError } from './validate'
 
 export interface ILoadedworkflow extends IWorkflow {
   files: IFiles
@@ -11,11 +11,11 @@ export interface ILoadedworkflow extends IWorkflow {
 export async function loadWorkflowArchive (archiveURL: string, catalog: ICatalog): Promise<ILoadedworkflow> {
   const { tomlstring, files } = await readArchive(archiveURL)
   const workflow = parseWorkflow(tomlstring, catalog)
-  const errors = await validateWorkflow(workflow, catalog, files)
-  if (errors.length > 0) {
-    console.error(errors)
-    throw new ValidationError('Invalid workflow loaded', errors)
-  }
+  // const errors = await validateWorkflow(workflow, catalog, files)
+  // if (errors.length > 0) {
+  //   console.error(errors)
+  //   throw new ValidationError('Invalid workflow loaded', errors)
+  // }
   return {
     ...workflow,
     files

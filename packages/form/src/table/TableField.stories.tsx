@@ -1,4 +1,5 @@
-import { UiSchema } from '@rjsf/core'
+import { UiSchema } from '@rjsf/utils'
+import validator from "@rjsf/validator-ajv8"
 import { action } from '@storybook/addon-actions'
 import { ComponentMeta, ComponentStory } from '@storybook/react'
 import { JSONSchema7 } from 'json-schema'
@@ -26,6 +27,7 @@ function render (schema: JSONSchema7, uiSchema: UiSchema, formData = {}): JSX.El
       uiSchema={uiSchema}
       formData={formData}
       onSubmit={action('onSubmit')}
+      validator={validator}
     />
   )
 }

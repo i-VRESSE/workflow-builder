@@ -14,7 +14,7 @@ import {
   useSetRecoilState
 } from 'recoil'
 import { JSONSchema7 } from 'json-schema'
-import { UiSchema } from '@rjsf/core'
+import { UiSchema } from '@rjsf/utils'
 import { nanoid } from 'nanoid'
 
 import { externalizeDataUrls, internalizeDataUrls } from './dataurls'

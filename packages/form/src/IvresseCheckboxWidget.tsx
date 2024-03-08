@@ -1,12 +1,13 @@
 // Customized from: https://github.com/rjsf-team/react-jsonschema-form/blob/724fb0bc3f1ae5d1d9b761b2bff7cf5c64fd7459/packages/bootstrap-4/src/CheckboxWidget/CheckboxWidget.tsx#L3-L48
 
 import React from 'react'
-
-import { WidgetProps, utils } from '@rjsf/core'
+// import { WidgetProps } from '@rjsf/core'
+import { schemaRequiresTrueValue } from '@rjsf/utils'
 // was import Form from 'react-bootstrap/Form', but vitest in core package complained about `Error: Directory import ... not supported resolving ES modules imported ...`
-import Form from 'react-bootstrap/cjs/Form.js'
+// import Form from 'react-bootstrap/cjs/Form.js'
+import Form from 'react-bootstrap/Form'
 
-export const IvresseCheckboxWidget = (props: WidgetProps): JSX.Element => {
+export const IvresseCheckboxWidget = (props: any): JSX.Element => {
   const {
     id,
     value,
@@ -25,7 +26,7 @@ export const IvresseCheckboxWidget = (props: WidgetProps): JSX.Element => {
   // the "required" attribute if the field value must be "true", due to the
   // "const" or "enum" keywords
   // Code was copied from packages/core/src/components/widgets/CheckboxWidget.js
-  const required = utils.schemaRequiresTrueValue(schema)
+  const required = schemaRequiresTrueValue(schema)
 
   const _onChange = ({
     target: { checked }
@@ -38,10 +39,22 @@ export const IvresseCheckboxWidget = (props: WidgetProps): JSX.Element => {
   }: React.FocusEvent<HTMLInputElement>): void => onFocus(id, checked)
 
   const desc = label !== '' ? label : schema.description
-  let descfield = <></>
+  let descfield = <span>No description</span>
   if (schema.description !== undefined || schema.description !== '') {
-    descfield = <DescriptionField description={schema.description} />
+    if (DescriptionField) {
+      descfield = <DescriptionField>{schema.description}</DescriptionField>
+    } else {
+      descfield = <span style={{fontSize:"0.75rem", color:"#666"}}>{schema.description}</span>
+    }
   }
+
+  console.group("IvresseCheckboxWidget")
+  console.log("required...", required)
+  console.log("descfield...", descfield)
+  console.log("DescriptionField...", DescriptionField)
+  console.log("Form...", Form)
+  console.groupEnd()
+
   return (
     <Form.Group className={`checkbox ${disabled || readonly ? 'disabled' : ''}`}>
       <Form.Check
@@ -57,7 +70,6 @@ export const IvresseCheckboxWidget = (props: WidgetProps): JSX.Element => {
         onFocus={_onFocus}
       />
       {descfield}
-
     </Form.Group>
   )
 }

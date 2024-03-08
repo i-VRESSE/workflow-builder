@@ -1,7 +1,7 @@
-import { UiSchema, utils } from '@rjsf/core'
+import { UiSchema,getUiOptions } from '@rjsf/utils'
 
 export const useIndexable = (uiSchema: UiSchema): [boolean, (n: number) => string] => {
-  const uiOptions = utils.getUiOptions(uiSchema)
+  const uiOptions = getUiOptions(uiSchema)
   const indexable = (
     uiOptions !== undefined &&
     'indexable' in uiOptions &&

@@ -1,5 +1,5 @@
 import React from 'react'
-import { ValidationError } from './validate'
+// import { ValidationError } from './validate'
 
 interface State {
   error: Error | null
@@ -16,9 +16,9 @@ export class ErrorBoundary extends React.Component<{}, State> {
 
   render (): React.ReactNode {
     if (this.state.error !== null) {
-      if (this.state.error instanceof ValidationError) {
-        console.error(this.state.error.errors)
-      }
+      // if (this.state.error instanceof ValidationError) {
+      //   console.error(this.state.error.errors)
+      // }
       return (
         <div>
           <h1>Something went terribly wrong.</h1>

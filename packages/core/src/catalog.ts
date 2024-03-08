@@ -1,7 +1,7 @@
 import { load } from 'js-yaml'
 import { groupCatalog } from './grouper'
 import { ICatalog, ICatalogIndex, IGlobal } from './types'
-import { validateCatalog, ValidationError } from './validate'
+// import { validateCatalog, ValidationError } from './validate'
 
 /**
  * URL where catalog index can be found. Defaults to `/catalog/index.json` relative to the `import.meta.url`.
@@ -33,10 +33,10 @@ export function prepareCatalog (unGroupedCatalog: unknown): ICatalog {
     throw new Error('Retrieved catalog is malformed')
   }
   const catalog = groupCatalog(unGroupedCatalog)
-  const errors = validateCatalog(catalog)
-  if (errors.length > 0) {
-    throw new ValidationError('Invalid catalog loaded', errors)
-  }
+  // const errors = validateCatalog(catalog)
+  // if (errors.length > 0) {
+  //   throw new ValidationError('Invalid catalog loaded', errors)
+  // }
   return catalog
 }
 
