@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## @i-vresse/wb-form 1.1.3 - 2024-03-08
+
+### Changed
+
+* Start item number from 1 instead of 0
+
 ## @i-vresse/wb-core 1.2.3 - 2024-02-02
 
 ### Changed
