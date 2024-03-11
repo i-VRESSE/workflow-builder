@@ -7,13 +7,12 @@ import { ICatalogNode } from './types'
 import { GripVertical } from './GripVertical'
 
 export const CatalogNode = ({ id, label }: ICatalogNode): JSX.Element => {
+  const { addNodeToWorkflow } = useWorkflow()
   const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform } = useDraggable({ id, data: { catalog: true } })
 
   const style = {
     transform: CSS.Translate.toString(transform)
   }
-
-  const { addNodeToWorkflow } = useWorkflow()
 
   return (
     <li>

@@ -23,7 +23,7 @@ export const VisualPanel = (): JSX.Element => {
   )
 
   const appendZoneStyle: CSSProperties = {
-    padding: 10,
+    padding: '1rem',
     textAlign: 'center'
   }
   const appendZone = (
@@ -56,7 +56,13 @@ export const VisualPanel = (): JSX.Element => {
   }
   const { setNodeRef } = useDroppable({ id: 'catalog-dropzone' })
   return (
-    <div ref={setNodeRef} style={{ height: '100%' }}>
+    <div
+      ref={setNodeRef} style={{
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column'
+      }}
+    >
       <SortableContext
         items={sortableItems}
         strategy={verticalListSortingStrategy}
@@ -65,44 +71,36 @@ export const VisualPanel = (): JSX.Element => {
       </SortableContext>
       <DragOverlay dropAnimation={null}>
         {draggingCatalogNode !== null
-          ? (
-            <button
+          ? <button
               title={`${draggingCatalogNode}`}
               className='btn btn-light btn-sm btn-visual-panel'
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span>{draggingCatalogNode}</span>
-                <div
-                  className='btn btn-light btn-sm'
-                  title='Move'
-                  style={{ cursor: 'grab' }}
-                >
-                  <GripVertical />
-                </div>
-              </div>
+            <span>{draggingCatalogNode}</span>
+            <div
+              className='btn btn-light btn-sm'
+              title='Move'
+              style={{ cursor: 'grab' }}
+            >
+              <GripVertical />
+            </div>
             </button>
-            )
           : null}
       </DragOverlay>
       <DragOverlay modifiers={[restrictToVerticalAxis]}>
         {draggingWorkflowNode !== undefined
-          ? (
-            <button
+          ? <button
               className='btn btn-light btn-sm btn-visual-panel'
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span>{draggingWorkflowNode.type}</span>
-                <div className='btn-group'>
-                  <div className='btn btn-light btn-sm'>
-                    <BsX />
-                  </div>
-                  <div className='btn btn-light btn-sm'>
-                    <GripVertical />
-                  </div>
-                </div>
+            <span>{draggingWorkflowNode.type}</span>
+            <div className='btn-group'>
+              <div className='btn btn-light btn-sm'>
+                <GripVertical />
               </div>
+              <div className='btn btn-light btn-sm'>
+                <BsX />
+              </div>
+            </div>
             </button>
-            )
           : null}
       </DragOverlay>
     </div>

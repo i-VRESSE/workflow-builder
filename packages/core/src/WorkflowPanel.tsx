@@ -19,23 +19,26 @@ export const WorkflowPanel = ({ children }: PropsWithChildren<{}>): JSX.Element 
   const textTabStyle = tab === 'text' ? 'nav-link active' : 'nav-link'
 
   return (
-    <fieldset>
+    <fieldset style={{
+      flex: 1,
+      display: 'flex',
+      flexDirection: 'column'
+    }}
+    >
       <legend>Workflow</legend>
-      <div style={{ display: 'flex', flexFlow: 'column', height: '100%', gap: '5px', paddingBottom: '5px' }}>
-        <div className='btn-toolbar'>
-          <button className='btn btn-light' onClick={toggleGlobalEdit} title='Edit global parameters'>Global parameters</button>
-          {children}
-        </div>
-        <ul className='nav nav-tabs'>
-          <li className='nav-item'>
-            <button className={visualTabStyle} onClick={() => setTab('visual')}>Visual</button>
-          </li>
-          <li className='nav-item'>
-            <button className={textTabStyle} onClick={() => setTab('text')}>Text</button>
-          </li>
-        </ul>
-        {selectedPanel}
+      <div className='btn-toolbar'>
+        <button className='btn btn-light' onClick={toggleGlobalEdit} title='Edit global parameters'>Global parameters</button>
+        {children}
       </div>
+      <ul className='nav nav-tabs'>
+        <li className='nav-item'>
+          <button className={visualTabStyle} onClick={() => setTab('visual')}>Visual</button>
+        </li>
+        <li className='nav-item'>
+          <button className={textTabStyle} onClick={() => setTab('text')}>Text</button>
+        </li>
+      </ul>
+      {selectedPanel}
     </fieldset>
   )
 }

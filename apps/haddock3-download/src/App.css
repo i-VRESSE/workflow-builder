@@ -23,6 +23,7 @@
   gap: 1rem;
 }
 
+.btn-visual-panel,
 .btn-catalog-node {
   width: 100%;
 }
@@ -48,7 +49,8 @@ li > ul{
   padding: 0rem;
 }
 
-div[role="button"]{
+div[role="button"],
+.btn-catalog-node{
   margin: 0.5rem 0rem;
   cursor: pointer;
 }
@@ -73,7 +75,6 @@ div[role="button"]{
   padding: 1rem 0rem;
 }
 
-
 /* Show panel section is clickable */
 h5[id^="expander4"]{
   cursor: pointer;
@@ -81,4 +82,21 @@ h5[id^="expander4"]{
 /* Allow scrollbars in the card when content is too large */
 .card-body{
   overflow: auto;
+}
+
+/* Alow scrollbars on tables which exceed card width */
+.form-group > fieldset {
+  overflow: auto;
+}
+
+/* hide commands by default */
+.btn-catalog-node .grip,
+.btn-visual-node .btn-group{
+  visibility: hidden;
+}
+
+/* show commands on hover */
+.btn-catalog-node:hover .grip,
+.btn-visual-node:hover .btn-group {
+  visibility: visible;
 }

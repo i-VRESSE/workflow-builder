@@ -27,7 +27,12 @@ function App (): JSX.Element {
             <CatalogPicker />
           </CatalogPanel>
         </GridArea>
-        <GridArea area='workflow'>
+        <GridArea
+          area='workflow' style={{
+            display: 'flex',
+            flexDirection: 'column'
+          }}
+        >
           <WorkflowPanel>
             <WorkflowUploadButton />
           </WorkflowPanel>
