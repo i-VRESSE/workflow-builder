@@ -26,7 +26,7 @@ function App (): JSX.Element {
             <CatalogPicker />
           </CatalogPanel>
         </GridArea>
-        <GridArea area='workflow'>
+        <GridArea area='workflow' className='workflow-area'>
           <WorkflowPanel />
         </GridArea>
         <GridArea area='node'>
