@@ -71,36 +71,40 @@ export const VisualPanel = (): JSX.Element => {
       </SortableContext>
       <DragOverlay dropAnimation={null}>
         {draggingCatalogNode !== null
-          ? <button
+          ? (
+            <button
               title={`${draggingCatalogNode}`}
               className='btn btn-light btn-sm btn-visual-panel'
             >
-            <span>{draggingCatalogNode}</span>
-            <div
-              className='btn btn-light btn-sm'
-              title='Move'
-              style={{ cursor: 'grab' }}
-            >
-              <GripVertical />
-            </div>
+              <span>{draggingCatalogNode}</span>
+              <div
+                className='btn btn-light btn-sm'
+                title='Move'
+                style={{ cursor: 'grab' }}
+              >
+                <GripVertical />
+              </div>
             </button>
+            )
           : null}
       </DragOverlay>
       <DragOverlay modifiers={[restrictToVerticalAxis]}>
         {draggingWorkflowNode !== undefined
-          ? <button
+          ? (
+            <button
               className='btn btn-light btn-sm btn-visual-panel'
             >
-            <span>{draggingWorkflowNode.type}</span>
-            <div className='btn-group'>
-              <div className='btn btn-light btn-sm'>
-                <GripVertical />
+              <span>{draggingWorkflowNode.type}</span>
+              <div className='btn-group'>
+                <div className='btn btn-light btn-sm'>
+                  <GripVertical />
+                </div>
+                <div className='btn btn-light btn-sm'>
+                  <BsX />
+                </div>
               </div>
-              <div className='btn btn-light btn-sm'>
-                <BsX />
-              </div>
-            </div>
             </button>
+            )
           : null}
       </DragOverlay>
     </div>
