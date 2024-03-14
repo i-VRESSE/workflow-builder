@@ -32,7 +32,7 @@ function App (): JSX.Element {
       <GridArea area='catalog'>
         <CatalogPanel />
       </GridArea>
-      <GridArea area='workflow'>
+      <GridArea area='workflow' className='workflow-area'>
         <WorkflowPanel>
           <WorkflowUploadButton />
         </WorkflowPanel>

@@ -6,7 +6,6 @@ import {
 } from '@dnd-kit/sortable'
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 import { BsX } from 'react-icons/bs'
-import { nodeWidth } from './constants'
 import {
   useDraggingCatalogNodeState,
   useDraggingWorkflowNodeState,
@@ -24,7 +23,7 @@ export const VisualPanel = (): JSX.Element => {
   )
 
   const appendZoneStyle: CSSProperties = {
-    padding: 10,
+    padding: '1rem',
     textAlign: 'center'
   }
   const appendZone = (
@@ -57,7 +56,13 @@ export const VisualPanel = (): JSX.Element => {
   }
   const { setNodeRef } = useDroppable({ id: 'catalog-dropzone' })
   return (
-    <div ref={setNodeRef} style={{ height: '100%' }}>
+    <div
+      ref={setNodeRef} style={{
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column'
+      }}
+    >
       <SortableContext
         items={sortableItems}
         strategy={verticalListSortingStrategy}
@@ -68,19 +73,16 @@ export const VisualPanel = (): JSX.Element => {
         {draggingCatalogNode !== null
           ? (
             <button
-              style={{ width: `${nodeWidth}rem` }}
               title={`${draggingCatalogNode}`}
-              className='btn btn-light btn-sm'
+              className='btn btn-light btn-sm btn-visual-panel'
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span>{draggingCatalogNode}</span>
-                <div
-                  className='btn btn-light btn-sm'
-                  title='Move'
-                  style={{ cursor: 'grab' }}
-                >
-                  <GripVertical />
-                </div>
+              <span>{draggingCatalogNode}</span>
+              <div
+                className='btn btn-light btn-sm'
+                title='Move'
+                style={{ cursor: 'grab' }}
+              >
+                <GripVertical />
               </div>
             </button>
             )
@@ -90,18 +92,15 @@ export const VisualPanel = (): JSX.Element => {
         {draggingWorkflowNode !== undefined
           ? (
             <button
-              style={{ width: `${nodeWidth + 2}rem` }}
-              className='btn btn-light btn-sm'
+              className='btn btn-light btn-sm btn-visual-panel'
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span>{draggingWorkflowNode.type}</span>
-                <div className='btn-group'>
-                  <div className='btn btn-light btn-sm'>
-                    <GripVertical />
-                  </div>
-                  <div className='btn btn-light btn-sm'>
-                    <BsX />
-                  </div>
+              <span>{draggingWorkflowNode.type}</span>
+              <div className='btn-group'>
+                <div className='btn btn-light btn-sm'>
+                  <GripVertical />
+                </div>
+                <div className='btn btn-light btn-sm'>
+                  <BsX />
                 </div>
               </div>
             </button>

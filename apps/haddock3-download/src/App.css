@@ -1,20 +1,120 @@
+/*
+  Customise workflow builder components
+*/
+
 .page {
-    padding: 1em;
-    display: grid;
-    width: 100%;
-    height: 100vh;
-    grid-template-areas: "head head head"
-                         "catalog workflow node"
-                         "catalog workflow-actions node-actions";
-    grid-template-columns: 1fr 1fr 2fr;
-    grid-template-rows: auto 1fr auto;
-    column-gap: 0.5rem;
+  padding: 1em;
+  display: grid;
+  width: 100%;
+  height: 100vh;
+  grid-template-areas: "head head head"
+                        "catalog workflow node"
+                        "catalog workflow-actions node-actions";
+  grid-template-columns: min-content minmax(12rem,1fr) minmax(20rem,2fr);
+  grid-template-rows: auto 1fr auto;
+  column-gap: 1rem;
 }
 
-.page > div {
-    overflow: auto;
+/* Style workflow area section */
+.workflow-area {
+  display: flex;
+  flex-direction: column;
 }
 
-.action-row {
-    padding: 0.25rem
+/* Style various form buttons */
+.btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.btn-visual-panel,
+.btn-catalog-node {
+  width: 100%;
+}
+
+.btn-group {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* remove gap from dropdown group */
+.dropdown.btn-group {
+  gap: 0rem;
+}
+
+/* center + icon in the button */
+.array-item-add{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.no-wrap{
+  text-wrap: nowrap;
+}
+
+ul{
+  padding: 0.25rem 0.25rem 0.25rem 1.25rem;
+}
+
+li{
+  list-style-type: none;
+}
+
+li > ul{
+  padding: 0rem;
+}
+
+div[role="button"],
+.btn-catalog-node{
+  margin: 0.5rem 0rem;
+  cursor: pointer;
+}
+
+/* Format actions section at the bottom */
+.action-row,
+.action-row>.nav {
+  display: flex;
+  gap: 1rem;
+  padding: 0.25rem;
+}
+
+.action-row>.nav {
+  flex: 1;
+  justify-content: flex-end;
+}
+
+
+.btn-toolbar{
+  display: flex;
+  gap: 1rem;
+  padding: 1rem 0rem;
+}
+
+/* Show panel section is clickable */
+h5[id^="expander4"]{
+  cursor: pointer;
+}
+/* Allow scrollbars in the card when content is too large */
+.card-body{
+  overflow: auto;
+}
+
+/* Alow scrollbars on tables which exceed card width */
+.form-group > fieldset {
+  overflow: auto;
+}
+
+/* hide commands by default */
+.btn-catalog-node .grip,
+.btn-visual-node .btn-group{
+  visibility: hidden;
+}
+
+/* show commands on hover */
+.btn-catalog-node:hover .grip,
+.btn-visual-node:hover .btn-group {
+  visibility: visible;
 }

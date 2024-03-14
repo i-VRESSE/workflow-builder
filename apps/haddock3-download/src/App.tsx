@@ -11,8 +11,8 @@ import {
   WorkflowUploadButton,
   Wrapper
 } from '@i-vresse/wb-core'
+
 import '@i-vresse/wb-form/dist/index.css'
-import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
 
 function App (): JSX.Element {
@@ -27,7 +27,7 @@ function App (): JSX.Element {
             <CatalogPicker />
           </CatalogPanel>
         </GridArea>
-        <GridArea area='workflow'>
+        <GridArea area='workflow' className='workflow-area'>
           <WorkflowPanel>
             <WorkflowUploadButton />
           </WorkflowPanel>

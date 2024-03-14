@@ -62,7 +62,7 @@ function App (): JSX.Element {
           <CatalogPicker catalogIndexURL={catalogIndexURL} />
         </CatalogPanel>
       </GridArea>
-      <GridArea area='workflow'>
+      <GridArea area='workflow' className='workflow-area'>
         <WorkflowPanel>
           <WorkflowUploadButton />
         </WorkflowPanel>

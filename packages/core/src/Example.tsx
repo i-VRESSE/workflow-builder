@@ -29,7 +29,7 @@ export const Example = ({ name, workflow }: IProps): JSX.Element => {
   return (
     <li>
       <button
-        className='btn btn-light'
+        className='btn btn-light no-wrap'
         onClick={onClick}
         title={workflow}
       >

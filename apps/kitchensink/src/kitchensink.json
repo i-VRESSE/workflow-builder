@@ -553,7 +553,7 @@
       "category": "resdictests"
     },
     {
-      "id": "node1",
+      "id": "node11",
       "label": "Node with prop1 has same size as global molecules parameter",
       "description": "Description 1",
       "category": "moleculetest",
@@ -582,7 +582,7 @@
       "tomlSchema": {}
     },
     {
-      "id": "node2",
+      "id": "node12",
       "label": "Node same as node1, but with ui:group",
       "description": "Description 1",
       "category": "moleculetest",
@@ -612,7 +612,7 @@
       "tomlSchema": {}
     },
     {
-      "id": "node3",
+      "id": "node13",
       "label": "Node with segments (with chain and residue formats) for each molecule",
       "description": "Description 1",
       "category": "moleculetest",
@@ -672,7 +672,7 @@
       }
     },
     {
-      "id": "node1",
+      "id": "node111",
       "label": "Node with prop1 has same size as global molecules parameter",
       "description": "Description 1",
       "category": "moleculetest",
@@ -701,7 +701,7 @@
       "tomlSchema": {}
     },
     {
-      "id": "node2",
+      "id": "node112",
       "label": "Node same as node1, but with ui:group",
       "description": "Description 1",
       "category": "moleculetest",
@@ -731,7 +731,7 @@
       "tomlSchema": {}
     },
     {
-      "id": "node3",
+      "id": "node113",
       "label": "Node with segments (with chain and residue formats) for each molecule",
       "description": "Description 1",
       "category": "moleculetest",
@@ -791,7 +791,7 @@
       }
     },
     {
-      "id": "node4",
+      "id": "node114",
       "label": "Node with array of object with property which array of scalar. Scalar is a residue and rendered as multi select.",
       "description": "Description 1",
       "category": "moleculetest",
@@ -893,7 +893,7 @@
       }
     },
     {
-        "id": "node12",
+        "id": "node1112",
         "label": "Node in initially collapsed cat",
         "description": "Description 12",
         "category": "collapsedcat",
