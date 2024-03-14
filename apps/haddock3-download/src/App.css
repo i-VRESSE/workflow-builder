@@ -39,6 +39,18 @@
   gap: 0.5rem;
 }
 
+/* remove gap from dropdown group */
+.dropdown.btn-group {
+  gap: 0rem;
+}
+
+/* center + icon in the button */
+.array-item-add{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .no-wrap{
   text-wrap: nowrap;
 }
