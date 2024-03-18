@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## @i-vresse/wb-core 2.0.0 - 2024-03-18
+
+### Removed
+
+* Removed CSS-in-JS styles from the core library.
+
+### Changed
+
+* The styles in the examples to compensate for the removed styles in the core (see App.css).
+
 ## @i-vresse/wb-form 1.1.3 - 2024-03-08
 
 ### Changed
