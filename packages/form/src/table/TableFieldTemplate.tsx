@@ -33,13 +33,14 @@ export const TableFieldTemplate = (props: ArrayFieldTemplateProps): JSX.Element 
   ) {
     widths = uiOptions.widths as { [name: string]: string }
   }
-  let indexColumnHeader = <></>
+  let indexColumnHeader
   let indexColumnCell = (_index: number): JSX.Element => <></>
   const [indexable, indexLookup] = useIndexable(props.uiSchema)
   if (indexable) {
-    indexColumnHeader = <th key='index-th' className='index-th' />
+    indexColumnHeader = <th key={`${props.title}-index-th`} className='index-th' />
     indexColumnCell = (index: number) => <td style={{ verticalAlign: 'middle' }}>{indexLookup(index)}</td>
   }
+
   const headers = Object.entries(rowSchema).map(
     ([key, s]: [string, any], i: number) => {
       const title = required.has(key)
@@ -60,7 +61,7 @@ export const TableFieldTemplate = (props: ArrayFieldTemplateProps): JSX.Element 
         const propDescs = Object.entries(s.properties)
           .filter((d: any) => d[1].description)
           .map(([skey, sschema]: any) => (
-            <li key={skey}>
+            <li key={`${props.title}-${skey as string}`}>
               <label className='control-label'>
                 {sschema.title}
                 {srequired.has(skey) && <span className='required'>*</span>}
@@ -83,7 +84,7 @@ export const TableFieldTemplate = (props: ArrayFieldTemplateProps): JSX.Element 
       const width = widths[key]
       return (
         <th
-          key={key}
+          key={`${props.title}-${key}`}
           title={s.description}
           style={{ width }}
         >
@@ -107,9 +108,11 @@ export const TableFieldTemplate = (props: ArrayFieldTemplateProps): JSX.Element 
       )
     }
   )
-  headers.unshift(indexColumnHeader)
-  headers.push(
-    <th key='actions-th' className='actions-th'>
+  // add indexing column header only if needed
+  if (typeof indexColumnHeader !== 'undefined') headers.unshift(indexColumnHeader)
+  // add button as first column
+  headers.unshift(
+    <th key={`${props.title}-actions-th`} className='actions-th'>
       <Button
         className='array-item-add'
         title='Add'
@@ -124,10 +127,10 @@ export const TableFieldTemplate = (props: ArrayFieldTemplateProps): JSX.Element 
   let rows: JSX.Element[] = []
   if ('items' in props) {
     rows = props.items.map((element: any, index) => {
+      const unique: string = `${props.title}-${element?.key as string}-${index.toString()}`
       return (
-        <tr key={element.key} className={element.className}>
-          {indexColumnCell(index)}
-          {element.children}
+        // remove button as first column
+        <tr key={unique} className={element.className}>
           <td className='table-actions'>
             <Button
               type='danger'
@@ -140,6 +143,8 @@ export const TableFieldTemplate = (props: ArrayFieldTemplateProps): JSX.Element 
               <BsDash />
             </Button>
           </td>
+          {indexColumnCell(index)}
+          {element.children}
         </tr>
       )
     })

@@ -17,3 +17,11 @@
 {
     display: none;
 }
+
+.table .table-actions{
+    vertical-align: middle;
+}
+
+th > label{
+    font-size: 0.875rem;
+}
