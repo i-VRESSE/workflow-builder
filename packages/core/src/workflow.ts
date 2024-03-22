@@ -13,7 +13,6 @@ export async function loadWorkflowArchive (archiveURL: string, catalog: ICatalog
   const workflow = parseWorkflow(tomlstring, catalog)
   const errors = await validateWorkflow(workflow, catalog, files)
   if (errors.length > 0) {
-    console.error(errors)
     throw new ValidationError('Invalid workflow loaded', errors)
   }
   return {

@@ -1,27 +1,13 @@
 import React, { useRef } from 'react'
-import { toast } from 'react-toastify'
+import { UpdateOptions, toast } from 'react-toastify'
 import { useWorkflow } from './store'
-import { ValidationError } from './validate'
-
-function flattenValidationErrors (error: ValidationError): Array<string> {
-  return error.errors.filter(e => e.workflowPath !== undefined && e.message !=== undefined).map((e) => {
-    let message = e.message
-    message = `Error in ${e.workflowPath}${e.instancePath}: ${message}`
-    if (e.params.additionalProperty) {
-      message += `: ${e.params.additionalProperty}`
-    }
-    if (e.params.allowedValues) {
-      message += `: ${e.params.allowedValues.join(', ')}`
-    }
-    return message
-  })
-}
+import { ValidationError, flattenValidationErrors } from './validate'
 
 function ErrorsList ({ error }: { error: ValidationError }): JSX.Element {
   return (
     <>
       <div>Workflow archive failed to load.</div>
-      <ul>
+      <ul style={{ maxHeight: '20rem', overflow: 'auto' }}>
         {flattenValidationErrors(error).map((message, index) => (
           <li key={index}>{message}</li>
         ))}
@@ -45,18 +31,32 @@ export const WorkflowUploadButton = (): JSX.Element => {
     const toastId = toast.loading('Loading workfow ...')
     try {
       await loadWorkflowArchive(url)
-      toast.update(toastId, { type: 'success', render: 'Workflow loaded' })
+      toast.update(toastId, {
+        type: 'success',
+        render: 'Workflow loaded',
+        autoClose: 1000,
+        isLoading: false,
+        progress: 1
+      })
+      toast.dismiss(toastId)
     } catch (error) {
+      const opts: Partial<UpdateOptions> = {
+        type: 'error',
+        autoClose: false,
+        closeOnClick: true,
+        closeButton: true,
+        isLoading: false,
+        progress: 1
+      }
       if (error instanceof ValidationError) {
         toast.update(toastId, {
-          type: 'error',
-          render: <ErrorsList error={error} />,
-          autoClose: false
+          ...opts,
+          render: <ErrorsList error={error} />
         })
       } else {
         console.error(error)
         toast.update(toastId, {
-          type: 'error',
+          ...opts,
           render:
             'Workflow archive failed to load. See DevTools (F12) console for errors.'
         })
