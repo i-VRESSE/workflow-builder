@@ -179,3 +179,21 @@ export function validateCatalog (catalog: ICatalog): Errors {
   // TODO validate non schema fields
   return [...globalErrors, ...nodesErrors.flat(1)]
 }
+
+export function flattenValidationErrors (error: ValidationError): string[] {
+  return error.errors.map((e) => {
+    if (e.workflowPath === undefined || e.message === undefined) {
+      return ''
+    }
+    let message = e.message
+    message = `Error in ${e.workflowPath}${e.instancePath}: ${message}`
+    if (typeof e.params.additionalProperty === 'string') {
+      message += `: ${e.params.additionalProperty}`
+    }
+    if (Array.isArray(e.params.allowedValues)) {
+      const values = e.params.allowedValues.map(d => String(d))
+      message += `: ${values.join(', ')}`
+    }
+    return message
+  }).filter(m => m !== '')
+}

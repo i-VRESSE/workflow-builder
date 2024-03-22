@@ -6,11 +6,11 @@ interface Data extends IWorkflow {
   files: IFiles
 }
 
-interface Subission {
+interface Submission {
   progressUrl: string
 }
 
-async function submit2api (url: string, data: Data): Promise<Subission> {
+async function submit2api (url: string, data: Data): Promise<Submission> {
   const resp = await fetch(
     url,
     {
@@ -38,7 +38,7 @@ export const useSubmit: (url?: string) => () => Promise<void> = (url = '/api/run
       {
         pending: 'Submitting workfow ...',
         success: {
-          render ({ data }: { data: Subission}) {
+          render ({ data }: { data: Submission}) {
             // TODO instead of presenting link could redirect to progress page
             return (
               <div>
