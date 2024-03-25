@@ -14,6 +14,16 @@ export const NodePanel = ({ fields, widgets }: FormProps): JSX.Element => {
   const { editingGlobal } = useWorkflow()
   let form = <div>No node or global parameters selected for configuration.</div>
   let legend = 'Node'
+
+  function onSectionBlur (): void {
+    console.group('NodePanel.onSectionBlur')
+    console.log('form...', form)
+    console.groupEnd()
+    // if (localErrors?.length === 0 && toSave) {
+    //   setFormData(localData)
+    // }
+  }
+
   if (editingGlobal) {
     form = (
       <GlobalForm
@@ -32,7 +42,7 @@ export const NodePanel = ({ fields, widgets }: FormProps): JSX.Element => {
     )
   }
   return (
-    <fieldset>
+    <fieldset onBlur={onSectionBlur}>
       <legend>{legend}</legend>
       {form}
     </fieldset>

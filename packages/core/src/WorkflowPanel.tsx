@@ -1,7 +1,6 @@
 import React, { PropsWithChildren, useState } from 'react'
 import { TextPanel } from './TextPanel'
 import { VisualPanel } from './VisualPanel'
-import { useWorkflow } from './store'
 
 type ITab = 'text' | 'visual'
 
@@ -12,7 +11,6 @@ type ITab = 'text' | 'visual'
  */
 export const WorkflowPanel = ({ children }: PropsWithChildren<{}>): JSX.Element => {
   const [tab, setTab] = useState<ITab>('visual')
-  const { toggleGlobalEdit } = useWorkflow()
 
   const selectedPanel = tab === 'visual' ? <VisualPanel /> : <TextPanel />
   const visualTabStyle = tab === 'visual' ? 'nav-link active' : 'nav-link'
@@ -27,7 +25,6 @@ export const WorkflowPanel = ({ children }: PropsWithChildren<{}>): JSX.Element 
     >
       <legend>Workflow</legend>
       <div className='btn-toolbar'>
-        <button className='btn btn-light' onClick={toggleGlobalEdit} title='Edit global parameters'>Global parameters</button>
         {children}
       </div>
       <ul className='nav nav-tabs'>

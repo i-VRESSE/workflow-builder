@@ -15,7 +15,7 @@ import { VisualNode } from './VisualNode'
 import { GripVertical } from './GripVertical'
 
 export const VisualPanel = (): JSX.Element => {
-  const { nodes } = useWorkflow()
+  const { nodes, toggleGlobalEdit } = useWorkflow()
   const draggingCatalogNode = useDraggingCatalogNodeState()[0]
   const draggingWorkflowNodeCode = useDraggingWorkflowNodeState()[0]
   const draggingWorkflowNode = nodes.find(
@@ -57,12 +57,21 @@ export const VisualPanel = (): JSX.Element => {
   const { setNodeRef } = useDroppable({ id: 'catalog-dropzone' })
   return (
     <div
-      ref={setNodeRef} style={{
+      ref={setNodeRef}
+      style={{
         flex: 1,
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        padding: '0.5rem 0rem'
       }}
     >
+      <button
+        className='btn btn-light btn-sm btn-block btn-visual-node'
+        onClick={toggleGlobalEdit}
+        title='Edit global parameters'
+      >
+        0. Global parameters
+      </button>
       <SortableContext
         items={sortableItems}
         strategy={verticalListSortingStrategy}

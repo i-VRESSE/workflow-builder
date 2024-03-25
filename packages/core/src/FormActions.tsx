@@ -33,13 +33,13 @@ import { useSelectNodeIndex, useActiveSubmitButton, useWorkflow } from './store'
  * toggleGlobalEdit()
  * ```
  */
-export const FormActions = (): JSX.Element => {
+export const FormActions = (): JSX.Element|null => {
   const index = useSelectNodeIndex()
   const { deleteNode, clearNodeSelection } = useWorkflow()
   const submitFormRef = useActiveSubmitButton()
   const { editingGlobal, toggleGlobalEdit } = useWorkflow()
   if (submitFormRef === undefined || !(index > -1 || editingGlobal)) {
-    return <></>
+    return null
   }
   const DeleteButton = (
     <button
