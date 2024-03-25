@@ -6,9 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## @i-vresse/wb-core 2.0.1 - 2024-03-25
+
 ### Changed
 
 * Upload errors are rendered on screen instead of console ([#143](https://github.com/i-VRESSE/workflow-builder/pull/143))
+
+## @i-vresse/wb-core 1.1.4 - 2024-03-25
+
+### Changed
+
 * In table moved buttons from last to first column ([#141](https://github.com/i-VRESSE/workflow-builder/issues/141))
 
 ## @i-vresse/wb-core 2.0.0 - 2024-03-18
