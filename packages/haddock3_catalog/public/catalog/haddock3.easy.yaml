@@ -165,6 +165,16 @@ global:
           definition. See also the 'haddock3-clean' and 'haddock3-unpack' command-line
           clients.
         type: boolean
+      offline:
+        default: false
+        title: Isolate haddock3 from internet.
+        description: Completely isolate the haddock3 run & results from internet.
+        $comment: For interactive plots, we are using the plotly library. It can be
+          embedded as a link to the plotly.js library and fetched from the web, or
+          directly copied on the html files AT THE COST OF ~3Mb per file. Setting
+          this parameter to `true` will add the javascript library in generated files,
+          therefore completely isolating haddock3 from any web call.
+        type: boolean
     required:
     - run_dir
     additionalProperties: false
@@ -192,6 +202,8 @@ global:
       ui:group: execution
     clean:
       ui:group: clean
+    offline:
+      ui:group: execution
   tomlSchema: {}
 nodes:
 - id: alascan
@@ -533,6 +545,12 @@ nodes:
         type: number
         maximum: 1.0
         minimum: 0.0
+      plot_matrix:
+        default: false
+        title: Plot matrix of members
+        description: Plot matrix of members. By default is false.
+        $comment: Plot matrix of members. By default is false.
+        type: boolean
     required: []
     additionalProperties: false
   uiSchema:
@@ -543,6 +561,8 @@ nodes:
     min_population:
       ui:group: analysis
     strictness:
+      ui:group: analysis
+    plot_matrix:
       ui:group: analysis
   tomlSchema: {}
 - id: clustrmsd
@@ -571,6 +591,12 @@ nodes:
         type: number
         maximum: 9999
         minimum: 1
+      plot_matrix:
+        default: false
+        title: Plot matrix of members
+        description: Plot matrix of members. By default is false.
+        $comment: Plot matrix of members. By default is false.
+        type: boolean
       n_clusters:
         default: 4
         title: Number of clusters
@@ -586,6 +612,8 @@ nodes:
     min_population:
       ui:group: analysis
     clust_cutoff:
+      ui:group: analysis
+    plot_matrix:
       ui:group: analysis
     n_clusters:
       ui:group: analysis
@@ -1077,12 +1105,35 @@ nodes:
         items:
           type: string
           format: chain
+      atom_similarity:
+        default: 90.0
+        title: Required atom similarity
+        description: Required similarity (in %) between the number of atoms in the
+          input models.
+        $comment: Required similarity (in %) between the number of atoms in the input
+          models. If the similarity is higher than this value, the RMSD calculation
+          is performed on the common atoms. Otherwise, the calculation is stopped.
+          The lower the value the looser the checks.
+        type: number
+        maximum: 100.0
+        minimum: 10.0
+      allatoms:
+        default: false
+        title: Atoms to be considered during the analysis.
+        description: Atoms to be considered during the analysis.
+        $comment: Atoms to be considered during the analysis. If false (default),
+          only backbone atoms will be considered, otherwise all the heavy-atoms.
+        type: boolean
     required: []
     additionalProperties: false
   uiSchema:
     receptor_chain:
       ui:group: analysis
     ligand_chains:
+      ui:group: analysis
+    atom_similarity:
+      ui:group: analysis
+    allatoms:
       ui:group: analysis
   tomlSchema: {}
 - id: lightdock
@@ -1508,9 +1559,36 @@ nodes:
           pattern: ^[A-Z]$
           format: chain
         maxPropertiesFrom: molecules
+      atom_similarity:
+        default: 90.0
+        title: Required atom similarity
+        description: Required similarity (in %) between the number of atoms in the
+          input models.
+        $comment: Required similarity (in %) between the number of atoms in the input
+          models. If the similarity is higher than this value, the RMSD calculation
+          is performed on the common atoms. Otherwise, the calculation is stopped.
+          The lower the value the looser the checks.
+        type: number
+        maximum: 100.0
+        minimum: 10.0
+      allatoms:
+        default: false
+        title: Atoms to be considered during the analysis.
+        description: Atoms to be considered during the analysis.
+        $comment: Atoms to be considered during the analysis. If false (default),
+          only backbone atoms will be considered, otherwise all the heavy-atoms.
+        type: boolean
     required: []
     additionalProperties: false
-  uiSchema: {}
+  uiSchema:
+    max_models:
+      ui:group: analysis
+    resdic:
+      ui:group: analysis
+    atom_similarity:
+      ui:group: analysis
+    allatoms:
+      ui:group: analysis
   tomlSchema:
     resdic:
       indexed: true
