@@ -14,7 +14,7 @@ test.describe('given an uploaded archive with a workflow.cfg file with a duplica
             molecules = [
               'some.pdb'
             ]
-            
+
             [caprieval]
 
             [caprieval]
@@ -23,30 +23,37 @@ test.describe('given an uploaded archive with a workflow.cfg file with a duplica
     // Upload workflow archive
     await page.locator('text="Upload" >> input[type="file"]')
       .setInputFiles({ name: 'workflow.zip', mimeType: 'application/zip', buffer: archive.toBuffer() })
+  })
 
-    // Click text=Text
-    await page.locator('text=Text').click()
-
+  test('it should show uplaoded file', async ({ page }) => {
+    // Click Files tab
+    await page.locator('text=Files').click()
+    // validate file button is present
     await page.waitForSelector('button:has-text("some.pdb")')
   })
 
   test('should have both headers and added index number', async ({ page }) => {
+    // Click Text tab
+    await page.locator('text=Text').click()
+    // debug
+    // await page.pause()
+
     const highlightedCode = await page.locator('#highlightedcode pre')
     const lines = await highlightedCode.allTextContents()
     const content = lines.join('\n')
     const expected = dedent`
 
-            run_dir = 'run1'
-            molecules = [
-              'some.pdb',
-            ]
-            
+      molecules = [
+        'some.pdb',
+      ]
 
-            [caprieval]
+      run_dir = 'run1'
 
-            ['caprieval.2']
+      [caprieval]
 
-        `
+      ['caprieval.2']
+
+    `
     expect(content).toEqual(expected)
   })
 })

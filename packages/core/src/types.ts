@@ -1,5 +1,5 @@
 import { JSONSchema7 } from 'json-schema'
-import { UiSchema } from '@rjsf/core'
+import { UiSchema, AjvError } from '@rjsf/core'
 
 /**
  * Array of tuples.
@@ -87,4 +87,9 @@ export interface IWorkflow {
 export interface IWorkflowSchema {
   global: IGlobal
   nodes: ICatalogNode[]
+}
+
+export interface NodeErrorsType {
+  hasErrors: boolean
+  errors: AjvError[]
 }

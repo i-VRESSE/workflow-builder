@@ -312,7 +312,8 @@ describe('validateWorkflow()', () => {
             properties: {
               chain: {
                 type: 'string',
-                format: 'chain'
+                format: 'chain',
+                enum: ['A']
               }
             }
           }
@@ -381,6 +382,7 @@ describe('validateWorkflow()', () => {
             }
           ]
         }
+
         const errors = await validateWorkflow(workflow, schemas, files)
 
         const expected = [{
@@ -388,9 +390,7 @@ describe('validateWorkflow()', () => {
           keyword: 'enum',
           message: 'must be equal to one of the allowed values',
           params: {
-            allowedValues: [
-              'A'
-            ]
+            allowedValues: ['A']
           },
           schemaPath: '#/properties/seg/items/0/items/properties/chain/enum',
           workflowPath: 'nodes[0]'

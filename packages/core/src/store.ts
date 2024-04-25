@@ -24,13 +24,14 @@ import {
   IWorkflowNode,
   IFiles,
   IParameters,
-  ICatalogNode
+  ICatalogNode,
+  NodeErrorsType
 } from './types'
 import { catalog2tomlSchemas, workflow2tomltext } from './toml'
 import {
   dropUnusedFiles,
   loadWorkflowArchive,
-  emptyParams,
+  emptyGlobalParams,
   clearFiles
 } from './workflow'
 import {
@@ -105,7 +106,10 @@ export function useDraggingCatalogNodeState (): [
 
 const globalParametersState = atom<IParameters>({
   key: 'global',
-  default: {}
+  default: {
+    // start with empty molecules array
+    molecules: []
+  }
 })
 
 const editingGlobalParametersState = atom<boolean>({
@@ -227,6 +231,7 @@ const globalFormDataState = selector<IParameters>({
     const newFiles = { ...files }
     const catalog = get(catalogState)
     let parameters: IParameters
+    // debugger
     if (formData instanceof DefaultValue) {
       parameters = {}
     } else {
@@ -259,6 +264,11 @@ const selectedNodeState = selector<IWorkflowNode | undefined>({
   get: ({ get }) => {
     const index = get(selectedNodeIndexState)
     const nodes = get(workflowNodesState)
+
+    // console.group('selectedNodeState')
+    // console.log('index...', index)
+    // console.groupEnd()
+
     if (index in nodes) {
       return nodes[index]
     }
@@ -323,8 +333,17 @@ const selectedNodeFormDataState = selector<IParameters | undefined>({
     if (catalogNode === undefined) {
       return
     }
+    let formErrors = []
+    if (Object.hasOwn(formData, 'formErrors')) {
+      // NOTE! 2024-04-11
+      // extract form errors info from ajv validator
+      formErrors = (formData as any)?.formErrors
+      // remove hasErrors from formData because it is not part of "real" data
+      delete (formData as any).formErrors
+    }
     const files = get(filesState)
     const newFiles = { ...files }
+    // debugger
     let parameters: IParameters
     if (formData instanceof DefaultValue) {
       parameters = {}
@@ -337,13 +356,26 @@ const selectedNodeFormDataState = selector<IParameters | undefined>({
       )
     }
     const nodes = get(workflowNodesState)
+    const errors = get(nodeErrors)
     const selectedNodeIndex = get(selectedNodeIndexState)
-    const newNode = { ...nodes[selectedNodeIndex], parameters }
+    const newNode = {
+      ...nodes[selectedNodeIndex],
+      parameters
+    }
     const newNodes = replaceItemAtIndex(nodes, selectedNodeIndex, newNode)
     const global = get(globalParametersState)
     const newUsedFiles = dropUnusedFiles(global, newNodes, newFiles)
     set(workflowNodesState, newNodes)
     set(filesState, newUsedFiles)
+    // save errors status of each node
+    const newErrors = {
+      ...errors,
+      [newNode.id]: {
+        hasErrors: formErrors?.length > 0,
+        errors: formErrors
+      }
+    }
+    set(nodeErrors, newErrors)
   }
 })
 
@@ -437,7 +469,8 @@ export interface UseWorkflow {
    */
   editingGlobal: boolean
   global: IParameters
-  toggleGlobalEdit: () => void
+  setEditingGlobal: (editing: boolean) => void
+  selectGlobalEdit: () => void
   /**
    * @param nodeType A {@link types!ICatalogNode.id | catalog node id}
    */
@@ -497,13 +530,16 @@ export function useWorkflow (): UseWorkflow {
   )
   const [files, setFiles] = useRecoilState(filesState)
   const catalog = useCatalog()
+  // clear errors method
+  const { clearErrors } = useClearErrors()
 
   return {
     nodes,
     editingGlobal,
     global,
-    toggleGlobalEdit () {
-      setEditingGlobal(!editingGlobal)
+    setEditingGlobal,
+    selectGlobalEdit () {
+      setEditingGlobal(true)
       setSelectedNodeIndex(-1)
     },
     addNodeToWorkflowAt (nodeType: string, targetId: string) {
@@ -515,24 +551,25 @@ export function useWorkflow (): UseWorkflow {
         ]
         return moveItem(newNodes, newNodes.length - 1, targetIndex)
       })
-      if (selectedNodeIndex === -1 && !editingGlobal) {
-        setSelectedNodeIndex(targetIndex)
-      }
+      // debugger
+      setSelectedNodeIndex(targetIndex)
     },
     addNodeToWorkflow (nodeType: string) {
       setNodes((oldNodes) => [
         ...oldNodes,
         { type: nodeType, parameters: {}, id: nanoid() }
       ])
-      if (selectedNodeIndex === -1 && !editingGlobal) {
-        setSelectedNodeIndex(nodes.length)
-      }
+      // debugger
+      setSelectedNodeIndex(nodes.length)
     },
     selectNode: (nodeIndex: number) => {
+      // console.group('selectNode')
+      // console.log('nodeIndex...', nodeIndex)
+      // console.groupEnd()
+      setSelectedNodeIndex(nodeIndex)
       if (editingGlobal) {
         setEditingGlobal(false)
       }
-      setSelectedNodeIndex(nodeIndex)
     },
     deleteNode (nodeIndex: number) {
       if (selectedNodeIndex !== -1) {
@@ -550,11 +587,16 @@ export function useWorkflow (): UseWorkflow {
     clearNodeSelection: () => setSelectedNodeIndex(-1),
     clear () {
       const blankNodes = removeAllItems(nodes)
-      const blankGlobals = emptyParams()
+      const blankGlobals = emptyGlobalParams()
       const blankFiles = clearFiles()
       setNodes(blankNodes)
       setGlobal(blankGlobals)
       setFiles(blankFiles)
+      // preselect global
+      setEditingGlobal(true)
+      setSelectedNodeIndex(-1)
+      // clear errors
+      clearErrors()
     },
     async loadWorkflowArchive (archiveURL: string) {
       const r = await loadWorkflowArchive(archiveURL, catalog)
@@ -588,6 +630,109 @@ export function useFiles (): IFiles {
  */
 export function useText (): string {
   const { nodes, global } = useWorkflow()
+  // console.group("useText")
+  // console.log("nodes...", nodes)
+  // console.log("global...", global)
+  // console.groupEnd()
   const catalog = useCatalog()
   return workflow2tomltext(nodes, global, catalog2tomlSchemas(catalog))
+}
+
+/**
+ * Autosave state and hooks
+ */
+const autosave = atom<boolean>({
+  key: 'autosave',
+  default: true
+})
+
+export function useAutosave (): [boolean, SetterOrUpdater<boolean>] {
+  return useRecoilState(autosave)
+}
+
+export function useSetAutosave (): SetterOrUpdater<boolean> {
+  return useSetRecoilState(autosave)
+}
+
+export function useAutosaveValue (): boolean {
+  return useRecoilValue(autosave)
+}
+
+const nodeErrors = atom<{
+  [key: string]: NodeErrorsType
+}>({
+  key: 'nodeErrors',
+  default: {}
+})
+
+export function useNodeHasErrors (): [{
+  [key: string]: NodeErrorsType
+}, SetterOrUpdater<{
+  [key: string]: NodeErrorsType
+}>] {
+  return useRecoilState(nodeErrors)
+}
+
+export function useSetNodeErrors (): (key: string, value: NodeErrorsType) => void {
+  const [errorNodes, setErrorNodes] = useNodeHasErrors()
+  // return function to update single node state
+  return function setNodeHasErrors (key: string, value: NodeErrorsType) {
+    // debugger
+    if (errorNodes[key] !== value) {
+      const newValid = {
+        ...errorNodes,
+        [key]: value
+      }
+      setErrorNodes(newValid)
+    }
+  }
+}
+
+export function useNodeHasErrorsValue (key: string): boolean {
+  const nodes = useRecoilValue(nodeErrors)
+
+  // console.group("useNodeHasErrorsValue")
+  // console.log("key...", key)
+  // console.log("nodes...", nodes)
+  // console.groupEnd()
+
+  // debugger
+  if (Object.hasOwn(nodes, key)) {
+    return nodes[key].hasErrors
+  } else {
+    return false
+  }
+}
+
+export function useClearErrors (): {
+  clearErrors: () => void
+} {
+  const setErrors = useSetRecoilState(nodeErrors)
+  // set to empty object
+  function clearErrors (): void {
+    setErrors({})
+  }
+  return {
+    clearErrors
+  }
+}
+
+export function useWorkflowHasErrors (): boolean {
+  const errors = useRecoilValue(nodeErrors)
+  const keys = Object.keys(errors)
+
+  // at least one node has error
+  const errorKey = keys.find(key => {
+    return errors[key]?.hasErrors
+  })
+  // if errorKey is found it has string type
+  const hasErrors = typeof errorKey === 'string'
+
+  console.group('useWorkflowHasErrors')
+  console.log('errors...', errors)
+  console.log('errorKey...', errorKey)
+  console.log('hasErrors...', hasErrors)
+  console.groupEnd()
+
+  return hasErrors
 }

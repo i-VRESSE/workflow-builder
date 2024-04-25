@@ -23,23 +23,15 @@ import { useSelectNodeIndex, useActiveSubmitButton, useWorkflow } from './store'
  * )
  * ```
  * The FormActions component will use `submitFormRefSetter` to submit form.
- *
- * For example to render the actions when global parameter editing is selected do
- *
- * ```js
- * import { useWorkflow } from '@i-vresse/wb-core/dist/store'
- *
- * const { toggleGlobalEdit } = useWorkflow()
- * toggleGlobalEdit()
  * ```
  */
-export const FormActions = (): JSX.Element => {
+export const FormActions = (): JSX.Element|null => {
   const index = useSelectNodeIndex()
   const { deleteNode, clearNodeSelection } = useWorkflow()
   const submitFormRef = useActiveSubmitButton()
-  const { editingGlobal, toggleGlobalEdit } = useWorkflow()
+  const { editingGlobal, setEditingGlobal } = useWorkflow()
   if (submitFormRef === undefined || !(index > -1 || editingGlobal)) {
-    return <></>
+    return null
   }
   const DeleteButton = (
     <button
@@ -62,7 +54,7 @@ export const FormActions = (): JSX.Element => {
       </button>
       <button
         className='btn btn-light'
-        onClick={() => editingGlobal ? toggleGlobalEdit() : clearNodeSelection()}
+        onClick={() => editingGlobal ? setEditingGlobal(false) : clearNodeSelection()}
         title='Forget changes made in form'
       >
         Cancel

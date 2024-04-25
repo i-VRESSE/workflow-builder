@@ -9,17 +9,16 @@ export const CatalogCategory = ({ name, description, collapsed: initiallyCollaps
   const style = {
     // TODO On https://developer.mozilla.org/en-US/docs/Web/CSS/list-style-type
     // disclosure-open/closed are said to be experimental, find how much compatibility there is.
-    listStyleType: collapsed ? 'disclosure-closed' : 'disclosure-open'
+    listStyleType: collapsed ? 'disclosure-closed' : 'disclosure-open',
+    cursor: 'pointer'
     // utf failed in chrome
     // listStyleType: collapsed ? '⏷' : '⏵'
   }
   return (
     <li
-      style={style} onClick={(e) => {
-        if (e.target === e.currentTarget) {
-          // only toggle when list marker is clicked
-          return setCollapsed((c) => !c)
-        }
+      style={style}
+      onClick={(e) => {
+        setCollapsed((c) => !c)
       }}
     >
       <span title={description}>{name}</span>

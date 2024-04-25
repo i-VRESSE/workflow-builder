@@ -80,13 +80,18 @@ function parameters2toml (parameters: IParameters, tomlSchema: TomlObjectSchema)
         const d2 = parameters2toml(d, nestedTomlSchema as TomlObjectSchema)
         return Section(d2)
       })
+    } else if (isArray) {
+      // debugger
+      // clear array of undefined entries
+      tomledParameters[k] = v.filter(item => item !== undefined)
     } else if (isObject(v) && isSectioned) {
       tomledParameters[k] = Section(v as any)
     } else if (isObject(v) && isIndexed) {
       Object.entries(v).forEach(([k2, v2]) => {
         tomledParameters[`${k}_${k2}`] = v2
       })
-    } else {
+    } else if (v !== undefined) {
+      // avoid params with undefined value
       tomledParameters[k] = v
     }
   })

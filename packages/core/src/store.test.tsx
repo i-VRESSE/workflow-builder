@@ -29,11 +29,13 @@ describe('useSelectNodeIndex()', () => {
 
 describe('useText()', () => {
   describe('given empty catalog, no nodes and no global parameters', () => {
-    it('should return empty string', () => {
+    it('should return default state with empty molecules array', () => {
       const { result } = renderHook(useText, {
         wrapper: RecoilRoot
       })
-      expect(result.current).toEqual('')
+      // clean text from returns (\n)
+      const text = result.current.replaceAll('\n', '')
+      expect(text).toEqual('molecules = []')
     })
   })
 

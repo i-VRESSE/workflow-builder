@@ -46,8 +46,11 @@ export function dropUnusedFiles (global: IParameters, nodes: IWorkflowNode[], fi
   return newFiles
 }
 
-export function emptyParams (): IParameters {
-  return {}
+export function emptyGlobalParams (): IParameters {
+  return {
+    // default is empty array of molecules
+    molecules: []
+  }
 }
 
 export function clearFiles (): IFiles {

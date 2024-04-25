@@ -33,9 +33,13 @@ export async function parseMolecules (
   if (!Array.isArray(moleculeFilePaths)) {
     return [[], undefined]
   }
+  // debugger
   // find file of molecule path
   // TODO check whether files are actually PDB files using uiSchema.molecules..items.ui:options.accept: .pdb
-  const moleculeFiles = moleculeFilePaths.map((p) => files[p])
+  const moleculeFiles = moleculeFilePaths
+    // ignore undefined entries (invalid entries)
+    .filter(file => file !== undefined)
+    .map((p) => files[p])
   // parse file
   const moleculeInfos = await Promise.all(
     moleculeFiles.map(async (f, i) => {
