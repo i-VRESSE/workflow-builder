@@ -15,18 +15,6 @@ categories:
 - name: analysis
   description: HADDOCK3 modules related to model analysis.
   collapsed: false
-- name: extras
-  description: '
-
-    HADDOCK3 extra modules.
-
-
-    The extra modules are modules that do not belong to any of the standard
-
-    simulation categories but that help further configuring the workflow.
-
-    '
-  collapsed: true
 global:
   schema:
     type: object
@@ -510,6 +498,13 @@ nodes:
         type: number
         maximum: 1000
         minimum: 1
+      allatoms:
+        default: false
+        title: Atoms to be considered during the analysis.
+        description: Atoms to be considered during the analysis.
+        $comment: Atoms to be considered during the analysis. If false (default),
+          only backbone atoms will be considered, otherwise all the heavy-atoms.
+        type: boolean
     required: []
     additionalProperties: false
   uiSchema:
@@ -543,6 +538,8 @@ nodes:
     lovoalign_exec:
       ui:group: analysis
     clt_threshold:
+      ui:group: analysis
+    allatoms:
       ui:group: analysis
   tomlSchema: {}
 - id: clustfcc
@@ -829,7 +826,7 @@ nodes:
     generate_chordchart:
       ui:group: analysis
     topX:
-      ui:group: sample
+      ui:group: analysis
     cluster_heatmap_datatype:
       ui:group: analysis
     chordchart_datatype:
@@ -3034,25 +3031,6 @@ nodes:
       ui:group: module
     log_level:
       ui:group: module
-  tomlSchema: {}
-- id: exit
-  category: extras
-  label: Exit module
-  description: Stop the workflow when this module is reached.
-  schema:
-    type: object
-    properties:
-      message:
-        default: Stopping the workflow.
-        title: Exiting message.
-        description: The message to print when exiting.
-        $comment: The message to print when exiting.
-        type: string
-        minLength: 0
-        maxLength: 1000
-    required: []
-    additionalProperties: false
-  uiSchema: {}
   tomlSchema: {}
 - id: flexref
   category: refinement
@@ -5383,6 +5361,8 @@ nodes:
       ui:group: sampling
     sinter_rigid_init:
       ui:group: sampling
+    sinter_rigid_final:
+      ui:group: sampling
     sinter_cool2_init:
       ui:group: sampling
     sinter_cool2_final:
@@ -5547,6 +5527,7 @@ nodes:
   uiSchema:
     ambig_fname:
       ui:widget: file
+      ui:group: distance restraints
   tomlSchema: {}
 - id: ilrmsdmatrix
   category: analysis
@@ -5694,7 +5675,35 @@ nodes:
         type: boolean
     required: []
     additionalProperties: false
-  uiSchema: {}
+  uiSchema:
+    glowworms:
+      ui:group: sampling
+    steps:
+      ui:group: sampling
+    swarms:
+      ui:group: sampling
+    scoring:
+      ui:group: scoring
+    top:
+      ui:group: analysis
+    receptor_chains:
+      ui:group: restraints
+    receptor_active:
+      ui:group: restraints
+    receptor_passive:
+      ui:group: restraints
+    ligand_chains:
+      ui:group: restraints
+    ligand_active:
+      ui:group: restraints
+    ligand_passive:
+      ui:group: restraints
+    noxt:
+      ui:group: topology
+    noh:
+      ui:group: topology
+    restraints:
+      ui:group: distance restraints
   tomlSchema: {}
 - id: mdref
   category: refinement
@@ -9716,12 +9725,26 @@ nodes:
         type: number
         maximum: 99999
         minimum: 1
+      sortby:
+        default: score
+        title: Method used to define `best cluster`.
+        description: Best cluster can be defined based either on cluster models scores,
+          or on cluster size. By default, 'score' is selected.
+        $comment: if the selection is done by 'score' the average score of the top
+          (4) models of each cluster is used to define the cluster rank. When clustering
+          by 'size', a bigger cluster size corresponds to a higher rank. By default,
+          'score' is selected.
+        type: string
+        minLength: 2
+        maxLength: 15
     required: []
     additionalProperties: false
   uiSchema:
     top_cluster:
       ui:group: analysis
     top_models:
+      ui:group: analysis
+    sortby:
       ui:group: analysis
   tomlSchema: {}
 - id: topoaa
@@ -9888,6 +9911,8 @@ nodes:
     ligand_top_fname:
       ui:widget: file
       ui:group: force field
+    limit:
+      ui:group: sampling
     tolerance:
       ui:group: module
     mol:
