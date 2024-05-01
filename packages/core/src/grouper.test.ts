@@ -504,6 +504,88 @@ describe('given a un-grouped prop with same name as group', () => {
   })
 })
 
+describe('given a prop in own group with same name as group of another prop', () => {
+  describe('groupSchema()', () => {
+    it('should make 2 groups each with a prop', () => {
+      const schema: JSONSchema7 = {
+        type: 'object',
+        properties: {
+          receptor_chains: {
+            type: 'string'
+          },
+          restraints: {
+            type: 'string'
+          }
+        },
+        additionalProperties: false
+      }
+      const uiSchema: UiSchema = {
+        receptor_chains: {
+          'ui:group': 'restraints'
+        },
+        restraints: {
+          'ui:group': 'distance restraints'
+        }
+      }
+      const groupedSchema = groupSchema(schema, uiSchema)
+
+      const expectedSchema: JSONSchema7 = {
+        type: 'object',
+        properties: {
+          restraints: {
+            type: 'object',
+            properties: {
+              receptor_chains: {
+                type: 'string'
+              }
+            },
+            additionalProperties: false
+          },
+          'distance restraints': {
+            type: 'object',
+            properties: {
+              restraints: {
+                type: 'string'
+              }
+            },
+            additionalProperties: false
+          }
+        },
+        additionalProperties: false
+      }
+      expect(groupedSchema).toEqual(expectedSchema)
+    })
+  })
+
+  describe('unGroupParameters()', () => {
+    it('should work', () => {
+      const groupedParameters = {
+        restraints: {
+          receptor_chains: 'val1'
+        },
+        'distance restraints': {
+          restraints: 'val2'
+        }
+      }
+
+      const actual = unGroupParameters(groupedParameters, {
+        receptor_chains: {
+          'ui:group': 'restraints'
+        },
+        restraints: {
+          'ui:group': 'distance restraints'
+        }
+      })
+
+      const expectedParameters = {
+        receptor_chains: 'val1',
+        restraints: 'val2'
+      }
+      expect(actual).toEqual(expectedParameters)
+    })
+  })
+})
+
 describe('given a prop with same name as group and another prop in same group', () => {
   describe('groupSchema()', () => {
     it('should move property inside object with same name', () => {
