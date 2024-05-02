@@ -1,6 +1,7 @@
 import { UiSchema } from '@rjsf/core'
 import { JSONSchema7 } from 'json-schema'
-import { beforeEach, describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it, beforeAll } from 'vitest'
+import { init } from '@i-vresse/pdbtbx-ts'
 
 import { JSONSchema7WithMaxItemsFrom } from '../resolveMaxItemsFrom'
 import { IFiles, IParameters } from '../types'
@@ -10,6 +11,10 @@ import {
   parseMolecules
 } from './addMoleculeValidation'
 import { MoleculeInfo } from './parse'
+
+beforeAll(async () => {
+  await init()
+})
 
 describe('parseMolecules()', () => {
   describe('given bad global schema or parameters', () => {

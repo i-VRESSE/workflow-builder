@@ -1,3 +1,4 @@
+import { JSONSchema7 } from 'json-schema'
 import { readArchive } from './archive'
 import { parseWorkflow } from './toml'
 import { ICatalog, IFiles, IParameters, IWorkflow, IWorkflowNode } from './types'
@@ -46,11 +47,15 @@ export function dropUnusedFiles (global: IParameters, nodes: IWorkflowNode[], fi
   return newFiles
 }
 
-export function emptyGlobalParams (): IParameters {
-  return {
-    // default is empty array of molecules
-    molecules: []
+export function emptyGlobalParams (schema: JSONSchema7): IParameters {
+  const parameters: IParameters = {}
+  for (const key in schema.properties) {
+    const propSchema = schema.properties[key]
+    if (typeof propSchema !== 'boolean' && propSchema.type === 'array') {
+      parameters[key] = []
+    }
   }
+  return parameters
 }
 
 export function clearFiles (): IFiles {

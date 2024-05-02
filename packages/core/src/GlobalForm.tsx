@@ -1,5 +1,4 @@
 import React from 'react'
-import { EmotionJSX } from '@emotion/react/types/jsx-namespace'
 import { Form } from '@i-vresse/wb-form'
 
 import { FormProps } from './FormProps'
@@ -7,7 +6,7 @@ import { useCatalog, useGlobalFormData, useSetActiveSubmitButton, useAutosaveVal
 
 import '@i-vresse/wb-form/dist/index.css'
 
-export const GlobalForm = ({ fields, widgets }: FormProps): EmotionJSX.Element => {
+export const GlobalForm = ({ fields, widgets }: FormProps): JSX.Element => {
   const { global: globalSchemas } = useCatalog()
   const [formData, setFormData] = useGlobalFormData()
   const submitFormRefSetter = useSetActiveSubmitButton()
@@ -15,13 +14,9 @@ export const GlobalForm = ({ fields, widgets }: FormProps): EmotionJSX.Element =
   const setNodeHasErrors = useSetNodeErrors()
   const uiSchema = globalSchemas.formUiSchema
 
-  // console.group('GlobalForm')
-  // console.log('formData...', formData)
-  // console.log('autosave...', autosave)
-  // console.groupEnd()
-
   return (
     <section>
+      <h4>Global parameters</h4>
       <Form
         schema={globalSchemas.formSchema ?? {}}
         uiSchema={uiSchema}

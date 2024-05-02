@@ -10,6 +10,8 @@ import {
 } from './store'
 import { GripVertical } from './GripVertical'
 
+import ErrorIcon from './ErrorIcon'
+
 interface IProp {
   type: string
   index: number
@@ -40,42 +42,30 @@ export const VisualNode = ({ type, index, id }: IProp): JSX.Element => {
   const selectedStyle =
     selectedNodeIndex === index ? { fontWeight: 'bold' } : {}
 
-  // console.group('VisualNode')
-  // console.log('nodeHasErrors...', nodeHasErrors)
-  // console.log('selectedNodeIndex...', selectedNodeIndex)
-  // console.log('draggingWorkflowNodeCode...', draggingWorkflowNodeCode)
-  // console.log('index...', index)
-  // console.log('type...', type)
-  // console.log('id...', id)
-  // console.groupEnd()
-
   function onNodeChange (): void {
-    // console.group('VisualNode.onNodeChange()')
-    // console.log('selectedNodeIndex...', selectedNodeIndex)
-    // console.log('index...', index)
-    // console.log('type...', type)
-    // console.log('id...', id)
-    // console.groupEnd()
     // change node only if different
-    // (default values used on change)
     if (selectedNodeIndex !== index) {
       selectNode(index)
     }
-    // selectNode(index)
   }
 
   // TODO after clicking node the active styling is not removed unless you activate another element
   return (
     <div ref={setNodeRef} style={style} {...attributes}>
       <button
-        className={`btn btn-light btn-sm btn-block btn-visual-node ${nodeHasErrors ? 'form-control is-invalid' : ''}`}
+        className={`btn btn-light btn-sm btn-block btn-visual-node ${nodeHasErrors ? 'text-danger' : ''}`}
         title='Click to configure'
         style={selectedStyle}
         onClick={onNodeChange}
       >
-        <span>
-          {index + 1}. {type}
-        </span>
+        <div>
+          {nodeHasErrors
+            ? <span style={{ marginRight: '0.5rem' }}><ErrorIcon /></span>
+            : null}
+          <span>
+            {index + 1}. {type}
+          </span>
+        </div>
         <div className='btn-group'>
           <div
             ref={setActivatorNodeRef}

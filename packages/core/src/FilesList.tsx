@@ -16,7 +16,7 @@ export const FilesList = (): JSX.Element => {
         padding: '0.5rem'
       }}
       >
-        <h5>No files to show</h5>
+        <p style={{ fontWeight: 'bold' }}>No files to show</p>
       </div>
     )
   }
@@ -26,7 +26,6 @@ export const FilesList = (): JSX.Element => {
       padding: '0.5rem'
     }}
     >
-      <h5>Files</h5>
       <ul>
         {fileList.map(filename =>
           <li key={filename}><button className='btn btn-link' onClick={() => downloadFile(filename)}>{filename}</button></li>

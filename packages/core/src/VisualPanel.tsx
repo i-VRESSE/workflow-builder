@@ -15,6 +15,7 @@ import {
 } from './store'
 import { VisualNode } from './VisualNode'
 import { GripVertical } from './GripVertical'
+import ErrorIcon from './ErrorIcon'
 
 function GlobalListNode (): JSX.Element {
   const node = useSelectedNode()
@@ -23,11 +24,16 @@ function GlobalListNode (): JSX.Element {
 
   return (
     <button
-      className={`btn btn-light btn-sm btn-block btn-visual-node ${(node != null) ? '' : 'font-bold font-weight-bold'} ${globalHasErrors ? 'form-control is-invalid' : ''} `}
+      className={`btn btn-light btn-sm btn-block btn-visual-node ${(node != null) ? '' : 'font-bold font-weight-bold'} ${globalHasErrors ? 'text-danger' : ''} `}
       onClick={selectGlobalEdit}
       title='Edit global parameters'
     >
-      0. Global parameters
+      <div>
+        {globalHasErrors
+          ? <span style={{ marginRight: '0.5rem' }}><ErrorIcon /></span>
+          : null}
+        <span>0. Global parameters</span>
+      </div>
     </button>
   )
 }
@@ -45,7 +51,7 @@ function AppendZone (): JSX.Element {
   )
 }
 
-function NodeList ({ showBorder = false }: {showBorder: boolean}): JSX.Element {
+function NodeList ({ showBorder = false }: { showBorder: boolean }): JSX.Element {
   const { nodes } = useWorkflow()
 
   const listStyle: CSSProperties = {
@@ -80,11 +86,6 @@ export const VisualPanel = (): JSX.Element => {
     sortableItems.push(draggingCatalogNode.toString())
   }
   const { setNodeRef } = useDroppable({ id: 'catalog-dropzone' })
-
-  // console.group('VisualPanel')
-  // console.log('nodes...', nodes)
-  // console.log('sortableItems...', sortableItems)
-  // console.groupEnd()
 
   return (
     <div

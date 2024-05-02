@@ -1,5 +1,4 @@
 import React from 'react'
-import { EmotionJSX } from '@emotion/react/types/jsx-namespace'
 import { Form } from '@i-vresse/wb-form'
 
 import { FormProps } from './FormProps'
@@ -12,7 +11,7 @@ import {
 
 import '@i-vresse/wb-form/dist/index.css'
 
-export const NodeForm = ({ fields, widgets }: FormProps): EmotionJSX.Element => {
+export const NodeForm = ({ fields, widgets }: FormProps): JSX.Element => {
   const catalogNode = useSelectedCatalogNode()
   const [formData, setFormData] = useSelectedNodeFormData()
   const schema = useSelectedNodeFormSchema() ?? {}
@@ -20,15 +19,6 @@ export const NodeForm = ({ fields, widgets }: FormProps): EmotionJSX.Element => 
   const uiSchema = useSelectedNodeFormUiSchema() ?? {}
   const autosave = useAutosaveValue()
   const node = useSelectedNode()
-
-  // console.group('NodeForm')
-  // console.log('formData...', formData)
-  // console.log('autosave...', autosave)
-  // console.log('node...', node)
-  // console.log('catalogNode...', catalogNode)
-  // console.log('schema...', schema)
-  // console.log('uiSchema...', uiSchema)
-  // console.groupEnd()
 
   if (node === undefined) {
     return <div>No node selected</div>

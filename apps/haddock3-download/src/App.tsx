@@ -46,9 +46,6 @@ function AutosaveManagement (): JSX.Element {
 
 function PageContent (): JSX.Element {
   const autosave = useAutosaveValue()
-  console.group('PageContent')
-  console.log('autosave...', autosave)
-  console.groupEnd()
 
   return (
     <div className='page'>

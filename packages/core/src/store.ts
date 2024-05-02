@@ -106,10 +106,7 @@ export function useDraggingCatalogNodeState (): [
 
 const globalParametersState = atom<IParameters>({
   key: 'global',
-  default: {
-    // start with empty molecules array
-    molecules: []
-  }
+  default: {}
 })
 
 const editingGlobalParametersState = atom<boolean>({
@@ -213,9 +210,16 @@ function parameters2formData (
 const globalFormDataState = selector<IParameters>({
   key: 'globalFormData',
   get: ({ get }) => {
-    const parameters = get(globalParametersState)
     const files = get(filesState)
     const catalog = get(catalogState)
+    let parameters = get(globalParametersState)
+
+    if (Object.keys(parameters)?.length === 0 &&
+      Object.keys(catalog?.global?.schema)?.length > 0) {
+      // get initial values only if global schema is loaded
+      // and parameters is empty object?s
+      parameters = emptyGlobalParams(catalog.global.schema)
+    }
     const formData = parameters2formData(
       parameters,
       files,
@@ -233,7 +237,8 @@ const globalFormDataState = selector<IParameters>({
     let parameters: IParameters
     // debugger
     if (formData instanceof DefaultValue) {
-      parameters = {}
+      // get default/inital state
+      parameters = emptyGlobalParams(catalog.global.schema)
     } else {
       parameters = formData2parameters(
         formData,
@@ -264,11 +269,9 @@ const selectedNodeState = selector<IWorkflowNode | undefined>({
   get: ({ get }) => {
     const index = get(selectedNodeIndexState)
     const nodes = get(workflowNodesState)
-
     // console.group('selectedNodeState')
     // console.log('index...', index)
     // console.groupEnd()
-
     if (index in nodes) {
       return nodes[index]
     }
@@ -587,7 +590,7 @@ export function useWorkflow (): UseWorkflow {
     clearNodeSelection: () => setSelectedNodeIndex(-1),
     clear () {
       const blankNodes = removeAllItems(nodes)
-      const blankGlobals = emptyGlobalParams()
+      const blankGlobals = emptyGlobalParams(catalog.global.schema)
       const blankFiles = clearFiles()
       setNodes(blankNodes)
       setGlobal(blankGlobals)
@@ -630,10 +633,6 @@ export function useFiles (): IFiles {
  */
 export function useText (): string {
   const { nodes, global } = useWorkflow()
-  // console.group("useText")
-  // console.log("nodes...", nodes)
-  // console.log("global...", global)
-  // console.groupEnd()
   const catalog = useCatalog()
   return workflow2tomltext(nodes, global, catalog2tomlSchemas(catalog))
 }
@@ -728,11 +727,11 @@ export function useWorkflowHasErrors (): boolean {
   // if errorKey is found it has string type
   const hasErrors = typeof errorKey === 'string'
 
-  console.group('useWorkflowHasErrors')
-  console.log('errors...', errors)
-  console.log('errorKey...', errorKey)
-  console.log('hasErrors...', hasErrors)
-  console.groupEnd()
+  // console.group('useWorkflowHasErrors')
+  // console.log('errors...', errors)
+  // console.log('errorKey...', errorKey)
+  // console.log('hasErrors...', hasErrors)
+  // console.groupEnd()
 
   return hasErrors
 }

@@ -35,7 +35,7 @@ describe('useText()', () => {
       })
       // clean text from returns (\n)
       const text = result.current.replaceAll('\n', '')
-      expect(text).toEqual('molecules = []')
+      expect(text).toEqual('')
     })
   })
 
