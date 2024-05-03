@@ -37,6 +37,10 @@ export function groupSchema (
       .filter((v) => 'ui:group' in v)
       .map((v) => v['ui:group'])
   )
+  // TODO direct prop with same name as group throw error
+  // TODO prop with group and same name as any group should be nested first
+  // todos should replace lines 44-65
+
   const directProps = schema.properties ?? {}
   const directPropNamesWithSameNameAsGroup = new Set(
     Object.keys(directProps).filter((k) => definedGroups.has(k))
