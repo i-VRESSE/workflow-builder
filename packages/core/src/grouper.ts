@@ -54,7 +54,7 @@ export function groupSchema (
   }
 
   if (!('properties' in newSchema && typeof newSchema.properties === 'object')) {
-    throw new Error('Schema must have properties')
+    return newSchema
   }
 
   // prop with group and same name as any group should be nested first
@@ -90,7 +90,7 @@ export function groupSchema (
       }
       const newGroup = newSchema.properties[group]
       if (typeof newGroup === 'boolean' || newGroup.properties === undefined) {
-        throw new Error('Schema must have properties')
+        return
       }
       newGroup.properties[k] = newSchema.properties[k]
       // Remove k as it now is in the group
