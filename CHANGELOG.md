@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Changed
+
+* Improved handling of groups in ui schema 
+
+### Fixed
+
+* Hide the exit module ([#153](https://github.com/i-VRESSE/workflow-builder/issues/153))
+
+
 ## @i-vresse/wb-core 2.0.1 - 2024-03-25
 
 ### Changed
