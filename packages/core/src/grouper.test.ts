@@ -5,7 +5,7 @@ import { groupCatalog, groupParameters, groupSchema, groupUiSchema, unGroupParam
 import { ICatalog, IParameters } from './types'
 
 function deepCopy<T> (value: T): T {
-  return JSON.parse(JSON.stringify(value))
+  return structuredClone(value)
 }
 
 describe('given a schema without any property with ui:group in uiSchema', () => {
