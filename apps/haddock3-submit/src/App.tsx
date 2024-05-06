@@ -15,7 +15,7 @@ import './App.css'
 import '@i-vresse/wb-form/dist/index.css'
 import { WorkflowSubmitButton } from './WorkflowSubmitButton'
 
-function AutosaveManagement(): JSX.Element {
+function AutosaveManagement (): JSX.Element {
   const autosave = useAutosaveValue()
   const setAutosave = useSetAutosave()
 
@@ -42,7 +42,7 @@ function AutosaveManagement(): JSX.Element {
   )
 }
 
-function App(): JSX.Element {
+function App (): JSX.Element {
   const autosave = useAutosaveValue()
   return (
     <div className='page'>

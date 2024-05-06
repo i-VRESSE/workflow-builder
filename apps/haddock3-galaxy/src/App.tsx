@@ -7,9 +7,7 @@ import {
   NodePanel,
   CatalogPicker,
   WorkflowClear,
-  WorkflowPanel,
-  WorkflowUploadButton,
-  WorkflowDownloadButton
+  WorkflowPanel
 } from '@i-vresse/wb-core'
 import './App.css'
 import '@i-vresse/wb-form/dist/index.css'
@@ -27,7 +25,7 @@ const catalogIndexURL = `data:application/json,${JSON.stringify(
   // reverse to load guru catalog by default (as it now is first entry) so example zip file is compliant
 )}`
 
-function AutosaveManagement(): JSX.Element {
+function AutosaveManagement (): JSX.Element {
   const autosave = useAutosaveValue()
   const setAutosave = useSetAutosave()
 
@@ -54,7 +52,7 @@ function AutosaveManagement(): JSX.Element {
   )
 }
 
-function App(): JSX.Element {
+function App (): JSX.Element {
   // Examples URLS need to prepended baseUrl
   const catalog = useCatalog()
   const autosave = useAutosaveValue()
@@ -108,7 +106,7 @@ function App(): JSX.Element {
 
 export default App
 
-async function addDatasetToBuilder(loadWorkflowArchive: (archiveURL: string) => Promise<void>): Promise<void> {
+async function addDatasetToBuilder (loadWorkflowArchive: (archiveURL: string) => Promise<void>): Promise<void> {
   const params = new URLSearchParams(document.location.search)
   const datasetId = params.get('dataset_id')
   if (datasetId !== null) {

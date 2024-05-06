@@ -25,7 +25,7 @@ import { useSelectNodeIndex, useActiveSubmitButton, useWorkflow } from './store'
  * The FormActions component will use `submitFormRefSetter` to submit form.
  * ```
  */
-export const FormActions = (): JSX.Element|null => {
+export const FormActions = (): JSX.Element | null => {
   const index = useSelectNodeIndex()
   const { deleteNode, clearNodeSelection } = useWorkflow()
   const submitFormRef = useActiveSubmitButton()

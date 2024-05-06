@@ -29,7 +29,7 @@ export const TextPanel = (): JSX.Element => {
           right: '0.25rem',
           top: '0.75rem'
         }}
-        onClick={copy2clipboard}
+        onClick={copy2clipboard as any}
       >
         Copy to clipboard
       </button>

@@ -18,7 +18,7 @@ import '@i-vresse/wb-form/dist/index.css'
 import './App.css'
 import kitchensinkCatalog from './kitchensink.json'
 
-function AutosaveManagement(): JSX.Element {
+function AutosaveManagement (): JSX.Element {
   const autosave = useAutosaveValue()
   const setAutosave = useSetAutosave()
 
@@ -45,8 +45,7 @@ function AutosaveManagement(): JSX.Element {
   )
 }
 
-
-function App(): JSX.Element {
+function App (): JSX.Element {
   const setCatalog = useSetCatalog()
   const autosave = useAutosaveValue()
 

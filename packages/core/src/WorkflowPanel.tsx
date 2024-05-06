@@ -10,7 +10,7 @@ type ITab = 'text' | 'visual' | 'files'
  * @param tab ITab
  * @returns JSX.Element
  */
-function SelectedTab ({ tab }: {tab: ITab}): JSX.Element {
+function SelectedTab ({ tab }: { tab: ITab }): JSX.Element {
   switch (tab) {
     case 'text':
       return <TextPanel />

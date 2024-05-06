@@ -88,7 +88,7 @@ export const WorkflowUploadButton = (): JSX.Element => {
         type='file'
         tabIndex={-1}
         accept='application/zip,.zip'
-        onChange={uploadWorkflow}
+        onChange={uploadWorkflow as any}
         style={{
           display: 'none'
         }}

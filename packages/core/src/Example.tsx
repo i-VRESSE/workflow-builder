@@ -30,7 +30,7 @@ export const Example = ({ name, workflow }: IProps): JSX.Element => {
     <li>
       <button
         className='btn btn-light no-wrap'
-        onClick={onClick}
+        onClick={onClick as any}
         title={workflow}
       >
         {name}

@@ -69,7 +69,6 @@ function walkSchemaForMoleculeFormats (
     const isArrayWithItems = s.type === 'array' && 'items' in s
     const isObjectWithUserNames =
       s.type === 'object' &&
-      s.additionalProperties &&
       typeof s.additionalProperties === 'object' &&
       !('properties' in s)
     if (isArrayWithItems && s.maxItemsFrom === moleculesPropName) {
@@ -216,7 +215,7 @@ function walkSchemaForMoleculeFormats (
         }
       }
     } else if (
-      isObjectWithUserNames === true &&
+      isObjectWithUserNames &&
       s.maxPropertiesFrom === moleculesPropName
     ) {
       // TODO implement

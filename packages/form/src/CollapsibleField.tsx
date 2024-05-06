@@ -104,22 +104,17 @@ export const CollapsibleField = (props: FieldProps): JSX.Element => {
         {hasError ? <ErrorIcon /> : null}
       </div>
       {/* show content when not collapsed */}
-      {/* eslint-disable-next-line padded-blocks */}
-      {!collapsed
-        ? <div className='card-body'>
-          {/* TitleField inside the ObjectField is not rendered when there is no title or name */}
-          <ObjectField {...dropTitle(props)} />
-        </div>
-        : null}
+      {/* TitleField inside the ObjectField is not rendered when there is no title or name */}
+      {!collapsed ? <div className='card-body'><ObjectField {...dropTitle(props)} /></div> : null}
     </div>
   )
 }
 
-function extractTitle(
+function extractTitle (
   props: FieldProps<any>,
   uiOptions:
-    | { [key: string]: string | number | boolean | object | any[] | null }
-    | undefined
+  | { [key: string]: string | number | boolean | object | any[] | null }
+  | undefined
 ): string {
   let title = props.name
   if ('title' in props.schema && props.schema.title !== undefined) {
@@ -135,7 +130,7 @@ function extractTitle(
   return title
 }
 
-function dropTitle(props: FieldProps<any>): FieldProps<any> {
+function dropTitle (props: FieldProps<any>): FieldProps<any> {
   const oprops = { ...props }
   oprops.name = ''
   if ('title' in oprops.schema) {
