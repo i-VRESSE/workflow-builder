@@ -8,13 +8,14 @@ import {
   CatalogPicker,
   WorkflowClear,
   WorkflowPanel,
-  WorkflowUploadButton
+  WorkflowUploadButton,
+  WorkflowDownloadButton
 } from '@i-vresse/wb-core'
 import './App.css'
 import '@i-vresse/wb-form/dist/index.css'
 import { WorkflowSubmitButton } from './WorkflowSubmitButton'
 import originalCatalogIndexURL from '../public/catalog/index.json'
-import { useCatalog, useSetCatalog, useWorkflow } from '@i-vresse/wb-core/dist/store'
+import { useAutosaveValue, useCatalog, useSetAutosave, useSetCatalog, useWorkflow } from '@i-vresse/wb-core/dist/store'
 import { useEffect } from 'react'
 import { toast } from 'react-toastify'
 
@@ -26,9 +27,37 @@ const catalogIndexURL = `data:application/json,${JSON.stringify(
   // reverse to load guru catalog by default (as it now is first entry) so example zip file is compliant
 )}`
 
-function App (): JSX.Element {
+function AutosaveManagement(): JSX.Element {
+  const autosave = useAutosaveValue()
+  const setAutosave = useSetAutosave()
+
+  return (
+    <div
+      className='form-group form-check'
+    >
+      <input
+        type='checkbox'
+        className='form-check-input'
+        id='autosave'
+        checked={autosave}
+        onChange={(e) => {
+          setAutosave(!autosave)
+        }}
+      />
+      <label
+        className='form-check-label'
+        htmlFor='autosave'
+      >
+        Autosave
+      </label>
+    </div>
+  )
+}
+
+function App(): JSX.Element {
   // Examples URLS need to prepended baseUrl
   const catalog = useCatalog()
+  const autosave = useAutosaveValue()
   const setCatalog = useSetCatalog()
   const { loadWorkflowArchive } = useWorkflow()
 
@@ -45,7 +74,6 @@ function App (): JSX.Element {
         }))
       if (touched) {
         setCatalog({ ...catalog, examples })
-
         // Load from dataset
         addDatasetToBuilder(loadWorkflowArchive).catch((e) => console.error(e))
       }
@@ -64,18 +92,15 @@ function App (): JSX.Element {
       </GridArea>
       <GridArea area='workflow' className='workflow-area'>
         <WorkflowPanel>
-          <WorkflowUploadButton />
+          <WorkflowSubmitButton />
+          <WorkflowClear />
+          <AutosaveManagement />
         </WorkflowPanel>
       </GridArea>
       <GridArea area='node'>
         <NodePanel />
-      </GridArea>
-      <GridArea className='action-row' area='workflow-actions'>
-        <WorkflowSubmitButton />
-        <WorkflowClear />
-      </GridArea>
-      <GridArea className='action-row' area='node-actions'>
-        <FormActions />
+        {/* show form actions if autosave is OFF */}
+        {!autosave ? <FormActions /> : null}
       </GridArea>
     </div>
   )
@@ -83,7 +108,7 @@ function App (): JSX.Element {
 
 export default App
 
-async function addDatasetToBuilder (loadWorkflowArchive: (archiveURL: string) => Promise<void>): Promise<void> {
+async function addDatasetToBuilder(loadWorkflowArchive: (archiveURL: string) => Promise<void>): Promise<void> {
   const params = new URLSearchParams(document.location.search)
   const datasetId = params.get('dataset_id')
   if (datasetId !== null) {
