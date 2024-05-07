@@ -412,25 +412,41 @@ const selectedNodeFormSchemaState = selector<JSONSchema7 | undefined>({
   get: ({ get }) => {
     const catalogNode = get(selectedCatalogNodeState)
     const globalParameters = get(globalParametersState)
-    if (
-      catalogNode === undefined ||
-      catalogNode.formSchema === undefined
-    ) {
+    const info = get(moleculeInfosState)
+    const schemaWithMolInfo = enrichSchemaWithMolInfo(catalogNode, globalParameters, info)
+    try {
+      return schemaWithMolInfo
+    } catch (e) {
       return undefined
     }
-    const schemaWithMaxItems = resolveMaxItemsFrom(
-      catalogNode.formSchema,
-      globalParameters
-    )
-    const [moleculeInfos, moleculesPropName] = get(moleculeInfosState)
-    const schemaWithMolInfo = addMoleculeValidation(
-      schemaWithMaxItems,
-      moleculeInfos,
-      moleculesPropName
-    )
-    return schemaWithMolInfo
   }
 })
+
+function enrichSchemaWithMolInfo (catalogNode: ICatalogNode | undefined, globalParameters: IParameters, info: [MoleculeInfo[], string | undefined]): JSONSchema7 {
+  if (
+    catalogNode === undefined ||
+    catalogNode.formSchema === undefined
+  ) {
+    throw new Error('Unable to find schema belonging to node')
+  }
+  const schemaWithMaxItems = resolveMaxItemsFrom(
+    catalogNode.formSchema,
+    globalParameters
+  )
+  const [moleculeInfos, moleculesPropName] = info
+  const schemaWithMolInfo = addMoleculeValidation(
+    schemaWithMaxItems,
+    moleculeInfos,
+    moleculesPropName
+  )
+  return schemaWithMolInfo
+}
+
+function emptyNodeParams (catalog: ICatalog, globalParameters: IParameters, info: [MoleculeInfo[], string | undefined], nodeType: string): IParameters {
+  const catalogNode = catalog.nodes.find((n) => n.id === nodeType)
+  const schemaWithMolInfo = enrichSchemaWithMolInfo(catalogNode, globalParameters, info)
+  return emptyGlobalParams(schemaWithMolInfo)
+}
 
 /**
  * Hook to get JSON schema for currently selected node that can be used in a rjsf form.
@@ -535,6 +551,7 @@ export function useWorkflow (): UseWorkflow {
   const catalog = useCatalog()
   // clear errors method
   const { clearErrors } = useClearErrors()
+  const moleculeInfos = useRecoilValue(moleculeInfosState)
 
   return {
     nodes,
@@ -558,17 +575,18 @@ export function useWorkflow (): UseWorkflow {
       setSelectedNodeIndex(targetIndex)
     },
     addNodeToWorkflow (nodeType: string) {
+      const parameters = emptyNodeParams(catalog, global, moleculeInfos, nodeType)
       setNodes((oldNodes) => [
         ...oldNodes,
-        { type: nodeType, parameters: {}, id: nanoid() }
+        { type: nodeType, parameters, id: nanoid() }
       ])
-      // debugger
       setSelectedNodeIndex(nodes.length)
     },
     selectNode: (nodeIndex: number) => {
       // console.group('selectNode')
       // console.log('nodeIndex...', nodeIndex)
       // console.groupEnd()
+
       setSelectedNodeIndex(nodeIndex)
       if (editingGlobal) {
         setEditingGlobal(false)

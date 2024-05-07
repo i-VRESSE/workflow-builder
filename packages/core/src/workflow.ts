@@ -52,7 +52,14 @@ export function emptyGlobalParams (schema: JSONSchema7): IParameters {
   for (const key in schema.properties) {
     const propSchema = schema.properties[key]
     if (typeof propSchema !== 'boolean' && propSchema.type === 'array') {
-      parameters[key] = []
+      if (propSchema.maxItems !== undefined && propSchema.format !== 'moleculefilepaths' && (
+        typeof propSchema.items === 'object' ||
+        (Array.isArray(propSchema.items) && propSchema.items[0].type === 'object')
+      )) {
+        parameters[key] = new Array(propSchema.maxItems).fill({})
+      } else {
+        parameters[key] = []
+      }
     }
   }
   return parameters

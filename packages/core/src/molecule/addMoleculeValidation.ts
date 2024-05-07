@@ -67,7 +67,7 @@ function walkSchemaForMoleculeFormats (
   const entries = Object.entries(newSchema.properties).map(([k, v]) => {
     const s = v as JSONSchema7WithMaxItemsFrom
     const isArrayWithItems = s.type === 'array' && 'items' in s
-    const isObjectWithUserNames =
+    const isObjectWitAdditionalProps =
       s.type === 'object' &&
       typeof s.additionalProperties === 'object' &&
       !('properties' in s)
@@ -215,7 +215,7 @@ function walkSchemaForMoleculeFormats (
         }
       }
     } else if (
-      isObjectWithUserNames &&
+      isObjectWitAdditionalProps &&
       s.maxPropertiesFrom === moleculesPropName
     ) {
       // TODO implement
