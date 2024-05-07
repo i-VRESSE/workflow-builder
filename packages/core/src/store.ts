@@ -414,20 +414,16 @@ const selectedNodeFormSchemaState = selector<JSONSchema7 | undefined>({
     const globalParameters = get(globalParametersState)
     const info = get(moleculeInfosState)
     const schemaWithMolInfo = enrichSchemaWithMolInfo(catalogNode, globalParameters, info)
-    try {
-      return schemaWithMolInfo
-    } catch (e) {
-      return undefined
-    }
+    return schemaWithMolInfo
   }
 })
 
-function enrichSchemaWithMolInfo (catalogNode: ICatalogNode | undefined, globalParameters: IParameters, info: [MoleculeInfo[], string | undefined]): JSONSchema7 {
+function enrichSchemaWithMolInfo (catalogNode: ICatalogNode | undefined, globalParameters: IParameters, info: [MoleculeInfo[], string | undefined]): JSONSchema7 | undefined {
   if (
     catalogNode === undefined ||
     catalogNode.formSchema === undefined
   ) {
-    throw new Error('Unable to find schema belonging to node')
+    return undefined
   }
   const schemaWithMaxItems = resolveMaxItemsFrom(
     catalogNode.formSchema,
@@ -444,7 +440,13 @@ function enrichSchemaWithMolInfo (catalogNode: ICatalogNode | undefined, globalP
 
 function emptyNodeParams (catalog: ICatalog, globalParameters: IParameters, info: [MoleculeInfo[], string | undefined], nodeType: string): IParameters {
   const catalogNode = catalog.nodes.find((n) => n.id === nodeType)
+  if (catalogNode === undefined) {
+    return {}
+  }
   const schemaWithMolInfo = enrichSchemaWithMolInfo(catalogNode, globalParameters, info)
+  if (schemaWithMolInfo === undefined) {
+    return emptyGlobalParams(catalogNode.schema)
+  }
   return emptyGlobalParams(schemaWithMolInfo)
 }
 

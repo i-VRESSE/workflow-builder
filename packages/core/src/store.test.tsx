@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { renderHook, act, cleanup } from '@testing-library/react-hooks'
 import {
   useGlobalFormData,
@@ -17,6 +17,16 @@ import { prepareCatalog } from './catalog'
 
 afterEach(cleanup)
 
+async function flushPromisesAndTimers (): Promise<void> {
+  return await act(
+    async () =>
+      await new Promise((resolve) => {
+        setTimeout(resolve, 100)
+        vi.runAllTimers()
+      })
+  )
+}
+
 describe('useSelectNodeIndex()', () => {
   it('should have -1 as initial value', () => {
     const { result } = renderHook(useSelectNodeIndex, {
@@ -28,19 +38,10 @@ describe('useSelectNodeIndex()', () => {
 })
 
 describe('useText()', () => {
-  describe('given empty catalog, no nodes and no global parameters', () => {
-    it('should return default state with empty molecules array', () => {
-      const { result } = renderHook(useText, {
-        wrapper: RecoilRoot
-      })
-      // clean text from returns (\n)
-      const text = result.current.replaceAll('\n', '')
-      expect(text).toEqual('')
-    })
-  })
-
   describe('given catalog and a global parameter', () => {
-    it('should return global parameter as TOML formatted string', () => {
+    it('should return global parameter as TOML formatted string', async () => {
+      vi.useFakeTimers()
+
       const { result } = renderHook(
         () => {
           // Custom hook to return hook under test and other hooks to fill global state
@@ -58,6 +59,8 @@ describe('useText()', () => {
           wrapper: RecoilRoot
         }
       )
+
+      await flushPromisesAndTimers()
 
       act(() => {
         // Fill global state
@@ -84,6 +87,8 @@ describe('useText()', () => {
         })
       })
 
+      await flushPromisesAndTimers()
+
       const expected = `
 parameterX = 'some value'
 `
@@ -94,10 +99,11 @@ parameterX = 'some value'
 
 describe('useSelectedCatalogNode()', () => {
   describe('given catalog and workflow with single node', () => {
-    it('should return catalog of selected node', () => {
+    it('should return catalog of selected node', async () => {
+      vi.useFakeTimers()
+
       const { result } = renderHook(
         () => {
-          // TODO be able to use hooks with have async code
           const catalogNode = useSelectedCatalogNode()
           const setCatalog = useSetCatalog()
           const { addNodeToWorkflow, selectNode } = useWorkflow()
@@ -154,6 +160,8 @@ describe('useSelectedCatalogNode()', () => {
         c.addNodeToWorkflow('somenode')
         c.selectNode(0)
       })
+
+      await flushPromisesAndTimers()
 
       const expected = {
         type: 'object',

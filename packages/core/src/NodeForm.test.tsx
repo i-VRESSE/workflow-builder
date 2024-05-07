@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import { cleanup, render, screen } from '@testing-library/react'
 import { RecoilRoot } from 'recoil'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
@@ -13,11 +13,11 @@ afterEach(cleanup)
 describe('<NodeForm/>', () => {
   describe('given no node is selected', () => {
     beforeEach(() => {
-      render(<NodeForm />, { wrapper: RecoilRoot })
+      render(<Suspense fallback={<span>Loading...</span>}><NodeForm /></Suspense>, { wrapper: RecoilRoot })
     })
 
-    it('should render no node selected', () => {
-      expect(screen.getByText('No node selected')).toBeTruthy()
+    it('should render no node selected', async () => {
+      expect(await screen.findByText('No node selected')).toBeTruthy()
     })
   })
 })
