@@ -88,7 +88,8 @@ function parameters2toml (parameters: IParameters, tomlSchema: TomlObjectSchema)
       tomledParameters[k] = Section(v as any)
     } else if (isObject(v) && isIndexed) {
       Object.entries(v).forEach(([k2, v2]) => {
-        tomledParameters[`${k}_${k2}`] = v2
+        const v3 = Array.isArray(v2) ? v2.filter(item => item !== undefined) : v2
+        tomledParameters[`${k}_${k2}`] = v3
       })
     } else if (v !== undefined) {
       // avoid params with undefined value
