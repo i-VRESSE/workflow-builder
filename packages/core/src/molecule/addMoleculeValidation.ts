@@ -6,12 +6,17 @@ import { IFiles, IParameters } from '../types'
 import { MoleculeInfo, parsePDB } from './parse'
 import { UiSchema, utils } from '@rjsf/core'
 
-// TODO can be quite expensive to parse big molecules, should try to use memoization
-export async function parseMolecules (
+// save in memory parsed molecule info
+interface parsedMoleculeInfoProps {
+  [key: string]: Omit<MoleculeInfo, 'path'>
+}
+const parsedMoleculeInfo: parsedMoleculeInfoProps = {}
+
+export function parseMolecules (
   globalParameters: IParameters,
   globalSchema: JSONSchema7,
   files: IFiles
-): Promise<[MoleculeInfo[], string | undefined]> {
+): [MoleculeInfo[], string | undefined] {
   if (globalSchema.properties === undefined) {
     return [[], undefined]
   }
@@ -33,24 +38,38 @@ export async function parseMolecules (
   if (!Array.isArray(moleculeFilePaths)) {
     return [[], undefined]
   }
-  // debugger
+
   // find file of molecule path
   // TODO check whether files are actually PDB files using uiSchema.molecules..items.ui:options.accept: .pdb
   const moleculeFiles = moleculeFilePaths
     // ignore undefined entries (invalid entries)
     .filter(file => file !== undefined)
     .map((p) => files[p])
+
   // parse file
-  const moleculeInfos = await Promise.all(
-    moleculeFiles.map(async (f, i) => {
-      const body = dataURL2content(f)
-      const info = await parsePDB(body)
+  const moleculeInfos = moleculeFiles.map((f, i) => {
+    // debugger
+    // check if already parsed
+    const path = moleculeFilePaths[i]
+    if (Object.hasOwn(parsedMoleculeInfo, path)) {
+      // console.log("from memory...",path)
       return {
-        ...info,
-        path: moleculeFilePaths[i]
+        ...parsedMoleculeInfo[path],
+        path
       }
-    })
-  )
+    }
+    // else parse the info
+    const body = dataURL2content(f)
+    const info = parsePDB(body)
+    // save info in memory
+    parsedMoleculeInfo[path] = { ...info }
+    // return new info from memory
+    return {
+      ...parsedMoleculeInfo[path],
+      path
+    }
+  })
+
   return [moleculeInfos, moleculesPropName]
 }
 

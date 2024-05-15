@@ -394,16 +394,19 @@ export function useSelectedNodeFormData (): [
 
 const moleculeInfosState = selector<[MoleculeInfo[], string | undefined]>({
   key: 'moleculeInfos',
-  get: async ({ get }) => {
+  // NOTE 2024-05-15! making get async causes page reload
+  get: ({ get }) => {
     const catalog = get(catalogState)
     const globalSchema = catalog.global.schema
     const globalParameters = get(globalParametersState)
     const files = get(filesState)
-    return await parseMolecules(
+    const moleculeInfo = parseMolecules(
       globalParameters,
       globalSchema,
       files
     )
+    // debugger
+    return moleculeInfo
   }
 })
 

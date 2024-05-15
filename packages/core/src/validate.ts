@@ -81,7 +81,7 @@ async function validateNodeFactory (
 ): Promise<
   (value: IWorkflowNode, index: number, array: IWorkflowNode[]) => Errors
   > {
-  const [moleculeInfos, moleculesPropName] = await parseMolecules(
+  const [moleculeInfos, moleculesPropName] = parseMolecules(
     globalParameters,
     globalSchema,
     files

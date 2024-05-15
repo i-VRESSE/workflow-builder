@@ -23,7 +23,7 @@ init()
   .then(() => console.log('pdbtx...initialized'))
   .catch(e => console.error(e.message))
 
-export async function parsePDB (content: string): Promise<Omit<MoleculeInfo, 'path'>> {
+export function parsePDB (content: string): Omit<MoleculeInfo, 'path'> {
   try {
     const info = open_pdb(content)
     if (info.warnings.length > 0) {
