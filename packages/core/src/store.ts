@@ -460,6 +460,27 @@ export function useSelectedNodeFormSchema (): JSONSchema7 | undefined {
   return useRecoilValue(selectedNodeFormSchemaState)
 }
 
+function expandSingleCollapsibleField (uiSchema: UiSchema): UiSchema {
+  const nrCollapsibles = Object.values(uiSchema).filter(
+    (v) => v['ui:field'] === 'collapsible'
+  ).length
+  if (nrCollapsibles === 1) {
+    const firstCollapsibleKey = Object.keys(uiSchema).find(
+      (k) => uiSchema[k]['ui:field'] === 'collapsible'
+    )
+    if (firstCollapsibleKey !== undefined) {
+      return {
+        ...uiSchema,
+        [firstCollapsibleKey]: {
+          ...uiSchema[firstCollapsibleKey],
+          'ui:collapsed': false
+        }
+      }
+    }
+  }
+  return uiSchema
+}
+
 const selectedNodeFormUiSchemaState = selector<UiSchema | undefined>({
   key: 'selectedNodeFormUiSchema',
   get: ({ get }) => {
@@ -475,7 +496,8 @@ const selectedNodeFormUiSchemaState = selector<UiSchema | undefined>({
       moleculeInfos,
       moleculesPropName
     )
-    return uiSchemaWithMolInfo
+
+    return expandSingleCollapsibleField(uiSchemaWithMolInfo)
   }
 })
 

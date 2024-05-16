@@ -29,7 +29,7 @@ export function groupSchema (
   schema: JSONSchema7,
   uiSchema: UiSchema
 ): JSONSchema7 {
-  const newSchema = JSON.parse(JSON.stringify(schema))
+  const newSchema = structuredClone(schema)
 
   // Handle overlap between groups and direct prop names.
   const definedGroups = new Set(
@@ -37,24 +37,38 @@ export function groupSchema (
       .filter((v) => 'ui:group' in v)
       .map((v) => v['ui:group'])
   )
-  const directProps = schema.properties ?? {}
-  const directPropNamesWithSameNameAsGroup = new Set(
-    Object.keys(directProps).filter((k) => definedGroups.has(k))
+  const propsWithGroup = new Set(
+    Object.keys(uiSchema).filter((k) => 'ui:group' in uiSchema[k])
   )
-  for (const k of directPropNamesWithSameNameAsGroup) {
-    const propHasGroup =
-      k in uiSchema && 'ui:group' in uiSchema[k] && 'ui:group' in uiSchema[k]
-    if (!(propHasGroup && uiSchema[k]['ui:group'] === k)) {
-      throw new Error(
-        `Can not have group and un-grouped parameter with same name ${k}`
-      )
-    }
-    // Prop has same name as its group so nest it
-    const v = newSchema.properties[k]
-    newSchema.properties[k] = {
+  const allProps = new Set(Object.keys(schema.properties ?? {}))
+  const grouplessProps = new Set([...allProps].filter((x) => !propsWithGroup.has(x)))
+  const grouplessPropsWithSameNameAsGroup = new Set(
+    [...grouplessProps].filter((x) => definedGroups.has(x))
+  )
+  // direct prop with same name as group throw error
+  if (grouplessPropsWithSameNameAsGroup.size > 0) {
+    const msg = Array.from(grouplessPropsWithSameNameAsGroup).join(', ')
+    throw new Error(
+      `Can not have group and un-grouped parameter with same name ${msg}`
+    )
+  }
+
+  if (!('properties' in newSchema && typeof newSchema.properties === 'object')) {
+    return newSchema
+  }
+
+  // prop with group and same name as any group should be nested first
+  const propsWithSameNameAsAnyGroup = new Set(Object.entries(uiSchema).filter(([k, v]) => 'ui:group' in v && definedGroups.has(k)).map((d) => d[0]))
+  for (const k of propsWithSameNameAsAnyGroup) {
+    const prop = newSchema.properties[k]
+    /* eslint-disable @typescript-eslint/no-dynamic-delete */
+    delete newSchema.properties[k]
+    /* eslint-enable @typescript-eslint/no-dynamic-delete */
+    const group = uiSchema[k]['ui:group']
+    newSchema.properties[group] = {
       type: 'object',
       properties: {
-        [k]: v
+        [k]: prop
       },
       additionalProperties: false
     }
@@ -62,8 +76,11 @@ export function groupSchema (
 
   Object.entries(uiSchema).forEach(([k, v]) => {
     // TODO recursivly, now only loops over first direct props
-    if ('ui:group' in v && !directPropNamesWithSameNameAsGroup.has(k)) {
+    if ('ui:group' in v && !propsWithSameNameAsAnyGroup.has(k)) {
       const group = v['ui:group']
+      if (!('properties' in newSchema && typeof newSchema.properties === 'object')) {
+        throw new Error('Schema must have properties')
+      }
       if (!(group in newSchema.properties)) {
         newSchema.properties[group] = {
           type: 'object',
@@ -71,7 +88,11 @@ export function groupSchema (
           additionalProperties: false
         }
       }
-      newSchema.properties[group].properties[k] = newSchema.properties[k]
+      const newGroup = newSchema.properties[group]
+      if (typeof newGroup === 'boolean' || newGroup.properties === undefined) {
+        return
+      }
+      newGroup.properties[k] = newSchema.properties[k]
       // Remove k as it now is in the group
       /* eslint-disable @typescript-eslint/no-dynamic-delete */
       delete newSchema.properties[k]

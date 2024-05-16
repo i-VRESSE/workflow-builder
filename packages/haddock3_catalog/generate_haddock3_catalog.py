@@ -430,10 +430,14 @@ def process_level(level_fn: Path, level: str):
 
     broken_modules = {
         'topocg', # Gives `AttributeError: module 'haddock.modules.topology.topocg' has no attribute 'HaddockModule'` error
+        'exit', # Does not make sense to have exit module in the catalog
     }
     # TODO define module order like category order
-    # now they are sorted alphabetically
+    # now they are sorted by insert
     nodes = [process_module(module, category, level) for module, category in sorted(modules_category.items()) if module not in broken_modules]
+
+    # remove catagories without nodes
+    categories = [c for c in categories if any(n['category'] == c['name'] for n in nodes)]
 
     catalog = {
         "title": f"Haddock 3 on {level} level",

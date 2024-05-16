@@ -5,7 +5,7 @@ import { groupCatalog, groupParameters, groupSchema, groupUiSchema, unGroupParam
 import { ICatalog, IParameters } from './types'
 
 function deepCopy<T> (value: T): T {
-  return JSON.parse(JSON.stringify(value))
+  return structuredClone(value)
 }
 
 describe('given a schema without any property with ui:group in uiSchema', () => {
@@ -500,6 +500,88 @@ describe('given a un-grouped prop with same name as group', () => {
       }
 
       expect(() => groupSchema(schema, uiSchema)).toThrow('Can not have group and un-grouped parameter with same name prop2')
+    })
+  })
+})
+
+describe('given a prop in own group with same name as group of another prop', () => {
+  describe('groupSchema()', () => {
+    it('should make 2 groups each with a prop', () => {
+      const schema: JSONSchema7 = {
+        type: 'object',
+        properties: {
+          receptor_chains: {
+            type: 'string'
+          },
+          restraints: {
+            type: 'string'
+          }
+        },
+        additionalProperties: false
+      }
+      const uiSchema: UiSchema = {
+        receptor_chains: {
+          'ui:group': 'restraints'
+        },
+        restraints: {
+          'ui:group': 'distance restraints'
+        }
+      }
+      const groupedSchema = groupSchema(schema, uiSchema)
+
+      const expectedSchema: JSONSchema7 = {
+        type: 'object',
+        properties: {
+          restraints: {
+            type: 'object',
+            properties: {
+              receptor_chains: {
+                type: 'string'
+              }
+            },
+            additionalProperties: false
+          },
+          'distance restraints': {
+            type: 'object',
+            properties: {
+              restraints: {
+                type: 'string'
+              }
+            },
+            additionalProperties: false
+          }
+        },
+        additionalProperties: false
+      }
+      expect(groupedSchema).toEqual(expectedSchema)
+    })
+  })
+
+  describe('unGroupParameters()', () => {
+    it('should work', () => {
+      const groupedParameters = {
+        restraints: {
+          receptor_chains: 'val1'
+        },
+        'distance restraints': {
+          restraints: 'val2'
+        }
+      }
+
+      const actual = unGroupParameters(groupedParameters, {
+        receptor_chains: {
+          'ui:group': 'restraints'
+        },
+        restraints: {
+          'ui:group': 'distance restraints'
+        }
+      })
+
+      const expectedParameters = {
+        receptor_chains: 'val1',
+        restraints: 'val2'
+      }
+      expect(actual).toEqual(expectedParameters)
     })
   })
 })
