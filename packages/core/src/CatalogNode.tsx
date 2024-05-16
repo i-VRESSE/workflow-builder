@@ -22,7 +22,12 @@ export const CatalogNode = ({ id, label }: ICatalogNode): JSX.Element => {
         {...attributes}
         title={label}
         className='btn btn-light btn-sm btn-catalog-node'
-        onClick={() => addNodeToWorkflow(id)}
+        onClick={(e) => {
+          // prevent bubbling click even to parent which toggles the group
+          e.stopPropagation()
+          // add node to workflow
+          addNodeToWorkflow(id)
+        }}
       >
         <span>{id}</span>
         <div

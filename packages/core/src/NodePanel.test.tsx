@@ -78,9 +78,11 @@ describe('<NodePanel/>', () => {
       vi.useFakeTimers()
 
       render(
-        <StoreContext>
-          <NodePanel fields={fields} widgets={widgets} />
-        </StoreContext>,
+        <Suspense fallback={<span>busy0</span>}>
+          <StoreContext>
+            <NodePanel fields={fields} widgets={widgets} />
+          </StoreContext>
+        </Suspense>,
         { wrapper: RecoilRoot }
       )
 
@@ -99,12 +101,12 @@ describe('<NodePanel/>', () => {
       await flushPromisesAndTimers()
     })
 
-    it('should render custom field', () => {
-      expect(screen.getByText('My string field')).toBeTruthy()
+    it('should render custom field', async () => {
+      expect(await screen.findByText('My string field')).toBeTruthy()
     })
 
-    it('should render custom widget', () => {
-      expect(screen.getByText('My string widget')).toBeTruthy()
+    it('should render custom widget', async () => {
+      expect(await screen.findByText('My string widget')).toBeTruthy()
     })
   })
 

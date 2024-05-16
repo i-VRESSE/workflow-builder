@@ -5,8 +5,8 @@ import { FieldProps, utils } from '@rjsf/core'
 const CaretUpSquare = (): JSX.Element => (
   <svg
     xmlns='http://www.w3.org/2000/svg'
-    width='16'
-    height='16'
+    width='20'
+    height='20'
     fill='currentColor'
     className='bi bi-caret-up-square'
     viewBox='0 0 16 16'
@@ -20,8 +20,8 @@ const CaretUpSquare = (): JSX.Element => (
 const CaretDownSquare = (): JSX.Element => (
   <svg
     xmlns='http://www.w3.org/2000/svg'
-    width='16'
-    height='16'
+    width='20'
+    height='20'
     fill='currentColor'
     className='bi bi-caret-down-square'
     viewBox='0 0 16 16'
@@ -30,6 +30,24 @@ const CaretDownSquare = (): JSX.Element => (
     <path d='M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2z' />
   </svg>
 )
+
+// Error icon shown in error (comes from bootstrap.css)
+const ErrorIcon = (): JSX.Element => {
+  return (
+    <svg
+      xmlns='http://www.w3.org/2000/svg'
+      width='24'
+      height='24'
+      fill='none'
+      stroke='#dc3545'
+      viewBox='0 0 12 12'
+    >
+      <circle cx='6' cy='6' r='4.5' />
+      <path strokeLinejoin='round' d='M5.8 3.6h.4L6 6.5z' />
+      <circle cx='6' cy='8.2' r='.6' fill='#dc3545' stroke='none' />
+    </svg>
+  )
+}
 
 const CollapsedIcon = CaretDownSquare
 const ExpandedIcon = CaretUpSquare
@@ -46,40 +64,48 @@ export const CollapsibleField = (props: FieldProps): JSX.Element => {
       : true
   const [collapsed, setCollapsed] = useState(initialCollapsed)
   const title = extractTitle(props, uiOptions)
-  const expanderId = props.id ?? `expander4${props.name.replaceAll(' ', '_')}` // TODO find rjsf func to get more stable id
+  const expanderId = props.id ?? `expander4${props.name.replaceAll(' ', '_')}` // TODO find rjsf func to get more stable
 
-  // To render button + name use styling from https://github.com/rjsf-team/react-jsonschema-form/blob/master/packages/bootstrap-4/src/TitleField/TitleField.tsx
-  // Card styling from bootstrap 4.6 https://getbootstrap.com/docs/4.6/components/card/
-  if (collapsed) {
-    return (
-      <div className='card'>
-        <div className='card-header'>
-          <h5
-            className='panel-title'
-            onClick={() => setCollapsed(false)}
-            id={expanderId}
-          >
-            <CollapsedIcon />
-            <span className='align-middle mx-3'>{title}</span>
-          </h5>
-        </div>
-      </div>
-    )
-  }
+  // console.group('CollapsibleField')
+  // console.log('errorSchema...', props.errorSchema)
+  // console.groupEnd()
 
-  // TitleField inside the ObjectField is not rendered when there is no title or name
-  const oprops = dropTitle(props)
+  // check for errors in the field. On error we show title in red and warning icon
+  const hasError = Object.keys(props.errorSchema).length > 0
+
   return (
     <div className='card'>
-      <div className='card-header'>
-        <h5 onClick={() => setCollapsed(true)} id={expanderId}>
-          <ExpandedIcon />
-          <span className='align-middle mx-3'>{title}</span>
+      <div
+        className={`card-header panel-title ${hasError ? 'text-danger' : ''}`}
+        id={expanderId}
+        style={{
+          display: 'flex',
+          justifyContent: 'flex-start',
+          alignItems: 'center',
+          gap: '1rem',
+          cursor: 'pointer'
+        }}
+        onClick={() => {
+          setCollapsed(!collapsed)
+        }}
+      >
+        {/* icon */}
+        {collapsed ? <CollapsedIcon /> : <ExpandedIcon />}
+        {/* title */}
+        <h5 style={{
+          flex: 1,
+          margin: 0,
+          padding: 0
+        }}
+        >
+          {title}
         </h5>
+        {/* error icon */}
+        {hasError ? <ErrorIcon /> : null}
       </div>
-      <div className='card-body'>
-        <ObjectField {...oprops} />
-      </div>
+      {/* show content when not collapsed */}
+      {/* TitleField inside the ObjectField is not rendered when there is no title or name */}
+      {!collapsed ? <div className='card-body'><ObjectField {...dropTitle(props)} /></div> : null}
     </div>
   )
 }

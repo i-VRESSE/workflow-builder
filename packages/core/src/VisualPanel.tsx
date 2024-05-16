@@ -9,10 +9,70 @@ import { BsX } from 'react-icons/bs'
 import {
   useDraggingCatalogNodeState,
   useDraggingWorkflowNodeState,
+  useNodeHasErrorsValue,
+  useSelectedNode,
   useWorkflow
 } from './store'
 import { VisualNode } from './VisualNode'
 import { GripVertical } from './GripVertical'
+import ErrorIcon from './ErrorIcon'
+
+function GlobalListNode (): JSX.Element {
+  const node = useSelectedNode()
+  const globalHasErrors = useNodeHasErrorsValue('global')
+  const { selectGlobalEdit } = useWorkflow()
+
+  return (
+    <button
+      className={`btn btn-light btn-sm btn-block btn-visual-node ${(node != null) ? '' : 'font-bold font-weight-bold'} ${globalHasErrors ? 'text-danger' : ''} `}
+      onClick={selectGlobalEdit}
+      title='Edit global parameters'
+    >
+      <div>
+        {globalHasErrors
+          ? <span style={{ marginRight: '0.5rem' }}><ErrorIcon /></span>
+          : null}
+        <span>0. Global parameters</span>
+      </div>
+    </button>
+  )
+}
+
+function AppendZone (): JSX.Element {
+  const appendZoneStyle: CSSProperties = {
+    padding: '1rem',
+    textAlign: 'center'
+  }
+  return (
+    <div style={appendZoneStyle}>
+      Append node to workflow by clicking node in catalog or by dragging node
+      from catalog to here.
+    </div>
+  )
+}
+
+function NodeList ({ showBorder = false }: { showBorder: boolean }): JSX.Element {
+  const { nodes } = useWorkflow()
+
+  const listStyle: CSSProperties = {
+    lineHeight: '2.5em',
+    height: '100%'
+  }
+  // add dashed border
+  if (showBorder) {
+    listStyle.borderStyle = 'dashed'
+    listStyle.borderWidth = 1
+  }
+
+  return (
+    <div style={listStyle}>
+      {nodes.map((node, i) => (
+        <VisualNode key={node.id} index={i} type={node.type} id={node.id} />
+      ))}
+      {nodes.length === 0 ? <AppendZone /> : null}
+    </div>
+  )
+}
 
 export const VisualPanel = (): JSX.Element => {
   const { nodes } = useWorkflow()
@@ -21,53 +81,31 @@ export const VisualPanel = (): JSX.Element => {
   const draggingWorkflowNode = nodes.find(
     (n) => n.id === draggingWorkflowNodeCode
   )
-
-  const appendZoneStyle: CSSProperties = {
-    padding: '1rem',
-    textAlign: 'center'
-  }
-  const appendZone = (
-    <div style={appendZoneStyle}>
-      Append node to workflow by clicking node in catalog or by dragging node
-      from catalog to here.
-    </div>
-  )
-
-  let listStyle: CSSProperties = { lineHeight: '2.5em', height: '100%' }
-  if (draggingWorkflowNodeCode !== null || draggingCatalogNode !== null || nodes.length === 0) {
-    listStyle = {
-      ...listStyle,
-      borderStyle: 'dashed',
-      borderWidth: 1
-    }
-  }
-  const nodeList = (
-    <div style={listStyle}>
-      {nodes.map((node, i) => (
-        <VisualNode key={node.id} index={i} type={node.type} id={node.id} />
-      ))}
-      {nodes.length === 0 ? appendZone : <></>}
-    </div>
-  )
-
   const sortableItems = nodes.map((n) => n.id)
   if (draggingCatalogNode !== null) {
     sortableItems.push(draggingCatalogNode.toString())
   }
   const { setNodeRef } = useDroppable({ id: 'catalog-dropzone' })
+
   return (
     <div
-      ref={setNodeRef} style={{
+      ref={setNodeRef}
+      style={{
         flex: 1,
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        padding: '0.5rem 0rem'
       }}
     >
+      <GlobalListNode />
       <SortableContext
         items={sortableItems}
         strategy={verticalListSortingStrategy}
       >
-        {nodeList}
+        {/* {nodeList} */}
+        <NodeList
+          showBorder={draggingWorkflowNodeCode !== null || draggingCatalogNode !== null || nodes.length === 0}
+        />
       </SortableContext>
       <DragOverlay dropAnimation={null}>
         {draggingCatalogNode !== null

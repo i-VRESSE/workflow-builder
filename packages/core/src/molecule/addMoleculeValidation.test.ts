@@ -1,6 +1,7 @@
 import { UiSchema } from '@rjsf/core'
 import { JSONSchema7 } from 'json-schema'
-import { beforeEach, describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it, beforeAll } from 'vitest'
+import { init } from '@i-vresse/pdbtbx-ts'
 
 import { JSONSchema7WithMaxItemsFrom } from '../resolveMaxItemsFrom'
 import { IFiles, IParameters } from '../types'
@@ -10,6 +11,10 @@ import {
   parseMolecules
 } from './addMoleculeValidation'
 import { MoleculeInfo } from './parse'
+
+beforeAll(async () => {
+  await init()
+})
 
 describe('parseMolecules()', () => {
   describe('given bad global schema or parameters', () => {
@@ -53,8 +58,8 @@ describe('parseMolecules()', () => {
     ]
     it.each(unchangedCases)(
       'given %s should find zero files',
-      async (_description, globalSchema, globalParameters, files) => {
-        const actual = await parseMolecules(
+      (_description, globalSchema, globalParameters, files) => {
+        const actual = parseMolecules(
           globalParameters,
           globalSchema,
           files
@@ -70,7 +75,7 @@ describe('addMoleculeValidation()', () => {
     let moleculeInfos: MoleculeInfo[]
     let moleculesPropName: string | undefined
 
-    beforeEach(async () => {
+    beforeEach(() => {
       const globalParameters = {
         molecules: ['a.pdb']
       }
@@ -94,14 +99,14 @@ describe('addMoleculeValidation()', () => {
       const files = {
         'a.pdb': file
       };
-      [moleculeInfos, moleculesPropName] = await parseMolecules(
+      [moleculeInfos, moleculesPropName] = parseMolecules(
         globalParameters,
         globalSchema,
         files
       )
     })
 
-    it('should return schema unchanged', async () => {
+    it('should return schema unchanged', () => {
       const itemsSchema: JSONSchema7 = {
         type: 'string'
       }
@@ -115,7 +120,7 @@ describe('addMoleculeValidation()', () => {
           prop1: propSchema
         }
       }
-      const actual = await addMoleculeValidation(
+      const actual = addMoleculeValidation(
         schema,
         moleculeInfos,
         moleculesPropName
@@ -124,7 +129,7 @@ describe('addMoleculeValidation()', () => {
     })
 
     describe('in array of array of object with prop with format:chain', () => {
-      it('should set enum to [A]', async () => {
+      it('should set enum to [A]', () => {
         const propSchema: JSONSchema7WithMaxItemsFrom = {
           type: 'array',
           maxItemsFrom: 'molecules',
@@ -147,7 +152,7 @@ describe('addMoleculeValidation()', () => {
             prop1: propSchema
           }
         }
-        const actual = await addMoleculeValidation(
+        const actual = addMoleculeValidation(
           schema,
           moleculeInfos,
           moleculesPropName
@@ -182,7 +187,7 @@ describe('addMoleculeValidation()', () => {
     })
 
     describe('in array of array of object with prop with format:residue', () => {
-      it('should set enum to [-3]', async () => {
+      it('should set enum to [-3]', () => {
         const propSchema: JSONSchema7WithMaxItemsFrom = {
           type: 'array',
           maxItemsFrom: 'molecules',
@@ -205,7 +210,7 @@ describe('addMoleculeValidation()', () => {
             prop1: propSchema
           }
         }
-        const actual = await addMoleculeValidation(
+        const actual = addMoleculeValidation(
           schema,
           moleculeInfos,
           moleculesPropName
@@ -241,7 +246,7 @@ describe('addMoleculeValidation()', () => {
 
     // Test for topoaa mol prop
     describe('in array of object of array of scalar with format:residue', () => {
-      it('should set enum to [-3]', async () => {
+      it('should set enum to [-3]', () => {
         const propSchema: JSONSchema7WithMaxItemsFrom = {
           type: 'array',
           maxItemsFrom: 'molecules',
@@ -270,7 +275,7 @@ describe('addMoleculeValidation()', () => {
             }
           }
         }
-        const actual = await addMoleculeValidation(
+        const actual = addMoleculeValidation(
           schema,
           moleculeInfos,
           moleculesPropName
@@ -311,7 +316,7 @@ describe('addMoleculeValidation()', () => {
     })
 
     describe('in grouped object of array of array of object with prop with format:residue', () => {
-      it('should set enum to [-3]', async () => {
+      it('should set enum to [-3]', () => {
         const propSchema: JSONSchema7WithMaxItemsFrom = {
           type: 'array',
           maxItemsFrom: 'molecules',
@@ -339,7 +344,7 @@ describe('addMoleculeValidation()', () => {
             }
           }
         }
-        const actual = await addMoleculeValidation(
+        const actual = addMoleculeValidation(
           schema,
           moleculeInfos,
           moleculesPropName
@@ -464,7 +469,7 @@ describe('addMoleculeValidation()', () => {
     })
 
     describe('given array of array of object with props with format:chain, format:residue and no format', () => {
-      it('should make items an array and set enums', async () => {
+      it('should make items an array and set enums', () => {
         const propSchema: JSONSchema7WithMaxItemsFrom = {
           type: 'array',
           maxItemsFrom: 'molecules',
@@ -494,7 +499,7 @@ describe('addMoleculeValidation()', () => {
             prop1: propSchema
           }
         }
-        const actual = await addMoleculeValidation(
+        const actual = addMoleculeValidation(
           schema,
           moleculeInfos,
           moleculesPropName
@@ -562,9 +567,10 @@ describe('addMoleculeValidation()', () => {
     let moleculeInfos: MoleculeInfo[]
     let moleculesPropName: string | undefined
 
-    beforeEach(async () => {
+    beforeEach(() => {
       const globalParameters = {
-        molecules: ['a.pdb']
+        // ensure unique name due to local cache
+        molecules: ['xyz.pdb']
       }
       const globalSchema: JSONSchema7 = {
         type: 'object',
@@ -583,9 +589,10 @@ describe('addMoleculeValidation()', () => {
         'data:text/plain;name=a.pdb;base64,' +
         Buffer.from(body).toString('base64')
       const files = {
-        'a.pdb': file
+        // ensure unique name due to local cache
+        'xyz.pdb': file
       };
-      [moleculeInfos, moleculesPropName] = await parseMolecules(
+      [moleculeInfos, moleculesPropName] = parseMolecules(
         globalParameters,
         globalSchema,
         files
@@ -596,7 +603,7 @@ describe('addMoleculeValidation()', () => {
       it.each([
         ['residue', 'number'],
         ['chain', 'string']
-      ] as const)('should make items an array and not set enums for %s format', async (moleculeformat, moleculeType) => {
+      ] as const)('should make items an array and not set enums for %s format', (moleculeformat, moleculeType) => {
         const propSchema: JSONSchema7WithMaxItemsFrom = {
           type: 'array',
           maxItemsFrom: 'molecules',
@@ -619,7 +626,7 @@ describe('addMoleculeValidation()', () => {
             prop1: propSchema
           }
         }
-        const actual = await addMoleculeValidation(
+        const actual = addMoleculeValidation(
           schema,
           moleculeInfos,
           moleculesPropName

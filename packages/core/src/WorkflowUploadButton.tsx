@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import { UpdateOptions, toast } from 'react-toastify'
-import { useWorkflow } from './store'
+import { useClearErrors, useWorkflow } from './store'
 import { ValidationError, flattenValidationErrors } from './validate'
 
 function ErrorsList ({ error }: { error: ValidationError }): JSX.Element {
@@ -19,6 +19,7 @@ function ErrorsList ({ error }: { error: ValidationError }): JSX.Element {
 export const WorkflowUploadButton = (): JSX.Element => {
   const uploadRef = useRef<HTMLInputElement>(null)
   const { loadWorkflowArchive } = useWorkflow()
+  const { clearErrors } = useClearErrors()
 
   async function uploadWorkflow (
     event: React.ChangeEvent<HTMLInputElement>
@@ -29,6 +30,8 @@ export const WorkflowUploadButton = (): JSX.Element => {
     const file = event.target.files[0]
     const url = URL.createObjectURL(file)
     const toastId = toast.loading('Loading workfow ...')
+    // clear all form errors before loading different configuration
+    clearErrors()
     try {
       await loadWorkflowArchive(url)
       toast.update(toastId, {
@@ -63,22 +66,32 @@ export const WorkflowUploadButton = (): JSX.Element => {
       }
     } finally {
       URL.revokeObjectURL(url)
+      if (uploadRef.current != null) {
+        // remove value in order to trigger on change event
+        // when uploading same file for the second time
+        uploadRef.current.value = ''
+      }
     }
   }
 
   return (
     <button
-      className='btn btn-light'
-      onClick={() => uploadRef.current?.click()}
+      className='btn btn-outline-secondary'
+      onClick={() => {
+        uploadRef.current?.click()
+      }}
       title='Upload an archive'
     >
       Upload
       <input
-        type='file'
-        accept='application/zip,.zip'
-        onChange={uploadWorkflow}
         ref={uploadRef}
-        style={{ opacity: 0, width: 0, height: 0 }}
+        type='file'
+        tabIndex={-1}
+        accept='application/zip,.zip'
+        onChange={uploadWorkflow as any}
+        style={{
+          display: 'none'
+        }}
       />
     </button>
   )

@@ -12,10 +12,10 @@ afterEach(cleanup)
 
 describe('<VisualPanel/>', () => {
   describe('given empty workflow', () => {
-    it('should render text how to add node', () => {
+    it('should render text how to add node', async () => {
       render(<VisualPanel />, { wrapper: Wrapper })
 
-      const appendZone = screen.getByText(/Append node to workflow by/)
+      const appendZone = await screen.findByText(/Append node to workflow by/)
       expect(appendZone).toBeTruthy()
     })
   })

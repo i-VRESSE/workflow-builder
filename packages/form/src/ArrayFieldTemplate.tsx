@@ -279,11 +279,10 @@ const DefaultNormalArrayFieldTemplate = (props: ArrayFieldTemplateProps) => {
               props.items.map((p) => DefaultArrayItem({ ...p, indexable, indexLookup }))}
 
             {props.canAdd && (
-              <Container className=''>
+              <Container className='button-container'>
                 <Row className='mt-2'>
                   <Col xs={9} />
                   <Col xs={3} className='py-4 col-lg-3 col-3'>
-                    {' '}
                     <AddButton
                       className='array-item-add'
                       onClick={props.onAddClick}

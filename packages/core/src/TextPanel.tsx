@@ -1,5 +1,4 @@
 import React from 'react'
-import { FilesList } from './FilesList'
 import { HighlightedCode } from './HighlightedCode'
 
 import { useText } from './store'
@@ -18,10 +17,22 @@ export const TextPanel = (): JSX.Element => {
   }
 
   return (
-    <div>
+    <div style={{
+      position: 'relative'
+    }}
+    >
       <HighlightedCode code={code} />
-      <button className='btn btn-link' onClick={copy2clipboard}>Copy to clipboard</button>
-      <FilesList />
+      <button
+        className='btn btn-link'
+        style={{
+          position: 'absolute',
+          right: '0.25rem',
+          top: '0.75rem'
+        }}
+        onClick={copy2clipboard as any}
+      >
+        Copy to clipboard
+      </button>
     </div>
   )
 }
