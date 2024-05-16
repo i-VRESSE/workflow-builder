@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## @i-vresse/wb-core 3.0.0 + @i-vresse/wb-form 2.0.0 - 2024-05-16
+
 ### Changed
 
 * Autosave ([#144](https://github.com/i-VRESSE/workflow-builder/pull/144))
