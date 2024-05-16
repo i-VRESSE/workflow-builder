@@ -1,6 +1,11 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, beforeAll } from 'vitest'
+import { init } from '@i-vresse/pdbtbx-ts'
 import dedent from 'ts-dedent'
 import { parsePDB, MoleculeInfo } from './parse'
+
+beforeAll(async () => {
+  await init()
+})
 
 describe('parsePDB', () => {
   const cases: Array<[string, string, Omit<MoleculeInfo, 'path'>]> = [

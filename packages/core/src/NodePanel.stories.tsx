@@ -23,7 +23,7 @@ export const NothingSelected: ComponentStory<typeof NodePanel> = () => {
 
 export const GlobalSelected: ComponentStory<typeof NodePanel> = () => {
   const setCatalog = useSetCatalog()
-  const { toggleGlobalEdit } = useWorkflow()
+  // const { setEditingGlobal } = useWorkflow()
   useEffect(() => {
     const catalog = prepareCatalog({
       title: 'Some title',
@@ -44,7 +44,7 @@ export const GlobalSelected: ComponentStory<typeof NodePanel> = () => {
       examples: {}
     })
     setCatalog(catalog)
-    toggleGlobalEdit()
+    // toggleGlobalEdit()
   }, [])
   return <NodePanel />
 }

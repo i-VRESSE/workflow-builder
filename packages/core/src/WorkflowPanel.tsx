@@ -1,22 +1,32 @@
 import React, { PropsWithChildren, useState } from 'react'
 import { TextPanel } from './TextPanel'
 import { VisualPanel } from './VisualPanel'
-import { useWorkflow } from './store'
+import { FilesList } from './FilesList'
 
-type ITab = 'text' | 'visual'
+type ITab = 'text' | 'visual' | 'files'
+
+/**
+ * Return selected tab content
+ * @param tab ITab
+ * @returns JSX.Element
+ */
+function SelectedTab ({ tab }: { tab: ITab }): JSX.Element {
+  switch (tab) {
+    case 'text':
+      return <TextPanel />
+    case 'files':
+      return <FilesList />
+    // visual panel is default
+    default:
+      return <VisualPanel />
+  }
+}
 
 /**
  * Panel which renders the workflow.
- *
- * Used selected the node of which edit its parameters.
  */
 export const WorkflowPanel = ({ children }: PropsWithChildren<{}>): JSX.Element => {
   const [tab, setTab] = useState<ITab>('visual')
-  const { toggleGlobalEdit } = useWorkflow()
-
-  const selectedPanel = tab === 'visual' ? <VisualPanel /> : <TextPanel />
-  const visualTabStyle = tab === 'visual' ? 'nav-link active' : 'nav-link'
-  const textTabStyle = tab === 'text' ? 'nav-link active' : 'nav-link'
 
   return (
     <fieldset style={{
@@ -27,18 +37,26 @@ export const WorkflowPanel = ({ children }: PropsWithChildren<{}>): JSX.Element 
     >
       <legend>Workflow</legend>
       <div className='btn-toolbar'>
-        <button className='btn btn-light' onClick={toggleGlobalEdit} title='Edit global parameters'>Global parameters</button>
         {children}
       </div>
-      <ul className='nav nav-tabs'>
+      <ul
+        className='nav nav-tabs'
+        style={{
+          padding: 0,
+          gap: '0.125rem'
+        }}
+      >
         <li className='nav-item'>
-          <button className={visualTabStyle} onClick={() => setTab('visual')}>Visual</button>
+          <button className={`nav-link ${tab === 'visual' ? 'active' : ''}`} onClick={() => setTab('visual')}>Visual</button>
         </li>
         <li className='nav-item'>
-          <button className={textTabStyle} onClick={() => setTab('text')}>Text</button>
+          <button className={`nav-link ${tab === 'text' ? 'active' : ''}`} onClick={() => setTab('text')}>Text</button>
+        </li>
+        <li className='nav-item'>
+          <button className={`nav-link ${tab === 'files' ? 'active' : ''}`} onClick={() => setTab('files')}>Files</button>
         </li>
       </ul>
-      {selectedPanel}
+      <SelectedTab tab={tab} />
     </fieldset>
   )
 }

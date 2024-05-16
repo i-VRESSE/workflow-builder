@@ -1,9 +1,10 @@
 import React from 'react'
 import { toast } from 'react-toastify'
-import { useWorkflow } from './store'
+import { useWorkflow, useWorkflowHasErrors } from './store'
 
 export const WorkflowDownloadButton = (): JSX.Element => {
   const { save } = useWorkflow()
+  const hasErrors = useWorkflowHasErrors()
 
   async function downloadWorkflow (): Promise<void> {
     await toast.promise(
@@ -22,6 +23,6 @@ export const WorkflowDownloadButton = (): JSX.Element => {
   }
 
   return (
-    <button className='btn btn-primary' onClick={downloadWorkflow}>Download archive</button>
+    <button className='btn btn-outline-primary' onClick={downloadWorkflow as any} disabled={hasErrors}>Download</button>
   )
 }

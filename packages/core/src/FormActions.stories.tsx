@@ -23,9 +23,9 @@ export const NothingSelected: ComponentStory<typeof FormActions> = () => {
 
 export const GlobalParametersSelected: ComponentStory<typeof FormActions> =
   () => {
-    const { toggleGlobalEdit } = useWorkflow()
+    const { setEditingGlobal } = useWorkflow()
     const submitFormRefSetter = useSetActiveSubmitButton()
-    useEffect(toggleGlobalEdit, [])
+    useEffect(() => setEditingGlobal(true), [])
     return (
       <>
         <button ref={submitFormRefSetter} style={{ display: 'none' }} />

@@ -15,9 +15,15 @@ export interface MoleculeInfo {
   residueSequenceNumbers: number[]
 }
 
-export async function parsePDB (content: string): Promise<Omit<MoleculeInfo, 'path'>> {
-  // TODO do init only once
-  await init()
+// use init only once
+// NOTE! when init is in parseDB function is causes undesired page reloads
+// when using autosave function. It results in the layout shift and lost
+// of focus on the input element user is editing.
+init()
+  .then(() => console.log('pdbtx...initialized'))
+  .catch(e => console.error(e.message))
+
+export function parsePDB (content: string): Omit<MoleculeInfo, 'path'> {
   try {
     const info = open_pdb(content)
     if (info.warnings.length > 0) {
