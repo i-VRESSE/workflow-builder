@@ -5295,6 +5295,16 @@ nodes:
         $comment: Atoms to be considered during the analysis. If false (default),
           only backbone atoms will be considered, otherwise all the heavy-atoms.
         type: boolean
+      contact_distance_cutoff:
+        default: 5.0
+        title: Distance cutoff defining a contact.
+        description: Cutoff distance (in Angstrom) defining a contact.
+        $comment: Distance (in Angstrom) cutoff defining a contact. Any atoms within
+          this cutoff range will be used to define the interface. Standard values
+          are usually 3.9 A or 5.0 A.
+        type: number
+        maximum: 30.0
+        minimum: 0.1
     required: []
     additionalProperties: false
   uiSchema:
@@ -5305,6 +5315,8 @@ nodes:
     atom_similarity:
       ui:group: analysis
     allatoms:
+      ui:group: analysis
+    contact_distance_cutoff:
       ui:group: analysis
   tomlSchema: {}
 - id: lightdock
