@@ -69,21 +69,14 @@ describe('parseMolecules()', () => {
     )
   })
 
-  it('should not error on null or undefined values in molecules array', () => {
-    // when undefined value passed in array
+  it('should not error on null values in molecules array', () => {
+    // when null value passed in array
     const mockGlobalParameters = {
-      molecules: [undefined] as any
+      molecules: [null] as any
     }
     const mockGlobalSchema: JSONSchema7 = {
       type: 'object',
       properties: {
-        run_dir: {
-          title: 'Run directory',
-          description: 'Folder to store the HADDOCK3 run',
-          $comment: 'The new folder that will be created to save the HADDOCK3 run',
-          type: 'string',
-          format: 'uri-reference'
-        },
         molecules: {
           title: 'Input Molecules',
           description: 'The input molecules that will be used for docking.',
@@ -96,107 +89,8 @@ describe('parseMolecules()', () => {
             format: 'uri-reference'
           },
           format: 'moleculefilepaths'
-        },
-        preprocess: {
-          default: false,
-          title: 'Tries to correct input PDBs',
-          description: 'If true, evaluates and tries to correct the input PDB before the workflow.',
-          $comment: "HADDOCK3 checks and processes the input PDB files to ensure they all comply with HADDOCK3's requirements. These checks concerns, for example, residue numbering, compatibility of chain IDs, and many others. You can see all checks performs in the live issue https://github.com/haddocking/haddock3/issues/143. If set to false, no checks are performed and HADDOCK3 directly uses the original input PDBs.",
-          type: 'boolean'
-        },
-        postprocess: {
-          default: true,
-          title: 'Executes haddock3-analyse on the CAPRI folders at the end of the run',
-          description: 'If true, executes haddock3-analyse on the CAPRI folders at the end of the workflow',
-          $comment: 'haddock3-analyse is a cli (see https://github.com/haddocking/haddock3/blob/main/src/haddock/clis/cli_analyse.py) used to plot the results of a HADDOCK3 workflow. If this option, this command is automatically executed at the end of the workflow (on the caprieval folders).',
-          type: 'boolean'
-        },
-        cns_exec: {
-          title: 'Path to the CNS executable',
-          description: 'If not provided, HADDOCK3 will use the cns path configured during the installation.',
-          $comment: 'CNS is a required component to run HADDOCK. Ideally it should have been configured during installation. If not you can specify with the cns_exec parameter its path.',
-          type: 'string',
-          format: 'uri-reference'
-        },
-        ncores: {
-          default: 4,
-          title: 'Number of CPU cores',
-          description: 'Number of CPU cores to use for the CNS calculations. It is truncated to max available CPUs  minus 1.',
-          $comment: 'Number of CPU cores to use for the CNS calculations. This will define the number of concurrent jobs being executed. Note that is truncated to the total number of available CPUs minus 1.',
-          type: 'number',
-          maximum: 500,
-          minimum: 1
-        },
-        mode: {
-          default: 'local',
-          title: 'Mode of execution',
-          description: 'Mode of execution of the jobs, either local or using a batch system.',
-          $comment: 'Mode of execution of the jobs, either local or using a batch system. Currently slurm and torque are supported. For the batch mode the queue command must be specified in the queue parameter.',
-          type: 'string',
-          minLength: 0,
-          maxLength: 20,
-          enum: [
-            'local',
-            'batch'
-          ]
-        },
-        batch_type: {
-          default: 'slurm',
-          title: 'Batch system',
-          description: 'Type of batch system running on your server',
-          $comment: 'Type of batch system running on your server. Only slurm and torque are supported at this time',
-          type: 'string',
-          minLength: 0,
-          maxLength: 100,
-          enum: [
-            'slurm',
-            'torque'
-          ]
-        },
-        queue: {
-          title: 'Queue name',
-          description: 'Name of the batch queue to which jobs will be submitted',
-          $comment: 'Name of the batch queue to which jobs will be submitted. If not defined the batch system default will be used.',
-          type: 'string',
-          minLength: 0,
-          maxLength: 100
-        },
-        queue_limit: {
-          default: 100,
-          title: 'Number of jobs to submit to the batch system',
-          description: 'Number of jobs to submit to the batch system',
-          $comment: 'This parameter controls the number of jobs that will be submitted to the batch system. In combination with the concat parameter this allow to limit the load on the queueing system and also make sure jobs remain in the queue for some time (if concat > 1) to avoid high system loads on the batch system.',
-          type: 'number',
-          maximum: 9999,
-          minimum: 1
-        },
-        concat: {
-          default: 1,
-          title: 'Number of models to produce per job.',
-          description: 'Multiple models can be calculated within one job',
-          $comment: 'This defines the number of models that will be generated within on job script. This allows to concatenate the generation of models into one script. In that way jobs might run longer in the batch system and reduce the load on the scheduler.',
-          type: 'number',
-          maximum: 9999,
-          minimum: 1
-        },
-        clean: {
-          default: true,
-          title: 'Clean the module output files.',
-          description: 'Clean the module if run succeeds by compressing or removing output files.',
-          $comment: "When running haddock through the command-line, the 'clean' parameter will instruct the workflow to clean the output files of the module if the whole run succeeds. In this process, PDB and PSF files are compressed to gzip, with the extension `.gz`. While files with extension `.seed`, `.inp`, and `.out` files are archived, and the original files deleted. The time to perform a cleaning operation depends on the number of files in the folders and the size of the files. However, it should not represent a limit step in the workflow. For example, a rigidbody sampling 10,000 structures takes about 4 minutes in our servers. This operation uses as many cores as allowed by the user in the 'ncores' parameter. SSD disks will perform faster by definition. See also the 'haddock3-clean' and 'haddock3-unpack' command-line clients.",
-          type: 'boolean'
-        },
-        offline: {
-          default: false,
-          title: 'Isolate haddock3 from internet.',
-          description: 'Completely isolate the haddock3 run & results from internet.',
-          $comment: 'For interactive plots, we are using the plotly library. It can be embedded as a link to the plotly.js library and fetched from the web, or directly copied on the html files AT THE COST OF ~3Mb per file. Setting this parameter to `true` will add the javascript library in generated files, therefore completely isolating haddock3 from any web call.',
-          type: 'boolean'
         }
       },
-      required: [
-        'run_dir'
-      ],
       additionalProperties: false
     }
     const mockFiles = {}
@@ -208,16 +102,40 @@ describe('parseMolecules()', () => {
       mockFiles
     )
     expect(actual1).toEqual([[], 'molecules'])
-
+  })
+  it('should not error on undefined values in molecules array', () => {
     // when undefined value passed in array
-    mockGlobalParameters.molecules = [null]
+    const mockGlobalParameters = {
+      molecules: [undefined] as any
+    }
+    const mockGlobalSchema: JSONSchema7 = {
+      type: 'object',
+      properties: {
+        molecules: {
+          title: 'Input Molecules',
+          description: 'The input molecules that will be used for docking.',
+          $comment: 'Molecules must be provided in PDB format. These PDB files can be single molecules or ensembles using the MODEL/ENDMDL statements.',
+          type: 'array',
+          minItems: 1,
+          maxItems: 20,
+          items: {
+            type: 'string',
+            format: 'uri-reference'
+          },
+          format: 'moleculefilepaths'
+        }
+      },
+      additionalProperties: false
+    }
+    const mockFiles = {}
 
-    const actual2 = parseMolecules(
+    // return empty array
+    const actual1 = parseMolecules(
       mockGlobalParameters,
       mockGlobalSchema,
       mockFiles
     )
-    expect(actual2).toEqual([[], 'molecules'])
+    expect(actual1).toEqual([[], 'molecules'])
   })
 })
 
