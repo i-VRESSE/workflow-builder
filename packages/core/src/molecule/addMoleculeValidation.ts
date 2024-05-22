@@ -20,6 +20,7 @@ export function parseMolecules (
   if (globalSchema.properties === undefined) {
     return [[], undefined]
   }
+
   // find prop which has format:moleculefilepaths
   const moleculesPropNameAndSchema = Object.entries(
     globalSchema.properties
@@ -42,8 +43,13 @@ export function parseMolecules (
   // find file of molecule path
   // TODO check whether files are actually PDB files using uiSchema.molecules..items.ui:options.accept: .pdb
   const moleculeFiles = moleculeFilePaths
-    // ignore undefined entries (invalid entries)
-    .filter(file => file !== undefined)
+    // ignore undefined/null entries (invalid entries)
+    .filter(file => {
+      // check on undefined value in array incl. string value
+      if (typeof file === 'undefined') return false
+      // check for null value
+      return file !== null
+    })
     .map((p) => files[p])
 
   // parse file

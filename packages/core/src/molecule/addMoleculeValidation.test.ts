@@ -68,6 +68,75 @@ describe('parseMolecules()', () => {
       }
     )
   })
+
+  it('should not error on null values in molecules array', () => {
+    // when null value passed in array
+    const mockGlobalParameters = {
+      molecules: [null] as any
+    }
+    const mockGlobalSchema: JSONSchema7 = {
+      type: 'object',
+      properties: {
+        molecules: {
+          title: 'Input Molecules',
+          description: 'The input molecules that will be used for docking.',
+          $comment: 'Molecules must be provided in PDB format. These PDB files can be single molecules or ensembles using the MODEL/ENDMDL statements.',
+          type: 'array',
+          minItems: 1,
+          maxItems: 20,
+          items: {
+            type: 'string',
+            format: 'uri-reference'
+          },
+          format: 'moleculefilepaths'
+        }
+      },
+      additionalProperties: false
+    }
+    const mockFiles = {}
+
+    // return empty array
+    const actual1 = parseMolecules(
+      mockGlobalParameters,
+      mockGlobalSchema,
+      mockFiles
+    )
+    expect(actual1).toEqual([[], 'molecules'])
+  })
+  it('should not error on undefined values in molecules array', () => {
+    // when undefined value passed in array
+    const mockGlobalParameters = {
+      molecules: [undefined] as any
+    }
+    const mockGlobalSchema: JSONSchema7 = {
+      type: 'object',
+      properties: {
+        molecules: {
+          title: 'Input Molecules',
+          description: 'The input molecules that will be used for docking.',
+          $comment: 'Molecules must be provided in PDB format. These PDB files can be single molecules or ensembles using the MODEL/ENDMDL statements.',
+          type: 'array',
+          minItems: 1,
+          maxItems: 20,
+          items: {
+            type: 'string',
+            format: 'uri-reference'
+          },
+          format: 'moleculefilepaths'
+        }
+      },
+      additionalProperties: false
+    }
+    const mockFiles = {}
+
+    // return empty array
+    const actual1 = parseMolecules(
+      mockGlobalParameters,
+      mockGlobalSchema,
+      mockFiles
+    )
+    expect(actual1).toEqual([[], 'molecules'])
+  })
 })
 
 describe('addMoleculeValidation()', () => {
