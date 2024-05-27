@@ -21,6 +21,7 @@ const ajv = new Ajv({
   // To silence `strict mode: "items" is 1-tuple, but minItems or maxItems/additionalItems are not specified or different at path` message
   // the strictTuples check can be disable by uncommenting next line
   // strictTuples: false
+  useDefaults: true
 })
 addFormats(ajv)
 addMoleculeFormats(ajv)

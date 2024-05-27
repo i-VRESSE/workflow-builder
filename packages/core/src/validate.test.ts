@@ -64,10 +64,24 @@ describe('validateWorkflow()', () => {
 
     describe('with default value', () => {
       it('should be valid if missing', async () => {
-        if (schemas.global.schema.properties !== undefined && typeof schemas.global.schema.properties.run_dir === 'object') {
-          schemas.global.schema.properties.run_dir.default = 'run1'
+        const globalSchema: JSONSchema7 = {
+          type: 'object',
+          properties: {
+            run_dir: {
+              type: 'string',
+              default: 'run1'
+            }
+          },
+          required: ['run_dir'],
+          additionalProperties: false
         }
-        console.log(JSON.stringify(schemas.global.schema, null, 2))
+        const schemas = {
+          global: {
+            schema: globalSchema,
+            uiSchema: {}
+          },
+          nodes: []
+        }
         const workflow = {
           global: {
           },
