@@ -61,6 +61,23 @@ describe('validateWorkflow()', () => {
       ]
       expect(errors).toEqual(expected)
     })
+
+    describe('with default value', () => {
+      it('should be valid if missing', async () => {
+        if (schemas.global.schema.properties !== undefined && typeof schemas.global.schema.properties.run_dir === 'object') {
+          schemas.global.schema.properties.run_dir.default = 'run1'
+        }
+        console.log(JSON.stringify(schemas.global.schema, null, 2))
+        const workflow = {
+          global: {
+          },
+          nodes: []
+        }
+        const errors = await validateWorkflow(workflow, schemas)
+
+        expect(errors).toEqual([])
+      })
+    })
   })
 
   describe('given schema of node', () => {
