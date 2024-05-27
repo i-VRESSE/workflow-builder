@@ -2849,15 +2849,33 @@ nodes:
   label: 'EM scoring module.
 
 
-    This module performs energy minimization and scoring of the models generated
+    This module performs energy minimization and scoring of the models generated in
 
-    in the previous step of the workflow. No restraints are applied during this step.
+    the previous step of the workflow. No restraints are applied during this step.
 
     '
   description: HADDOCK3 module to perform energy minimization scoring.
   schema:
     type: object
     properties:
+      per_interface_scoring:
+        default: false
+        title: Interchains scoring
+        description: Output scores per interface in the PDB header.
+        $comment: With this option true, the interface of all combinations of chains
+          will be analysed and the corresponding HADDOCK scores (without restraints
+          terms) and their components (Eelec, Evdw, Edesol, BSA) will be written to
+          the header of each PDB file.
+        type: boolean
+      w_air:
+        default: 0.0
+        title: Weight of the distance restraint energy
+        description: Weight of the distance restraints energy in the scoring function
+        $comment: Weight of the distance restraints energy in the scoring function.
+          Note that this is different from the force constants used during the calculations.
+        type: number
+        maximum: 9999
+        minimum: 0
       w_bsa:
         default: 0.0
         title: Weight of the buried surface area term
@@ -2999,6 +3017,10 @@ nodes:
     required: []
     additionalProperties: false
   uiSchema:
+    per_interface_scoring:
+      ui:group: scoring
+    w_air:
+      ui:group: scoring
     w_bsa:
       ui:group: scoring
     w_cdih:
@@ -7844,11 +7866,22 @@ nodes:
 
     This module will perform a short MD simulation on the input models and
 
-    score them. No restraints are applied during this step.'
+    score them. No restraints are applied during this step.
+
+    '
   description: HADDOCK3 module to perform energy minimization scoring.
   schema:
     type: object
     properties:
+      per_interface_scoring:
+        default: false
+        title: Interchain scoring
+        description: Output scores per interface in the PDB header.
+        $comment: With this option true, the interface of all combinations of chains
+          will be analysed and the corresponding HADDOCK scores (without restraints
+          terms) and their components (Eelec, Evdw, Edesol, BSA) will be written to
+          the header of each PDB file.
+        type: boolean
       w_bsa:
         default: 0.0
         title: Weight of the buried surface area term
@@ -8114,6 +8147,8 @@ nodes:
     required: []
     additionalProperties: false
   uiSchema:
+    per_interface_scoring:
+      ui:group: scoring
     w_bsa:
       ui:group: scoring
     w_cdih:
@@ -9826,11 +9861,19 @@ nodes:
       limit:
         default: true
         title: Limit the number of input molecules.
-        description: When TRUE, the topoaa module can accept any number of input molecules.
+        description: When true, the topoaa module can accept any number of input molecules.
         $comment: Enable/disable the limit of input molecules for the topoaa module.
           Setting the limit to false is useful when the topoaa module is followed
           by scoring modules such as emscoring, or other analysis modules. If topoaa
           is used in the middle of the workflow this parameter has no effect.
+        type: boolean
+      set_bfactor:
+        default: true
+        title: Define if the b-factor column must be overwritten
+        description: When true (default), all b-factors are set to a default value
+          of 15
+        $comment: Defines if the original b-factor values are kept (true) or all b-factors
+          are set to a default value for 15 (false).
         type: boolean
       tolerance:
         default: 0
@@ -9925,6 +9968,8 @@ nodes:
       ui:group: force field
     limit:
       ui:group: sampling
+    set_bfactor:
+      ui:group: module
     tolerance:
       ui:group: module
     mol:
