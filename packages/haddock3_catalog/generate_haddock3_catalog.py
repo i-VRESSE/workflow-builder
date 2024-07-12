@@ -124,6 +124,8 @@ def config2schema(config):
             prop['description'] = v['short']
         if 'long' in v and v['long'] != 'No long description yet':
             prop['$comment'] = v['long']
+        if 'incompatible' in v:
+            # TODO handle incompatible parameters
         if 'type' not in v:
             # if not type field treat value as dict of dicts
             # TODO instead of removing group and explevel from mol1.prot_segid dict do proper filtering and support group recursivly
