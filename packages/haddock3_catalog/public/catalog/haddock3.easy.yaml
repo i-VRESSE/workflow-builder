@@ -163,17 +163,24 @@ global:
           this parameter to `true` will add the javascript library in generated files,
           therefore completely isolating haddock3 from any web call.
         type: boolean
-      less_io:
-        default: false
-        title: Reduce the amount of I/O operations.
-        description: Reduce the amount of I/O operations.
-        $comment: This option will reduce the amount of I/O operations by writing
-          less files to disk. This can be useful for example when running on a network
-          file system where I/O operations are slow.
-        type: boolean
     required:
     - run_dir
     additionalProperties: false
+    if:
+      properties:
+        mode:
+          const: batch
+    then: {}
+    else:
+      properties:
+        less_io:
+          default: false
+          title: Reduce the amount of I/O operations.
+          description: Reduce the amount of I/O operations.
+          $comment: This option will reduce the amount of I/O operations by writing
+            less files to disk. This can be useful for example when running on a network
+            file system where I/O operations are slow.
+          type: boolean
   uiSchema:
     molecules:
       items:
@@ -186,8 +193,8 @@ global:
       ui:group: execution
     ncores:
       ui:group: execution
-    mode:
-      ui:group: execution
+    # mode:
+    #   ui:group: execution
     batch_type:
       ui:group: execution
     queue:
@@ -200,8 +207,8 @@ global:
       ui:group: clean
     offline:
       ui:group: execution
-    less_io:
-      ui:group: execution
+    # less_io:
+    #   ui:group: execution
   tomlSchema: {}
 nodes:
 - id: alascan
