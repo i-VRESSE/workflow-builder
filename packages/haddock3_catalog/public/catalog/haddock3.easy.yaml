@@ -596,8 +596,8 @@ nodes:
         $comment: Value of cutoff cophenetic distance. When criterion is maxclust,
           this value is ignored.
         type: number
-        maximum: 9999
-        minimum: 1
+        maximum: 100
+        minimum: 0.1
       plot_matrix:
         default: false
         title: Plot matrix of members

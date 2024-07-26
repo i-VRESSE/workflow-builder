@@ -687,8 +687,8 @@ nodes:
         $comment: Value of cutoff cophenetic distance. When criterion is maxclust,
           this value is ignored.
         type: number
-        maximum: 9999
-        minimum: 1
+        maximum: 100
+        minimum: 0.1
       plot_matrix:
         default: false
         title: Plot matrix of members
@@ -6920,16 +6920,16 @@ nodes:
       sampling_factor:
         default: 1
         title: Sampling factor for each starting model
-        description: This paramater control how many times a model will be refined.
-        $comment: This paramater control how many times a model will be refined.
+        description: This parameter control how many times a model will be refined.
+        $comment: This parameter control how many times a model will be refined.
         type: number
-        maximum: 200
+        maximum: 400
         minimum: 1
       max_nmodels:
         default: 10000
         title: Maximum number of models to refine
-        description: This paramater controls the maximum number of models to refine.
-        $comment: This paramater controls the maximum number of models to refine.
+        description: This parameter controls the maximum number of models to refine.
+        $comment: This parameter controls the maximum number of models to refine.
         type: number
         maximum: 50000
         minimum: 1
