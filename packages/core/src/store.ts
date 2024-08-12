@@ -780,3 +780,25 @@ export function useWorkflowHasErrors (): boolean {
 
   return hasErrors
 }
+
+/**
+ * Creates archive from workflow and make web browser save it to disk.
+ *
+ * With rewrite of global parameters as a callback.
+ *
+ * @param cb Rewrite global parameters
+ */
+export function useSaveWithGlobalRewrite (
+  cb: (
+    global: IParameters,
+  ) => IParameters
+): () => Promise<void> {
+  const nodes = useRecoilValue(workflowNodesState)
+  const global = useRecoilValue(globalParametersState)
+  const files = useRecoilValue(filesState)
+  const catalog = useRecoilValue(catalogState)
+  return async () => {
+    const rewrittenGlobal = cb(global)
+    await saveArchive(nodes, rewrittenGlobal, files, catalog2tomlSchemas(catalog))
+  }
+}
