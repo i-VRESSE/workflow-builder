@@ -269,9 +269,6 @@ const selectedNodeState = selector<IWorkflowNode | undefined>({
   get: ({ get }) => {
     const index = get(selectedNodeIndexState)
     const nodes = get(workflowNodesState)
-    // console.group('selectedNodeState')
-    // console.log('index...', index)
-    // console.groupEnd()
     if (index in nodes) {
       return nodes[index]
     }
@@ -610,10 +607,6 @@ export function useWorkflow (): UseWorkflow {
       setSelectedNodeIndex(nodes.length)
     },
     selectNode: (nodeIndex: number) => {
-      // console.group('selectNode')
-      // console.log('nodeIndex...', nodeIndex)
-      // console.groupEnd()
-
       setSelectedNodeIndex(nodeIndex)
       if (editingGlobal) {
         setEditingGlobal(false)
@@ -721,7 +714,6 @@ export function useSetNodeErrors (): (key: string, value: NodeErrorsType) => voi
   const [errorNodes, setErrorNodes] = useNodeHasErrors()
   // return function to update single node state
   return function setNodeHasErrors (key: string, value: NodeErrorsType) {
-    // debugger
     if (errorNodes[key] !== value) {
       const newValid = {
         ...errorNodes,
@@ -735,12 +727,6 @@ export function useSetNodeErrors (): (key: string, value: NodeErrorsType) => voi
 export function useNodeHasErrorsValue (key: string): boolean {
   const nodes = useRecoilValue(nodeErrors)
 
-  // console.group("useNodeHasErrorsValue")
-  // console.log("key...", key)
-  // console.log("nodes...", nodes)
-  // console.groupEnd()
-
-  // debugger
   if (Object.hasOwn(nodes, key)) {
     return nodes[key].hasErrors
   } else {
@@ -771,12 +757,6 @@ export function useWorkflowHasErrors (): boolean {
   })
   // if errorKey is found it has string type
   const hasErrors = typeof errorKey === 'string'
-
-  // console.group('useWorkflowHasErrors')
-  // console.log('errors...', errors)
-  // console.log('errorKey...', errorKey)
-  // console.log('hasErrors...', hasErrors)
-  // console.groupEnd()
 
   return hasErrors
 }

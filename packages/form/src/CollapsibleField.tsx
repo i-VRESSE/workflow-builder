@@ -66,10 +66,6 @@ export const CollapsibleField = (props: FieldProps): JSX.Element => {
   const title = extractTitle(props, uiOptions)
   const expanderId = props.id ?? `expander4${props.name.replaceAll(' ', '_')}` // TODO find rjsf func to get more stable
 
-  // console.group('CollapsibleField')
-  // console.log('errorSchema...', props.errorSchema)
-  // console.groupEnd()
-
   // check for errors in the field. On error we show title in red and warning icon
   const hasError = Object.keys(props.errorSchema).length > 0
 
