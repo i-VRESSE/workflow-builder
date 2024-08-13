@@ -375,9 +375,12 @@ def process_module(module_name, category, level):
     config4level = filter_on_level(config, level)
     schemas = config2schema(config4level)
     label =  module.__doc__
-    if len(label) > 200:
-        # src/haddock/modules/analysis/rmsdmatrix/__init__.py has long docstring, so take only first line. 
-        label =  label.splitlines()[1] 
+    # If multiline take first and second if first is empty
+    if label.count('\n') > 1:
+        lines =  label.splitlines()
+        label = lines[0]
+        if not label:
+            label = lines[1]
     # TODO add $schema and $id to schema
     return {
         "id": module_name,
