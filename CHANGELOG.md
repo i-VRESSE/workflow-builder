@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## @i-vresse/wb-core 3.1.0 - 2024-08-13
+
+### Added
+
+* Hook useSaveWithGlobalRewrite() ([#161](https://github.com/i-VRESSE/workflow-builder/pull/161))
+
 ## @i-vresse/wb-core 3.0.1 - 2024-05-23
 
 ### Fixed
