@@ -6,7 +6,6 @@ import {
   Header,
   NodePanel,
   WorkflowClear,
-  WorkflowDownloadButton,
   WorkflowPanel,
   WorkflowUploadButton
 } from '@i-vresse/wb-core'
@@ -17,6 +16,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import '@i-vresse/wb-form/dist/index.css'
 import './App.css'
 import kitchensinkCatalog from './kitchensink.json'
+import { DownloadButton } from './DownloadButton'
 
 function AutosaveManagement (): JSX.Element {
   const autosave = useAutosaveValue()
@@ -63,7 +63,7 @@ function App (): JSX.Element {
       </GridArea>
       <GridArea area='workflow' className='workflow-area'>
         <WorkflowPanel>
-          <WorkflowDownloadButton />
+          <DownloadButton />
           <WorkflowUploadButton />
           <WorkflowClear />
           <AutosaveManagement />
