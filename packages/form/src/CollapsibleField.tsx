@@ -97,7 +97,7 @@ export const CollapsibleField = (props: FieldProps): JSX.Element => {
           {title}
         </h5>
         {/* error icon */}
-        {hasError ? <ErrorIcon /> : null}
+        {hasError ? <div title={JSON.stringify(props.errorSchema)}><ErrorIcon /></div> : null}
       </div>
       {/* show content when not collapsed */}
       {/* TitleField inside the ObjectField is not rendered when there is no title or name */}
