@@ -193,8 +193,8 @@ global:
       ui:group: execution
     ncores:
       ui:group: execution
-    # mode:
-    #   ui:group: execution
+    mode:
+      ui:group: execution
     batch_type:
       ui:group: execution
     queue:
@@ -207,8 +207,8 @@ global:
       ui:group: clean
     offline:
       ui:group: execution
-    # less_io:
-    #   ui:group: execution
+    less_io:
+      ui:group: execution
   tomlSchema: {}
 nodes:
 - id: alascan
