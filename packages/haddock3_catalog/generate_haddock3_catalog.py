@@ -109,6 +109,7 @@ def config2schema(config):
 
     required = []
     collapsed_config = collapse_expandable(config)
+    ifthenelses = {}
     for k, v in collapsed_config.items():
         prop = {}
         prop_ui = {}
@@ -125,7 +126,22 @@ def config2schema(config):
         if 'long' in v and v['long'] != 'No long description yet':
             prop['$comment'] = v['long']
         if 'incompatible' in v:
-            # TODO handle incompatible parameters
+            ifthenelse = {
+                "if": {
+                    "properties": {}
+                },
+                "then": {},
+                "else": {
+                    "properties": {
+                        k: prop
+                    }
+                }
+            }
+            for ik, iv in v['incompatible'].items():
+                ifthenelse['if']['properties'][ik] = {
+                    "const": iv
+                }
+            ifthenelses[k] = ifthenelse
         if 'type' not in v:
             # if not type field treat value as dict of dicts
             # TODO instead of removing group and explevel from mol1.prot_segid dict do proper filtering and support group recursivly
@@ -338,7 +354,8 @@ def config2schema(config):
                 raise ValueError(f"Don't know how to determine type of items of {v}")
         else:
             raise ValueError(f"Don't know what to do with {k}:{v}")
-        properties[k] = prop
+        if k not in ifthenelses:
+            properties[k] = prop
         if 'group' in v and v['group'] != '' and v['group'] is not None:
             prop_ui['ui:group'] = v['group']
         if prop_ui:
@@ -351,6 +368,10 @@ def config2schema(config):
         "required": required,
         "additionalProperties": False
     }
+    if ifthenelses:
+        if len(ifthenelses) > 1:
+            raise ValueError(f"Only one ifthenelse is supported, but got {len(ifthenelses)}")
+        schema.update(list(ifthenelses.values())[0])
     return {
         "schema": schema,
         "uiSchema": uiSchema,
