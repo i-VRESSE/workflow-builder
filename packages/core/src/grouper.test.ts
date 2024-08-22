@@ -1,7 +1,13 @@
 import { expect, describe, it, beforeEach } from 'vitest'
 import { JSONSchema7 } from 'json-schema'
 import { UiSchema } from '@rjsf/core'
-import { groupCatalog, groupParameters, groupSchema, groupUiSchema, unGroupParameters } from './grouper'
+import {
+  groupCatalog,
+  groupParameters,
+  groupSchema,
+  groupUiSchema,
+  unGroupParameters
+} from './grouper'
 import { ICatalog, IParameters } from './types'
 
 function deepCopy<T> (value: T): T {
@@ -288,18 +294,22 @@ describe('given a schema with a 2 props with ui:group in uiSchema and 1 without'
           schema,
           uiSchema
         },
-        categories: [{
-          name: 'category1',
-          description: 'Category 1'
-        }],
-        nodes: [{
-          schema,
-          uiSchema,
-          id: 'node1',
-          label: 'Node 1',
-          description: 'Description 1',
-          category: 'category1'
-        }],
+        categories: [
+          {
+            name: 'category1',
+            description: 'Category 1'
+          }
+        ],
+        nodes: [
+          {
+            schema,
+            uiSchema,
+            id: 'node1',
+            label: 'Node 1',
+            description: 'Description 1',
+            category: 'category1'
+          }
+        ],
         examples: {}
       }
 
@@ -342,20 +352,24 @@ describe('given a schema with a 2 props with ui:group in uiSchema and 1 without'
           formSchema: expectedSchema,
           formUiSchema: expecteduiSchema
         },
-        categories: [{
-          name: 'category1',
-          description: 'Category 1'
-        }],
-        nodes: [{
-          schema,
-          uiSchema,
-          formSchema: expectedSchema,
-          formUiSchema: expecteduiSchema,
-          id: 'node1',
-          label: 'Node 1',
-          description: 'Description 1',
-          category: 'category1'
-        }],
+        categories: [
+          {
+            name: 'category1',
+            description: 'Category 1'
+          }
+        ],
+        nodes: [
+          {
+            schema,
+            uiSchema,
+            formSchema: expectedSchema,
+            formUiSchema: expecteduiSchema,
+            id: 'node1',
+            label: 'Node 1',
+            description: 'Description 1',
+            category: 'category1'
+          }
+        ],
         examples: {}
       }
       expect(actual).toEqual(expected)
@@ -499,7 +513,9 @@ describe('given a un-grouped prop with same name as group', () => {
         }
       }
 
-      expect(() => groupSchema(schema, uiSchema)).toThrow('Can not have group and un-grouped parameter with same name prop2')
+      expect(() => groupSchema(schema, uiSchema)).toThrow(
+        'Can not have group and un-grouped parameter with same name prop2'
+      )
     })
   })
 })
@@ -625,6 +641,87 @@ describe('given a prop with same name as group and another prop in same group', 
               }
             },
             additionalProperties: false
+          }
+        },
+        additionalProperties: false
+      }
+      expect(groupedSchema).toEqual(expectedSchema)
+    })
+  })
+})
+
+describe('given a schema with if/then/else', () => {
+  let schema: JSONSchema7
+  let uiSchema: UiSchema
+
+  beforeEach(() => {
+    schema = {
+      type: 'object',
+      properties: {
+        prop1: {
+          type: 'string',
+          enum: ['val1', 'val2']
+        }
+      },
+      additionalProperties: false,
+      if: {
+        properties: {
+          prop1: {
+            const: 'val1'
+          }
+        }
+      },
+      then: {},
+      else: {
+        properties: {
+          prop2: {
+            type: 'string'
+          }
+        }
+      }
+    }
+    uiSchema = {
+      prop1: {
+        'ui:group': 'group1'
+      },
+      prop2: {
+        'ui:group': 'group1'
+      }
+    }
+  })
+
+  describe('groupSchema()', () => {
+    it('should move properties inside an object with group name as key', () => {
+      const groupedSchema = groupSchema(schema, uiSchema)
+      console.log(JSON.stringify(groupedSchema, null, 2))
+
+      const expectedSchema: JSONSchema7 = {
+        type: 'object',
+        properties: {
+          group1: {
+            type: 'object',
+            properties: {
+              prop1: {
+                type: 'string',
+                enum: ['val1', 'val2']
+              }
+            },
+            additionalProperties: false,
+            if: {
+              properties: {
+                prop1: {
+                  const: 'val1'
+                }
+              }
+            },
+            then: {},
+            else: {
+              properties: {
+                prop2: {
+                  type: 'string'
+                }
+              }
+            }
           }
         },
         additionalProperties: false
