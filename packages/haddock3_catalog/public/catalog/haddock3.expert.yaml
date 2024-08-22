@@ -218,7 +218,7 @@ global:
 nodes:
 - id: alascan
   category: analysis
-  label: ''
+  label: HADDOCK3 module for alanine scan.
   description: HADDOCK3 module for alanine scan.
   schema:
     type: object
@@ -340,7 +340,7 @@ nodes:
       indexed: true
 - id: caprieval
   category: analysis
-  label: ''
+  label: Calculate CAPRI metrics for the input models.
   description: HADDOCK3 module to calculate the CAPRI metrics.
   schema:
     type: object
@@ -542,7 +542,7 @@ nodes:
   tomlSchema: {}
 - id: clustfcc
   category: analysis
-  label: ''
+  label: Cluster modules with FCC.
   description: HADDOCK3 module for clustering with FCC.
   schema:
     type: object
@@ -675,8 +675,8 @@ nodes:
         $comment: Value of cutoff cophenetic distance. When criterion is maxclust,
           this value is ignored.
         type: number
-        maximum: 9999
-        minimum: 1
+        maximum: 100
+        minimum: 0.1
       plot_matrix:
         default: false
         title: Plot matrix of members
@@ -710,7 +710,7 @@ nodes:
   tomlSchema: {}
 - id: contactmap
   category: analysis
-  label: Compute contacts and generate heatmaps.
+  label: Compute contacts between chains in complexes.
   description: HADDOCK3 module to compute complexes contacts and generate heatmap.
   schema:
     type: object
@@ -2810,14 +2810,7 @@ nodes:
           flatten: true
 - id: emscoring
   category: scoring
-  label: 'EM scoring module.
-
-
-    This module performs energy minimization and scoring of the models generated in
-
-    the previous step of the workflow. No restraints are applied during this step.
-
-    '
+  label: EM scoring module.
   description: HADDOCK3 module to perform energy minimization scoring.
   schema:
     type: object
@@ -5454,7 +5447,7 @@ nodes:
   tomlSchema: {}
 - id: mdref
   category: refinement
-  label: Water refinement with CNS.
+  label: Explicit solvent MD refinement with CNS.
   description: HADDOCK3 module for water refinement.
   schema:
     type: object
@@ -6623,16 +6616,16 @@ nodes:
       sampling_factor:
         default: 1
         title: Sampling factor for each starting model
-        description: This paramater control how many times a model will be refined.
-        $comment: This paramater control how many times a model will be refined.
+        description: This parameter control how many times a model will be refined.
+        $comment: This parameter control how many times a model will be refined.
         type: number
-        maximum: 200
+        maximum: 400
         minimum: 1
       max_nmodels:
         default: 10000
         title: Maximum number of models to refine
-        description: This paramater controls the maximum number of models to refine.
-        $comment: This paramater controls the maximum number of models to refine.
+        description: This parameter controls the maximum number of models to refine.
+        $comment: This parameter controls the maximum number of models to refine.
         type: number
         maximum: 50000
         minimum: 1
@@ -7530,14 +7523,7 @@ nodes:
           flatten: true
 - id: mdscoring
   category: scoring
-  label: 'MD scoring module.
-
-
-    This module will perform a short MD simulation on the input models and
-
-    score them. No restraints are applied during this step.
-
-    '
+  label: MD scoring module.
   description: HADDOCK3 module to perform energy minimization scoring.
   schema:
     type: object
@@ -9304,7 +9290,7 @@ nodes:
       indexed: true
 - id: seletop
   category: analysis
-  label: ''
+  label: Select a number of models.
   description: HADDOCK3 module to select top cluster/model.
   schema:
     type: object
@@ -9328,7 +9314,7 @@ nodes:
   tomlSchema: {}
 - id: seletopclusts
   category: analysis
-  label: ''
+  label: Select models from the top clusters.
   description: Haddock Module for 'seletopclusts'.
   schema:
     type: object

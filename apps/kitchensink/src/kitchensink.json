@@ -5,6 +5,10 @@
     "schema": {
       "type": "object",
       "properties": {
+        "run_dir": {
+          "type": "string",
+          "title": "Run directory"
+        },
         "molecules": {
           "title": "Input Molecules",
           "type": "array",
