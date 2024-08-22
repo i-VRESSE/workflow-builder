@@ -1,4 +1,4 @@
-import { expect, describe, it, beforeEach } from 'vitest'
+import { expect, describe, it, beforeEach, assert } from 'vitest'
 import { JSONSchema7 } from 'json-schema'
 import { UiSchema } from '@rjsf/core'
 import {
@@ -654,79 +654,272 @@ describe('given a schema with if/then/else', () => {
   let schema: JSONSchema7
   let uiSchema: UiSchema
 
-  beforeEach(() => {
-    schema = {
-      type: 'object',
-      properties: {
-        prop1: {
-          type: 'string',
-          enum: ['val1', 'val2']
-        }
-      },
-      additionalProperties: false,
-      if: {
-        properties: {
-          prop1: {
-            const: 'val1'
-          }
-        }
-      },
-      then: {},
-      else: {
-        properties: {
-          prop2: {
-            type: 'string'
-          }
-        }
-      }
-    }
-    uiSchema = {
-      prop1: {
-        'ui:group': 'group1'
-      },
-      prop2: {
-        'ui:group': 'group1'
-      }
-    }
-  })
-
-  describe('groupSchema()', () => {
-    it('should move properties inside an object with group name as key', () => {
-      const groupedSchema = groupSchema(schema, uiSchema)
-      console.log(JSON.stringify(groupedSchema, null, 2))
-
-      const expectedSchema: JSONSchema7 = {
+  describe('else in same group', () => {
+    beforeEach(() => {
+      schema = {
         type: 'object',
         properties: {
-          group1: {
-            type: 'object',
-            properties: {
-              prop1: {
-                type: 'string',
-                enum: ['val1', 'val2']
-              }
-            },
-            additionalProperties: false,
-            if: {
-              properties: {
-                prop1: {
-                  const: 'val1'
-                }
-              }
-            },
-            then: {},
-            else: {
-              properties: {
-                prop2: {
-                  type: 'string'
-                }
-              }
+          prop1: {
+            type: 'string',
+            enum: ['val1', 'val2']
+          }
+        },
+        additionalProperties: false,
+        if: {
+          properties: {
+            prop1: {
+              const: 'val1'
             }
           }
         },
-        additionalProperties: false
+        then: {},
+        else: {
+          properties: {
+            prop2: {
+              type: 'string'
+            }
+          }
+        }
       }
-      expect(groupedSchema).toEqual(expectedSchema)
+      uiSchema = {
+        prop1: {
+          'ui:group': 'group1'
+        },
+        prop2: {
+          'ui:group': 'group1'
+        }
+      }
+    })
+
+    describe('groupSchema()', () => {
+      it('should move properties inside an object with group name as key', () => {
+        const groupedSchema = groupSchema(schema, uiSchema)
+
+        const expectedSchema: JSONSchema7 = {
+          type: 'object',
+          properties: {
+            group1: {
+              type: 'object',
+              properties: {
+                prop1: {
+                  type: 'string',
+                  enum: ['val1', 'val2']
+                }
+              },
+              additionalProperties: false,
+              if: {
+                properties: {
+                  prop1: {
+                    const: 'val1'
+                  }
+                }
+              },
+              then: {},
+              else: {
+                properties: {
+                  prop2: {
+                    type: 'string'
+                  }
+                }
+              }
+            }
+          },
+          additionalProperties: false
+        }
+        expect(groupedSchema).toEqual(expectedSchema)
+      })
+    })
+  })
+
+  describe('else in same group', () => {
+    beforeEach(() => {
+      schema = {
+        type: 'object',
+        properties: {
+          prop1: {
+            type: 'string',
+            enum: ['val1', 'val2']
+          }
+        },
+        additionalProperties: false,
+        if: {
+          properties: {
+            prop1: {
+              const: 'val1'
+            }
+          }
+        },
+        then: {
+          properties: {
+            prop2: {
+              type: 'string'
+            }
+          }
+        },
+        else: {}
+      }
+      uiSchema = {
+        prop1: {
+          'ui:group': 'group1'
+        },
+        prop2: {
+          'ui:group': 'group1'
+        }
+      }
+    })
+
+    describe('groupSchema()', () => {
+      it('should move properties inside an object with group name as key', () => {
+        const groupedSchema = groupSchema(schema, uiSchema)
+
+        const expectedSchema: JSONSchema7 = {
+          type: 'object',
+          properties: {
+            group1: {
+              type: 'object',
+              properties: {
+                prop1: {
+                  type: 'string',
+                  enum: ['val1', 'val2']
+                }
+              },
+              additionalProperties: false,
+              if: {
+                properties: {
+                  prop1: {
+                    const: 'val1'
+                  }
+                }
+              },
+              then: {
+                properties: {
+                  prop2: {
+                    type: 'string'
+                  }
+                }
+              },
+              else: {}
+            }
+          },
+          additionalProperties: false
+        }
+        expect(groupedSchema).toEqual(expectedSchema)
+      })
+    })
+  })
+
+  describe.each<{ label: string, schema: JSONSchema7, uiSchema: UiSchema }>([
+    {
+      label: 'if and else in different group',
+      schema: {
+        type: 'object',
+        properties: {
+          prop1: {
+            type: 'string',
+            enum: ['val1', 'val2']
+          }
+        },
+        additionalProperties: false,
+        if: {
+          properties: {
+            prop1: {
+              const: 'val1'
+            }
+          }
+        },
+        then: {
+        },
+        else: {
+          properties: {
+            prop2: {
+              type: 'string'
+            }
+          }
+        }
+      },
+      uiSchema: {
+        prop1: {
+          'ui:group': 'group1'
+        },
+        prop2: {
+          'ui:group': 'group2'
+        }
+      }
+    },
+    {
+      label: 'if and then in different group',
+      schema: {
+        type: 'object',
+        properties: {
+          prop1: {
+            type: 'string',
+            enum: ['val1', 'val2']
+          }
+        },
+        additionalProperties: false,
+        if: {
+          properties: {
+            prop1: {
+              const: 'val1'
+            }
+          }
+        },
+        then: {
+          properties: {
+            prop2: {
+              type: 'string'
+            }
+          }
+        },
+        else: {}
+      },
+      uiSchema: {
+        prop1: {
+          'ui:group': 'group1'
+        },
+        prop2: {
+          'ui:group': 'group2'
+        }
+      }
+    },
+    {
+      label: 'if not in group',
+      schema: {
+        type: 'object',
+        properties: {
+          prop1: {
+            type: 'string',
+            enum: ['val1', 'val2']
+          }
+        },
+        additionalProperties: false,
+        if: {
+          properties: {
+            prop1: {
+              const: 'val1'
+            }
+          }
+        },
+        then: {
+          properties: {
+            prop2: {
+              type: 'string'
+            }
+          }
+        },
+        else: {}
+      },
+      uiSchema: {
+        prop2: {
+          'ui:group': 'group2'
+        }
+      }
+    }
+  ])('$label', ({ schema, uiSchema }) => {
+    it('groupSchema() should throw error', () => {
+      assert.throws(() => {
+        groupSchema(schema, uiSchema)
+      }, 'Cannot have an if in one group and a then/else in another group')
     })
   })
 })
