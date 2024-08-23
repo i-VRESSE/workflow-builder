@@ -94,6 +94,18 @@ function pruneThenElses (parameters: IParameters, schema: JSONSchema7): IParamet
         /* eslint-enable @typescript-eslint/no-dynamic-delete */
       }
     }
+    // Remove then parameters that are same as default
+    if (schema.then !== undefined && typeof schema.then !== 'boolean' && schema.then !== undefined && schema.then.properties !== undefined) {
+      const thenPropnames = Object.keys(schema.then.properties)
+      for (const k of thenPropnames) {
+        const p = schema.then.properties[k]
+        if (typeof p === 'object' && p.default === parameters[k]) {
+          /* eslint-disable @typescript-eslint/no-dynamic-delete */
+          delete parameters[k]
+          /* eslint-enable @typescript-eslint/no-dynamic-delete */
+        }
+      }
+    }
   } else {
     // Remove then parameters
     if (schema.then !== undefined && typeof schema.then !== 'boolean' && schema.then !== undefined && schema.then.properties !== undefined) {
@@ -102,6 +114,18 @@ function pruneThenElses (parameters: IParameters, schema: JSONSchema7): IParamet
         /* eslint-disable @typescript-eslint/no-dynamic-delete */
         delete parameters[k]
         /* eslint-enable @typescript-eslint/no-dynamic-delete */
+      }
+    }
+    // Remove else parameters that are same as default
+    if (schema.else !== undefined && typeof schema.else !== 'boolean' && schema.else !== undefined && schema.else.properties !== undefined) {
+      const elsePropnames = Object.keys(schema.else.properties)
+      for (const k of elsePropnames) {
+        const p = schema.else.properties[k]
+        if (typeof p === 'object' && p.default === parameters[k]) {
+          /* eslint-disable @typescript-eslint/no-dynamic-delete */
+          delete parameters[k]
+          /* eslint-enable @typescript-eslint/no-dynamic-delete */
+        }
       }
     }
   }
