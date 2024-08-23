@@ -136,7 +136,7 @@ and will have restricted the sta and end prop to only allow 1, 2, 3 and 4.
 
 The `if`, `then` and `else` keywords can be used to [conditionally apply a schema](https://json-schema.org/understanding-json-schema/reference/conditionals#ifthenelse).
 
-For example to have a the `foo` property only if the `bar` property is false use:
+For example to have the `foo` property only if the `bar` property is false use:
 
 ```yaml
     type: object
@@ -154,4 +154,4 @@ For example to have a the `foo` property only if the `bar` property is false use
           type: string
 ```
 
-Only supports simple const condition with one or more properties and not complex conditions like patterns.
+Only supports simple const condition with one or more properties and not complex conditions like patterns. Also only a single if/tnen/else block per object is supported. It can be combined with [groups](uiSchema.md#uigroup).
