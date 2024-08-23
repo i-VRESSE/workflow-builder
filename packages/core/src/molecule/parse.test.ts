@@ -14,7 +14,8 @@ describe('parsePDB', () => {
       '',
       {
         chains: [],
-        residueSequenceNumbers: []
+        residueSequenceNumbers: [],
+        error: ['BreakingError: No Atoms parsed\nNo Atoms could be parsed from the given file. Please make sure it is a valid PDB/mmCIF file.\n']
       }
     ],
     [

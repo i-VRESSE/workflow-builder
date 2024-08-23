@@ -6,12 +6,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## @i-vresse/wb-core 3.2.0 - 2024-08-23
+
+### Added
+
+* Support for if/then/else in JSON schema ([#160](https://github.com/i-VRESSE/workflow-builder/pull/160))
+* Pick any chain of the given molecules ([#162](https://github.com/i-VRESSE/workflow-builder/issues/162))
+
+## @i-vresse/wb-form 2.0.1 - 2024-08-23
+
+### Added
+
+* Show errors for hidden fields in tooltip of CollapsibleField ([#160](https://github.com/i-VRESSE/workflow-builder/pull/160))
+
 ## @i-vresse/wb-core 3.1.0 - 2024-08-13
 
 ### Added
 
 * Hook useSaveWithGlobalRewrite() ([#161](https://github.com/i-VRESSE/workflow-builder/pull/161))
-* Support for if/then/else in JSON schema ([#160](https://github.com/i-VRESSE/workflow-builder/pull/160))
 
 ## @i-vresse/wb-core 3.0.1 - 2024-05-23
 

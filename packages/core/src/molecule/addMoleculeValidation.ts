@@ -246,6 +246,35 @@ function walkSchemaForMoleculeFormats (
       // TODO implement
       const newObjectSchema = v
       return [k, newObjectSchema]
+    } else if (isArrayWithItems && typeof s.items === 'object' && !Array.isArray(s.items) && s.items.type === 'object') {
+      // {type:array, items:{type:object, properties:{x:{type:string, format:chain}}}}
+      const newObjectSchema = walkSchemaForMoleculeFormats(
+        s.items,
+        moleculeInfos,
+        moleculesPropName
+      )
+      return [k, { ...s, items: newObjectSchema }]
+    } else if (isArrayWithItems && typeof s.items === 'object' && !Array.isArray(s.items) && s.items.type === 'string') {
+      // {type:array, items:{type:string, format:chain}}
+      const newObjectSchema = walkSchemaForMoleculeFormats(
+        {
+          type: 'object',
+          properties: {
+            xxx: s.items
+          }
+        },
+        moleculeInfos,
+        moleculesPropName
+      )
+      if (!(newObjectSchema.properties !== undefined)) {
+        throw new Error('Unreachable code')
+      }
+      return [k, { ...s, items: newObjectSchema.properties.xxx }]
+    } else if (s.type === 'string' && s.format === 'chain' && moleculeInfos.every((m) => m.error === undefined)) {
+      // Only set if all molecules have been parsed successfully
+      const chains = [...new Set(moleculeInfos.flatMap((m) => m.chains))]
+      const newSchema = { ...s, enum: chains }
+      return [k, newSchema]
     } else if (s.type === 'object') {
       const newObjectSchema = walkSchemaForMoleculeFormats(
         s,

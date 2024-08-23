@@ -1,6 +1,6 @@
 {
   "name": "@i-vresse/wb-form",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Enhanced version of the React JSON schema form component with Bootstrap 4 theme",
   "keywords": [
     "react",
