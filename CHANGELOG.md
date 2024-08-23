@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 * Hook useSaveWithGlobalRewrite() ([#161](https://github.com/i-VRESSE/workflow-builder/pull/161))
+* Support for if/then/else in JSON schema ([#160](https://github.com/i-VRESSE/workflow-builder/pull/160))
 
 ## @i-vresse/wb-core 3.0.1 - 2024-05-23
 

@@ -131,3 +131,27 @@ and `abcd.pdb` file has chain A and B with residues 1, 2, 3 and 4.
 
 Then the form will have restricted the `chain` prop to only allow `A` and `B`
 and will have restricted the sta and end prop to only allow 1, 2, 3 and 4.
+
+## If then else
+
+The `if`, `then` and `else` keywords can be used to [conditionally apply a schema](https://json-schema.org/understanding-json-schema/reference/conditionals#ifthenelse).
+
+For example to have a the `foo` property only if the `bar` property is false use:
+
+```yaml
+    type: object
+    properties:
+      bar:
+        type: boolean
+    if:
+      properties:
+        bar:
+          const: true
+    then: {}
+    else:
+      properties:
+        foo:
+          type: string
+```
+
+Only supports simple const condition with one or more properties and not complex conditions like patterns.
