@@ -132,6 +132,17 @@ and `abcd.pdb` file has chain A and B with residues 1, 2, 3 and 4.
 Then the form will have restricted the `chain` prop to only allow `A` and `B`
 and will have restricted the sta and end prop to only allow 1, 2, 3 and 4.
 
+To have a string property that should be restricted to any chains in any of the uploaded PDB files, for node schema use something like
+
+```yaml
+  type: object
+  properties:
+    receptor_chain:
+      type: string
+      format: chain
+```
+For example if 2 pdb files with chain A, B and C are uploaded, the form will restrict the receptor_chain property to only allow A, B and C. The restriction is only applied if all the PDB files could be parsed.
+
 ## If then else
 
 The `if`, `then` and `else` keywords can be used to [conditionally apply a schema](https://json-schema.org/understanding-json-schema/reference/conditionals#ifthenelse).

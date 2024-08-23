@@ -631,7 +631,7 @@ describe('addMoleculeValidation()', () => {
       })
     })
 
-    describe('given an object with prop1 prop with format:chain', () => {
+    describe('given an object with prop1 prop with format:chain and without maxItemsFrom:molecules', () => {
       it('should in prop1 prop set enum to [A, B]', () => {
         const schema: JSONSchema7 = {
           type: 'object',
@@ -654,6 +654,88 @@ describe('addMoleculeValidation()', () => {
               type: 'string',
               format: 'chain',
               enum: ['A', 'B']
+            }
+          }
+        }
+        expect(actual).toEqual(expected)
+      })
+    })
+
+    describe('given an object with prop1 as array of string with format:chain and without maxItemsFrom:molecules', () => {
+      it('should in items in prop1 prop set enum to [A, B]', () => {
+        const schema: JSONSchema7 = {
+          type: 'object',
+          properties: {
+            prop1: {
+              type: 'array',
+              items: {
+                type: 'string',
+                format: 'chain'
+              }
+            }
+          }
+        }
+        const actual = addMoleculeValidation(
+          schema,
+          moleculeInfos,
+          moleculesPropName
+        )
+        const expected: JSONSchema7 = {
+          type: 'object',
+          properties: {
+            prop1: {
+              type: 'array',
+              items: {
+                type: 'string',
+                format: 'chain',
+                enum: ['A', 'B']
+              }
+            }
+          }
+        }
+        expect(actual).toEqual(expected)
+      })
+    })
+
+    describe('given an object with prop1 as array of object with prop1 with format:chain and without maxItemsFrom:molecules', () => {
+      it('should in prop1 prop set enum to [A, B]', () => {
+        const schema: JSONSchema7 = {
+          type: 'object',
+          properties: {
+            prop1: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  prop1: {
+                    type: 'string',
+                    format: 'chain'
+                  }
+                }
+              }
+            }
+          }
+        }
+        const actual = addMoleculeValidation(
+          schema,
+          moleculeInfos,
+          moleculesPropName
+        )
+        const expected: JSONSchema7 = {
+          type: 'object',
+          properties: {
+            prop1: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  prop1: {
+                    type: 'string',
+                    format: 'chain',
+                    enum: ['A', 'B']
+                  }
+                }
+              }
             }
           }
         }
@@ -752,6 +834,35 @@ describe('addMoleculeValidation()', () => {
           type: 'object',
           properties: {
             prop1: expectedPropSchema
+          }
+        }
+        expect(actual).toEqual(expected)
+      })
+    })
+
+    describe('given an object with prop1 prop with format:chain', () => {
+      it('should not have enum in prop1', () => {
+        const schema: JSONSchema7 = {
+          type: 'object',
+          properties: {
+            prop1: {
+              type: 'string',
+              format: 'chain'
+            }
+          }
+        }
+        const actual = addMoleculeValidation(
+          schema,
+          moleculeInfos,
+          moleculesPropName
+        )
+        const expected: JSONSchema7 = {
+          type: 'object',
+          properties: {
+            prop1: {
+              type: 'string',
+              format: 'chain'
+            }
           }
         }
         expect(actual).toEqual(expected)
