@@ -59,7 +59,7 @@ function groupSchemaCondition ({
     typeof newSchema.then !== 'boolean' &&
     (newSchema.then.properties != null) &&
     k in newSchema.then.properties
-  if (thenInGroup ?? elseInGroup) {
+  if (thenInGroup || elseInGroup) {
     const ifGroup = groupOfIfProp(newSchema, uiSchema)
     if (ifGroup !== group) {
       throw new Error(

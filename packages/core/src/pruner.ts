@@ -72,5 +72,39 @@ export function pruneDefaults (parameters: IParameters, schema: JSONSchema7, res
       newParameters[k] = v
     }
   })
-  return newParameters
+  return pruneThenElses(newParameters, schema)
+}
+
+function pruneThenElses (parameters: IParameters, schema: JSONSchema7): IParameters {
+  if (!(schema.if !== undefined && typeof schema.if !== 'boolean' && schema.if !== undefined && schema.if.properties !== undefined)) {
+    // no if then bail out
+    return parameters
+  }
+
+  const condition = Object.entries(schema.if.properties).every(
+    ([k, sv]) => typeof sv === 'object' && sv.const !== undefined && sv.const === parameters[k]
+  )
+  if (condition) {
+    // Remove else parameters
+    if (schema.else !== undefined && typeof schema.else !== 'boolean' && schema.else !== undefined && schema.else.properties !== undefined) {
+      const elsePropnames = Object.keys(schema.else.properties)
+      for (const k of elsePropnames) {
+        /* eslint-disable @typescript-eslint/no-dynamic-delete */
+        delete parameters[k]
+        /* eslint-enable @typescript-eslint/no-dynamic-delete */
+      }
+    }
+  } else {
+    // Remove then parameters
+    if (schema.then !== undefined && typeof schema.then !== 'boolean' && schema.then !== undefined && schema.then.properties !== undefined) {
+      const thenPropnames = Object.keys(schema.then.properties)
+      for (const k of thenPropnames) {
+        /* eslint-disable @typescript-eslint/no-dynamic-delete */
+        delete parameters[k]
+        /* eslint-enable @typescript-eslint/no-dynamic-delete */
+      }
+    }
+  }
+
+  return parameters
 }

@@ -640,4 +640,136 @@ describe('pruneDefaults()', () => {
       expect(result).toStrictEqual(expected)
     })
   })
+
+  describe('if/then/else', () => {
+    describe('given if is true and has else parameter', () => {
+      it('should remove else parameter', () => {
+        const parameters = {
+          prop1: 'val1',
+          prop2: 'someval'
+        }
+        const schema: JSONSchema7 = {
+          type: 'object',
+          properties: {
+            prop1: {
+              type: 'string',
+              enum: ['val1', 'val2']
+            }
+          },
+          if: {
+            properties: {
+              prop1: {
+                const: 'val1'
+              }
+            }
+          },
+          then: {
+          },
+          else: {
+            properties: {
+              prop2: {
+                type: 'string'
+              }
+            }
+          },
+          additionalProperties: false
+        }
+
+        const result = pruneDefaults(parameters, schema, true)
+        const expected = {
+          prop1: 'val1'
+        }
+        expect(result).toStrictEqual(expected)
+      })
+    })
+
+    describe('given if is false and has then parameter', () => {
+      it('should remove then parameter', () => {
+        const parameters = {
+          prop1: 'val2',
+          prop2: 'someval'
+        }
+        const schema: JSONSchema7 = {
+          type: 'object',
+          properties: {
+            prop1: {
+              type: 'string',
+              enum: ['val1', 'val2']
+            }
+          },
+          if: {
+            properties: {
+              prop1: {
+                const: 'val1'
+              }
+            }
+          },
+          then: {
+            properties: {
+              prop2: {
+                type: 'string'
+              }
+            }
+          },
+          else: {
+          },
+          additionalProperties: false
+        }
+
+        const result = pruneDefaults(parameters, schema, true)
+        const expected = {
+          prop1: 'val2'
+        }
+        expect(result).toStrictEqual(expected)
+      })
+    })
+
+    describe('given if is true and has then and else parameter', () => {
+      it('should remove else parameter, but keep then', () => {
+        const parameters = {
+          prop1: 'val1',
+          prop2: 'someval',
+          prop3: 'someval3'
+        }
+        const schema: JSONSchema7 = {
+          type: 'object',
+          properties: {
+            prop1: {
+              type: 'string',
+              enum: ['val1', 'val2']
+            }
+          },
+          if: {
+            properties: {
+              prop1: {
+                const: 'val1'
+              }
+            }
+          },
+          then: {
+            properties: {
+              prop3: {
+                type: 'string'
+              }
+            }
+          },
+          else: {
+            properties: {
+              prop2: {
+                type: 'string'
+              }
+            }
+          },
+          additionalProperties: false
+        }
+
+        const result = pruneDefaults(parameters, schema, true)
+        const expected = {
+          prop1: 'val1',
+          prop3: 'someval3'
+        }
+        expect(result).toStrictEqual(expected)
+      })
+    })
+  })
 })

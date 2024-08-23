@@ -731,7 +731,7 @@ describe('given a schema with if/then/else', () => {
     })
   })
 
-  describe('else in same group', () => {
+  describe('then in same group', () => {
     beforeEach(() => {
       schema = {
         type: 'object',
