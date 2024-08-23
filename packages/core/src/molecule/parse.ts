@@ -13,6 +13,11 @@ export interface MoleculeInfo {
    * Unique residue numbers found in PDB file
    */
   residueSequenceNumbers: number[]
+  /**
+   * Error if any
+   * If set the chains and residueSequenceNumbers should not be used
+   */
+  error?: unknown
 }
 
 // use init only once
@@ -38,7 +43,8 @@ export function parsePDB (content: string): Omit<MoleculeInfo, 'path'> {
     console.error(error)
     return {
       chains: [],
-      residueSequenceNumbers: []
+      residueSequenceNumbers: [],
+      error
     }
   }
 }
