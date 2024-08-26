@@ -30,6 +30,8 @@ export function parseMolecules (
   if (moleculesPropNameAndSchema === undefined) {
     return [[], undefined]
   }
+  // not finding moleculefilepaths in then and else blocks as moleculefilepaths only supported in global schema properties
+
   // find molecule file paths that belongs to this array item
   const moleculesPropName = moleculesPropNameAndSchema[0]
   if (!(moleculesPropName in globalParameters)) {
@@ -285,6 +287,7 @@ function walkSchemaForMoleculeFormats (
     }
     return [k, v]
   })
+  // not finding molecule formats in then and else blocks as if block only supported in global schema
   newSchema.properties = Object.fromEntries(entries)
   return newSchema
 }

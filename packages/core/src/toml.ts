@@ -249,7 +249,6 @@ export function parseWorkflowFromTable (
     globalKeys,
     tomlSchema4global,
     tomSchema4nodes
-
   )
 }
 

@@ -55,6 +55,12 @@ export function globalParameterKeys (global: IGlobal): Set<string> {
   if (global?.schema.properties != null) {
     keys = Object.keys(global.schema.properties)
   }
+  if (global?.schema.then !== undefined && typeof global.schema.then !== 'boolean' && global.schema.then.properties !== undefined) {
+    keys = [...keys, ...Object.keys(global.schema.then.properties)]
+  }
+  if (global?.schema.else !== undefined && typeof global.schema.else !== 'boolean' && global.schema.else.properties !== undefined) {
+    keys = [...keys, ...Object.keys(global.schema.else.properties)]
+  }
   return new Set(keys)
 }
 
