@@ -40,6 +40,7 @@ export function resolveMaxItemsFrom (formSchema: JSONSchema7WithMaxItemsFrom, gl
       }
       return [k, s]
     })
+  // not finding maxItemsFrom in then and else blocks as only supported in global schema
   newFormSchema.properties = Object.fromEntries(entries)
   return newFormSchema
 }

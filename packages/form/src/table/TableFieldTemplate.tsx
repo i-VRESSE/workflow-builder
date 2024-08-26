@@ -81,6 +81,7 @@ export const TableFieldTemplate = (props: ArrayFieldTemplateProps): JSX.Element 
           </>
         )
       }
+      // not finding description in then and else blocks as not supported in table
       const width = widths[key]
       return (
         <th
