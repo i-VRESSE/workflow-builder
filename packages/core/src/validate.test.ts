@@ -432,8 +432,7 @@ describe('validateWorkflow()', () => {
                   type: 'number'
                 }
               }
-            },
-            additionalProperties: true
+            }
           },
           uiSchema: {
 
@@ -484,8 +483,7 @@ describe('validateWorkflow()', () => {
                   type: 'number'
                 }
               }
-            },
-            additionalProperties: true
+            }
           },
           uiSchema: {
 
