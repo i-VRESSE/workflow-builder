@@ -151,6 +151,7 @@ For example to have the `foo` property only if the `bar` property is false use:
 
 ```yaml
     type: object
+    additionalProperties: true
     properties:
       bar:
         type: boolean
@@ -166,3 +167,4 @@ For example to have the `foo` property only if the `bar` property is false use:
 ```
 
 Only supports simple const condition with one or more properties and not complex conditions like patterns. Also only a single if/tnen/else block per object is supported. It can be combined with [groups](uiSchema.md#uigroup).
+Also only supported with `additionalProperties: true` present in the schema.

@@ -399,6 +399,121 @@ describe('validateWorkflow()', () => {
       })
     })
   })
+
+  describe('given gloal schema with ifthenelse block', () => {
+    it('should be valid when then parameter is given', async () => {
+      const schemas: IWorkflowSchema = {
+        global: {
+          schema: {
+            type: 'object',
+            properties: {
+              ifpar: {
+                type: 'boolean',
+                default: false
+              }
+            },
+            if: {
+              properties: {
+                ifpar: {
+                  const: true
+                }
+              }
+            },
+            then: {
+              properties: {
+                thenpar: {
+                  type: 'number'
+                }
+              }
+            },
+            else: {
+              properties: {
+                elsepar: {
+                  type: 'number'
+                }
+              }
+            },
+            additionalProperties: true
+          },
+          uiSchema: {
+
+          }
+        },
+        nodes: []
+      }
+      const workflow = {
+        global: {
+          ifpar: true,
+          thenpar: 1234
+        },
+        nodes: []
+      }
+      const errors = await validateWorkflow(workflow, schemas)
+      expect(errors).toEqual([])
+    })
+
+    it('should be invalid when invalid then parameter is given', async () => {
+      const schemas: IWorkflowSchema = {
+        global: {
+          schema: {
+            type: 'object',
+            properties: {
+              ifpar: {
+                type: 'boolean',
+                default: false
+              }
+            },
+            if: {
+              properties: {
+                ifpar: {
+                  const: true
+                }
+              }
+            },
+            then: {
+              properties: {
+                thenpar: {
+                  type: 'number',
+                  minimum: 0
+                }
+              }
+            },
+            else: {
+              properties: {
+                elsepar: {
+                  type: 'number'
+                }
+              }
+            },
+            additionalProperties: true
+          },
+          uiSchema: {
+
+          }
+        },
+        nodes: []
+      }
+      const workflow = {
+        global: {
+          ifpar: true,
+          thenpar: -1234
+        },
+        nodes: []
+      }
+      const errors = await validateWorkflow(workflow, schemas)
+      expect(errors).toEqual([{
+        instancePath: '/thenpar',
+        keyword: 'minimum',
+        message: 'must be >= 0',
+        params: {
+          comparison: '>=',
+          limit: 0
+        },
+        schemaPath: '#/then/properties/thenpar/minimum',
+        workflowPath: 'global'
+      }])
+    })
+  })
 })
 
 describe('validateCatalog()', () => {

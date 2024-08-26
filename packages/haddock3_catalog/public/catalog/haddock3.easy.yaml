@@ -165,7 +165,7 @@ global:
         type: boolean
     required:
     - run_dir
-    additionalProperties: false
+    additionalProperties: true
     if:
       properties:
         mode:
