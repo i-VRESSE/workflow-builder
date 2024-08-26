@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## @i-vresse/wb-core 3.2.1 - 2024-08-26
+
+### Fixed
+
+- Handle json schema ifthenelse block in file upload ([#164](https://github.com/i-VRESSE/workflow-builder/issues/164))
+
 ## @i-vresse/wb-core 3.2.0 - 2024-08-23
 
 ### Added
