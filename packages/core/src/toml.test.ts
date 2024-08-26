@@ -1,7 +1,7 @@
 import dedent from 'ts-dedent'
-import { expect, describe, it } from 'vitest'
-import { dedupWorkflow, parseWorkflowByCatalogPieces, TomlSchemas, workflow2tomltext, tomlstring2table } from './toml'
-import { IParameters } from './types'
+import { expect, describe, it, beforeEach } from 'vitest'
+import { dedupWorkflow, parseWorkflowByCatalogPieces, TomlSchemas, workflow2tomltext, tomlstring2table, parseWorkflow } from './toml'
+import { ICatalog, IParameters } from './types'
 
 describe('workflow2tomltext()', () => {
   it('should write list of dicts as array of tables', () => {
@@ -996,5 +996,72 @@ bar = 4
   ])('given %s should replace repeated headers with headers including an index', (_desc, input, expected) => {
     const actual = dedupWorkflow(input)
     expect(actual).toEqual(expected)
+  })
+})
+
+describe('parseWorkflow()', () => {
+  describe('given calalog with if then else block', () => {
+    let catalog: ICatalog
+
+    beforeEach(() => {
+      catalog = {
+        title: 'test',
+        categories: [],
+        examples: {},
+        global: {
+          schema: {
+            type: 'object',
+            properties: {
+              ifpar: {
+                type: 'boolean',
+                default: false
+              }
+            },
+            if: {
+              properties: {
+                ifpar: {
+                  const: true
+                }
+              }
+            },
+            then: {
+              properties: {
+                thenpar: {
+                  type: 'number'
+                }
+              }
+            },
+            else: {
+              properties: {
+                elsepar: {
+                  type: 'number'
+                }
+              }
+            }
+          },
+          uiSchema: {}
+        },
+        nodes: []
+      }
+    })
+
+    it('should have parameters from block be global parameters', () => {
+      const workflow = `
+         thenpar = 42
+         elsepar = 113
+         `
+
+      const result = parseWorkflow(workflow, catalog)
+
+      const expected = {
+        global: {
+          thenpar: 42,
+          elsepar: 113
+        },
+        nodes: []
+      }
+
+      expect(result).toEqual(expected)
+    })
   })
 })
