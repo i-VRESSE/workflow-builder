@@ -399,8 +399,7 @@ nodes:
         maxLength: 1
         format: chain
       ligand_chains:
-        default:
-        - B
+        default: []
         title: Ligand ChainIDs
         description: Ligand ChainIDs to be considered for the RMSD calculations.
         $comment: Ligand ChainIDs to be considered for the RMSD calculations. This
@@ -1084,12 +1083,12 @@ nodes:
         maxLength: 1
         format: chain
       ligand_chains:
-        default:
-        - B
+        default: []
         title: Ligand ChainIDs
         description: Ligand ChainIDs to be considered for the IL-RMSD calculations.
         $comment: Ligand ChainIDs to be considered for the IL-RMSD calculations. This
-          determines which chains will be treated as the ligand for the IL-RMSD.
+          determines which chains will be treated as the ligand for the IL-RMSD. By
+          default, all chains are considered with the exception of the receptor chain.
         type: array
         minItems: 0
         maxItems: 100

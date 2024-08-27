@@ -366,8 +366,8 @@ def config2schema(config):
         "type": "object",
         "properties": properties,
         "required": required,
-        // Ajv only allows props from then|else block if additionalProperties is true
-        // otherwise ajv will give "must NOT have additional properties" error
+        # Ajv only allows props from then|else block if additionalProperties is true
+        # otherwise ajv will give "must NOT have additional properties" error
         "additionalProperties": bool(ifthenelses)
     }
     if ifthenelses:
