@@ -366,14 +366,17 @@ def config2schema(config):
         "type": "object",
         "properties": properties,
         "required": required,
-        # Ajv only allows props from then|else block if additionalProperties is true
-        # otherwise ajv will give "must NOT have additional properties" error
-        "additionalProperties": bool(ifthenelses)
     }
     if ifthenelses:
         if len(ifthenelses) > 1:
             raise ValueError(f"Only one ifthenelse is supported, but got {len(ifthenelses)}")
         schema.update(list(ifthenelses.values())[0])
+    else:
+        # Ajv only allows props from then|else block if additionalProperties is true inplicitly or explicitly
+        # if additionalProperties=false then ajv will give "must NOT have additional properties" error
+        # if additionalProperties=true is explict then rjsf will render plus button for adding custom key/value pairs, which is unwanted
+        # so we make it implicit by not setting additionalProperties
+        schema['additionalProperties'] = False
     return {
         "schema": schema,
         "uiSchema": uiSchema,
