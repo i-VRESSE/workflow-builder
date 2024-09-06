@@ -404,6 +404,17 @@ nodes:
           docked models based on the CAPRI criteria, a combination of i-RMSD, l-RMSD
           and FNAT value. For details check the DockQ publication `DOI:10.1371/journal.pone.0161879`
         type: boolean
+      global_rmsd:
+        default: true
+        title: Calculate global RMSD
+        description: Calculate full structure RMSD.
+        $comment: Compute full structure RMSD between reference structure and the
+          model after superimposition. Note that a sequence alignment is performed
+          to obtain the mapping between the reference and the model. If the one of
+          the structure contain a 'small-molecule', we assume that the compared structure
+          atoms are in the same order. With default parameters `allatoms = false`,
+          only backbone RMSD will be computed.
+        type: boolean
       irmsd_cutoff:
         default: 10.0
         title: "Distance cutoff (\xC5) used to define interface residues."
@@ -523,6 +534,8 @@ nodes:
     ilrmsd:
       ui:group: analysis
     dockq:
+      ui:group: analysis
+    global_rmsd:
       ui:group: analysis
     irmsd_cutoff:
       ui:group: analysis
