@@ -763,6 +763,7 @@ nodes:
       mol_shape:
         type: array
         maxItemsFrom: molecules
+        title: Shape(s)
         items:
           default: false
           title: Is the molecule a shape?
@@ -815,9 +816,8 @@ nodes:
           dihe_fname.
         type: number
         maximum: 9999
-        minimum: -9999
+        minimum: 0
       ssdihed:
-        default: none
         title: Define automatically backbone dihedral angle restraints
         description: If turned on, this option will automatically defined backbone
           dihedral angle restraints for the selected regions.
@@ -844,8 +844,8 @@ nodes:
           option)
         $comment: Force constant for backbone dihedral angle restraints (ssdihed option)
         type: number
-        maximum: 9999
-        minimum: -9999
+        maximum: 180
+        minimum: 0
       dnarest_on:
         default: false
         title: Restrain the DNA conformation
@@ -856,6 +856,22 @@ nodes:
           will be automatically defined: - single base planarity - sugar pucker -
           phosphate backbone diherdral angle restraints - Watson-Crick base pairing'
         type: boolean
+      ligand_param_fname:
+        title: Custom ligand parameter file
+        description: Ligand parameter file in CNS format
+        $comment: Ligand parameter file in CNS format containing all force field parameters
+          (bond, angles, dihedrals, impropers, van der waals) for any ligand not supported
+          by default by HADDOCK
+        type: string
+        format: uri-reference
+      ligand_top_fname:
+        title: Custom ligand topology file
+        description: Ligand topology file in CNS format
+        $comment: Ligand topology file in CNS format containing the ligand topologies
+          (atoms, masses, charges, bond definitions...) for any ligand not supported
+          by default by HADDOCK
+        type: string
+        format: uri-reference
       elecflag:
         default: true
         title: Include electrostatics energy
@@ -891,6 +907,12 @@ nodes:
       ui:group: dihedral restraints
     dnarest_on:
       ui:group: other restraints
+    ligand_param_fname:
+      ui:widget: file
+      ui:group: force field
+    ligand_top_fname:
+      ui:widget: file
+      ui:group: force field
     elecflag:
       ui:group: force field
   tomlSchema:
@@ -903,6 +925,22 @@ nodes:
   schema:
     type: object
     properties:
+      ligand_param_fname:
+        title: Custom ligand parameter file
+        description: Ligand parameter file in CNS format
+        $comment: Ligand parameter file in CNS format containing all force field parameters
+          (bond, angles, dihedrals, impropers, van der waals) for any ligand not supported
+          by default by HADDOCK
+        type: string
+        format: uri-reference
+      ligand_top_fname:
+        title: Custom ligand topology file
+        description: Ligand topology file in CNS format
+        $comment: Ligand topology file in CNS format containing the ligand topologies
+          (atoms, masses, charges, bond definitions...) for any ligand not supported
+          by default by HADDOCK
+        type: string
+        format: uri-reference
       elecflag:
         default: true
         title: Include electrostatics energy
@@ -913,6 +951,12 @@ nodes:
     required: []
     additionalProperties: false
   uiSchema:
+    ligand_param_fname:
+      ui:widget: file
+      ui:group: force field
+    ligand_top_fname:
+      ui:widget: file
+      ui:group: force field
     elecflag:
       ui:group: force field
   tomlSchema: {}
@@ -926,6 +970,7 @@ nodes:
       mol_shape:
         type: array
         maxItemsFrom: molecules
+        title: Shape(s)
         items:
           default: false
           title: Is the molecule a shape?
@@ -970,7 +1015,6 @@ nodes:
           dihe_fname file.
         type: boolean
       ssdihed:
-        default: none
         title: Define automatically backbone dihedral angle restraints
         description: If turned on, this option will automatically defined backbone
           dihedral angle restraints for the selected regions.
@@ -997,8 +1041,8 @@ nodes:
           option)
         $comment: Force constant for backbone dihedral angle restraints (ssdihed option)
         type: number
-        maximum: 9999
-        minimum: -9999
+        maximum: 180
+        minimum: 0
       dnarest_on:
         default: false
         title: Restrain the DNA conformation
@@ -1009,6 +1053,22 @@ nodes:
           will be automatically defined: - single base planarity - sugar pucker -
           phosphate backbone diherdral angle restraints - Watson-Crick base pairing'
         type: boolean
+      ligand_param_fname:
+        title: Custom ligand parameter file
+        description: Ligand parameter file in CNS format
+        $comment: Ligand parameter file in CNS format containing all force field parameters
+          (bond, angles, dihedrals, impropers, van der waals) for any ligand not supported
+          by default by HADDOCK
+        type: string
+        format: uri-reference
+      ligand_top_fname:
+        title: Custom ligand topology file
+        description: Ligand topology file in CNS format
+        $comment: Ligand topology file in CNS format containing the ligand topologies
+          (atoms, masses, charges, bond definitions...) for any ligand not supported
+          by default by HADDOCK
+        type: string
+        format: uri-reference
       elecflag:
         default: true
         title: Include electrostatics energy
@@ -1052,6 +1112,12 @@ nodes:
       ui:group: dihedral restraints
     dnarest_on:
       ui:group: other restraints
+    ligand_param_fname:
+      ui:widget: file
+      ui:group: force field
+    ligand_top_fname:
+      ui:widget: file
+      ui:group: force field
     elecflag:
       ui:group: force field
     sinter_rigid_final:
@@ -1261,6 +1327,7 @@ nodes:
       mol_shape:
         type: array
         maxItemsFrom: molecules
+        title: Shape(s)
         items:
           default: false
           title: Is the molecule a shape?
@@ -1304,8 +1371,17 @@ nodes:
         $comment: Turns on dihedral angle restraints. Those should be defined in the
           dihe_fname file.
         type: boolean
+      dihedrals_scale:
+        default: 200
+        title: Force constant for dihedral angle restraints
+        description: Force constant applied to the dihedral angle restraints read
+          from dihe_fname.
+        $comment: Force constant applied to the dihedral angle restraints read from
+          dihe_fname.
+        type: number
+        maximum: 9999
+        minimum: 0
       ssdihed:
-        default: none
         title: Define automatically backbone dihedral angle restraints
         description: If turned on, this option will automatically defined backbone
           dihedral angle restraints for the selected regions.
@@ -1332,7 +1408,7 @@ nodes:
           option)
         $comment: Force constant for backbone dihedral angle restraints (ssdihed option)
         type: number
-        maximum: 1000
+        maximum: 180
         minimum: 0
       dnarest_on:
         default: false
@@ -1344,6 +1420,22 @@ nodes:
           will be automatically defined: - single base planarity - sugar pucker -
           phosphate backbone diherdral angle restraints - Watson-Crick base pairing'
         type: boolean
+      ligand_param_fname:
+        title: Custom ligand parameter file
+        description: Ligand parameter file in CNS format
+        $comment: Ligand parameter file in CNS format containing all force field parameters
+          (bond, angles, dihedrals, impropers, van der waals) for any ligand not supported
+          by default by HADDOCK
+        type: string
+        format: uri-reference
+      ligand_top_fname:
+        title: Custom ligand topology file
+        description: Ligand topology file in CNS format
+        $comment: Ligand topology file in CNS format containing the ligand topologies
+          (atoms, masses, charges, bond definitions...) for any ligand not supported
+          by default by HADDOCK
+        type: string
+        format: uri-reference
       elecflag:
         default: true
         title: Include electrostatics energy
@@ -1385,12 +1477,20 @@ nodes:
       ui:group: dihedral restraints
     dihedrals_on:
       ui:group: dihedral restraints
+    dihedrals_scale:
+      ui:group: dihedral restraints
     ssdihed:
       ui:group: dihedral restraints
     error_dih:
       ui:group: dihedral restraints
     dnarest_on:
       ui:group: other restraints
+    ligand_param_fname:
+      ui:widget: file
+      ui:group: force field
+    ligand_top_fname:
+      ui:widget: file
+      ui:group: force field
     elecflag:
       ui:group: force field
   tomlSchema:
@@ -1404,7 +1504,6 @@ nodes:
     type: object
     properties:
       ssdihed:
-        default: none
         title: Define automatically backbone dihedral angle restraints
         description: If turned on, this option will automatically defined backbone
           dihedral angle restraints for the selected regions.
@@ -1443,6 +1542,22 @@ nodes:
           will be automatically defined: - single base planarity - sugar pucker -
           phosphate backbone diherdral angle restraints - Watson-Crick base pairing'
         type: boolean
+      ligand_param_fname:
+        title: Custom ligand parameter file
+        description: Ligand parameter file in CNS format
+        $comment: Ligand parameter file in CNS format containing all force field parameters
+          (bond, angles, dihedrals, impropers, van der waals) for any ligand not supported
+          by default by HADDOCK
+        type: string
+        format: uri-reference
+      ligand_top_fname:
+        title: Custom ligand topology file
+        description: Ligand topology file in CNS format
+        $comment: Ligand topology file in CNS format containing the ligand topologies
+          (atoms, masses, charges, bond definitions...) for any ligand not supported
+          by default by HADDOCK
+        type: string
+        format: uri-reference
       elecflag:
         default: true
         title: Include electrostatics energy
@@ -1473,6 +1588,12 @@ nodes:
       ui:group: dihedral restraints
     dnarest_on:
       ui:group: other restraints
+    ligand_param_fname:
+      ui:widget: file
+      ui:group: force field
+    ligand_top_fname:
+      ui:widget: file
+      ui:group: force field
     elecflag:
       ui:group: force field
   tomlSchema: {}
@@ -1486,6 +1607,7 @@ nodes:
       mol_shape:
         type: array
         maxItemsFrom: molecules
+        title: Shape(s)
         items:
           default: false
           title: Is the molecule a shape?
@@ -1720,6 +1842,22 @@ nodes:
           this should not be done if you are defining distance restraints to specific
           hydrogen atoms (e.g. when using NMR distance restraints).
         type: boolean
+      ligand_param_fname:
+        title: Custom ligand parameter file
+        description: Ligand parameter file in CNS format
+        $comment: Ligand parameter file in CNS format containing all force field parameters
+          (bond, angles, dihedrals, impropers, van der waals) for any ligand not supported
+          by default by HADDOCK
+        type: string
+        format: uri-reference
+      ligand_top_fname:
+        title: Custom ligand topology file
+        description: Ligand topology file in CNS format
+        $comment: Ligand topology file in CNS format containing the ligand topologies
+          (atoms, masses, charges, bond definitions...) for any ligand not supported
+          by default by HADDOCK
+        type: string
+        format: uri-reference
       mol:
         title: Input molecule configuration
         $comment: You can expand this parameter and associated sub-parameters to the
@@ -1753,6 +1891,7 @@ nodes:
               minimum: 0
             hisd:
               type: array
+              title: Histidines to be defined as HISD
               items:
                 title: HISD residue number
                 description: Residue number of the Histidine to be defined as HISD
@@ -1775,6 +1914,7 @@ nodes:
               minimum: 0
             hise:
               type: array
+              title: Histidines to be defined as HISE
               items:
                 title: HISE residue number
                 description: Residue number of the Histidine to be defined as HISE
@@ -1791,6 +1931,12 @@ nodes:
   uiSchema:
     delenph:
       ui:group: molecule
+    ligand_param_fname:
+      ui:widget: file
+      ui:group: force field
+    ligand_top_fname:
+      ui:widget: file
+      ui:group: force field
     mol:
       ui:indexable: true
       ui:group: input molecules
