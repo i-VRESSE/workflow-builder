@@ -189,7 +189,7 @@ def config2schema(config):
                 prop_toml['items']['properties'] = schemas['tomlSchema']
             # Rename as parameter is array and does not need extra index
             if k == 'mol1':
-                k = 'mol'                
+                k = 'mol'
         elif v['type'] == 'list' and k.endswith('_'):
             # if parameter name ends with _ then schema is object with chain as key and list of residues as value
 
