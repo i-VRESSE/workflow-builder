@@ -30,6 +30,9 @@ test.describe('given 1 molecule and a topoaa node', () => {
     await page.locator('#expander4molecule svg').click()
     // Click #expander4input_molecules svg
     await page.locator('#expander4input_molecules svg').click()
+    // Add item to input molecule configuration
+    await page.locator('text=input molecules Input molecule configuration >> button').click()
+
     // Click text=Save
     // await page.locator('button:has-text("Save")').click()
   })
