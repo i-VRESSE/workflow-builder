@@ -1877,52 +1877,6 @@ nodes:
                 are within 2A. This cutoff can be changed in the generate-topology.cns
                 script.
               type: boolean
-            nhisd:
-              default: 0
-              title: Number of HISD residue
-              description: Defines the number of HISD residues (neutral HIS with the
-                proton on the ND atom) residues when autohis=false
-              $comment: Defines the number of HISD residues (neutral HIS with the
-                proton on the ND atom) residues. The corresponding residue numbers
-                must be defined in the following parameter (hisd_1, hisd_2, ...).
-                Add as many as needed. Note that HIS is interpreted as a charged Histidine)
-              type: number
-              maximum: 9999
-              minimum: 0
-            hisd:
-              type: array
-              title: Histidines to be defined as HISD
-              items:
-                title: HISD residue number
-                description: Residue number of the Histidine to be defined as HISD
-                $comment: Residue number of the Histidine to be defined as HISD
-                type: number
-                maximum: 9999
-                minimum: -9999
-                format: residue
-            nhise:
-              default: 0
-              title: Number of HISE residue
-              description: Defines the number of HISE residues (neutral HIS with the
-                proton on the NE atom) residues when autohis=false
-              $comment: Defines the number of HISE residues (neutral HIS with the
-                proton on the NE atom) residues. The corresponding residue numbers
-                must be defined in the following parameter (hise_1, hise_2, ...).
-                Add as many as needed. Note that HIS is interpreted as a charged Histidine)
-              type: number
-              maximum: 9999
-              minimum: 0
-            hise:
-              type: array
-              title: Histidines to be defined as HISE
-              items:
-                title: HISE residue number
-                description: Residue number of the Histidine to be defined as HISE
-                $comment: Residue number of the Histidine to be defined as HISE
-                type: number
-                maximum: 9999
-                minimum: -9999
-                format: residue
           required: []
           additionalProperties: false
         maxItemsFrom: molecules
@@ -1945,10 +1899,5 @@ nodes:
       indexed: true
       items:
         sectioned: true
-        properties:
-          hisd:
-            indexed: true
-          hise:
-            indexed: true
 examples:
   docking-protein-ligand: /examples/docking-protein-ligand.zip
