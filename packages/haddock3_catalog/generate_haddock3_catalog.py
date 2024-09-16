@@ -408,7 +408,21 @@ def filter_on_level(config, level):
         valid_levels.add(l)
         if l == level:
             break
-    return {k: v for k, v in config.items() if v['explevel'] in valid_levels and not v['explevel'] == _hidden_level}
+    filtered_config = {}
+    for k, v in config.items():
+        if v['explevel'] in valid_levels and v['explevel'] != _hidden_level:
+            filtered_v = v
+            # topoaa.mol1 has some parameters that are easy and some that are expert
+            # need to filter out the expert ones when level=easy
+            if 'type' in v and v['type'] == 'dict':
+                filtered_v = {}
+                for k2, v2 in v.items():
+                    if 'explevel' not in v2:
+                        filtered_v[k2] = v2
+                    if 'explevel' in v2 and v2['explevel'] in valid_levels and v2['explevel'] != _hidden_level:
+                        filtered_v[k2] = v2
+            filtered_config[k] = filtered_v
+    return filtered_config
 
 def process_module(module_name, category, level):
     logging.warning(f'Processing module: {module_name}')
