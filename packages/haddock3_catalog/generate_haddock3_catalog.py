@@ -13,6 +13,22 @@ from yaml import dump, load, Loader
 from haddock.modules import modules_category
 from haddock import config_expert_levels, _hidden_level
 
+expandable_titles = {
+    'mol_shape': 'Shape(s)',
+    'mol_fix_origin': 'Fix origin(s)',
+    'hisd': 'Histidines to be defined as HISD',
+    'hise': 'Histidines to be defined as HISE',
+    "c2sym": "C2 symmetry restraints",
+    "c3sym": "C3 symmetry restraints",
+    "c4sym": "C4 symmetry restraints",
+    "c5sym": "C5 symmetry restraints",
+    "c6sym": "C6 symmetry restraints",
+    "s3sym": "S3 symmetry restraints",
+    "ncs": "Non-crystallographic symmetry restraints",
+    "seg": "Semi-flexible segments",
+    "fle": "Fully flexible segments",
+}
+
 def argparser_builder():
     parser = argparse.ArgumentParser()
     parser.add_argument('--out_dir', type=Path, default='public/catalog')
@@ -116,7 +132,7 @@ def config2schema(config):
         prop_toml = {}
         if 'default' in v:
             prop["default"] = v['default']
-        elif 'type' in v and v['type'] != 'list':
+        elif 'type' in v and not (v['type'] in {'list', 'dict'}):
             # If there is no default then user must supply a value so prop is required
             required.append(k)
         if 'title' in v and v['title'] != 'No title yet':
@@ -142,13 +158,13 @@ def config2schema(config):
                     "const": iv
                 }
             ifthenelses[k] = ifthenelse
-        if 'type' not in v:
-            # if not type field treat value as dict of dicts
+        if v['type'] == 'dict':
+            # treat value as dict of dicts
             # TODO instead of removing group and explevel from mol1.prot_segid dict do proper filtering and support group recursivly
             config2 = {
                 k2:{
                     k3:v3 for k3,v3 in v2.items() if k3 not in {'group','explevel'}
-                } for k2,v2 in v.items() if k2 not in {'explevel', 'title', 'short', 'long', 'group'}
+                } for k2,v2 in v.items() if k2 not in {'explevel', 'title', 'short', 'long', 'group', 'type'}
             }
             schemas = config2schema(collapse_expandable(config2))
             prop.update({
@@ -246,7 +262,7 @@ def config2schema(config):
                 prop['maxLength'] = v['maxchars']
             if 'choices' in v:
                 prop['enum'] = [choice for choice in v['choices'] if choice != '']
-            if v['default'] == '':
+            if v['default'] in {'', 'none'}:
                 del prop['default']
             if chain_like(k, v):
                 prop['format'] = 'chain'
@@ -259,6 +275,8 @@ def config2schema(config):
             elif 'maxItemsFrom' in v:
                 prop['maxItemsFrom'] = v['maxItemsFrom']
                 prop_ui['ui:indexable'] = True
+            if 'title' not in v and k in expandable_titles:
+                prop['title'] = expandable_titles[k]
             if 'properties' in v:
                 obj_schemas = config2schema(v['properties'])
                 if v['dim'] == 1:
