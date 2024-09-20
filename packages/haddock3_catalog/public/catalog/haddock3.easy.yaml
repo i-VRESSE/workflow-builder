@@ -172,13 +172,12 @@ global:
     then: {}
     else:
       properties:
-        debug:
+        less_io:
           default: false
-          title: Write intermediate and stdout files.
-          description: Write intermediate and stdout files.
-          $comment: When set to true, this option will increase the amount of I/O
-            operations by writing intermediate input, output and error files on disk.
-            Turning it to false can be useful for example when running on a network
+          title: Reduce the amount of I/O operations.
+          description: Reduce the amount of I/O operations.
+          $comment: This option will reduce the amount of I/O operations by writing
+            less files to disk. This can be useful for example when running on a network
             file system where I/O operations are slow.
           type: boolean
   uiSchema:
@@ -207,7 +206,7 @@ global:
       ui:group: clean
     offline:
       ui:group: execution
-    debug:
+    less_io:
       ui:group: execution
   tomlSchema: {}
 nodes:

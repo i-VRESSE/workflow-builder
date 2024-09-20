@@ -182,13 +182,12 @@ global:
     then: {}
     else:
       properties:
-        debug:
+        less_io:
           default: false
-          title: Write intermediate and stdout files.
-          description: Write intermediate and stdout files.
-          $comment: When set to true, this option will increase the amount of I/O
-            operations by writing intermediate input, output and error files on disk.
-            Turning it to false can be useful for example when running on a network
+          title: Reduce the amount of I/O operations.
+          description: Reduce the amount of I/O operations.
+          $comment: This option will reduce the amount of I/O operations by writing
+            less files to disk. This can be useful for example when running on a network
             file system where I/O operations are slow.
           type: boolean
   uiSchema:
@@ -219,7 +218,7 @@ global:
       ui:group: clean
     offline:
       ui:group: execution
-    debug:
+    less_io:
       ui:group: execution
   tomlSchema: {}
 nodes:
@@ -1064,16 +1063,6 @@ nodes:
         $comment: Filename of the custom symmetry restraints file.
         type: string
         format: uri-reference
-      numc2sym:
-        default: 0
-        title: Number of C2 symmetry restraints
-        description: Defines the number of C2 symmetry restraints.
-        $comment: Defines the number of C2 symmetry restraints. For each, a pair of
-          segments on which the symmetry restraint is applied will have to be defined.
-          Those must all have the same length.
-        type: number
-        maximum: 40
-        minimum: 0
       c2sym:
         type: array
         title: C2 symmetry restraints
@@ -1135,16 +1124,6 @@ nodes:
               format: chain
           required: []
           additionalProperties: false
-      numc3sym:
-        default: 0
-        title: Number of C3 symmetry restraints
-        description: Defines the number of C3 symmetry restraints.
-        $comment: Defines the number of C3 symmetry restraints. For each, three segments
-          on which the symmetry restraint is applied will have to be defined. Those
-          must all have the same length.
-        type: number
-        maximum: 10
-        minimum: 0
       c3sym:
         type: array
         title: C3 symmetry restraints
@@ -1232,16 +1211,6 @@ nodes:
               format: chain
           required: []
           additionalProperties: false
-      numc4sym:
-        default: 0
-        title: Number of C4 symmetry restraints
-        description: Defines the number of C4 symmetry restraints.
-        $comment: Defines the number of C4 symmetry restraints. For each, four segments
-          on which the symmetry restraint is applied will have to be defined. Those
-          must all have the same length.
-        type: number
-        maximum: 10
-        minimum: 0
       c4sym:
         type: array
         title: C4 symmetry restraints
@@ -1356,16 +1325,6 @@ nodes:
               format: chain
           required: []
           additionalProperties: false
-      numc5sym:
-        default: 0
-        title: Number of C5 symmetry restraints
-        description: Defines the number of C5 symmetry restraints.
-        $comment: Defines the number of C5 symmetry restraints. For each, five segments
-          on which the symmetry restraint is applied will have to be defined. Those
-          must all have the same length.
-        type: number
-        maximum: 10
-        minimum: 0
       c5sym:
         type: array
         title: C5 symmetry restraints
@@ -1506,16 +1465,6 @@ nodes:
               format: chain
           required: []
           additionalProperties: false
-      numc6sym:
-        default: 0
-        title: Number of C6 symmetry restraints
-        description: Defines the number of C6 symmetry restraints.
-        $comment: Defines the number of C6 symmetry restraints. For each, six segments
-          on which the symmetry restraint is applied will have to be defined. Those
-          must all have the same length.
-        type: number
-        maximum: 10
-        minimum: 0
       c6sym:
         type: array
         title: C6 symmetry restraints
@@ -1682,16 +1631,6 @@ nodes:
               format: chain
           required: []
           additionalProperties: false
-      nums3sym:
-        default: 0
-        title: Number of S3 symmetry restraints
-        description: Defines the number of S3 symmetry restraints.
-        $comment: Defines the number of S3 symmetry restraints. For each, three segments
-          on which the symmetry restraint is applied will have to be defined. Those
-          must all have the same length.
-        type: number
-        maximum: 10
-        minimum: 0
       s3sym:
         type: array
         title: S3 symmetry restraints
@@ -1796,16 +1735,6 @@ nodes:
         $comment: Force constant for non-crystallographic restraints
         type: number
         maximum: 1000
-        minimum: 0
-      numncs:
-        default: 0
-        title: Number of non-crystallographic symmetry restraints
-        description: Number of non-crystallographic symmetry restraints (NCS).
-        $comment: Number of non-crystallographic symmetry restraints. For each pairs
-          of segments will have to be defined. Note that those must contain exactly
-          the same residues/atom combinations.
-        type: number
-        maximum: 100
         minimum: 0
       ncs:
         type: array
@@ -2349,17 +2278,6 @@ nodes:
         type: number
         maximum: 1000
         minimum: -1
-      nfle:
-        default: 0
-        title: Number of fully flexible segments
-        description: This defines the number of fully flexible segments.
-        $comment: This parameter defines the number of fully flexible segments for
-          all molecules. If >=1 then those must be defined manually with segment ID
-          (segid) in the fle_seg_* variable, followed by the starting and ending residue
-          numbers in the fle_sta_* and fle_end_* variables.
-        type: number
-        maximum: 1000
-        minimum: 0
       fle:
         type: array
         title: Fully flexible segments
@@ -2451,32 +2369,20 @@ nodes:
     symtbl_fname:
       ui:widget: file
       ui:group: symmetry
-    numc2sym:
-      ui:group: symmetry
     c2sym:
       ui:field: table
-      ui:group: symmetry
-    numc3sym:
       ui:group: symmetry
     c3sym:
       ui:field: table
       ui:group: symmetry
-    numc4sym:
-      ui:group: symmetry
     c4sym:
       ui:field: table
-      ui:group: symmetry
-    numc5sym:
       ui:group: symmetry
     c5sym:
       ui:field: table
       ui:group: symmetry
-    numc6sym:
-      ui:group: symmetry
     c6sym:
       ui:field: table
-      ui:group: symmetry
-    nums3sym:
       ui:group: symmetry
     s3sym:
       ui:field: table
@@ -2484,8 +2390,6 @@ nodes:
     ncs_on:
       ui:group: symmetry
     kncs:
-      ui:group: symmetry
-    numncs:
       ui:group: symmetry
     ncs:
       ui:field: table
@@ -2569,8 +2473,6 @@ nodes:
     nseg19:
       ui:group: flexibility
     nseg20:
-      ui:group: flexibility
-    nfle:
       ui:group: flexibility
     fle:
       ui:field: table
@@ -3208,16 +3110,6 @@ nodes:
         $comment: Filename of the custom symmetry restraints file.
         type: string
         format: uri-reference
-      numc2sym:
-        default: 0
-        title: Number of C2 symmetry restraints
-        description: Defines the number of C2 symmetry restraints.
-        $comment: Defines the number of C2 symmetry restraints. For each, a pair of
-          segments on which the symmetry restraint is applied will have to be defined.
-          Those must all have the same length.
-        type: number
-        maximum: 40
-        minimum: 0
       c2sym:
         type: array
         title: C2 symmetry restraints
@@ -3279,16 +3171,6 @@ nodes:
               format: chain
           required: []
           additionalProperties: false
-      numc3sym:
-        default: 0
-        title: Number of C3 symmetry restraints
-        description: Defines the number of C3 symmetry restraints.
-        $comment: Defines the number of C3 symmetry restraints. For each, three segments
-          on which the symmetry restraint is applied will have to be defined. Those
-          must all have the same length.
-        type: number
-        maximum: 10
-        minimum: 0
       c3sym:
         type: array
         title: C3 symmetry restraints
@@ -3376,16 +3258,6 @@ nodes:
               format: chain
           required: []
           additionalProperties: false
-      numc4sym:
-        default: 0
-        title: Number of C4 symmetry restraints
-        description: Defines the number of C4 symmetry restraints.
-        $comment: Defines the number of C4 symmetry restraints. For each, four segments
-          on which the symmetry restraint is applied will have to be defined. Those
-          must all have the same length.
-        type: number
-        maximum: 10
-        minimum: 0
       c4sym:
         type: array
         title: C4 symmetry restraints
@@ -3500,16 +3372,6 @@ nodes:
               format: chain
           required: []
           additionalProperties: false
-      numc5sym:
-        default: 0
-        title: Number of C5 symmetry restraints
-        description: Defines the number of C5 symmetry restraints.
-        $comment: Defines the number of C5 symmetry restraints. For each, five segments
-          on which the symmetry restraint is applied will have to be defined. Those
-          must all have the same length.
-        type: number
-        maximum: 10
-        minimum: 0
       c5sym:
         type: array
         title: C5 symmetry restraints
@@ -3650,16 +3512,6 @@ nodes:
               format: chain
           required: []
           additionalProperties: false
-      numc6sym:
-        default: 0
-        title: Number of C6 symmetry restraints
-        description: Defines the number of C6 symmetry restraints.
-        $comment: Defines the number of C6 symmetry restraints. For each, six segments
-          on which the symmetry restraint is applied will have to be defined. Those
-          must all have the same length.
-        type: number
-        maximum: 10
-        minimum: 0
       c6sym:
         type: array
         title: C6 symmetry restraints
@@ -3826,16 +3678,6 @@ nodes:
               format: chain
           required: []
           additionalProperties: false
-      nums3sym:
-        default: 0
-        title: Number of S3 symmetry restraints
-        description: Defines the number of S3 symmetry restraints.
-        $comment: Defines the number of S3 symmetry restraints. For each, three segments
-          on which the symmetry restraint is applied will have to be defined. Those
-          must all have the same length.
-        type: number
-        maximum: 10
-        minimum: 0
       s3sym:
         type: array
         title: S3 symmetry restraints
@@ -3940,16 +3782,6 @@ nodes:
         $comment: Force constant for non-crystallographic restraints
         type: number
         maximum: 1000
-        minimum: 0
-      numncs:
-        default: 0
-        title: Number of non-crystallographic symmetry restraints
-        description: Number of non-crystallographic symmetry restraints (NCS).
-        $comment: Number of non-crystallographic symmetry restraints. For each pairs
-          of segments will have to be defined. Note that those must contain exactly
-          the same residues/atom combinations.
-        type: number
-        maximum: 100
         minimum: 0
       ncs:
         type: array
@@ -4541,17 +4373,6 @@ nodes:
         type: number
         maximum: 1000
         minimum: -1
-      nfle:
-        default: 0
-        title: Number of fully flexible segments
-        description: This defines the number of fully flexible segments.
-        $comment: This parameter defines the number of fully flexible segments for
-          all molecules. If >=1 then those must be defined manually with segment ID
-          (segid) in the fle_seg_* variable, followed by the starting and ending residue
-          numbers in the fle_sta_* and fle_end_* variables.
-        type: number
-        maximum: 1000
-        minimum: 0
       fle:
         type: array
         title: Fully flexible segments
@@ -4673,32 +4494,20 @@ nodes:
     symtbl_fname:
       ui:widget: file
       ui:group: symmetry
-    numc2sym:
-      ui:group: symmetry
     c2sym:
       ui:field: table
-      ui:group: symmetry
-    numc3sym:
       ui:group: symmetry
     c3sym:
       ui:field: table
       ui:group: symmetry
-    numc4sym:
-      ui:group: symmetry
     c4sym:
       ui:field: table
-      ui:group: symmetry
-    numc5sym:
       ui:group: symmetry
     c5sym:
       ui:field: table
       ui:group: symmetry
-    numc6sym:
-      ui:group: symmetry
     c6sym:
       ui:field: table
-      ui:group: symmetry
-    nums3sym:
       ui:group: symmetry
     s3sym:
       ui:field: table
@@ -4706,8 +4515,6 @@ nodes:
     ncs_on:
       ui:group: symmetry
     kncs:
-      ui:group: symmetry
-    numncs:
       ui:group: symmetry
     ncs:
       ui:field: table
@@ -4801,8 +4608,6 @@ nodes:
     nseg19:
       ui:group: flexibility
     nseg20:
-      ui:group: flexibility
-    nfle:
       ui:group: flexibility
     fle:
       ui:field: table
@@ -5298,16 +5103,6 @@ nodes:
         $comment: Filename of the custom symmetry restraints file.
         type: string
         format: uri-reference
-      numc2sym:
-        default: 0
-        title: Number of C2 symmetry restraints
-        description: Defines the number of C2 symmetry restraints.
-        $comment: Defines the number of C2 symmetry restraints. For each, a pair of
-          segments on which the symmetry restraint is applied will have to be defined.
-          Those must all have the same length.
-        type: number
-        maximum: 40
-        minimum: 0
       c2sym:
         type: array
         title: C2 symmetry restraints
@@ -5369,16 +5164,6 @@ nodes:
               format: chain
           required: []
           additionalProperties: false
-      numc3sym:
-        default: 0
-        title: Number of C3 symmetry restraints
-        description: Defines the number of C3 symmetry restraints.
-        $comment: Defines the number of C3 symmetry restraints. For each, three segments
-          on which the symmetry restraint is applied will have to be defined. Those
-          must all have the same length.
-        type: number
-        maximum: 10
-        minimum: 0
       c3sym:
         type: array
         title: C3 symmetry restraints
@@ -5466,16 +5251,6 @@ nodes:
               format: chain
           required: []
           additionalProperties: false
-      numc4sym:
-        default: 0
-        title: Number of C4 symmetry restraints
-        description: Defines the number of C4 symmetry restraints.
-        $comment: Defines the number of C4 symmetry restraints. For each, four segments
-          on which the symmetry restraint is applied will have to be defined. Those
-          must all have the same length.
-        type: number
-        maximum: 10
-        minimum: 0
       c4sym:
         type: array
         title: C4 symmetry restraints
@@ -5590,16 +5365,6 @@ nodes:
               format: chain
           required: []
           additionalProperties: false
-      numc5sym:
-        default: 0
-        title: Number of C5 symmetry restraints
-        description: Defines the number of C5 symmetry restraints.
-        $comment: Defines the number of C5 symmetry restraints. For each, five segments
-          on which the symmetry restraint is applied will have to be defined. Those
-          must all have the same length.
-        type: number
-        maximum: 10
-        minimum: 0
       c5sym:
         type: array
         title: C5 symmetry restraints
@@ -5740,16 +5505,6 @@ nodes:
               format: chain
           required: []
           additionalProperties: false
-      numc6sym:
-        default: 0
-        title: Number of C6 symmetry restraints
-        description: Defines the number of C6 symmetry restraints.
-        $comment: Defines the number of C6 symmetry restraints. For each, six segments
-          on which the symmetry restraint is applied will have to be defined. Those
-          must all have the same length.
-        type: number
-        maximum: 10
-        minimum: 0
       c6sym:
         type: array
         title: C6 symmetry restraints
@@ -5916,16 +5671,6 @@ nodes:
               format: chain
           required: []
           additionalProperties: false
-      nums3sym:
-        default: 0
-        title: Number of S3 symmetry restraints
-        description: Defines the number of S3 symmetry restraints.
-        $comment: Defines the number of S3 symmetry restraints. For each, three segments
-          on which the symmetry restraint is applied will have to be defined. Those
-          must all have the same length.
-        type: number
-        maximum: 10
-        minimum: 0
       s3sym:
         type: array
         title: S3 symmetry restraints
@@ -6030,16 +5775,6 @@ nodes:
         $comment: Force constant for non-crystallographic restraints
         type: number
         maximum: 1000
-        minimum: 0
-      numncs:
-        default: 0
-        title: Number of non-crystallographic symmetry restraints
-        description: Number of non-crystallographic symmetry restraints (NCS).
-        $comment: Number of non-crystallographic symmetry restraints. For each pairs
-          of segments will have to be defined. Note that those must contain exactly
-          the same residues/atom combinations.
-        type: number
-        maximum: 100
         minimum: 0
       ncs:
         type: array
@@ -6624,17 +6359,6 @@ nodes:
         type: number
         maximum: 1000
         minimum: -1
-      nfle:
-        default: 0
-        title: Number of fully flexible segments
-        description: This defines the number of fully flexible segments.
-        $comment: This parameter defines the number of fully flexible segments for
-          all molecules. If >=1 then those must be defined manually with segment ID
-          (segid) in the fle_seg_* variable, followed by the starting and ending residue
-          numbers in the fle_sta_* and fle_end_* variables.
-        type: number
-        maximum: 1000
-        minimum: 0
       fle:
         type: array
         title: Fully flexible segments
@@ -6732,32 +6456,20 @@ nodes:
     symtbl_fname:
       ui:widget: file
       ui:group: symmetry
-    numc2sym:
-      ui:group: symmetry
     c2sym:
       ui:field: table
-      ui:group: symmetry
-    numc3sym:
       ui:group: symmetry
     c3sym:
       ui:field: table
       ui:group: symmetry
-    numc4sym:
-      ui:group: symmetry
     c4sym:
       ui:field: table
-      ui:group: symmetry
-    numc5sym:
       ui:group: symmetry
     c5sym:
       ui:field: table
       ui:group: symmetry
-    numc6sym:
-      ui:group: symmetry
     c6sym:
       ui:field: table
-      ui:group: symmetry
-    nums3sym:
       ui:group: symmetry
     s3sym:
       ui:field: table
@@ -6765,8 +6477,6 @@ nodes:
     ncs_on:
       ui:group: symmetry
     kncs:
-      ui:group: symmetry
-    numncs:
       ui:group: symmetry
     ncs:
       ui:field: table
@@ -6856,8 +6566,6 @@ nodes:
     nseg19:
       ui:group: flexibility
     nseg20:
-      ui:group: flexibility
-    nfle:
       ui:group: flexibility
     fle:
       ui:field: table
@@ -7514,7 +7222,7 @@ nodes:
         $comment: Filename of the custom symmetry restraints file.
         type: string
         format: uri-reference
-      numc2sym:
+      nc2sym:
         default: 0
         title: Number of C2 symmetry restraints
         description: Defines the number of C2 symmetry restraints.
@@ -7585,7 +7293,7 @@ nodes:
               format: chain
           required: []
           additionalProperties: false
-      numc3sym:
+      nc3sym:
         default: 0
         title: Number of C3 symmetry restraints
         description: Defines the number of C3 symmetry restraints.
@@ -7682,7 +7390,7 @@ nodes:
               format: chain
           required: []
           additionalProperties: false
-      numc4sym:
+      nc4sym:
         default: 0
         title: Number of C4 symmetry restraints
         description: Defines the number of C4 symmetry restraints.
@@ -7806,7 +7514,7 @@ nodes:
               format: chain
           required: []
           additionalProperties: false
-      numc5sym:
+      nc5sym:
         default: 0
         title: Number of C5 symmetry restraints
         description: Defines the number of C5 symmetry restraints.
@@ -7956,7 +7664,7 @@ nodes:
               format: chain
           required: []
           additionalProperties: false
-      numc6sym:
+      nc6sym:
         default: 0
         title: Number of C6 symmetry restraints
         description: Defines the number of C6 symmetry restraints.
@@ -8132,7 +7840,7 @@ nodes:
               format: chain
           required: []
           additionalProperties: false
-      nums3sym:
+      ns3sym:
         default: 0
         title: Number of S3 symmetry restraints
         description: Defines the number of S3 symmetry restraints.
@@ -8246,16 +7954,6 @@ nodes:
         $comment: Force constant for non-crystallographic restraints
         type: number
         maximum: 1000
-        minimum: 0
-      numncs:
-        default: 0
-        title: Number of non-crystallographic symmetry restraints
-        description: Number of non-crystallographic symmetry restraints (NCS).
-        $comment: Number of non-crystallographic symmetry restraints. For each pairs
-          of segments will have to be defined. Note that those must contain exactly
-          the same residues/atom combinations.
-        type: number
-        maximum: 100
         minimum: 0
       ncs:
         type: array
@@ -8505,32 +8203,32 @@ nodes:
     symtbl_fname:
       ui:widget: file
       ui:group: symmetry
-    numc2sym:
+    nc2sym:
       ui:group: symmetry
     c2sym:
       ui:field: table
       ui:group: symmetry
-    numc3sym:
+    nc3sym:
       ui:group: symmetry
     c3sym:
       ui:field: table
       ui:group: symmetry
-    numc4sym:
+    nc4sym:
       ui:group: symmetry
     c4sym:
       ui:field: table
       ui:group: symmetry
-    numc5sym:
+    nc5sym:
       ui:group: symmetry
     c5sym:
       ui:field: table
       ui:group: symmetry
-    numc6sym:
+    nc6sym:
       ui:group: symmetry
     c6sym:
       ui:field: table
       ui:group: symmetry
-    nums3sym:
+    ns3sym:
       ui:group: symmetry
     s3sym:
       ui:field: table
@@ -8538,8 +8236,6 @@ nodes:
     ncs_on:
       ui:group: symmetry
     kncs:
-      ui:group: symmetry
-    numncs:
       ui:group: symmetry
     ncs:
       ui:field: table
