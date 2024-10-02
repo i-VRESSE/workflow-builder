@@ -192,12 +192,13 @@ global:
     then: {}
     else:
       properties:
-        less_io:
+        debug:
           default: false
-          title: Reduce the amount of I/O operations.
-          description: Reduce the amount of I/O operations.
-          $comment: This option will reduce the amount of I/O operations by writing
-            less files to disk. This can be useful for example when running on a network
+          title: Write intermediate and stdout files.
+          description: Write intermediate and stdout files.
+          $comment: When set to true, this option will increase the amount of I/O
+            operations by writing intermediate input, output and error files on disk.
+            Turning it to false can be useful for example when running on a network
             file system where I/O operations are slow.
           type: boolean
   uiSchema:
@@ -230,7 +231,7 @@ global:
       ui:group: clean
     offline:
       ui:group: execution
-    less_io:
+    debug:
       ui:group: execution
   tomlSchema: {}
 nodes:
@@ -8357,80 +8358,6 @@ nodes:
               format: chain
           required: []
           additionalProperties: false
-      ncs_on:
-        default: false
-        title: Non-crystallographic symmetry restraints
-        description: Non-crystallographic symmetry restraints to ensure two molecules
-          will have the same conformation.
-        $comment: Non-crystallographic symmetry restraints to ensure two molecules
-          will have the same conformation. This does not apply any symmetry between
-          the two molecules but rather defines restraints such as the RMSD between
-          those is 0.
-        type: boolean
-      kncs:
-        default: 1.0
-        title: Force constant for non-crystallographic restraints
-        description: Force constant for non-crystallographic restraints
-        $comment: Force constant for non-crystallographic restraints
-        type: number
-        maximum: 1000
-        minimum: 0
-      ncs:
-        type: array
-        title: Non-crystallographic symmetry restraints
-        items:
-          type: object
-          properties:
-            sta1:
-              title: Residue number of first residue
-              description: Residue number of first residue in the first NCS segment
-              $comment: Residue number of first residue in the first NCS segment
-              type: number
-              maximum: 9999
-              minimum: -9999
-              format: residue
-            end1:
-              title: Residue number of last residue
-              description: Residue number of last residue in the first NCS segment
-              $comment: Residue number of last residue in the first NCS segment
-              type: number
-              maximum: 9999
-              minimum: -9999
-              format: residue
-            seg1:
-              title: Segment ID of first NCS segment
-              description: Segment ID of first NCS segment
-              $comment: Segment ID of first NCS segment
-              type: string
-              minLength: 0
-              maxLength: 100
-              format: chain
-            sta2:
-              title: Residue number of first residue
-              description: Residue number of first residue in the second NCS segment
-              $comment: Residue number of first residue in the second NCS segment
-              type: number
-              maximum: 9999
-              minimum: -9999
-              format: residue
-            end2:
-              title: Residue number of last residue
-              description: Residue number of last residue in the second NCS segment
-              $comment: Residue number of last residue in the second NCS segment
-              type: number
-              maximum: 9999
-              minimum: -9999
-              format: residue
-            seg2:
-              title: Segment ID of second NCS segment
-              description: Segment ID of second NCS segment
-              $comment: Segment ID of second NCS segment
-              type: string
-              minLength: 0
-              maxLength: 100
-              format: chain
-          required: []
-          additionalProperties: false
       w_dist:
         default: 0.01
         title: Weight of the distance restraint energy
@@ -8661,13 +8588,6 @@ nodes:
     s3sym:
       ui:field: table
       ui:group: symmetry
-    ncs_on:
-      ui:group: symmetry
-    kncs:
-      ui:group: symmetry
-    ncs:
-      ui:field: table
-      ui:group: symmetry
     w_dist:
       ui:group: scoring
     w_air:
@@ -8730,10 +8650,6 @@ nodes:
       items:
         flatten: true
     s3sym:
-      indexed: true
-      items:
-        flatten: true
-    ncs:
       indexed: true
       items:
         flatten: true
