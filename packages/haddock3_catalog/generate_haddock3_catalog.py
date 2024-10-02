@@ -141,7 +141,37 @@ def config2schema(config):
             prop['description'] = v['short']
         if 'long' in v and v['long'] != 'No long description yet':
             prop['$comment'] = v['long']
-        if 'incompatible' in v:
+        if 'incompatible' in v and list(v['incompatible'].keys()) == [False]:
+            # From https://github.com/haddocking/haddock3/blob/bd7fc784938405ec8a809da83b970b16147462ea/src/haddock/modules/defaults.yaml#L141C1-L154C18
+            # Given
+            # debug:
+            #   default: false
+            #   type: boolean
+            #   ...
+            #   incompatible:
+            #     false:
+            #       mode: batch
+            #
+            # Should produce JSON schema
+            #
+            # if:
+            #   properties:
+            #     mode:
+            #       const: batch
+            # then: {}
+            # else:
+            #   properties:
+            #     debug:
+            #       default: false
+            #       ...
+            #       type: boolean
+            #
+            # Means 
+            # if mode=batch then debug must be true which is then the default
+            # if mode!=batch then debug can be true or false
+            # from pprint import pprint
+            # pprint(v)
+            # raise NotImplementedError('incompatible not implemented')
             ifthenelse = {
                 "if": {
                     "properties": {}
@@ -153,7 +183,7 @@ def config2schema(config):
                     }
                 }
             }
-            for ik, iv in v['incompatible'].items():
+            for ik, iv in v['incompatible'][False].items():
                 ifthenelse['if']['properties'][ik] = {
                     "const": iv
                 }

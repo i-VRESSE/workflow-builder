@@ -48,6 +48,8 @@ export function isCatalog (catalog: unknown): catalog is ICatalog {
     'nodes' in catalog
   )
   // TODO add more checks
+  // check keys in global
+  // check keys in each node
 }
 
 export function globalParameterKeys (global: IGlobal): Set<string> {
