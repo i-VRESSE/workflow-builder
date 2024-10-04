@@ -6911,6 +6911,317 @@ nodes:
     tolerance:
       ui:group: module
   tomlSchema: {}
+- id: openmm
+  category: refinement
+  label: OpenMM refinement module for HADDOCK3.
+  description: HADDOCK3 OpenMM module.
+  schema:
+    type: object
+    properties:
+      forcefield:
+        default: amber14-all.xml
+        title: Forcefield used by OpenMM.
+        description: Forcefields that can be used by OpenMM.
+        $comment: Forcefields that can be used by OpenMM.
+        type: string
+        minLength: 10
+        maxLength: 100
+        enum:
+        - amber14-all.xml
+        - amber14/protein.ff14SB.xml
+        - amber14/protein.ff15ipq.xml
+        - amber14/DNA.OL15.xml
+        - amber14/DNA.bsc1.xml
+        - amber14/RNA.OL3.xml
+        - amber14/lipid17.xml
+        - amber14/GLYCAM_06j-1.xml
+        - charmm36.xml
+      explicit_solvent_model:
+        default: amber14/tip3p.xml
+        title: Explicit solvent models.
+        description: Solvent models supported by the OpenMM modeller to build the
+          water solvation box.
+        $comment: Solvent models supported by the OpenMM modeller to build the water
+          solvation box.
+        type: string
+        minLength: 0
+        maxLength: 100
+        enum:
+        - amber14/tip3p.xml
+        - amber14/spce.xml
+        - charmm36/spce.xml
+        - amber14/tip4pew.xml
+        - charmm36/tip4pew.xml
+        - charmm36/tip5p.xml
+      ph:
+        default: 7.4
+        title: pH of the buffer.
+        description: pH of the buffer.
+        $comment: pH of the buffer. This has an infulence on the protonation states
+          of the resiudes.
+        type: number
+        maximum: 12
+        minimum: -3.0
+      keep_solvent:
+        default: false
+        title: Whether-or-not solvent be removed from provided structures.
+        description: Whether-or-not solvent be removed from provided structures.
+        $comment: Whether-or-not solvent be removed from provided structures. If 'false',
+          all HETATM atoms will be removed.
+        type: boolean
+      implicit_solvent:
+        default: false
+        title: Indicate use of implicit solvent.
+        description: Indicate use of implicit solvent, avoids building a water solvation
+          box around pdbs.
+        $comment: Indicate use of implicit solvent, avoids building a water solvation
+          box around pdbs.
+        type: boolean
+      implicit_solvent_model:
+        default: implicit/hct.xml
+        title: Implicit solvent models.
+        description: Implicit solvent models supported by OpenMM.
+        $comment: Implicit solvent models supported by OpenMM.
+        type: string
+        minLength: 0
+        maxLength: 100
+        enum:
+        - implicit/hct.xml
+        - implicit/obc1.xml
+        - implicit/obc2.xml
+        - implicit/gbn.xml
+        - implicit/gbn2.xml
+      add_extra_particles_for_forcefield:
+        default: false
+        title: Add extra particles for forcefield.
+        description: Add extra particles for forcefield if needed such as e.g. Drude
+          particles.
+        $comment: Add extra particles for forcefield if needed such as e.g. Drude
+          particles.
+        type: boolean
+      timestep_ps:
+        default: 0.002
+        title: Timestep definition.
+        description: Definition of timestep used by the integrator to progress the
+          simulation.
+        $comment: Definition of timestep used by the integrator to progress the simulation.
+        type: number
+        maximum: 0.004
+        minimum: 0.001
+      constraints:
+        default: HBonds
+        title: Integration constraints.
+        description: Integration constraints used to allow for larger integration
+          time step.
+        $comment: Integration constraints used to allow for larger integration time
+          step. For extra info see http://docs.openmm.org/latest/userguide/application/02_running_sims.html#constraints
+        type: string
+        minLength: 1
+        maxLength: 20
+        enum:
+        - None
+        - HBonds
+        - AllBonds
+        - HAngles
+      equilibration_timesteps:
+        default: 3000
+        title: Equilibration timesteps.
+        description: Equilibration timesteps performed without saving the simulation
+          state.
+        $comment: Equilibration timesteps performed without saving the simulation
+          state.
+        type: number
+        maximum: 100000
+        minimum: 0
+      simulation_timesteps:
+        default: 2000
+        title: Simulation timesteps.
+        description: Simulation timesteps performed during the simulation.
+        $comment: Simulation timesteps performed during the simulation.
+        type: number
+        maximum: 1000000
+        minimum: 0
+      sampling_factor:
+        default: 1
+        title: Number of simulation replicas.
+        description: Number of simulation replicas.
+        $comment: Number of simulation replicas.
+        type: number
+        maximum: 20
+        minimum: 1
+      temperature_kelvin:
+        default: 298.15
+        title: Average temperature.
+        description: Average temperature used by e.g. the integrator or by for temperature
+          coupling.
+        $comment: Average temperature used by e.g. the integrator or by for temperature
+          coupling.
+        type: number
+        maximum: 1000.0
+        minimum: 1.0
+      remove_center_of_mass_motion:
+        default: true
+        title: Remove center of mass motion.
+        description: Remove center of mass motion when overall molecular drift is
+          detected.
+        $comment: Remove center of mass motion when overall molecular drift is detected.
+        type: boolean
+      generate_ensemble:
+        default: true
+        title: Generate ensemble of configurations.
+        description: Generate ensemble of configurations.
+        $comment: If 'true', generates 1 single ensemble .pdb file holding various
+          configurations; composed of the equilibrated one, all intermediates and
+          the final one. If 'false', only return the last configuration obtained after
+          'simulation_timesteps' steps.
+        type: boolean
+      save_intermediate:
+        default: 1
+        title: Number of intermediate configurations to save.
+        description: Number of intermediate configurations to save during the simulation.
+        $comment: Number of intermediate configurations to save during the simulation.
+          The code divides the length of the simulation (simulation_timesteps) by
+          this parameter to get how often configurations should be saved.
+        type: number
+        maximum: 100
+        minimum: 0
+      padding:
+        default: 1.0
+        title: Padding value in nanometers.
+        description: Padding value in nanometers.
+        $comment: Padding value in nanometers. This is used to create the solvation
+          box by adding water molecules around the molecule up to this padding distance.
+          When performing a long refinement of a complex, increase this parameter
+          as the molecules will likely move away from each other.
+        type: number
+        maximum: 10
+        minimum: 0.3
+      rigid_water:
+        default: true
+        title: Use rigid water.
+        description: Use of rigid water in the simulation.
+        $comment: Use of rigid water in the simulation. Flexible water molecules usually
+          require a slower taken timestep by the used integrator.
+        type: boolean
+      iniseed:
+        default: 917
+        title: Simulation seed.
+        description: Set a pseudo-random seed for the simulation.
+        $comment: Set a pseudo-random seed for the simulation. This defines how the
+          initial velocities are created, but has no effect on the randomicity of
+          the solvation box.
+        type: number
+        maximum: 1000000
+        minimum: 0
+      ion_concentration:
+        default: 0.15
+        title: Ion concentration.
+        description: Ion concentration in Molar.
+        $comment: Ion concentration in Molar.
+        type: number
+        maximum: 5
+        minimum: 0
+      solv_equilibration:
+        default: true
+        title: Process the solvent equilibration phase.
+        description: Process the solvent equilibration phase.
+        $comment: Process the solvent equilibration phase. If 'true', the solvent
+          will be equilibrated while constraining proteins positions to intial ones.
+        type: boolean
+      solv_eq_max_temperature_kelvin:
+        default: 310.0
+        title: Upper boundary of temperature to reach during solvent eauilibration
+          phase.
+        description: Upper boundary of temperature to reach during solvent eauilibration
+          phase.
+        $comment: Upper boundary of temperature to reach during solvent eauilibration
+          phase.
+        type: number
+        maximum: 400
+        minimum: 1
+      solv_eq_stepsize_fs:
+        default: 2.0
+        title: Step size for the solvent equilibration phase.
+        description: Step size (in femptoseconds) for the solvent equilibration phase.
+        $comment: Step size (in femptoseconds) for the solvent equilibration phase.
+        type: number
+        maximum: 4
+        minimum: 0.5
+      solv_eq_timesteps:
+        default: 500
+        title: Number of timesteps to be performed during solvent equilibration phase.
+        description: Number of timesteps to be performed during solvent equilibration
+          phase.
+        $comment: Number of timesteps to be performed during solvent equilibration
+          phase.
+        type: number
+        maximum: 10000
+        minimum: 10
+      solv_eq_spring_constant:
+        default: 20.0
+        title: Spring constant (k) used to restrain protein coordinates during solvent
+          equilibration phase.
+        description: Spring constant (k) used to restrain protein coordintes during
+          solvent equilibration phase.
+        $comment: Spring constant (k) used to restrain protein coordinates during
+          solvent equilibration phase.
+        type: number
+        maximum: 10000
+        minimum: 0
+    required: []
+    additionalProperties: false
+  uiSchema:
+    forcefield:
+      ui:group: force field
+    explicit_solvent_model:
+      ui:group: force field
+    ph:
+      ui:group: simulation
+    keep_solvent:
+      ui:group: post processing
+    implicit_solvent:
+      ui:group: force field
+    implicit_solvent_model:
+      ui:group: force field
+    add_extra_particles_for_forcefield:
+      ui:group: force field
+    timestep_ps:
+      ui:group: sampling
+    constraints:
+      ui:group: restraints
+    equilibration_timesteps:
+      ui:group: sampling
+    simulation_timesteps:
+      ui:group: sampling
+    sampling_factor:
+      ui:group: sampling
+    temperature_kelvin:
+      ui:group: sampling
+    remove_center_of_mass_motion:
+      ui:group: sampling
+    generate_ensemble:
+      ui:group: post processing
+    save_intermediate:
+      ui:group: sampling
+    padding:
+      ui:group: sampling
+    rigid_water:
+      ui:group: restraints
+    iniseed:
+      ui:group: sampling
+    ion_concentration:
+      ui:group: sampling
+    solv_equilibration:
+      ui:group: sampling
+    solv_eq_max_temperature_kelvin:
+      ui:group: sampling
+    solv_eq_stepsize_fs:
+      ui:group: sampling
+    solv_eq_timesteps:
+      ui:group: sampling
+    solv_eq_spring_constant:
+      ui:group: sampling
+  tomlSchema: {}
 - id: rigidbody
   category: sampling
   label: Rigid-body docking sampling module
