@@ -319,11 +319,9 @@ export function lines2node (text: string): number[] {
   // highlighter linenumber starts with 1 so add offset
   const nodeLines: number[] = [-1]
   let nodeIndex = -1
-  const isTable = /^\[/
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i]
-    if (isTable.test(line) && !line.includes('.')
-    ) {
+    if (line.startsWith('[') && !line.includes('.')) {
       nodeIndex++
     }
     nodeLines.push(nodeIndex)
