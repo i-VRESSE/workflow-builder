@@ -1112,4 +1112,21 @@ describe('lines2node()', () => {
     const expected = [-1, -1, -1, -1, -1, 0, 0, 1]
     expect(lookup).toEqual(expected)
   })
+
+  it('given 2 sections', () => {
+    const workflow = [
+      '',
+      'molecules = [',
+      ']',
+      '',
+      '[section1]',
+      '',
+      '[section1.mol1]'
+    ].join('\n')
+
+    const lookup = lines2node(workflow)
+
+    const expected = [-1, -1, -1, -1, -1, 0, 0, 0]
+    expect(lookup).toEqual(expected)
+  })
 })
