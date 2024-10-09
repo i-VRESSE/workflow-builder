@@ -32,11 +32,9 @@ export const HighlightedCode = ({ code, onClick }: IProps): JSX.Element => (
       })}
       // onClick only works with showLineNumbers, so enable and hide
       showLineNumbers
-      lineNumberStyle={(props) => {
-        return {
-          display: 'none'
-        }
-      }}
+      lineNumberStyle={() => ({
+        display: 'none'
+      })}
     >
       {code}
     </SyntaxHighlighter>
