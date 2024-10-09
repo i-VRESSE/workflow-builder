@@ -10,14 +10,34 @@ export interface IProps {
    * The piece of code in TOML format
    */
   code: string
+  onClick?: (lineNumber: number) => void
 }
 
 /**
  * Render piece of TOML formatted text in colors.
  */
-export const HighlightedCode = ({ code }: IProps): JSX.Element => (
+export const HighlightedCode = ({ code, onClick }: IProps): JSX.Element => (
   <div id='highlightedcode'>
-    <SyntaxHighlighter language='toml' style={style}>
+    <SyntaxHighlighter
+      language='toml'
+      style={style}
+      wrapLines
+      lineProps={lineNumber => ({
+        style: { display: 'block', cursor: 'pointer' },
+        onClick () {
+          if (onClick != null) {
+            onClick(lineNumber)
+          }
+        }
+      })}
+      // onClick only works with showLineNumbers, so enable and hide
+      showLineNumbers
+      lineNumberStyle={(props) => {
+        return {
+          display: 'none'
+        }
+      }}
+    >
       {code}
     </SyntaxHighlighter>
   </div>

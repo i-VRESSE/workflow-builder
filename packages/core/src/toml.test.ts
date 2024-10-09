@@ -1,6 +1,6 @@
 import dedent from 'ts-dedent'
 import { expect, describe, it, beforeEach } from 'vitest'
-import { dedupWorkflow, parseWorkflowByCatalogPieces, TomlSchemas, workflow2tomltext, tomlstring2table, parseWorkflow } from './toml'
+import { dedupWorkflow, parseWorkflowByCatalogPieces, TomlSchemas, workflow2tomltext, tomlstring2table, parseWorkflow, lines2node } from './toml'
 import { ICatalog, IParameters } from './types'
 
 describe('workflow2tomltext()', () => {
@@ -1063,5 +1063,53 @@ describe('parseWorkflow()', () => {
 
       expect(result).toEqual(expected)
     })
+  })
+})
+
+describe('lines2node()', () => {
+  it('given just global parameters should return all lines -1', () => {
+    const workflow = [
+      '',
+      'molecules = [',
+      ']',
+      ''
+    ].join('\n')
+
+    const lookup = lines2node(workflow)
+
+    const expected = [-1, -1, -1, -1, -1]
+    expect(lookup).toEqual(expected)
+  })
+
+  it('given one section', () => {
+    const workflow = [
+      '',
+      'molecules = [',
+      ']',
+      '',
+      '[section1]'
+    ].join('\n')
+
+    const lookup = lines2node(workflow)
+
+    const expected = [-1, -1, -1, -1, -1, 0]
+    expect(lookup).toEqual(expected)
+  })
+
+  it('given 2 sections', () => {
+    const workflow = [
+      '',
+      'molecules = [',
+      ']',
+      '',
+      '[section1]',
+      '',
+      '[section2]'
+    ].join('\n')
+
+    const lookup = lines2node(workflow)
+
+    const expected = [-1, -1, -1, -1, -1, 0, 0, 1]
+    expect(lookup).toEqual(expected)
   })
 })

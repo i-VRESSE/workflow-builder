@@ -2344,7 +2344,7 @@ __metadata:
     "@types/file-saver": ^2.0.4
     "@types/js-yaml": ^4.0.5
     "@types/papaparse": ^5.3.2
-    "@types/react-syntax-highlighter": ^13.5.2
+    "@types/react-syntax-highlighter": ^15.5.0
     "@vitest/coverage-v8": ^1.5.3
     "@zip.js/zip.js": ^2.3.23
     ajv: ^8.9.0
@@ -4585,12 +4585,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-syntax-highlighter@npm:^13.5.2":
-  version: 13.5.2
-  resolution: "@types/react-syntax-highlighter@npm:13.5.2"
+"@types/react-syntax-highlighter@npm:^15.5.0":
+  version: 15.5.13
+  resolution: "@types/react-syntax-highlighter@npm:15.5.13"
   dependencies:
     "@types/react": "*"
-  checksum: 237cb596368f7c2c8549d0150308cd5fe633d249b6e20bebb4e242bc1172b60e808db2a57d212f409ab3fee37f47b8465ac35c4754e814d7e0f53cc1b2dd14ea
+  checksum: 55f751c140eb6641b16a5644af3b6fc25223957141085758ae6898948e70eaca33d8276e86e75d5d60939aff63af1d20278aba0d3a25483266f9deee1eb468e3
   languageName: node
   linkType: hard
 

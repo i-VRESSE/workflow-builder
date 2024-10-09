@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## @i-vresse/wb-core 3.2.2 - 2024-10-09
+
+### Added
+
+- Configure node by clicking in workflow config toml text ([#20](https://github.com/i-VRESSE/workflow-builder/issues/20))
+
 ## @i-vresse/wb-core 3.2.1 - 2024-08-26
 
 ### Fixed

@@ -1,7 +1,8 @@
 import React from 'react'
 import { HighlightedCode } from './HighlightedCode'
 
-import { useText } from './store'
+import { useText, useWorkflow } from './store'
+import { lines2node } from './toml'
 
 // TODO highlighter is 1/3 of dist/vendor.js, look for lighter alternative
 // Already tried to use dynamic import:
@@ -10,10 +11,21 @@ import { useText } from './store'
 
 export const TextPanel = (): JSX.Element => {
   const code = useText()
+  const { selectNode, selectGlobalEdit } = useWorkflow()
 
   async function copy2clipboard (): Promise<void> {
     await navigator.permissions.query({ name: 'clipboard-write' } as any)
     await navigator.clipboard.writeText(code)
+  }
+
+  function onClickLine (lineNumber: number): void {
+    const lookup = lines2node(code)
+    const nodeIndex = lookup[lineNumber]
+    if (nodeIndex === -1) {
+      selectGlobalEdit()
+    } else {
+      selectNode(nodeIndex)
+    }
   }
 
   return (
@@ -21,7 +33,7 @@ export const TextPanel = (): JSX.Element => {
       position: 'relative'
     }}
     >
-      <HighlightedCode code={code} />
+      <HighlightedCode code={code} onClick={onClickLine} />
       <button
         className='btn btn-link'
         style={{
