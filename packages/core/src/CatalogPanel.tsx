@@ -18,7 +18,7 @@ export const CatalogPanel = ({ children }: PropsWithChildren<{}>): JSX.Element =
       <legend>Catalog</legend>
       <React.Suspense fallback={<span>Loading catalog...</span>}>
         {children}
-        <h4>Nodes</h4>
+        <h4>{catalog.nodeLegend ?? 'Node'}s</h4>
         <ul style={{ lineHeight: '2.5em' }}>
           {catalog.categories.map((category) => (
             <CatalogCategory key={category.name} {...category} />

@@ -108,3 +108,19 @@ export const WithExample: ComponentStory<typeof CatalogPanel> = () => {
   })
   return <CatalogPanel />
 }
+
+export const WithNodeLegend: ComponentStory<typeof CatalogPanel> = () => {
+  const setCatalog = useSetCatalog()
+  setCatalog({
+    title: 'Some title',
+    nodeLegend: 'My custom node label',
+    categories: [],
+    global: {
+      schema: {},
+      uiSchema: {}
+    },
+    nodes: [],
+    examples: {}
+  })
+  return <CatalogPanel />
+}
