@@ -2344,7 +2344,7 @@ __metadata:
     "@types/file-saver": ^2.0.4
     "@types/js-yaml": ^4.0.5
     "@types/papaparse": ^5.3.2
-    "@types/react-syntax-highlighter": ^15.5.0
+    "@types/react-syntax-highlighter": 13.5.2
     "@vitest/coverage-v8": ^1.5.3
     "@zip.js/zip.js": ^2.3.23
     ajv: ^8.9.0
@@ -2360,7 +2360,7 @@ __metadata:
     react-bootstrap: ^1
     react-dnd-html5-backend: ^14.1.0
     react-icons: ^3.10.0
-    react-syntax-highlighter: ^15.5.0
+    react-syntax-highlighter: 15.4.5
     react-toastify: ^8.1.0
     recoil: ^0.5.2
     ts-dedent: ^2.2.0
@@ -4585,12 +4585,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-syntax-highlighter@npm:^15.5.0":
-  version: 15.5.13
-  resolution: "@types/react-syntax-highlighter@npm:15.5.13"
+"@types/react-syntax-highlighter@npm:13.5.2":
+  version: 13.5.2
+  resolution: "@types/react-syntax-highlighter@npm:13.5.2"
   dependencies:
     "@types/react": "*"
-  checksum: 55f751c140eb6641b16a5644af3b6fc25223957141085758ae6898948e70eaca33d8276e86e75d5d60939aff63af1d20278aba0d3a25483266f9deee1eb468e3
+  checksum: 237cb596368f7c2c8549d0150308cd5fe633d249b6e20bebb4e242bc1172b60e808db2a57d212f409ab3fee37f47b8465ac35c4754e814d7e0f53cc1b2dd14ea
   languageName: node
   linkType: hard
 
@@ -15077,6 +15077,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"prismjs@npm:^1.25.0":
+  version: 1.29.0
+  resolution: "prismjs@npm:1.29.0"
+  checksum: 007a8869d4456ff8049dc59404e32d5666a07d99c3b0e30a18bd3b7676dfa07d1daae9d0f407f20983865fd8da56de91d09cb08e6aa61f5bc420a27c0beeaf93
+  languageName: node
+  linkType: hard
+
 "prismjs@npm:^1.27.0":
   version: 1.28.0
   resolution: "prismjs@npm:1.28.0"
@@ -15629,7 +15636,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-syntax-highlighter@npm:^15.4.5, react-syntax-highlighter@npm:^15.5.0":
+"react-syntax-highlighter@npm:15.4.5":
+  version: 15.4.5
+  resolution: "react-syntax-highlighter@npm:15.4.5"
+  dependencies:
+    "@babel/runtime": ^7.3.1
+    highlight.js: ^10.4.1
+    lowlight: ^1.17.0
+    prismjs: ^1.25.0
+    refractor: ^3.2.0
+  peerDependencies:
+    react: ">= 0.14.0"
+  checksum: 120bac5cfbd65eb47e513b8057e3cb71843ce15241bbf933c1818c294965b87d8e074c7929a8fc2ced66c3e3f38c4cc6bf04365a8345e3a382cd524d0093949f
+  languageName: node
+  linkType: hard
+
+"react-syntax-highlighter@npm:^15.4.5":
   version: 15.5.0
   resolution: "react-syntax-highlighter@npm:15.5.0"
   dependencies:
@@ -15821,7 +15843,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"refractor@npm:^3.6.0":
+"refractor@npm:^3.2.0, refractor@npm:^3.6.0":
   version: 3.6.0
   resolution: "refractor@npm:3.6.0"
   dependencies:
