@@ -3,7 +3,7 @@ import React from 'react'
 import { FormProps } from './FormProps'
 import { GlobalForm } from './GlobalForm'
 import { NodeForm } from './NodeForm'
-import { useSelectNodeIndex } from './store'
+import { useCatalog, useSelectNodeIndex } from './store'
 
 /**
  * Panel which renders the form for the selected node or the global parameters.
@@ -11,8 +11,9 @@ import { useSelectNodeIndex } from './store'
  */
 export const NodePanel = ({ fields, widgets }: FormProps): JSX.Element => {
   const selectedNodeIndex = useSelectNodeIndex()
+  const { nodeLabel } = useCatalog()
 
-  const legend = 'Node'
+  const legend = nodeLabel ?? 'Node'
 
   return (
     <fieldset>

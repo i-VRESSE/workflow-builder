@@ -53,6 +53,7 @@ export interface IGlobal {
 
 export interface ICatalog {
   title: string
+  nodeLabel?: string
   global: IGlobal
   categories: ICategory[]
   nodes: ICatalogNode[]

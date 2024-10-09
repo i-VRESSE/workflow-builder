@@ -534,6 +534,7 @@ def process_level(level_fn: Path, level: str):
 
     catalog = {
         "title": f"Haddock 3 on {level} level",
+        "nodeLabel": "Module",
         "categories": categories,
         'global': process_global(level),
         "nodes": nodes,
