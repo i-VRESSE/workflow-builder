@@ -309,7 +309,8 @@ export function dedupWorkflow (inp: string): string {
  * For each line in the text, return the node index.
  * -1 for global parameters.
  *
- * Ignores table with dots in the name.
+ * Ignores table with dots in the name,
+ * but do allow dot in the name if it inside qoutes.
  *
  * @param text The TOML text
  * @returns
@@ -319,9 +320,12 @@ export function lines2node (text: string): number[] {
   // highlighter linenumber starts with 1 so add offset
   const nodeLines: number[] = [-1]
   let nodeIndex = -1
+  // Matches ['section1.1'] , but not ['section1.1'.mol1]
+  const isRepeatedNodeRegexp = /^\[['"].*\.\d+['"]\]$/g
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i]
-    if (line.startsWith('[') && !line.includes('.')) {
+    const isRepeatedNode = isRepeatedNodeRegexp.test(line)
+    if (line.startsWith('[') && (!line.includes('.') || isRepeatedNode)) {
       nodeIndex++
     }
     nodeLines.push(nodeIndex)

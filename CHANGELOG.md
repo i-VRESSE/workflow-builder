@@ -6,11 +6,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## @i-vresse/wb-core 3.2.4 - 2024-10-09
+
+### Fixed
+
+- Do treat `['caprieval.1']` as a node, but `['section1.1'.mol1]` not as a node
+
 ## @i-vresse/wb-core 3.2.3 - 2024-10-09
 
 ### Fixed
 
-- Do not treat `[topoaa.mol1]` as a module
+- Do not treat `[topoaa.mol1]` as a node
 
 ## @i-vresse/wb-core 3.2.2 - 2024-10-09
 

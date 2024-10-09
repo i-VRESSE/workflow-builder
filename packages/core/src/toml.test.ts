@@ -1129,4 +1129,31 @@ describe('lines2node()', () => {
     const expected = [-1, -1, -1, -1, -1, 0, 0, 0]
     expect(lookup).toEqual(expected)
   })
+
+  it('given repeated table with nested table', () => {
+    const workflow = [
+      '',
+      'molecules = [',
+      ']',
+      '',
+      '[section1]', // node 0
+      '',
+      '[section1.mol1]',
+      '',
+      "['section1.1']", // node 1
+      '',
+      "['section1.1'.mol1]",
+      '',
+      '[section2]', // node 2
+      '',
+      "['section1.42']", // node 3
+      '',
+      "['section1.42'.mol12]"
+    ].join('\n')
+
+    const lookup = lines2node(workflow)
+
+    const expected = [-1, -1, -1, -1, -1, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 3, 3, 3]
+    expect(lookup).toEqual(expected)
+  })
 })
