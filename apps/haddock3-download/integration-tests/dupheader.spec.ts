@@ -42,16 +42,17 @@ test.describe('given an uploaded archive with a workflow.cfg file with a duplica
     const lines = await highlightedCode.allTextContents()
     const content = lines.join('\n')
     const expected = dedent`
-
-      molecules = [
-        'some.pdb',
-      ]
-
-      run_dir = 'run1'
-
-      [caprieval]
-
-      ['caprieval.2']
+      1
+      2molecules = [
+      3  'some.pdb',
+      4]
+      5
+      6run_dir = 'run1'
+      7
+      8[caprieval]
+      9
+      10['caprieval.2']
+      11
 
     `
     expect(content).toEqual(expected)
