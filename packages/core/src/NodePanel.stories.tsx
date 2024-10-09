@@ -88,13 +88,13 @@ export const NodeSelected: ComponentStory<typeof NodePanel> = () => {
   return <NodePanel />
 }
 
-export const CustomNodeLabel: ComponentStory<typeof NodePanel> = () => {
+export const CustomNodeLegend: ComponentStory<typeof NodePanel> = () => {
   const setCatalog = useSetCatalog()
   // const { setEditingGlobal } = useWorkflow()
   useEffect(() => {
     const catalog = prepareCatalog({
       title: 'Some title',
-      nodeLabel: 'My custom node label',
+      nodeLegend: 'My custom node label',
       categories: [],
       global: {
         schema: {

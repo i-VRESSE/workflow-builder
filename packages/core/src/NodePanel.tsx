@@ -11,9 +11,9 @@ import { useCatalog, useSelectNodeIndex } from './store'
  */
 export const NodePanel = ({ fields, widgets }: FormProps): JSX.Element => {
   const selectedNodeIndex = useSelectNodeIndex()
-  const { nodeLabel } = useCatalog()
+  const { nodeLegend } = useCatalog()
 
-  const legend = nodeLabel ?? 'Node'
+  const legend = nodeLegend ?? 'Node'
 
   return (
     <fieldset>

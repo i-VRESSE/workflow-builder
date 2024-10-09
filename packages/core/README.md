@@ -64,7 +64,7 @@ function App() {
   useEffect(() => {
     const catalog = {
       title: "Some title",
-      nodeLabel: "Workflow node",
+      nodeLegend: "Workflow node",
       global: {
         schema: {
           type: "object",

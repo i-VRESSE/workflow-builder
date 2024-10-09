@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Configure node by clicking in workflow config toml text ([#20](https://github.com/i-VRESSE/workflow-builder/issues/20))
-- Allow to configure node label in catalog ([#151](https://github.com/i-VRESSE/workflow-builder/issues/151))
+- Allow to configure node legend in catalog ([#151](https://github.com/i-VRESSE/workflow-builder/issues/151))
 
 ## @i-vresse/wb-core 3.2.1 - 2024-08-26
 

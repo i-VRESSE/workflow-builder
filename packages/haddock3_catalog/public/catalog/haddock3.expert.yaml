@@ -1,5 +1,5 @@
 title: Haddock 3 on expert level
-nodeLabel: Module
+nodeLegend: Module
 categories:
 - name: topology
   description: HADDOCK3 modules to create topologies.
