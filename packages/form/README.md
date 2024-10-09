@@ -2,6 +2,8 @@
 
 [![TS-Standard - Typescript Standard Style Guide](https://badgen.net/badge/code%20style/ts-standard/blue?icon=typescript)](https://github.com/standard/ts-standard)
 [![npmjs.com](https://img.shields.io/npm/v/@i-vresse/wb-form.svg?style=flat)](https://www.npmjs.com/package/@i-vresse/wb-form)
+[![Documentation](https://img.shields.io/badge/docs-blue)](https://i-vresse.github.io/workflow-builder/form/docs/)
+[![GitHub](https://img.shields.io/badge/github-repo-blue?logo=github)](https://github.com/i-VRESSE/workflow-builder/tree/main/packages/form)
 
 This package contains an enhanced version of the [React JSON schema form component](https://github.com/rjsf-team/react-jsonschema-form) with Bootstrap 4 theme.
 
