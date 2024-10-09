@@ -2360,7 +2360,7 @@ __metadata:
     react-bootstrap: ^1
     react-dnd-html5-backend: ^14.1.0
     react-icons: ^3.10.0
-    react-syntax-highlighter: ^15.4.5
+    react-syntax-highlighter: ^15.5.0
     react-toastify: ^8.1.0
     recoil: ^0.5.2
     ts-dedent: ^2.2.0
@@ -15629,7 +15629,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-syntax-highlighter@npm:^15.4.5":
+"react-syntax-highlighter@npm:^15.4.5, react-syntax-highlighter@npm:^15.5.0":
   version: 15.5.0
   resolution: "react-syntax-highlighter@npm:15.5.0"
   dependencies:
