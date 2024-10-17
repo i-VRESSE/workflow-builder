@@ -1947,6 +1947,79 @@ nodes:
   tomlSchema:
     resdic:
       indexed: true
+- id: sasascore
+  category: scoring
+  label: Surface accessibility scoring module.
+  description: HADDOCK3 module to perform accessibility scoring.
+  schema:
+    type: object
+    properties:
+      cutoff:
+        default: 0.4
+        title: relative side chain surface accessibility cutoff
+        description: relative side chain surface accessibility cutoff
+        $comment: relative side chain surface accessibility cutoff. Residues with
+          a relative side chain surface accessibility below this value are considered
+          buried.
+        type: number
+        maximum: 1.0
+        minimum: 0.0
+      resdic_buried:
+        default: {}
+        title: List of residues supposed to be buried
+        description: List of residues supposed to be buried
+        $comment: resdic_buried_* is an expandable parameter. You can provide resdic_buried_A,
+          resdic_buried_B, resdic_buried_C, etc, where the last capital letter is
+          the chain identifier.
+        type: object
+        additionalProperties:
+          type: array
+          items:
+            type: number
+            format: residue
+            minItems: 0
+            maxItems: 100
+          uniqueItems: true
+          default: []
+        propertyNames:
+          pattern: ^[A-Z]$
+          format: chain
+        maxPropertiesFrom: molecules
+      resdic_accessible:
+        default: {}
+        title: List of residues supposed to be accessible
+        description: List of residues supposed to be accessible
+        $comment: resdic_* is an expandable parameter. You can provide resdic_accessible_A,
+          resdic_accessible_B, resdic_accessible_C, etc, where the last capital letter
+          is the chain identifier.
+        type: object
+        additionalProperties:
+          type: array
+          items:
+            type: number
+            format: residue
+            minItems: 0
+            maxItems: 100
+          uniqueItems: true
+          default: []
+        propertyNames:
+          pattern: ^[A-Z]$
+          format: chain
+        maxPropertiesFrom: molecules
+    required: []
+    additionalProperties: false
+  uiSchema:
+    cutoff:
+      ui:group: scoring
+    resdic_buried:
+      ui:group: analysis
+    resdic_accessible:
+      ui:group: analysis
+  tomlSchema:
+    resdic_buried:
+      indexed: true
+    resdic_accessible:
+      indexed: true
 - id: seletop
   category: analysis
   label: Select a number of models.
