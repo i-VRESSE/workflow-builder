@@ -392,10 +392,16 @@ def config2schema(config):
                 prop['items'] = {
                     "type": "number"
                 }
-            elif k == 'ligand_chains':
+            elif k == 'ligand_chains' or k == 'chains':
                 prop['items'] = {
                     "type": "string",
                     "format": "chain"
+                }
+                prop['default'] = v['default']
+            elif k == 'interface_combinations':
+                # For emscoring module
+                prop['items'] = {
+                    "type": "string"
                 }
                 prop['default'] = v['default']
             else:
