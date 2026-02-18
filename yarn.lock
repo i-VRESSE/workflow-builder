@@ -2256,7 +2256,7 @@ __metadata:
   resolution: "@i-vresse/haddock3-config-builder-download@workspace:apps/haddock3-download"
   dependencies:
     "@i-vresse/wb-core": "workspace:^"
-    "@playwright/test": ^1.58.2
+    "@playwright/test": ^1.45.0
     "@types/adm-zip": ^0.5.0
     "@types/node": 16
     "@types/react": ^17.0.0
@@ -2761,7 +2761,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@playwright/test@npm:^1.58.2":
+"@playwright/test@npm:^1.45.0":
   version: 1.58.2
   resolution: "@playwright/test@npm:1.58.2"
   dependencies:
