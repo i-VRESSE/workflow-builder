@@ -59,6 +59,15 @@ global:
           used to plot the results of a HADDOCK3 workflow. If this option, this command
           is automatically executed at the end of the workflow (on the caprieval folders).
         type: boolean
+      gen_archive:
+        default: false
+        title: Generates an archive of the run and of the analysis.
+        description: If true, executes haddock3-analyse in self_contained mode and
+          generates archives of the run_directory and of the analysis in two separated
+          tgz files.
+        $comment: If true, executes haddock3-analyse in self_contained mode and generates
+          archives of the run_directory and of the analysis in two separated tgz files.
+        type: boolean
       cns_exec:
         title: Path to the CNS executable
         description: If not provided, HADDOCK3 will use the cns path configured during
@@ -229,13 +238,19 @@ nodes:
         type: number
         maximum: 20.0
         minimum: 1.0
-      output:
+      output_bfactor:
         default: false
-        title: Dump all the models in the output folder
-        description: Dump all the models in the output folder with the delta_score
-          written in the b-factor column.
-        $comment: Dump all the models in the output folder with the delta_score written
-          in the b-factor column.
+        title: Dump the input models with the rescaled delta_score written in the
+          b-factor column.
+        description: Dump the input models with the rescaled delta_score written in
+          the b-factor column.
+        $comment: Dump the input models with the rescaled delta_score written in the
+          b-factor column. Those files do not contain the mutations, but rather will
+          display the normalized (between 0 and 100) delta HADDOCK score (100 * (delta_score
+          - min_score) / (max_score - min_score)) in the b-factor column. The higher
+          the b-factor, the more favourable (or less unfavourable) the mutation. You
+          can color the PDB files according to this attribute (in pymol, type "spectrum
+          b")
         type: boolean
       scan_residue:
         default: ALA
@@ -290,23 +305,71 @@ nodes:
         - TOP
         - TYP
         - TYS
+        - CIR
       plot:
         default: false
         title: Plot scanning data.
         description: Plot scanning data.
         $comment: Plot scanning data.
         type: boolean
+      chains:
+        default: []
+        title: ChainIDs to be considered for the scanning.
+        description: ChainIDs to be considered for the scanning.
+        $comment: ChainIDs to be considered for the scanning. If empty, all the chains
+          will be considered. If not empty, only residues part of the specified chains
+          will be mutated. Do not use this parameter if you are using the resdic_*
+          parameter.
+        type: array
+        minItems: 0
+        maxItems: 10
+        items:
+          type: string
+          format: chain
+      output_mutants:
+        default: false
+        title: Dump the mutated, energy-minimized PDB files.
+        description: Dump the mutated, energy-minimized PDB files.
+        $comment: Dump the mutated, energy-minimized PDB files. As the number of mutants
+          can be very large, this option is allowed only when a single model is provided
+          in input.
+        type: boolean
+      ligand_param_fname:
+        title: Custom ligand parameter file
+        description: Ligand parameter file in CNS format
+        $comment: Ligand parameter file in CNS format, for any ligand/residues/molecules
+          not supported by default by HADDOCK.
+        type: string
+        format: uri-reference
+      ligand_top_fname:
+        title: Custom ligand topology file
+        description: Ligand topology file in CNS format
+        $comment: Ligand topology file in CNS format containing the ligand topologies
+          (atoms, masses, charges, bond definitions...) for any ligand not supported
+          by default by HADDOCK
+        type: string
+        format: uri-reference
     required: []
     additionalProperties: false
   uiSchema:
     int_cutoff:
       ui:group: analysis
-    output:
+    output_bfactor:
       ui:group: analysis
     scan_residue:
       ui:group: analysis
     plot:
       ui:group: analysis
+    chains:
+      ui:group: analysis
+    output_mutants:
+      ui:group: analysis
+    ligand_param_fname:
+      ui:widget: file
+      ui:group: force field
+    ligand_top_fname:
+      ui:widget: file
+      ui:group: force field
   tomlSchema: {}
 - id: caprieval
   category: analysis
@@ -483,6 +546,14 @@ nodes:
         $comment: Atoms to be considered during the analysis. If false (default),
           only backbone atoms will be considered, otherwise all the heavy-atoms.
         type: boolean
+      keep_hetatm:
+        default: false
+        title: HETATM to be considered during the analysis.
+        description: HETATM to be considered during the analysis.
+        $comment: HETATM to be considered during the analysis. If false (default),
+          only ATOM coordinates lines will be used, otherwise the HETATM from reference
+          will also be used.
+        type: boolean
     required: []
     additionalProperties: false
   uiSchema:
@@ -521,10 +592,12 @@ nodes:
       ui:group: analysis
     allatoms:
       ui:group: analysis
+    keep_hetatm:
+      ui:group: analysis
   tomlSchema: {}
 - id: clustfcc
   category: analysis
-  label: Cluster modules with FCC.
+  label: Fraction of Common Contacts (FCC) clustering module.
   description: HADDOCK3 module for clustering with FCC.
   schema:
     type: object
@@ -962,6 +1035,28 @@ nodes:
     elecflag:
       ui:group: force field
   tomlSchema: {}
+- id: filter
+  category: analysis
+  label: Filter models based on their score.
+  description: HADDOCK3 module to select top cluster/model.
+  schema:
+    type: object
+    properties:
+      threshold:
+        default: 0.0
+        title: Threshold value to filter models.
+        description: Threshold value to filter models based on their score.
+        $comment: Threshold value to filter models based on their score. Models having
+          higher score than the threshold value will be filtered out.
+        type: number
+        maximum: 99999.99
+        minimum: -99999.99
+    required: []
+    additionalProperties: false
+  uiSchema:
+    threshold:
+      ui:group: analysis
+  tomlSchema: {}
 - id: flexref
   category: refinement
   label: Flexible refinement with CNS.
@@ -1127,23 +1222,6 @@ nodes:
   tomlSchema:
     mol_shape:
       indexed: true
-- id: gdock
-  category: sampling
-  label: gdock integration sampling module.
-  description: HADDOCK3 gdock module.
-  schema:
-    type: object
-    properties:
-      ambig_fname:
-        type: string
-        format: uri-reference
-    required: []
-    additionalProperties: false
-  uiSchema:
-    ambig_fname:
-      ui:widget: file
-      ui:group: distance restraints
-  tomlSchema: {}
 - id: ilrmsdmatrix
   category: analysis
   label: ilRMSD matrix module.
@@ -1601,7 +1679,7 @@ nodes:
   tomlSchema: {}
 - id: openmm
   category: refinement
-  label: OpenMM refinement module for HADDOCK3.
+  label: OpenMM Molecular Dynamics refinement module for HADDOCK3.
   description: HADDOCK3 OpenMM module.
   schema:
     type: object
@@ -1792,6 +1870,127 @@ nodes:
       ui:group: sampling
     solv_equilibration:
       ui:group: sampling
+  tomlSchema: {}
+- id: prodigyligand
+  category: scoring
+  label: PRODIGY-ligand scoring module.
+  description: HADDOCK3 module to perform energy minimization scoring.
+  schema:
+    type: object
+    properties:
+      receptor_chain:
+        default: A
+        title: Chain ID of the receptor.
+        description: Chain ID of the receptor.
+        $comment: Chain ID of the receptor. Used to know what chain should be considered
+          as receptor interacting with the ligand.
+        type: string
+        minLength: 1
+        maxLength: 1
+        format: chain
+      ligand_chain:
+        default: B
+        title: Chain ID of the ligand.
+        description: Chain ID of the ligand.
+        $comment: Chain of the ligand to score. Used to know in which chain the ligand
+          is found.
+        type: string
+        minLength: 1
+        maxLength: 1
+        format: chain
+      ligand_resname:
+        default: UNK
+        title: Residue name of the ligand.
+        description: Residue name of the ligand.
+        $comment: Residue name of the ligand to score. Must be present in the ligand
+          chain.
+        type: string
+        minLength: 1
+        maxLength: 3
+      temperature:
+        default: 25.0
+        title: "Temperature (\xB0C) at which to perform the conversion to pKd."
+        description: "Temperature (\xB0C) at which to perform the conversion from\
+          \ deltaG (kcal.mol-1) to pKd."
+        $comment: "Temperature (\xB0C) at which to perform the conversion from deltaG\
+          \ (kcal.mol-1) to pKd."
+        type: number
+        maximum: 95.0
+        minimum: -273.15
+      to_pkd:
+        default: true
+        title: Converts binding affinity values to pKd.
+        description: Converts binding affinity values to pKd.
+        $comment: By default, prodigy-lig results in deltaG (kcal.mol-1), but this
+          parameter allows to convert results to pKd.
+        type: boolean
+    required: []
+    additionalProperties: false
+  uiSchema:
+    receptor_chain:
+      ui:group: scoring
+    ligand_chain:
+      ui:group: scoring
+    ligand_resname:
+      ui:group: scoring
+    temperature:
+      ui:group: conversion
+    to_pkd:
+      ui:group: conversion
+  tomlSchema: {}
+- id: prodigyprotein
+  category: scoring
+  label: PRODIGY protein complex scoring module
+  description: HADDOCK3 module to perform energy minimization scoring.
+  schema:
+    type: object
+    properties:
+      chains:
+        default: []
+        title: Chains to be scored.
+        description: List of chains to be scored. If empty/unspecified, all inter-chains
+          contacts will be considered for the final prediction.
+        $comment: List of chains to be scored. If empty/unspecified, all inter-chains
+          contacts will be considered for the final prediction. In specific cases,
+          for example antibody-antigen complexes, some chains should be considered
+          as a single molecule. Use the chains parameter to provide a list of chains
+          that should be considered for the calculation. Use commas to include multiple
+          chains as part of a single group. ["A", "B"]      => Contacts calculated
+          (only) between chains A and B. ["A,B", "C"]    => Contacts calculated (only)
+          between chains A and C; and B and C. ["A", "B", "C"] => Contacts calculated
+          (only) between chains A and B; B and C; and A and C.
+        type: array
+        minItems: 0
+        maxItems: 20
+        items:
+          type: string
+          format: chain
+      temperature:
+        default: 25.0
+        title: "Temperature (\xB0C) at which to perform the conversion to pKd."
+        description: "Temperature (\xB0C) at which to perform the conversion from\
+          \ deltaG (kcal.mol-1) to pKd."
+        $comment: "Temperature (\xB0C) at which to perform the conversion  from deltaG\
+          \ (kcal.mol-1) to pKd."
+        type: number
+        maximum: 95.0
+        minimum: -273.15
+      to_pkd:
+        default: true
+        title: Converts binding affinity values to pKd.
+        description: Converts binding affinity values to pKd.
+        $comment: By default, prodigy-lig results in deltaG (kcal.mol-1), but this
+          parameter allows to convert results to pKd.
+        type: boolean
+    required: []
+    additionalProperties: false
+  uiSchema:
+    chains:
+      ui:group: scoring
+    temperature:
+      ui:group: conversion
+    to_pkd:
+      ui:group: conversion
   tomlSchema: {}
 - id: rigidbody
   category: sampling
@@ -2051,7 +2250,7 @@ nodes:
   schema:
     type: object
     properties:
-      top_cluster:
+      top_clusters:
         default: 1000
         title: Number of clusters to consider
         description: Number of clusters to consider (ranked by score)
@@ -2087,7 +2286,7 @@ nodes:
     required: []
     additionalProperties: false
   uiSchema:
-    top_cluster:
+    top_clusters:
       ui:group: analysis
     top_models:
       ui:group: analysis
@@ -2145,6 +2344,30 @@ nodes:
                 will generate a peptide bond between the N- and C-ter provided those
                 are within 2A. This cutoff can be changed in the generate-topology.cns
                 script.
+              type: boolean
+            charged_nter:
+              default: false
+              title: N-ter topology
+              description: Define if N-terminus should be charged or uncharged
+              $comment: This option defines how N-terminus residue should be. If false
+                (default), N-ter will be an uncharged NH, as it would be in a peptide
+                bond. If true, N-ter will be a charged NH3+.
+              type: boolean
+            charged_cter:
+              default: false
+              title: C-ter topology
+              description: Define if C-terminus should be charged or uncharged
+              $comment: This option defines how N-terminus residue should be. If false
+                (default), C-ter will be an uncharged CO, as it would be in a peptide
+                bond. If true, C-ter will be a charged COO-.
+              type: boolean
+            5_phosphate:
+              default: false
+              title: Nucleic Acids 5' topology
+              description: Define if 5' end should be phosphate or not.
+              $comment: This option defines how nucleic acid 5' residue should be.
+                If false (default), 5' end will be an OH. If true, 5' end will be
+                a phosphate.
               type: boolean
           required: []
           additionalProperties: false
