@@ -633,6 +633,982 @@ nodes:
     keep_hetatm:
       ui:group: analysis
   tomlSchema: {}
+- id: caprifilter
+  category: analysis
+  label: Filter models by any combination of CAPRI metrics computed against a reference
+    structure.
+  description: HADDOCK3 module to filter models by CAPRI metrics.
+  schema:
+    type: object
+    properties:
+      reference_fname:
+        title: Reference structure
+        description: Reference structure for CAPRI metric calculation.
+        $comment: Path to the reference PDB structure used to calculate CAPRI metrics.
+          This parameter is mandatory, the module will stop with an error if reference
+          not found.
+        type: string
+        format: uri-reference
+      filter_by:
+        default:
+        - rmsd
+        title: Metrics to filter by.
+        description: List of CAPRI metrics to use for filtering.
+        $comment: List of CAPRI metrics to filter on. Valid values are rmsd, irmsd,
+          lrmsd, ilrmsd, fnat, dockq. Each metric must have its corresponding {metric}_filter_cutoff
+          and {metric}_filter_out parameters set. All filters are applied simultaneously
+          (AND logic), so a model must pass every active filter to be kept.
+        type: array
+        minItems: 1
+        maxItems: 6
+        items:
+          type: string
+      rmsd_filter_cutoff:
+        default: 10.0
+        title: "RMSD filter cutoff (\xC5)."
+        description: Filtering threshold for RMSD.
+        $comment: Filtering threshold for RMSD.
+        type: number
+        maximum: 99999.99
+        minimum: 0.0
+      rmsd_filter_out:
+        default: above
+        title: RMSD filtering direction.
+        description: Filter out models with RMSD above or below the cutoff.
+        $comment: if 'above' - filter out models that are over the cutoff value (rmsd_filter_cutoff).
+          if 'below' - filter out models with rmsd under the cutoff value (rmsd_filter_cutoff).
+        type: string
+        minLength: 1
+        maxLength: 10
+        enum:
+        - above
+        - below
+      irmsd_filter_cutoff:
+        default: 5.0
+        title: "iRMSD filter cutoff (\xC5)."
+        description: Filtering threshold for interface-RMSD.
+        $comment: Filtering threshold for interface-RMSD.
+        type: number
+        maximum: 99999.99
+        minimum: 0.0
+      irmsd_filter_out:
+        default: above
+        title: iRMSD filtering direction.
+        description: Filter out models with iRMSD above or below the cutoff.
+        $comment: if 'above' - filter out models that are over the cutoff value (irmsd_filter_cutoff).
+          if 'below' - filter out models with irmsd under the cutoff value (irmsd_filter_cutoff).
+        type: string
+        minLength: 1
+        maxLength: 10
+        enum:
+        - above
+        - below
+      lrmsd_filter_cutoff:
+        default: 10.0
+        title: "lRMSD filter cutoff (\xC5)."
+        description: Filtering threshold for ligand-RMSD
+        $comment: Filtering threshold for ligand-RMSD.
+        type: number
+        maximum: 99999.99
+        minimum: 0.0
+      lrmsd_filter_out:
+        default: above
+        title: lRMSD filtering direction.
+        description: Filter out models with lRMSD above or below the cutoff.
+        $comment: if 'above' - filter out models that are over the cutoff value (lrmsd_filter_cutoff).
+          if 'below' - filter out models with lRMSD under the cutoff value (lrmsd_filter_cutoff).
+        type: string
+        minLength: 1
+        maxLength: 10
+        enum:
+        - above
+        - below
+      ilrmsd_filter_cutoff:
+        default: 10.0
+        title: "ilRMSD filter cutoff (\xC5)."
+        description: Filtering threshold for interface-ligand-RMSD.
+        $comment: Filtering threshold for interface-ligand-RMSD.
+        type: number
+        maximum: 99999.99
+        minimum: 0.0
+      ilrmsd_filter_out:
+        default: above
+        title: ilRMSD filtering direction.
+        description: Filter out models with ilRMSD above or below the cutoff.
+        $comment: if 'above' - filter out models that are over the cutoff value (ilrmsd_filter_cutoff).
+          if 'below' - filter out models with ilRMSD under the cutoff value (ilrmsd_filter_cutoff).
+        type: string
+        minLength: 1
+        maxLength: 10
+        enum:
+        - above
+        - below
+      fnat_filter_cutoff:
+        default: 0.3
+        title: FNAT filter cutoff.
+        description: Filtering threshold for fraction of native contacts.
+        $comment: Filtering threshold for fraction of native contacts.
+        type: number
+        maximum: 1.0
+        minimum: 0.0
+      fnat_filter_out:
+        default: below
+        title: FNAT filtering direction.
+        description: Filter out models with FNAT above or below the cutoff.
+        $comment: if 'above' - filter out models that are over the cutoff value (fnat_filter_cutoff).
+          if 'below' - filter out models with FNAT under the cutoff value (fnat_filter_cutoff).
+        type: string
+        minLength: 1
+        maxLength: 10
+        enum:
+        - above
+        - below
+      dockq_filter_cutoff:
+        default: 0.23
+        title: DockQ filter cutoff.
+        description: Filtering threshold for DockQ.
+        $comment: Filtering threshold for DockQ.
+        type: number
+        maximum: 1.0
+        minimum: 0.0
+      dockq_filter_out:
+        default: below
+        title: DockQ filtering direction.
+        description: Filter out models with DockQ above or below the cutoff.
+        $comment: if 'above' - filter out models that are over the cutoff value (dockq_filter_cutoff).
+          if 'below' - filter out models with DockQ under the cutoff value (dockq_filter_cutoff).
+        type: string
+        minLength: 1
+        maxLength: 10
+        enum:
+        - above
+        - below
+      irmsd_cutoff:
+        default: 10.0
+        title: "Distance cutoff (\xC5) used to define interface residues."
+        description: "Distance cutoff (\xC5) used to define interface residues."
+        $comment: "Distance cutoff (\xC5) used to define interface residues based\
+          \ on intermolecular contacts."
+        type: number
+        maximum: 20.0
+        minimum: 3.0
+      fnat_cutoff:
+        default: 5.0
+        title: "Distance cutoff (\xC5) used to define interface contacts."
+        description: "Distance cutoff (\xC5) used to define interface contacts."
+        $comment: "Distance cutoff (\xC5) used to define interface contacts between\
+          \ two interacting molecules."
+        type: number
+        maximum: 20.0
+        minimum: 3.0
+      receptor_chain:
+        default: A
+        title: Receptor ChainID
+        description: Receptor ChainID for RMSD calculations.
+        $comment: Receptor ChainID to be considered for the lRMSD and ilRMSD calculations.
+        type: string
+        minLength: 1
+        maxLength: 1
+        format: chain
+      ligand_chains:
+        default: []
+        title: Ligand ChainIDs
+        description: Ligand ChainIDs for RMSD calculations.
+        $comment: Ligand ChainIDs to be considered for the lRMSD and ilRMSD calculations.
+        type: array
+        minItems: 0
+        maxItems: 100
+        items:
+          type: string
+          format: chain
+      sortby:
+        default: score
+        title: Sort the output file by this value
+        description: Which value should be used to sort the output.
+        $comment: Which value should be used to sort the output caprifilter.tsv.
+        type: string
+        minLength: 0
+        maxLength: 20
+        enum:
+        - score
+        - irmsd
+        - lrmsd
+        - ilrmsd
+        - fnat
+        - dockq
+        - rmsd
+      sort_ascending:
+        default: true
+        title: Sort in ascending order
+        description: Sort models in ascending order.
+        $comment: Sort models in ascending order inside the output file caprifilter.tsv.
+        type: boolean
+      alignment_method:
+        default: sequence
+        title: Alignment method
+        description: Alignment method used to match residue numbering.
+        $comment: Alignment method used to match residue numbering between model and
+          reference. Sequence alignment is the default. Structure alignment requires
+          LovoAlign.
+        type: string
+        minLength: 0
+        maxLength: 100
+        enum:
+        - structure
+        - sequence
+      lovoalign_exec:
+        title: LovoAlign executable path
+        description: Path to the LovoAlign executable.
+        $comment: Path to the LovoAlign executable. Only required when alignment_method=structure.
+        type: string
+        minLength: 0
+        maxLength: 200
+      caprifilter_full:
+        default: false
+        title: Write all-models table
+        description: Write caprifilter_all_models.tsv with all models, status (kept/filtered)
+          and requested metrics.
+        $comment: Write caprifilter_all_models.tsv with all models, status (kept/filtered)
+          and requested metrics.
+        type: boolean
+      allatoms:
+        default: false
+        title: Use all heavy atoms
+        description: Use all heavy atoms (including side chains).
+        $comment: If false (default), only backbone atoms are used. If true, all heavy
+          atoms.
+        type: boolean
+      keep_hetatm:
+        default: false
+        title: Consider HETATM records
+        description: Include HETATM atoms from the reference.
+        $comment: If false (default), only ATOM lines are used. If true, HETATM from
+          the reference are also included.
+        type: boolean
+    required: []
+    additionalProperties: false
+  uiSchema:
+    reference_fname:
+      ui:widget: file
+      ui:group: analysis
+    filter_by:
+      ui:group: analysis
+    rmsd_filter_cutoff:
+      ui:group: analysis
+    rmsd_filter_out:
+      ui:group: analysis
+    irmsd_filter_cutoff:
+      ui:group: analysis
+    irmsd_filter_out:
+      ui:group: analysis
+    lrmsd_filter_cutoff:
+      ui:group: analysis
+    lrmsd_filter_out:
+      ui:group: analysis
+    ilrmsd_filter_cutoff:
+      ui:group: analysis
+    ilrmsd_filter_out:
+      ui:group: analysis
+    fnat_filter_cutoff:
+      ui:group: analysis
+    fnat_filter_out:
+      ui:group: analysis
+    dockq_filter_cutoff:
+      ui:group: analysis
+    dockq_filter_out:
+      ui:group: analysis
+    irmsd_cutoff:
+      ui:group: analysis
+    fnat_cutoff:
+      ui:group: analysis
+    receptor_chain:
+      ui:group: analysis
+    ligand_chains:
+      ui:group: analysis
+    sortby:
+      ui:group: analysis
+    sort_ascending:
+      ui:group: analysis
+    alignment_method:
+      ui:group: analysis
+    lovoalign_exec:
+      ui:group: analysis
+    caprifilter_full:
+      ui:group: analysis
+    allatoms:
+      ui:group: analysis
+    keep_hetatm:
+      ui:group: analysis
+  tomlSchema: {}
+- id: cgtoaa
+  category: refinement
+  label: Backmapping of Coarse-Grained structures into All-atom structures with CNS.
+  description: HADDOCK3 module energy minimization refinement.
+  schema:
+    type: object
+    properties:
+      mol_fix_origin:
+        type: array
+        maxItemsFrom: molecules
+        title: Fix origin(s)
+        items:
+          default: false
+          title: Fix molecule
+          description: Fixes the molecule in its original position.
+          $comment: Fixes the molecule in its original position.
+          type: boolean
+      mol_shape:
+        type: array
+        maxItemsFrom: molecules
+        title: Shape(s)
+        items:
+          default: false
+          title: Is the molecule a shape?
+          description: Defines a molecule as a shape.
+          $comment: Defines a molecule as a shape, which is a collection of beads.
+          type: boolean
+      w_air:
+        default: 0.1
+        title: Weight of the distance restraint energy
+        description: Weight of the distance restraints energy in the scoring function
+        $comment: Weight of the distance restraints energy in the scoring function.
+          Note that this is different from the force constants used during the calculations.
+        type: number
+        maximum: 9999
+        minimum: 0
+      w_bsa:
+        default: 0.0
+        title: Weight of the buried surface area term
+        description: Weight of the buried surface area term in the scoring function
+        $comment: Weight of the buried surface area (BSA) term in the scoring function.
+          Note that the BSA is only used for scoring.
+        type: number
+        maximum: 9999
+        minimum: -9999
+      w_cdih:
+        default: 0.0
+        title: Weight of the dihedral angle restraint energy
+        description: Weight of the dihedral angle restraints energy in the scoring
+          function
+        $comment: Weight of the dihedral angle restraints energy in the scoring function.
+          Note that this is different from the force constant used during the calculations.
+        type: number
+        maximum: 9999
+        minimum: 0
+      w_desolv:
+        default: 1.0
+        title: Weight of the desolvation energy term
+        description: Weight of the desolvation energy term in the scoring function
+        $comment: Weight of the desolvation energy term in the scoring function. Note
+          that the desolvation energy is only used for scoring.
+        type: number
+        maximum: 9999
+        minimum: -9999
+      w_elec:
+        default: 0.2
+        title: Weight of the intermolecular electrostatic energy
+        description: Weight of the intermolecular electrostatic energy in the scoring
+          function
+        $comment: Weight of the intermolecular electrostatic energy in the scoring
+          function. Note that this does not affect the electostatic energy during
+          the EM minimization.
+        type: number
+        maximum: 9999
+        minimum: -9999
+      w_sym:
+        default: 0.1
+        title: Weight of the symmetry restraint energy
+        description: Weight of the symmetry restraints energy in the scoring function
+        $comment: Weight of the symmetry restraints energy in the scoring function.
+          Note that this is different from the force constant used during the calculations.
+        type: number
+        maximum: 9999
+        minimum: 0
+      w_vdw:
+        default: 1.0
+        title: Weight of the intermolecular van der Waals energy
+        description: Weight of the intermolecular van der Waals energy in the scoring
+          function
+        $comment: Weight of the intermolecular van der Waals energy in the scoring
+          function. Note that this does not affect the van der Waals energy during
+          the EM minimization.
+        type: number
+        maximum: 9999
+        minimum: -9999
+      ligand_param_fname:
+        title: Custom ligand parameter file
+        description: Ligand parameter file in CNS format
+        $comment: Ligand parameter file in CNS format containing all force field parameters
+          (bond, angles, dihedrals, impropers, van der waals) for any ligand not supported
+          by default by HADDOCK
+        type: string
+        format: uri-reference
+      ligand_top_fname:
+        title: Custom ligand topology file
+        description: Ligand topology file in CNS format
+        $comment: Ligand topology file in CNS format containing the ligand topologies
+          (atoms, masses, charges, bond definitions...) for any ligand not supported
+          by default by HADDOCK
+        type: string
+        format: uri-reference
+      elecflag:
+        default: true
+        title: Include electrostatics energy
+        description: Include electrostatics energy during the calculations.
+        $comment: Include electrostatics energy during the calculations. If set to
+          false electrostatics will not be considered.
+        type: boolean
+      dielec:
+        default: cdie
+        title: Constant (cdie) or distance-dependent dielectric (rdie) constant.
+        description: Use a constant (cdie option) or a distance-dependent dielectric
+          (rdie) constant in the Coulomb potential.
+        $comment: Use a constant (cdie option) or a distance-dependent dielectric
+          (rdie) constant in the Coulomb potential. A distance dependent dielectric
+          constant will effectively scale down the electrostatic energy by having
+          a 1/r**2 dependency instead of 1/r
+        type: string
+        minLength: 0
+        maxLength: 4
+        enum:
+        - cdie
+        - rdie
+      epsilon:
+        default: 1.0
+        title: Dielectric constant
+        description: Dielectric constant for the electrostatic Coulomb energy term.
+        $comment: Dielectric constant for the electrostatic Coulomb energy term.
+        type: number
+        maximum: 78
+        minimum: 1
+      epsilon_cg:
+        default: 10.0
+        title: Dielectric constant for coarse-grained mode
+        description: Dielectric constant for the electrostatic Coulomb energy term
+          in coarse-grained mode.
+        $comment: Dielectric constant for the electrostatic Coulomb energy term in
+          coarse-grained mode.
+        type: number
+        maximum: 78
+        minimum: 1
+      dihedflag:
+        default: true
+        title: Use torsion angle dihedral energy term
+        description: Turns on the torsion angle dihedral energy terms of the force
+          field.
+        $comment: Turns on the torsion angle dihedral energy terms of the force field.
+        type: boolean
+      sampling_factor:
+        default: 1
+        title: Sampling factor for each starting model
+        description: This parameter control how many times a model will be refined.
+        $comment: This parameter control how many times a model will be refined. For
+          EM refinement only it does not make sense to increase it unless random removal
+          of restraints is turned on. If not then the energy minimisation will lead
+          to the same final conformation.
+        type: number
+        maximum: 500
+        minimum: 1
+      max_nmodels:
+        default: 50000
+        title: Maximum number of models to refine
+        description: This parameter controls the maximum number of models to refine.
+        $comment: This parameter controls the maximum number of models to refine.
+        type: number
+        maximum: 100000
+        minimum: 1
+      nemsteps:
+        default: 10
+        title: Number of EM steps
+        description: Number of energy minimisation steps to perform.
+        $comment: Number of energy minimisation steps to perform. Note that the effective
+          number might be smaller if the minimisation converges earlier.
+        type: number
+        maximum: 10000
+        minimum: 1
+      tolerance:
+        default: 5
+        title: Failure tolerance percentage
+        description: Percentage of allowed failures for a module to successfully complete
+        $comment: Percentage of allowed failures for a module to successfully complete
+        type: number
+        maximum: 99
+        minimum: 0
+      nseg1:
+        default: -1
+        title: Number of semi-flexible segments
+        description: This defines the number of semi-flexible segments (-1 automatic,
+          0 ridig, >1 manual definition).
+        $comment: This parameter defines the number of semi-flexible segments for
+          the specified molecule. If set to -1 then those are automatically defined
+          based on contacts. Those can also be manually defined by defining the number
+          of segment (nseg>=1). In that case the starting and ending residues of each
+          segment must be defined. The position of atoms in regions outside the semi-flexible
+          regions will have weak harmonic positional restraints during the energy
+          minimisation. If nseg is set to 0, then the molecule will be kept ridig.
+        type: number
+        maximum: 1000
+        minimum: -1
+      seg:
+        type: array
+        maxItemsFrom: molecules
+        title: Semi-flexible segments
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              sta:
+                title: Starting residue number
+                description: Residue number defining the start of the semi-flexible
+                  segment.
+                $comment: Residue number defining the start of the semi-flexible segment.
+                type: number
+                maximum: 9999
+                minimum: -9999
+                format: residue
+              end:
+                title: Ending residue number
+                description: Residue number defining the end of the semi-flexible
+                  segment.
+                $comment: Residue number defining the end of the semi-flexible segment.
+                type: number
+                maximum: 9999
+                minimum: -9999
+                format: residue
+            required: []
+            additionalProperties: false
+      nseg2:
+        default: -1
+        title: Number of semi-flexible segments
+        description: This defines the number of semi-flexible segments (-1 automatic,
+          0 ridig, >1 manual definition).
+        $comment: This parameter defines the number of semi-flexible segments for
+          the specified molecule. If set to -1 then those are automatically defined
+          based on contacts. Those can also be manually defined by defining the number
+          of segment (nseg>=1). In that case the starting and ending residues of each
+          segment must be defined. The position of atoms in regions outside the semi-flexible
+          regions will have weak harmonic positional restraints during the energy
+          minimisation. If nseg is set to 0, then the molecule will be kept ridig.
+        type: number
+        maximum: 1000
+        minimum: -1
+      nseg3:
+        default: -1
+        title: Number of semi-flexible segments
+        description: This defines the number of semi-flexible segments (-1 automatic,
+          0 ridig, >1 manual definition).
+        $comment: This parameter defines the number of semi-flexible segments for
+          the specified molecule. If set to -1 then those are automatically defined
+          based on contacts. Those can also be manually defined by defining the number
+          of segment (nseg>=1). In that case the starting and ending residues of each
+          segment must be defined. The position of atoms in regions outside the semi-flexible
+          regions will have weak harmonic positional restraints during the energy
+          minimisation. If nseg is set to 0, then the molecule will be kept ridig.
+        type: number
+        maximum: 1000
+        minimum: -1
+      nseg4:
+        default: -1
+        title: Number of semi-flexible segments
+        description: This defines the number of semi-flexible segments (-1 automatic,
+          0 ridig, >1 manual definition).
+        $comment: This parameter defines the number of semi-flexible segments for
+          the specified molecule. If set to -1 then those are automatically defined
+          based on contacts. Those can also be manually defined by defining the number
+          of segment (nseg>=1). In that case the starting and ending residues of each
+          segment must be defined. The position of atoms in regions outside the semi-flexible
+          regions will have weak harmonic positional restraints during the energy
+          minimisation. If nseg is set to 0, then the molecule will be kept ridig.
+        type: number
+        maximum: 1000
+        minimum: -1
+      nseg5:
+        default: -1
+        title: Number of semi-flexible segments
+        description: This defines the number of semi-flexible segments (-1 automatic,
+          0 ridig, >1 manual definition).
+        $comment: This parameter defines the number of semi-flexible segments for
+          the specified molecule. If set to -1 then those are automatically defined
+          based on contacts. Those can also be manually defined by defining the number
+          of segment (nseg>=1). In that case the starting and ending residues of each
+          segment must be defined. The position of atoms in regions outside the semi-flexible
+          regions will have weak harmonic positional restraints during the energy
+          minimisation. If nseg is set to 0, then the molecule will be kept ridig.
+        type: number
+        maximum: 1000
+        minimum: -1
+      nseg6:
+        default: -1
+        title: Number of semi-flexible segments
+        description: This defines the number of semi-flexible segments (-1 automatic,
+          0 ridig, >1 manual definition).
+        $comment: This parameter defines the number of semi-flexible segments for
+          the specified molecule. If set to -1 then those are automatically defined
+          based on contacts. Those can also be manually defined by defining the number
+          of segment (nseg>=1). In that case the starting and ending residues of each
+          segment must be defined. The position of atoms in regions outside the semi-flexible
+          regions will have weak harmonic positional restraints during the energy
+          minimisation. If nseg is set to 0, then the molecule will be kept ridig.
+        type: number
+        maximum: 1000
+        minimum: -1
+      nseg7:
+        default: -1
+        title: Number of semi-flexible segments
+        description: This defines the number of semi-flexible segments (-1 automatic,
+          0 ridig, >1 manual definition).
+        $comment: This parameter defines the number of semi-flexible segments for
+          the specified molecule. If set to -1 then those are automatically defined
+          based on contacts. Those can also be manually defined by defining the number
+          of segment (nseg>=1). In that case the starting and ending residues of each
+          segment must be defined. The position of atoms in regions outside the semi-flexible
+          regions will have weak harmonic positional restraints during the energy
+          minimisation. If nseg is set to 0, then the molecule will be kept ridig.
+        type: number
+        maximum: 1000
+        minimum: -1
+      nseg8:
+        default: -1
+        title: Number of semi-flexible segments
+        description: This defines the number of semi-flexible segments (-1 automatic,
+          0 ridig, >1 manual definition).
+        $comment: This parameter defines the number of semi-flexible segments for
+          the specified molecule. If set to -1 then those are automatically defined
+          based on contacts. Those can also be manually defined by defining the number
+          of segment (nseg>=1). In that case the starting and ending residues of each
+          segment must be defined. The position of atoms in regions outside the semi-flexible
+          regions will have weak harmonic positional restraints during the energy
+          minimisation. If nseg is set to 0, then the molecule will be kept ridig.
+        type: number
+        maximum: 1000
+        minimum: -1
+      nseg9:
+        default: -1
+        title: Number of semi-flexible segments
+        description: This defines the number of semi-flexible segments (-1 automatic,
+          0 ridig, >1 manual definition).
+        $comment: This parameter defines the number of semi-flexible segments for
+          the specified molecule. If set to -1 then those are automatically defined
+          based on contacts. Those can also be manually defined by defining the number
+          of segment (nseg>=1). In that case the starting and ending residues of each
+          segment must be defined. The position of atoms in regions outside the semi-flexible
+          regions will have weak harmonic positional restraints during the energy
+          minimisation. If nseg is set to 0, then the molecule will be kept ridig.
+        type: number
+        maximum: 1000
+        minimum: -1
+      nseg10:
+        default: -1
+        title: Number of semi-flexible segments
+        description: This defines the number of semi-flexible segments (-1 automatic,
+          0 ridig, >1 manual definition).
+        $comment: This parameter defines the number of semi-flexible segments for
+          the specified molecule. If set to -1 then those are automatically defined
+          based on contacts. Those can also be manually defined by defining the number
+          of segment (nseg>=1). In that case the starting and ending residues of each
+          segment must be defined. The position of atoms in regions outside the semi-flexible
+          regions will have weak harmonic positional restraints during the energy
+          minimisation. If nseg is set to 0, then the molecule will be kept ridig.
+        type: number
+        maximum: 1000
+        minimum: -1
+      nseg11:
+        default: -1
+        title: Number of semi-flexible segments
+        description: This defines the number of semi-flexible segments (-1 automatic,
+          0 ridig, >1 manual definition).
+        $comment: This parameter defines the number of semi-flexible segments for
+          the specified molecule. If set to -1 then those are automatically defined
+          based on contacts. Those can also be manually defined by defining the number
+          of segment (nseg>=1). In that case the starting and ending residues of each
+          segment must be defined. The position of atoms in regions outside the semi-flexible
+          regions will have weak harmonic positional restraints during the energy
+          minimisation. If nseg is set to 0, then the molecule will be kept ridig.
+        type: number
+        maximum: 1000
+        minimum: -1
+      nseg12:
+        default: -1
+        title: Number of semi-flexible segments
+        description: This defines the number of semi-flexible segments (-1 automatic,
+          0 ridig, >1 manual definition).
+        $comment: This parameter defines the number of semi-flexible segments for
+          the specified molecule. If set to -1 then those are automatically defined
+          based on contacts. Those can also be manually defined by defining the number
+          of segment (nseg>=1). In that case the starting and ending residues of each
+          segment must be defined. The position of atoms in regions outside the semi-flexible
+          regions will have weak harmonic positional restraints during the energy
+          minimisation. If nseg is set to 0, then the molecule will be kept ridig.
+        type: number
+        maximum: 1000
+        minimum: -1
+      nseg13:
+        default: -1
+        title: Number of semi-flexible segments
+        description: This defines the number of semi-flexible segments (-1 automatic,
+          0 ridig, >1 manual definition).
+        $comment: This parameter defines the number of semi-flexible segments for
+          the specified molecule. If set to -1 then those are automatically defined
+          based on contacts. Those can also be manually defined by defining the number
+          of segment (nseg>=1). In that case the starting and ending residues of each
+          segment must be defined. The position of atoms in regions outside the semi-flexible
+          regions will have weak harmonic positional restraints during the energy
+          minimisation. If nseg is set to 0, then the molecule will be kept ridig.
+        type: number
+        maximum: 1000
+        minimum: -1
+      nseg14:
+        default: -1
+        title: Number of semi-flexible segments
+        description: This defines the number of semi-flexible segments (-1 automatic,
+          0 ridig, >1 manual definition).
+        $comment: This parameter defines the number of semi-flexible segments for
+          the specified molecule. If set to -1 then those are automatically defined
+          based on contacts. Those can also be manually defined by defining the number
+          of segment (nseg>=1). In that case the starting and ending residues of each
+          segment must be defined. The position of atoms in regions outside the semi-flexible
+          regions will have weak harmonic positional restraints during the energy
+          minimisation. If nseg is set to 0, then the molecule will be kept ridig.
+        type: number
+        maximum: 1000
+        minimum: -1
+      nseg15:
+        default: -1
+        title: Number of semi-flexible segments
+        description: This defines the number of semi-flexible segments (-1 automatic,
+          0 ridig, >1 manual definition).
+        $comment: This parameter defines the number of semi-flexible segments for
+          the specified molecule. If set to -1 then those are automatically defined
+          based on contacts. Those can also be manually defined by defining the number
+          of segment (nseg>=1). In that case the starting and ending residues of each
+          segment must be defined. The position of atoms in regions outside the semi-flexible
+          regions will have weak harmonic positional restraints during the energy
+          minimisation. If nseg is set to 0, then the molecule will be kept ridig.
+        type: number
+        maximum: 1000
+        minimum: -1
+      nseg16:
+        default: -1
+        title: Number of semi-flexible segments
+        description: This defines the number of semi-flexible segments (-1 automatic,
+          0 ridig, >1 manual definition).
+        $comment: This parameter defines the number of semi-flexible segments for
+          the specified molecule. If set to -1 then those are automatically defined
+          based on contacts. Those can also be manually defined by defining the number
+          of segment (nseg>=1). In that case the starting and ending residues of each
+          segment must be defined. The position of atoms in regions outside the semi-flexible
+          regions will have weak harmonic positional restraints during the energy
+          minimisation. If nseg is set to 0, then the molecule will be kept ridig.
+        type: number
+        maximum: 1000
+        minimum: -1
+      nseg17:
+        default: -1
+        title: Number of semi-flexible segments
+        description: This defines the number of semi-flexible segments (-1 automatic,
+          0 ridig, >1 manual definition).
+        $comment: This parameter defines the number of semi-flexible segments for
+          the specified molecule. If set to -1 then those are automatically defined
+          based on contacts. Those can also be manually defined by defining the number
+          of segment (nseg>=1). In that case the starting and ending residues of each
+          segment must be defined. The position of atoms in regions outside the semi-flexible
+          regions will have weak harmonic positional restraints during the energy
+          minimisation. If nseg is set to 0, then the molecule will be kept ridig.
+        type: number
+        maximum: 1000
+        minimum: -1
+      nseg18:
+        default: -1
+        title: Number of semi-flexible segments
+        description: This defines the number of semi-flexible segments (-1 automatic,
+          0 ridig, >1 manual definition).
+        $comment: This parameter defines the number of semi-flexible segments for
+          the specified molecule. If set to -1 then those are automatically defined
+          based on contacts. Those can also be manually defined by defining the number
+          of segment (nseg>=1). In that case the starting and ending residues of each
+          segment must be defined. The position of atoms in regions outside the semi-flexible
+          regions will have weak harmonic positional restraints during the energy
+          minimisation. If nseg is set to 0, then the molecule will be kept ridig.
+        type: number
+        maximum: 1000
+        minimum: -1
+      nseg19:
+        default: -1
+        title: Number of semi-flexible segments
+        description: This defines the number of semi-flexible segments (-1 automatic,
+          0 ridig, >1 manual definition).
+        $comment: This parameter defines the number of semi-flexible segments for
+          the specified molecule. If set to -1 then those are automatically defined
+          based on contacts. Those can also be manually defined by defining the number
+          of segment (nseg>=1). In that case the starting and ending residues of each
+          segment must be defined. The position of atoms in regions outside the semi-flexible
+          regions will have weak harmonic positional restraints during the energy
+          minimisation. If nseg is set to 0, then the molecule will be kept ridig.
+        type: number
+        maximum: 1000
+        minimum: -1
+      nseg20:
+        default: -1
+        title: Number of semi-flexible segments
+        description: This defines the number of semi-flexible segments (-1 automatic,
+          0 ridig, >1 manual definition).
+        $comment: This parameter defines the number of semi-flexible segments for
+          the specified molecule. If set to -1 then those are automatically defined
+          based on contacts. Those can also be manually defined by defining the number
+          of segment (nseg>=1). In that case the starting and ending residues of each
+          segment must be defined. The position of atoms in regions outside the semi-flexible
+          regions will have weak harmonic positional restraints during the energy
+          minimisation. If nseg is set to 0, then the molecule will be kept ridig.
+        type: number
+        maximum: 1000
+        minimum: -1
+      fle:
+        type: array
+        title: Fully flexible segments
+        items:
+          type: object
+          properties:
+            sta:
+              title: Starting residue number
+              description: Residue number defining the start of the fully flexible
+                segment.
+              $comment: Residue number defining the start of this (1st) fully flexible
+                segment.
+              type: number
+              maximum: 9999
+              minimum: -9999
+              format: residue
+            end:
+              title: End residue number
+              description: Residue number defining the end of the fully flexible segment.
+              $comment: Residue number defining the end of this (1st) fully flexible
+                segment.
+              type: number
+              maximum: 9999
+              minimum: -9999
+              format: residue
+            seg:
+              title: Segment ID (segid)
+              description: Segment ID of the molecule for which this flexible segment
+                is defined.
+              $comment: Segment ID of the molecule for which this (1st) flexible segment
+                is defined.
+              type: string
+              minLength: 1
+              maxLength: 4
+              format: chain
+          required: []
+          additionalProperties: false
+    required: []
+    additionalProperties: false
+  uiSchema:
+    mol_fix_origin:
+      ui:indexable: true
+      ui:group: molecule
+    mol_shape:
+      ui:indexable: true
+      ui:group: molecule
+    w_air:
+      ui:group: scoring
+    w_bsa:
+      ui:group: scoring
+    w_cdih:
+      ui:group: scoring
+    w_desolv:
+      ui:group: scoring
+    w_elec:
+      ui:group: scoring
+    w_sym:
+      ui:group: scoring
+    w_vdw:
+      ui:group: scoring
+    ligand_param_fname:
+      ui:widget: file
+      ui:group: force field
+    ligand_top_fname:
+      ui:widget: file
+      ui:group: force field
+    elecflag:
+      ui:group: force field
+    dielec:
+      ui:group: force field
+    epsilon:
+      ui:group: force field
+    epsilon_cg:
+      ui:group: force field
+    dihedflag:
+      ui:group: force field
+    sampling_factor:
+      ui:group: sampling
+    max_nmodels:
+      ui:group: sampling
+    nemsteps:
+      ui:group: sampling
+    tolerance:
+      ui:group: module
+    nseg1:
+      ui:group: flexibility
+    seg:
+      items:
+        ui:field: table
+      ui:group: flexibility
+    nseg2:
+      ui:group: flexibility
+    nseg3:
+      ui:group: flexibility
+    nseg4:
+      ui:group: flexibility
+    nseg5:
+      ui:group: flexibility
+    nseg6:
+      ui:group: flexibility
+    nseg7:
+      ui:group: flexibility
+    nseg8:
+      ui:group: flexibility
+    nseg9:
+      ui:group: flexibility
+    nseg10:
+      ui:group: flexibility
+    nseg11:
+      ui:group: flexibility
+    nseg12:
+      ui:group: flexibility
+    nseg13:
+      ui:group: flexibility
+    nseg14:
+      ui:group: flexibility
+    nseg15:
+      ui:group: flexibility
+    nseg16:
+      ui:group: flexibility
+    nseg17:
+      ui:group: flexibility
+    nseg18:
+      ui:group: flexibility
+    nseg19:
+      ui:group: flexibility
+    nseg20:
+      ui:group: flexibility
+    fle:
+      ui:field: table
+      ui:group: flexibility
+  tomlSchema:
+    mol_fix_origin:
+      indexed: true
+    mol_shape:
+      indexed: true
+    seg:
+      indexed: true
+      items:
+        indexed: true
+        items:
+          flatten: true
+    fle:
+      indexed: true
+      items:
+        flatten: true
 - id: clustfcc
   category: analysis
   label: Fraction of Common Contacts (FCC) clustering module.
@@ -1981,6 +2957,16 @@ nodes:
         type: number
         maximum: 78
         minimum: 1
+      epsilon_cg:
+        default: 10.0
+        title: Dielectric constant for coarse-grained mode
+        description: Dielectric constant for the electrostatic Coulomb energy term
+          in coarse-grained mode.
+        $comment: Dielectric constant for the electrostatic Coulomb energy term in
+          coarse-grained mode.
+        type: number
+        maximum: 78
+        minimum: 1
       dihedflag:
         default: true
         title: Use torsion angle dihedral energy term
@@ -2495,6 +3481,8 @@ nodes:
       ui:group: force field
     epsilon:
       ui:group: force field
+    epsilon_cg:
+      ui:group: force field
     dihedflag:
       ui:group: force field
     sampling_factor:
@@ -2805,7 +3793,7 @@ nodes:
   tomlSchema: {}
 - id: filter
   category: analysis
-  label: Filter models based on their score.
+  label: Filtering module.
   description: HADDOCK3 module to select top cluster/model.
   schema:
     type: object
@@ -4056,7 +5044,8 @@ nodes:
         $comment: Use a constant (cdie option) or a distance-dependent dielectric
           (rdie) constant in the Coulomb potential. A distance dependent dielectric
           constant will effectively scale down the electrostatic energy by having
-          a 1/r**2 dependency instead of 1/r
+          a 1/r**2 dependency instead of 1/r. Note that with coarse graining cdie
+          will be used.
         type: string
         minLength: 0
         maxLength: 4
@@ -4068,6 +5057,16 @@ nodes:
         title: Dielectric constant
         description: Dielectric constant for the electrostatic Coulomb energy term.
         $comment: Dielectric constant for the electrostatic Coulomb energy term.
+        type: number
+        maximum: 78
+        minimum: 1
+      epsilon_cg:
+        default: 10.0
+        title: Dielectric constant for coarse-grained mode
+        description: Dielectric constant for the electrostatic Coulomb energy term
+          in coarse-grained mode.
+        $comment: Dielectric constant for the electrostatic Coulomb energy term in
+          coarse-grained mode.
         type: number
         maximum: 78
         minimum: 1
@@ -4144,6 +5143,21 @@ nodes:
         type: number
         maximum: 10000
         minimum: 0
+      separate:
+        default: false
+        title: Separate molecules
+        description: Translate molecules to separate them
+        $comment: Translate molecules to separate them ensuring a minimum distance
+          that allows rotations (controlled by the randrot parameter) without clashes
+        type: boolean
+      randrot:
+        default: false
+        title: Random rotations
+        description: Randomly rotate the molecules around their respective center
+          of mass
+        $comment: Randomly rotate the molecules around their respective center of
+          mass
+        type: boolean
       sinter_rigid_final:
         default: 0.001
         title: End rigid-body MD intermolecular interactions scaling factor.
@@ -4663,6 +5677,8 @@ nodes:
       ui:group: force field
     epsilon:
       ui:group: force field
+    epsilon_cg:
+      ui:group: force field
     dihedflag:
       ui:group: force field
     sampling_factor:
@@ -4678,6 +5694,10 @@ nodes:
     mdsteps_cool2:
       ui:group: sampling
     mdsteps_cool3:
+      ui:group: sampling
+    separate:
+      ui:group: sampling
+    randrot:
       ui:group: sampling
     sinter_rigid_final:
       ui:group: sampling
@@ -4773,6 +5793,86 @@ nodes:
       indexed: true
       items:
         flatten: true
+- id: gdock
+  category: sampling
+  label: gdock integration sampling module.
+  description: HADDOCK3 gdock module.
+  schema:
+    type: object
+    properties:
+      ambig_fname:
+        title: Ambiguous distance restraints filename
+        description: Filename of the ambiguous distance restraints file
+        $comment: Filename of the ambiguous distance restraints file. Restraints between
+          the receptor and ligand chains are converted to residue pairs and used by
+          gdock to bias the genetic algorithm search.
+        type: string
+        format: uri-reference
+      max_generations:
+        default: 250
+        title: Maximum number of generations
+        description: Maximum number of genetic algorithm generations.
+        $comment: Maximum number of genetic algorithm generations run by gdock.
+        type: number
+        maximum: 100000
+        minimum: 1
+      number_of_individuals:
+        default: 150
+        title: Number of individuals
+        description: Number of individuals in the GA population.
+        $comment: Number of individuals (chromosomes) in each generation of gdock's
+          genetic algorithm. Larger populations explore the conformational space more
+          broadly but increase runtime proportionally.
+        type: number
+        maximum: 100000
+        minimum: 1
+      seed:
+        default: 42
+        title: Random seed
+        description: Random seed used by gdock's genetic algorithm.
+        $comment: Random seed used by gdock's genetic algorithm, for reproducibility.
+        type: number
+        maximum: 999999999
+        minimum: 0
+      sampling:
+        default: 1000
+        title: Number of maximum models to generate
+        description: Maximum number of unique conformations gdock collects per input
+          model.
+        $comment: Controls gdock's Hall-of-Fame capacity. gdock accumulates up to
+          this many unique conformations during the genetic algorithm run and returns
+          them all sorted by fitness.
+        type: number
+        maximum: 500000
+        minimum: 1
+      crossdock:
+        default: true
+        title: Cross docking of starting ensembles
+        description: If true, all combinations of input models are docked; if false,
+          models are paired by index.
+        $comment: Controls how starting model ensembles are combined. When true (default),
+          gdock docks all combinations of receptor x ligand models (same as rigidbody
+          crossdock=true). When false, the first receptor model is paired with the
+          first ligand model, etc.; this requires both ensembles to have the same
+          number of models.
+        type: boolean
+    required: []
+    additionalProperties: false
+  uiSchema:
+    ambig_fname:
+      ui:widget: file
+      ui:group: distance restraints
+    max_generations:
+      ui:group: sampling
+    number_of_individuals:
+      ui:group: sampling
+    seed:
+      ui:group: sampling
+    sampling:
+      ui:group: sampling
+    crossdock:
+      ui:group: sampling
+  tomlSchema: {}
 - id: ilrmsdmatrix
   category: analysis
   label: ilRMSD matrix module.
@@ -6075,15 +7175,16 @@ nodes:
         title: Solvent
         description: Solvent to use during the short MD refinement
         $comment: Solvent to use during the short MD refinement. Water and DMSO are
-          supported. A solvent shelll is generated by shifting pre-equilibrated boxes
+          supported. A solvent shell is generated by shifting pre-equilibrated boxes
           around the complex. For water an 8A water shell is generated and for DMSO
-          a 12.5A shell. For DMSO,
+          a 12.5A shell. To perform MD without solvent, set solvent to none.
         type: string
-        minLength: 0
-        maxLength: 100
+        minLength: 1
+        maxLength: 50
         enum:
         - water
         - dmso
+        - none
       nemsteps:
         default: 200
         title: Number of EM steps
@@ -6922,15 +8023,16 @@ nodes:
         title: Solvent
         description: Solvent to use during the short MD refinement
         $comment: Solvent to use during the short MD refinement. Water and DMSO are
-          supported. A solvent shelll is generated by shifting pre-equilibrated boxes
+          supported. A solvent shell is generated by shifting pre-equilibrated boxes
           around the complex. For water an 8A water shell is generated and for DMSO
-          a 12.5A shell. For DMSO,
+          a 12.5A shell. To perform MD without solvent, set solvent to none.
         type: string
-        minLength: 0
-        maxLength: 100
+        minLength: 1
+        maxLength: 50
         enum:
         - water
         - dmso
+        - none
       nemsteps:
         default: 200
         title: Number of EM steps
@@ -7160,7 +8262,7 @@ nodes:
         description: Simulation timesteps performed during the simulation.
         $comment: Simulation timesteps performed during the simulation.
         type: number
-        maximum: 1000000
+        maximum: 10000000
         minimum: 0
       sampling_factor:
         default: 1
@@ -7751,8 +8853,20 @@ nodes:
           If set to true, HADDOCK will rotate the molecule by 180 degree around an
           axis perpendicular to the interface.
         type: boolean
-      randorien:
+      separate:
         default: true
+        title: Separate molecules
+        description: Translate molecules to separate them
+        $comment: Translate molecules to separate them ensuring a minimum distance
+          that allows rotations (controlled by the randrot parameter) without clashes
+        type: boolean
+      randrot:
+        default: true
+        title: Random rotations
+        description: Randomly rotate the molecules around their respective center
+          of mass
+        $comment: Randomly rotate the molecules around their respective center of
+          mass
         type: boolean
       inter_rigid:
         default: 1.0
@@ -8619,7 +9733,8 @@ nodes:
         $comment: Use a constant (cdie option) or a distance-dependent dielectric
           (rdie) constant in the Coulomb potential. A distance dependent dielectric
           constant will effectively scale down the electrostatic energy by having
-          a 1/r**2 dependency instead of 1/r
+          a 1/r**2 dependency instead of 1/r. Note that with coarse graining cdie
+          will be used.
         type: string
         minLength: 0
         maxLength: 4
@@ -8631,6 +9746,16 @@ nodes:
         title: Dielectric constant
         description: Dielectric constant for the electrostatic Coulomb energy term.
         $comment: Dielectric constant for the electrostatic Coulomb energy term.
+        type: number
+        maximum: 78
+        minimum: 1
+      epsilon_cg:
+        default: 10.0
+        title: Dielectric constant for coarse grained mode
+        description: Dielectric constant for the electrostatic Coulomb energy term
+          in coarse-grained mode.
+        $comment: Dielectric constant for the electrostatic Coulomb energy term in
+          coarse-grained mode.
         type: number
         maximum: 78
         minimum: 1
@@ -8690,7 +9815,9 @@ nodes:
       ui:group: sampling
     rotate180:
       ui:group: sampling
-    randorien:
+    separate:
+      ui:group: sampling
+    randrot:
       ui:group: sampling
     inter_rigid:
       ui:group: sampling
@@ -8760,6 +9887,8 @@ nodes:
     dielec:
       ui:group: force field
     epsilon:
+      ui:group: force field
+    epsilon_cg:
       ui:group: force field
   tomlSchema:
     mol_fix_origin:
@@ -9043,6 +10172,13 @@ nodes:
           state of histidines ((+1: HIS or 0: HISD/HISE) by selecting the state leading
           to the lowest electrostatic energy'
         type: boolean
+      autotoppar:
+        default: false
+        title: Automatically generate topologies and parameters for unknown atoms
+        description: Automatically generate topologies and parameters for unknown
+          atoms
+        $comment: Automatically generate topologies and parameters for unknown atoms
+        type: boolean
       delenph:
         default: true
         title: Keep or remove non-polar hydrogen atoms
@@ -9053,6 +10189,20 @@ nodes:
           this should not be done if you are defining distance restraints to specific
           hydrogen atoms (e.g. when using NMR distance restraints).
         type: boolean
+      hydrogen_build:
+        default: all
+        title: Building of hydrogen atoms
+        description: If set to all, all hydrogen atoms will be regenerated
+        $comment: By default, all hydrogen atoms are generated (which gives the most
+          robust behavior). But in some cases it might be better to only rebuild the
+          unknown ones (e.g. for small ligand, or very large molecules to save time).
+          In that case the hydrogen_build should be set to unknown.
+        type: string
+        minLength: 0
+        maxLength: 100
+        enum:
+        - all
+        - unknown
       ligand_param_fname:
         title: Custom ligand parameter file
         description: Ligand parameter file in CNS format
@@ -9191,7 +10341,11 @@ nodes:
   uiSchema:
     autohis:
       ui:group: molecule
+    autotoppar:
+      ui:group: molecule
     delenph:
+      ui:group: molecule
+    hydrogen_build:
       ui:group: molecule
     ligand_param_fname:
       ui:widget: file
