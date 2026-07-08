@@ -404,8 +404,16 @@ def config2schema(config):
                     "type": "string"
                 }
                 prop['default'] = v['default']
+            elif k == 'filter_by':
+                # For caprifilter module
+                prop['items'] = {
+                    "type": "string",
+                    "enum": v['choices']
+                }
+                prop['default'] = v['default']
+                prop['uniqueItems'] = True
             else:
-                raise ValueError(f"Don't know how to determine type of items of {v}")
+                raise ValueError(f"Don't know how to determine type of items of {v} from {k}")
         else:
             raise ValueError(f"Don't know what to do with {k}:{v}")
         if k not in ifthenelses:
