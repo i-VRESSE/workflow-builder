@@ -10,7 +10,7 @@ test('Verify that [object Object] bug does not show up (issue #74)', async ({ pa
   await page.locator('text=docking-protein-ligand').click()
 
   // validate that file is used
-  await page.locator('text=Files').click()
+  await page.locator('button:has-text("Files")').click()
   await page.waitForSelector('button:has-text("data/target.pdb")')
 
   // change to 'text' tab

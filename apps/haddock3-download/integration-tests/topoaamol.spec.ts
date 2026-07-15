@@ -74,7 +74,7 @@ test.describe('given 1 molecule and a topoaa node', () => {
           .setInputFiles({ name: 'workflow.zip', mimeType: 'application/zip', buffer: file1 })
 
         // ensure file is uploaded
-        await page.locator('text=Files').click()
+        await page.locator('button:has-text("Files")').click()
         await page.waitForSelector('button:has-text("e2a-hpr_1GGR.pdb")')
       })
 

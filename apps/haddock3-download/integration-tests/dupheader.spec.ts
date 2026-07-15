@@ -27,7 +27,7 @@ test.describe('given an uploaded archive with a workflow.cfg file with a duplica
 
   test('it should show uplaoded file', async ({ page }) => {
     // Click Files tab
-    await page.locator('text=Files').click()
+    await page.locator('button:has-text("Files")').click()
     // validate file button is present
     await page.waitForSelector('button:has-text("some.pdb")')
   })

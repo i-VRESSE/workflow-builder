@@ -392,14 +392,28 @@ def config2schema(config):
                 prop['items'] = {
                     "type": "number"
                 }
-            elif k == 'ligand_chains':
+            elif k == 'ligand_chains' or k == 'chains':
                 prop['items'] = {
                     "type": "string",
                     "format": "chain"
                 }
                 prop['default'] = v['default']
+            elif k == 'interface_combinations':
+                # For emscoring module
+                prop['items'] = {
+                    "type": "string"
+                }
+                prop['default'] = v['default']
+            elif k == 'filter_by':
+                # For caprifilter module
+                prop['items'] = {
+                    "type": "string",
+                    "enum": v['choices']
+                }
+                prop['default'] = v['default']
+                prop['uniqueItems'] = True
             else:
-                raise ValueError(f"Don't know how to determine type of items of {v}")
+                raise ValueError(f"Don't know how to determine type of items of {v} from {k}")
         else:
             raise ValueError(f"Don't know what to do with {k}:{v}")
         if k not in ifthenelses:
@@ -522,7 +536,6 @@ def process_level(level_fn: Path, level: str):
     categories = [process_category(c) for c in category_list]
 
     broken_modules = {
-        'topocg', # Gives `AttributeError: module 'haddock.modules.topology.topocg' has no attribute 'HaddockModule'` error
         'exit', # Does not make sense to have exit module in the catalog
     }
     # TODO define module order like category order
