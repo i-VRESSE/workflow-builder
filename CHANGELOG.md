@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## @i-vresse/wb-core 3.2.5 - 2026-07-15
+
+### Fixed
+
+- Invalid workflow for latest haddock3 [#181](https://github.com/i-VRESSE/workflow-builder/issues/181)
+
 ## @i-vresse/wb-core 3.2.4 - 2024-10-09
 
 ### Fixed
