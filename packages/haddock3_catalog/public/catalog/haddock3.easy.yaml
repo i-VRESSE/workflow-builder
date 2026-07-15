@@ -616,15 +616,23 @@ nodes:
         - rmsd
         title: Metrics to filter by.
         description: List of CAPRI metrics to use for filtering.
-        $comment: List of CAPRI metrics to filter on. Valid values are rmsd, irmsd,
-          lrmsd, ilrmsd, fnat, dockq. Each metric must have its corresponding {metric}_filter_cutoff
-          and {metric}_filter_out parameters set. All filters are applied simultaneously
-          (AND logic), so a model must pass every active filter to be kept.
+        $comment: List of CAPRI metrics to filter on. Each metric must have its corresponding
+          {metric}_filter_cutoff and {metric}_filter_out parameters set. All filters
+          are applied simultaneously (AND logic), so a model must pass every active
+          filter to be kept.
         type: array
         minItems: 1
         maxItems: 6
         items:
           type: string
+          enum:
+          - rmsd
+          - irmsd
+          - lrmsd
+          - ilrmsd
+          - fnat
+          - dockq
+        uniqueItems: true
       rmsd_filter_cutoff:
         default: 10.0
         title: "RMSD filter cutoff (\xC5)."
@@ -2868,6 +2876,68 @@ nodes:
       ui:group: molecule
     hydrogen_build:
       ui:group: molecule
+    ligand_param_fname:
+      ui:widget: file
+      ui:group: force field
+    ligand_top_fname:
+      ui:widget: file
+      ui:group: force field
+    mol:
+      ui:indexable: true
+      ui:group: input molecules
+  tomlSchema:
+    mol:
+      indexed: true
+      items:
+        sectioned: true
+- id: topocg
+  category: topology
+  label: Create and manage CNS coarse-grained topology.
+  description: HADDOCK3 module to create CNS all-atom topologies.
+  schema:
+    type: object
+    properties:
+      ligand_param_fname:
+        title: Custom ligand parameter file
+        description: Ligand parameter file in CNS format
+        $comment: Ligand parameter file in CNS format containing all force field parameters
+          (bond, angles, dihedrals, impropers, van der waals) for any ligand not supported
+          by default by HADDOCK
+        type: string
+        format: uri-reference
+      ligand_top_fname:
+        title: Custom ligand topology file
+        description: Ligand topology file in CNS format
+        $comment: Ligand topology file in CNS format containing the ligand topologies
+          (atoms, masses, charges, bond definitions...) for any ligand not supported
+          by default by HADDOCK
+        type: string
+        format: uri-reference
+      mol:
+        title: Input molecule configuration
+        $comment: You can expand this parameter and associated sub-parameters to the
+          other input molecules. For example, if you input three molecules, you can
+          define mol1, mol2, and mol3 subparameters. Those not defined will be populated
+          with the defaults.
+        type: array
+        items:
+          type: object
+          properties:
+            cyclicpept:
+              default: false
+              title: Cyclic peptide
+              description: Defines the molecule as a cyclic peptide
+              $comment: This option defines the molecule as a cyclic peptide and HADDOCK
+                will generate a peptide bond between the N- and C-ter provided those
+                are within 2A. This cutoff can be changed in the generate-topology.cns
+                script.
+              type: boolean
+          required: []
+          additionalProperties: false
+        maxItemsFrom: molecules
+    required: []
+    additionalProperties: false
+  uiSchema:
     ligand_param_fname:
       ui:widget: file
       ui:group: force field
