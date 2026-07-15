@@ -49,7 +49,7 @@ test.describe('given an uploaded archive with a workflow.cfg file with a duplica
       5
       6run_dir = 'run1'
       7
-      8[caprieval]
+      8['caprieval.1']
       9
       10['caprieval.2']
       11

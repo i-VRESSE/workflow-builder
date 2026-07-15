@@ -19,6 +19,11 @@ export function catalog2tomlSchemas (catalog: ICatalog): TomlSchemas {
 function nodes2tomltable (nodes: IWorkflowNode[], tomlSchema4nodes: Record<string, TomlObjectSchema> = {}): Record<string, unknown> {
   const table: Record<string, unknown> = {}
   const track: Record<string, number> = {}
+  const typeOccurences: Record<string, number> = {}
+  for (const node of nodes) {
+    typeOccurences[node.type] = (typeOccurences[node.type] ?? 0) + 1
+  }
+
   for (const node of nodes) {
     if (!(node.type in track)) {
       track[node.type] = 0
@@ -26,7 +31,7 @@ function nodes2tomltable (nodes: IWorkflowNode[], tomlSchema4nodes: Record<strin
     track[node.type]++
     const tomlSchemaOfNode = node.type in tomlSchema4nodes ? tomlSchema4nodes[node.type] : {}
     const section =
-      track[node.type] > 1 ? `${node.type}.${track[node.type]}` : node.type
+      typeOccurences[node.type] > 1 ? `${node.type}.${track[node.type]}` : node.type
     const nodeParameters: Record<string, unknown> = parameters2toml(node.parameters, tomlSchemaOfNode)
     table[section] = Section(nodeParameters as any)
   }
@@ -252,34 +257,43 @@ export function parseWorkflowFromTable (
   )
 }
 
-/**
- * Adds index to every repeated header
- */
-function uniqueHeader (line: string, memory: Map<string, number>): string {
-  const isHeader = /^\['?\w+.*\]$/
-  if (!isHeader.test(line)) {
-    return line
+interface ParsedHeader {
+  rootName: string
+  rest: string[]
+  hasExplicitIndex: boolean
+}
+
+function parseHeader (line: string): ParsedHeader | undefined {
+  if (line.startsWith('[[') && line.endsWith(']]')) {
+    return undefined
   }
-  const header = line.slice(1, -1)
-  let [nodeName, ...rest] = splitHeader(header)
-  const hasDigit = nodeName.match(/^(\w+)\.\d+$/)
-  if (hasDigit !== null) {
-    nodeName = hasDigit[1]
+
+  if (!line.startsWith('[') || !line.endsWith(']')) {
+    return undefined
   }
-  if (nodeName !== '') {
-    const canonicalHeader = [nodeName, ...rest].join('.')
-    const index = memory.get(canonicalHeader)
-    if (index !== undefined) {
-      memory.set(canonicalHeader, index + 1)
-      const newHeader = mergeHeader([`${nodeName}.${index}`, ...rest])
-      return `[${newHeader}]`
-    } else {
-      memory.set(canonicalHeader, 1)
-      return line
-    }
-  } else {
-    return line
+
+  const [nodeName = '', ...rest] = splitHeader(line.slice(1, -1))
+  const hasDigit = nodeName.match(/^(.*)\.\d+$/)
+  const rootName = hasDigit?.[1] ?? nodeName
+  if (rootName === '') {
+    return undefined
   }
+
+  return {
+    rootName,
+    rest,
+    hasExplicitIndex: hasDigit !== null
+  }
+}
+
+function canonicalNestedPath (rest: string[]): string[] {
+  if (rest.length === 0) {
+    return rest
+  }
+
+  const nestedPath = [...rest]
+  nestedPath[nestedPath.length - 1] = nestedPath[nestedPath.length - 1].replace(/\.\d+$/, '')
+  return nestedPath
 }
 
 /**
@@ -290,19 +304,65 @@ function uniqueHeader (line: string, memory: Map<string, number>): string {
  * ```
  * with
  * ```toml
- * [somenode]
  * ['somenode.1']
+ * ['somenode.2']
  * ```
  */
 export function dedupWorkflow (inp: string): string {
-  const headers: Map<string, number> = new Map()
-  return inp
+  const lines = inp
     .replaceAll('\r\n', '\n')
     .replace('\r', '\n')
-    .split('\n').map(
-      (line) => uniqueHeader(line, headers)
-    )
-    .join('\n')
+    .split('\n')
+
+  const rootHeaderState: Map<string, { count: number, hasBareHeader: boolean }> = new Map()
+  lines.forEach(line => {
+    const parsedHeader = parseHeader(line)
+    if (parsedHeader?.rest.length === 0) {
+      const state = rootHeaderState.get(parsedHeader.rootName) ?? { count: 0, hasBareHeader: false }
+      state.count++
+      state.hasBareHeader = state.hasBareHeader || !parsedHeader.hasExplicitIndex
+      rootHeaderState.set(parsedHeader.rootName, state)
+    }
+  })
+
+  const rootHeaderIndices: Map<string, number> = new Map()
+  const nestedHeaderIndices: Map<string, number> = new Map()
+  return lines.map(line => {
+    const parsedHeader = parseHeader(line)
+    if (parsedHeader === undefined) {
+      return line
+    }
+
+    const rootState = rootHeaderState.get(parsedHeader.rootName)
+    if (rootState === undefined || rootState.count <= 1 || !rootState.hasBareHeader) {
+      return line
+    }
+
+    if (parsedHeader.rest.length === 0) {
+      rootHeaderIndices.set(parsedHeader.rootName, (rootHeaderIndices.get(parsedHeader.rootName) ?? 0) + 1)
+    }
+
+    const index = rootHeaderIndices.get(parsedHeader.rootName)
+    if (index === undefined) {
+      return line
+    }
+
+    if (parsedHeader.rest.length === 0) {
+      return `[${mergeHeader([`${parsedHeader.rootName}.${index}`])}]`
+    }
+
+    const nestedPath = canonicalNestedPath(parsedHeader.rest)
+    const nestedHeaderKey = [`${parsedHeader.rootName}.${index}`, ...nestedPath].join('\u0000')
+    const nestedIndex = (nestedHeaderIndices.get(nestedHeaderKey) ?? 0) + 1
+    nestedHeaderIndices.set(nestedHeaderKey, nestedIndex)
+
+    const dedupedNestedPath = [...nestedPath]
+    if (nestedIndex > 1) {
+      dedupedNestedPath[dedupedNestedPath.length - 1] = `${dedupedNestedPath[dedupedNestedPath.length - 1]}.${nestedIndex}`
+    }
+
+    return `[${mergeHeader([`${parsedHeader.rootName}.${index}`, ...dedupedNestedPath])}]`
+  }).join('\n')
 }
 
 /**
