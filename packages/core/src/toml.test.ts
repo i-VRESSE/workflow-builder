@@ -65,7 +65,7 @@ bar = 'fizzz'
     const tomlSchemas: TomlSchemas = { nodes: {}, global: {} }
     const result = workflow2tomltext(nodes, {}, tomlSchemas)
     const expected = `
-[somenode]
+['somenode.1']
 
 foo = 'bar'
 
@@ -403,7 +403,7 @@ foo = 'bar'
 
   it('should de-index repeated nodes', () => {
     const workflow = `
-[somenode]
+['somenode.1']
 
 foo = 'bar'
 
@@ -925,7 +925,49 @@ key8 = [
 describe('dedupWorkflow()', () => {
   it.each([
     [
-      'no dups',
+      'no changes',
+  `\
+[somenode]
+foo = 42
+
+[somenode.nestedpar]
+bar = 5
+
+[othernode]
+baz = 8
+`,
+  `\
+[somenode]
+foo = 42
+
+[somenode.nestedpar]
+bar = 5
+
+[othernode]
+baz = 8
+`
+    ], [
+      'array of tables -> untouched',
+  `\
+[[product]]
+name = 'Hammer'
+sku = 738594937
+
+[[product]]
+name = "Nail"
+sku = 284758393
+`,
+  `\
+[[product]]
+name = 'Hammer'
+sku = 738594937
+
+[[product]]
+name = "Nail"
+sku = 284758393
+`
+    ], [
+      'mixed cfg and toml headers',
       `\
 [somenode]
 foo = 42
@@ -939,15 +981,15 @@ bar = 5
 bar = 8
 `,
 `\
-[somenode]
+['somenode.1']
 foo = 42
 
-[somenode.nestedpar]
+['somenode.1'.nestedpar]
 bar = 5
 
-['somenode.1']
+['somenode.2']
 
-['somenode.1'.nestedpar]
+['somenode.2'.nestedpar]
 bar = 8
 `
     ], [
@@ -959,10 +1001,10 @@ foo = 1
 [somenode]
 foo = 2
 `, `\
-[somenode]
+['somenode.1']
 foo = 1
 
-['somenode.1']
+['somenode.2']
 foo = 2
 `
     ], [
@@ -980,17 +1022,164 @@ foo = 3
 [somenode.nestedpar]
 bar = 4
 `, `\
+['somenode.1']
+foo = 1
+
+['somenode.1'.nestedpar]
+bar = 2
+
+['somenode.2']
+foo = 3
+
+['somenode.2'.nestedpar]
+bar = 4
+`
+    ], [
+      'nested dups within one node',
+  `\
 [somenode]
 foo = 1
 
 [somenode.nestedpar]
 bar = 2
 
+[somenode.nestedpar]
+bar = 3
+
+[somenode]
+foo = 4
+`, `\
 ['somenode.1']
-foo = 3
+foo = 1
 
 ['somenode.1'.nestedpar]
+bar = 2
+
+['somenode.1'.'nestedpar.2']
+bar = 3
+
+['somenode.2']
+foo = 4
+`
+    ], [
+      'triple root dups',
+  `\
+[somenode]
+foo = 1
+
+[somenode]
+foo = 2
+
+[somenode]
+foo = 3
+`, `\
+['somenode.1']
+foo = 1
+
+['somenode.2']
+foo = 2
+
+['somenode.3']
+foo = 3
+`
+    ], [
+      'triple nested dups within one node',
+  `\
+[somenode]
+foo = 1
+
+[somenode.nestedpar]
+bar = 2
+
+[somenode.nestedpar]
+bar = 3
+
+[somenode.nestedpar]
 bar = 4
+
+[somenode]
+foo = 5
+`, `\
+['somenode.1']
+foo = 1
+
+['somenode.1'.nestedpar]
+bar = 2
+
+['somenode.1'.'nestedpar.2']
+bar = 3
+
+['somenode.1'.'nestedpar.3']
+bar = 4
+
+['somenode.2']
+foo = 5
+`
+    ], [
+      'nested array of tables -> untouched',
+  `\
+[['somenode.foo']]
+bar = 'fizz'
+
+[['somenode.foo']]
+bar = 'buzz'
+`, `\
+[['somenode.foo']]
+bar = 'fizz'
+
+[['somenode.foo']]
+bar = 'buzz'
+`
+    ],
+    [
+      'already correctly indexed nodes',
+      `\
+['somenode.1']
+foo = 1
+
+['somenode.2']
+foo = 2
+`,
+`\
+['somenode.1']
+foo = 1
+
+['somenode.2']
+foo = 2
+`
+    ],
+    [
+      'already uniquely indexed nodes',
+      `\
+['somenode.5']
+foo = 1
+
+['somenode.6']
+foo = 2
+`,
+`\
+['somenode.5']
+foo = 1
+
+['somenode.6']
+foo = 2
+`
+    ],
+    [
+      'already unique header names',
+      `\
+['somenode.5']
+foo = 1
+
+['othernode.6']
+foo = 2
+`,
+`\
+['somenode.5']
+foo = 1
+
+['othernode.6']
+foo = 2
 `
     ]
   ])('given %s should replace repeated headers with headers including an index', (_desc, input, expected) => {
